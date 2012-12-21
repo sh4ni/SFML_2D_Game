@@ -8,7 +8,7 @@ using namespace sf;
 class Schrift{
 public:
 	void Render		(RenderWindow &Window);
-	Schrift			(String path, float X, float Y, String myText);
+	Schrift			(float X, float Y, String myText);
 private:
 	Font font;
 	Text printText;

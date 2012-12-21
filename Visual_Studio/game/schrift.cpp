@@ -1,9 +1,9 @@
 #include "schrift.h"
 #include "defines.h"
 
-Schrift::Schrift(String path, float X, float Y, String myText){
+Schrift::Schrift(float X, float Y, String myText){
 	
-	if(!font.loadFromFile(path))
+	if(!font.loadFromFile("include/fonts/arial.ttf"))
 		std::cout << "Fehler beim Laden!" << std::endl;
 	else
 		std::cout << "Font geladen!" << std::endl;
@@ -19,4 +19,3 @@ Schrift::Schrift(String path, float X, float Y, String myText){
 void Schrift::Render(RenderWindow &Window){
 	Window.draw(printText);
 }
-		
