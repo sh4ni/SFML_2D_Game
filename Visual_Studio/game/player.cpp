@@ -23,7 +23,7 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	if(Keyboard::isKeyPressed(Keyboard::Left)){
 		sprite.setRotation(270.f);
 		if( x <= -10.f){
-			x = Window.getSize().x;
+			x = (float) Window.getSize().x;
 		}else{
 			x -= (Speed*ElapsedTime);
 		}
@@ -40,7 +40,7 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	if(Keyboard::isKeyPressed(Keyboard::Up)){
 		sprite.setRotation(0.f);
 		if( y <= -10.f){
-			y = Window.getSize().y;
+			y = (float) Window.getSize().y;
 		}else{
 			y -= (Speed*ElapsedTime);
 		}

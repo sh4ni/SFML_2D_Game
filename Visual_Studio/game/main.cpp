@@ -28,7 +28,7 @@ int main()
 	Npc::loadTexture("include/texture/npc/npc.png");
 
 	int timeCount = 0;
-	int random_x = 0;
+	float random_x;
 
     while (window.isOpen())
     {
@@ -46,7 +46,7 @@ int main()
 
 		// Npc Erstellung 
 		if(timeCount >= 100){
-			random_x = (rand()%WIDTH)+1;
+			random_x =(float) (rand()%WIDTH)+1;
 			Npc E1;
 			E1.SetPosition(random_x,20.f);
 			npcs.push_back(E1);
@@ -56,7 +56,7 @@ int main()
         window.clear(Color(0,127,255));
 		window.draw(BackgroundSprite);
 
-		for(int i=0; i< npcs.size(); i++){
+		for(unsigned i=0; i< npcs.size(); i++){
 			if(!npcs[i].Active){
 				npcs.erase(npcs.begin() + i);
 			}
