@@ -6,11 +6,13 @@
 #include "player.h"
 #include "npc.h"
 #include "schrift.h"
+#include "map.h"
 
 using namespace sf;
 
-int game() {
+int Game() {
 	try {
+		LoadMap("include/map/map1.txt");
 		RenderWindow window(VideoMode(WIDTH, HEIGHT), VERSION);
 		Clock clock;
 		Texture BackgroundTexture;
@@ -53,8 +55,9 @@ int game() {
 				timeCount = 0;
 			}
 
-			window.clear(Color(0,127,255));
-			window.draw(BackgroundSprite);
+			window.clear(Color(255,255,255));
+			//window.draw(BackgroundSprite);
+			DrawMap(window);
 
 			for(int i=0; i< npcs.size(); i++){
 				if(!npcs[i].Active){
@@ -70,6 +73,9 @@ int game() {
 			Texter.Render(window),
 			window.display();
 		}
+	}
+	catch(const char * ErrorCode){
+		std::cout << ErrorCode << std::endl;
 	}
 	catch(...){
 		std::cout << "Ausnahmefehler" << std::endl;

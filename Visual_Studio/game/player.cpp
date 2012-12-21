@@ -47,6 +47,7 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	}
 	if(Keyboard::isKeyPressed(Keyboard::Down)){
 		sprite.setRotation(180.f);
+
 		if( y >= Window.getSize().y + 10.f){
 			y = 0.f;
 		}else{
