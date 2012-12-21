@@ -1,0 +1,30 @@
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+*.vcxproj*
+*.ncb
+*.aps
+*.suo
+*.tlog
+Visual_Studio/ipch/
+Visual_Studio/Debug/
+Visual_Studio/Release/
+Visual_Studio/game/Debug/
+Visual_Studio/game/Release/
+*.sdf
+*.sln
