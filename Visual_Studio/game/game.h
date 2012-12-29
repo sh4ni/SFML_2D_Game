@@ -23,6 +23,7 @@ private:
 	static void GameLoop();
 
 	static void ShowSplashScreen();
+	static void ShowMenu();
 
 	enum GameState { Uninitialized, ShowingSplash, Paused, ShowingMenu, Playing, Exiting };
   

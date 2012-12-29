@@ -43,6 +43,11 @@ void Game::GameLoop()
 			ShowSplashScreen();
 		break;
 		}
+		case Game::ShowingMenu:
+		{
+			ShowMenu();
+		break;
+		}
 		case Game::Playing:{
 			_mainWindow.clear(Color(255,255,255));
 			_mainWindow.display();
@@ -60,8 +65,11 @@ void Game::GameLoop()
 void Game::ShowSplashScreen(){
 	SplashScreen splashScreen;
 	splashScreen.Show(_mainWindow);
-	_gameState = Game::Playing;
+	_gameState = Game::ShowingMenu;
 }
 
+void Game::ShowMenu(){
+	_gameState = Playing;
+}
 Game::GameState Game::_gameState = Uninitialized;
 sf::RenderWindow Game::_mainWindow;
