@@ -2,8 +2,7 @@
 
 int main(void){
 
-	Game();
+	Game::Start();
 
 	return 0;
-
 }

@@ -1,6 +1,6 @@
 #define DEBUG 0
 
-#define WIDTH 1280
-#define HEIGHT 800
+#define WIDTH 1024
+#define HEIGHT 768
 
-#define VERSION "0.01 Alpha Build - " __DATE__ " " __TIME__
+#define VERSION "The Journey - 0.02 Alpha Build - " __DATE__ " " __TIME__

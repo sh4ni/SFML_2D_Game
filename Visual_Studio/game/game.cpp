@@ -1,91 +1,67 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <vector>
+#include "Game.h"
 
-#include "defines.h"
-#include "player.h"
-#include "npc.h"
-#include "schrift.h"
-#include "map.h"
+void Game::Start(void)
+{
+	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
+	if(_gameState != Uninitialized) return;
+	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
+	_mainWindow.create(VideoMode(WIDTH, HEIGHT), VERSION);
 
-using namespace sf;
 
-int Game() {
-	try {
+	// Hier folgt der Rest
 
-		RenderWindow window(VideoMode(WIDTH, HEIGHT), VERSION);
-		Clock clock;
-		Texture BackgroundTexture;
-		Sprite BackgroundSprite;
-		std::vector<Npc> npcs;
 
-		Player P1("include/texture/player/player.png");
-		Schrift myVersion(0,HEIGHT-10,VERSION);
-		Schrift Texter(0,50,"Danner");
-	
-		BackgroundTexture.loadFromFile("include/texture/background.png");
-		BackgroundSprite.setTexture(BackgroundTexture);
-		BackgroundSprite.setPosition(0.f,0.f);
+	// Setze den Spielstatus auf Playing
+	_gameState = Game::ShowingSplash;
+	//_gameState = Game::Playing;
+	// Solange das Spiel nicht beendet wird, führe GameLoop aus
+	while(!IsExiting()){
+		GameLoop();
+	}
+	// Wenn der GameLoop beendet wurde, schließe das Fenster
+	_mainWindow.close();
+}
 
-		Npc::loadTexture("include/texture/npc/npc.png");
+bool Game::IsExiting()
+{
+	// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zurück, ansonsten ein False
+	if(_gameState == Game::Exiting){
+		return true;
+	}else{ 
+		return false;
+	}
+	// Möglichkeit das Spiel zu Speichern
+}
 
-		LoadMap("include/map/map1.txt");
-
-		int npcCount = 0;
-
-		int timeCount = 0;
-		int random_x = 0;
-
-		while (window.isOpen())
-		{
-			Event event;
-		
-
-			float ElapsedTime = (float)clock.restart().asMilliseconds();
-			timeCount += (int)ElapsedTime;
-
-			while (window.pollEvent(event))
+void Game::GameLoop()
+{
+	Event currentEvent;
+	_mainWindow.pollEvent(currentEvent);
+	_mainWindow.setFramerateLimit(60U);
+	switch(_gameState){
+		case Game::ShowingSplash:{
+			ShowSplashScreen();
+		break;
+		}
+		case Game::Playing:{
+			_mainWindow.clear(Color(255,255,255));
+			_mainWindow.display();
+			
+			if(currentEvent.type == Event::Closed) _gameState = Game::Exiting;
+			if(currentEvent.type == Event::KeyPressed)
 			{
-				if (event.type == Event::Closed)
-					window.close();
+				if(currentEvent.key.code == Keyboard::Escape) _gameState = Game::Exiting;
 			}
-
-			// Npc Erstellung 
-			if(timeCount >= 100){
-				random_x = (rand()%WIDTH)+1;
-				Npc E1;
-				E1.SetPosition(random_x,20.f);
-				npcs.push_back(E1);
-				timeCount = 0;
-				npcCount++;
-			}
-
-			window.clear(Color(255,255,255));
-			//window.draw(BackgroundSprite);
-			DrawMap(window);
-
-			for(int i=0; i< npcs.size(); i++){
-				if(!npcs[i].Active){
-					npcs.erase(npcs.begin() + i);
-					npcCount--;
-				}
-				npcs[i].Update(window, ElapsedTime);
-				npcs[i].Render(window);
-			}
-			std::cout << npcCount << std::endl;
-			P1.Update(window, ElapsedTime);
-			P1.Render(window);
-			myVersion.Render(window);
-			Texter.Render(window),
-			window.display();
+		break;
 		}
 	}
-	catch(const char * ErrorCode){
-		std::cout << ErrorCode << std::endl;
-	}
-	catch(...){
-		std::cout << "Ausnahmefehler" << std::endl;
-	}
-
-    return 0;
 }
+
+void Game::ShowSplashScreen(){
+	SplashScreen splashScreen;
+	splashScreen.Show(_mainWindow);
+	_gameState = Game::Playing;
+}
+
+Game::GameState Game::_gameState = Uninitialized;
+sf::RenderWindow Game::_mainWindow;
