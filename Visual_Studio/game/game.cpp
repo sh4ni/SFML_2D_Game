@@ -12,7 +12,7 @@ using namespace sf;
 
 int Game() {
 	try {
-		LoadMap("include/map/map1.txt");
+
 		RenderWindow window(VideoMode(WIDTH, HEIGHT), VERSION);
 		Clock clock;
 		Texture BackgroundTexture;
@@ -28,6 +28,10 @@ int Game() {
 		BackgroundSprite.setPosition(0.f,0.f);
 
 		Npc::loadTexture("include/texture/npc/npc.png");
+
+		LoadMap("include/map/map1.txt");
+
+		int npcCount = 0;
 
 		int timeCount = 0;
 		int random_x = 0;
@@ -53,6 +57,7 @@ int Game() {
 				E1.SetPosition(random_x,20.f);
 				npcs.push_back(E1);
 				timeCount = 0;
+				npcCount++;
 			}
 
 			window.clear(Color(255,255,255));
@@ -62,11 +67,12 @@ int Game() {
 			for(int i=0; i< npcs.size(); i++){
 				if(!npcs[i].Active){
 					npcs.erase(npcs.begin() + i);
+					npcCount--;
 				}
 				npcs[i].Update(window, ElapsedTime);
 				npcs[i].Render(window);
 			}
-
+			std::cout << npcCount << std::endl;
 			P1.Update(window, ElapsedTime);
 			P1.Render(window);
 			myVersion.Render(window);
