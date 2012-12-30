@@ -1,34 +1,22 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <vector>
-
-#include "defines.h"
-#include "player.h"
-#include "npc.h"
-#include "schrift.h"
-#include "map.h"
-#include "splashScreen.h"
-
-using namespace sf;
+#include "include.h"
 
 class Game
 {
 public:
 	static void Start();
 private:
-	static bool IsExiting();
-	static void GameLoop();
-
-	static void ShowSplashScreen();
+	static void ShowIntro();
 	static void ShowMenu();
+	static void GameLoop();
+	static bool IsExiting();
 
-	enum GameState { Uninitialized, ShowingSplash, Paused, ShowingMenu, Playing, Exiting };
-  
+	enum GameState { Uninitialized, ShowingIntro, Paused, ShowingMenu, Playing, Exiting };
+
 	static GameState _gameState;
-	static sf::RenderWindow _mainWindow;
+	static RenderWindow _mainWindow;
 };
 
 #endif

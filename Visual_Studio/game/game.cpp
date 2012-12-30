@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "include.h"
 
 void Game::Start(void)
 {
@@ -12,7 +12,7 @@ void Game::Start(void)
 
 
 	// Setze den Spielstatus auf Playing
-	_gameState = Game::ShowingSplash;
+	_gameState = Game::ShowingIntro;
 	//_gameState = Game::Playing;
 	// Solange das Spiel nicht beendet wird, führe GameLoop aus
 	while(!IsExiting()){
@@ -37,10 +37,11 @@ void Game::GameLoop()
 {
 	Event currentEvent;
 	_mainWindow.pollEvent(currentEvent);
-	_mainWindow.setFramerateLimit(60U);
+	_mainWindow.setFramerateLimit(FPS);
+
 	switch(_gameState){
-		case Game::ShowingSplash:{
-			ShowSplashScreen();
+		case Game::ShowingIntro:{
+			ShowIntro();
 		break;
 		}
 		case Game::ShowingMenu:
@@ -49,27 +50,29 @@ void Game::GameLoop()
 		break;
 		}
 		case Game::Playing:{
-			_mainWindow.clear(Color(255,255,255));
+			_mainWindow.clear(Color(255,0,255));
 			_mainWindow.display();
 			
 			if(currentEvent.type == Event::Closed) _gameState = Game::Exiting;
 			if(currentEvent.type == Event::KeyPressed)
 			{
-				if(currentEvent.key.code == Keyboard::Escape) _gameState = Game::Exiting;
+				if(currentEvent.key.code == Keyboard::Escape) _gameState = Game::ShowingMenu;
 			}
 		break;
 		}
 	}
 }
 
-void Game::ShowSplashScreen(){
-	SplashScreen splashScreen;
-	splashScreen.Show(_mainWindow);
+void Game::ShowIntro(){
+	Intro intro;
+	intro.Show(_mainWindow);
 	_gameState = Game::ShowingMenu;
 }
 
 void Game::ShowMenu(){
-	_gameState = Playing;
+	Menu menu;
+	menu.Show(_mainWindow);
+	_gameState = Game::Playing;
 }
 Game::GameState Game::_gameState = Uninitialized;
-sf::RenderWindow Game::_mainWindow;
+RenderWindow Game::_mainWindow;
