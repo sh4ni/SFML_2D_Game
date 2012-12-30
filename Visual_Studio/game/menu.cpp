@@ -2,7 +2,7 @@
 
 void Menu::Show(RenderWindow& renderWindow){
 	Texture image;
-	if(image.loadFromFile("include/texture/menu.png") != true){
+	if(image.loadFromFile("include/interface/menu.png") != true){
 		return;
 	}
 
@@ -13,8 +13,21 @@ void Menu::Show(RenderWindow& renderWindow){
 	//Schrift Texter(0,50,"Danner");
 	//Texter.Render(renderWindow);
 
+	//////////////////////////////
+	//////////////////////////////
+	//////////////////////////////
+	Clock clock;
+
+	float ElapsedTime = (float)clock.restart().asMilliseconds();
+
 	Player P1("include/texture/player/player.png");
+
+	// Ist hier Falsch, da dass Fenster so nicht aktualisiert wird
 	P1.Render(renderWindow);
+	P1.Update(renderWindow, ElapsedTime);
+	//////////////////////////////
+	//////////////////////////////
+	//////////////////////////////
 
 	renderWindow.display();
 
@@ -27,7 +40,7 @@ void Menu::Show(RenderWindow& renderWindow){
 		Event event;
 		while(renderWindow.pollEvent(event))
 		{
-			if(event.type == Event::KeyPressed || event.type == Event::MouseButtonPressed ){
+			if(event.type == Event::MouseButtonPressed ){
 				return;
 			}else if(event.type == Event::Closed){
 				return;

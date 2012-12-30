@@ -6,7 +6,7 @@ void Game::Start(void)
 	if(_gameState != Uninitialized) return;
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
 	_mainWindow.create(VideoMode(WIDTH, HEIGHT), VERSION);
-
+	//_mainWindow.setIcon(32,32,*windowIcon);
 
 	// Hier folgt der Rest
 

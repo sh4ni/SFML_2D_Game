@@ -2,7 +2,7 @@
 void Intro::Show(RenderWindow & renderWindow)
 {
 	Texture image;
-	if(image.loadFromFile("include/texture/intro.png") != true)
+	if(image.loadFromFile("include/interface/intro.png") != true)
 	{
 		return;
 	}
