@@ -10,8 +10,8 @@ void Menu::Show(RenderWindow& renderWindow){
 	
 	renderWindow.draw(sprite);
 	
-	//Schrift Texter(0,50,"Danner");
-	//Texter.Render(renderWindow);
+	Schrift Texter(0,50,"Menu");
+	Texter.Render(renderWindow);
 
 	//////////////////////////////
 	//////////////////////////////
@@ -40,7 +40,7 @@ void Menu::Show(RenderWindow& renderWindow){
 		Event event;
 		while(renderWindow.pollEvent(event))
 		{
-			if(event.type == Event::MouseButtonPressed ){
+			if(event.type == Event::MouseButtonPressed || event.type == Event::KeyPressed){
 				return;
 			}else if(event.type == Event::Closed){
 				return;

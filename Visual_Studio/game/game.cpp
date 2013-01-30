@@ -41,26 +41,43 @@ void Game::GameLoop()
 
 	switch(_gameState){
 		case Game::ShowingIntro:{
+			std::cout << "Intro" << std::endl;
 			ShowIntro();
 		break;
 		}
-		case Game::ShowingMenu:
-		{
+		case Game::ShowingMenu:{
+			std::cout << "Menu" << std::endl;
 			ShowMenu();
 		break;
 		}
 		case Game::Playing:{
+			// Hier ist das Hauptspiel
+			std::cout << "Spiel - Map" << std::endl;
 			_mainWindow.clear(Color(255,0,255));
 			_mainWindow.display();
+			ShowMap(1);				// 1 = Level 1 -> Hauptkarte / Oberwelt
 			
+			
+			/*
+			_mainWindow.clear(Color(255,0,255));
+			_mainWindow.display();
+
+
+
 			if(currentEvent.type == Event::Closed) _gameState = Game::Exiting;
 			if(currentEvent.type == Event::KeyPressed)
 			{
 				if(currentEvent.key.code == Keyboard::Escape) _gameState = Game::ShowingMenu;
 			}
+			*/
 		break;
 		}
 	}
+}
+void Game::ShowMap(int LevelId){
+	Map map;
+	map.Show(_mainWindow, LevelId);
+	_gameState = Game::Exiting;
 }
 
 void Game::ShowIntro(){
@@ -74,5 +91,8 @@ void Game::ShowMenu(){
 	menu.Show(_mainWindow);
 	_gameState = Game::Playing;
 }
+
+
+// static member variables need to be instantiated outside of the class
 Game::GameState Game::_gameState = Uninitialized;
 RenderWindow Game::_mainWindow;
