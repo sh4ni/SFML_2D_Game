@@ -52,26 +52,9 @@ void Game::GameLoop()
 		break;
 		}
 		case Game::Playing:{
-			// Hier ist das Hauptspiel
+			// Hier wird die Map geladen
 			std::cout << "Spiel - Map" << std::endl;
-			//_mainWindow.clear(Color(255,0,255));
-			//_mainWindow.display();
 			ShowMap(1,view);				// 1 = Level 1 -> Hauptkarte / Oberwelt
-			
-			
-			/*
-			_mainWindow.clear(Color(255,0,255));
-			_mainWindow.display();
-
-			
-
-			if(currentEvent.type == Event::Closed) _gameState = Game::Exiting;
-			if(currentEvent.type == Event::KeyPressed)
-			{
-				if(currentEvent.key.code == Keyboard::Escape) _gameState = Game::ShowingMenu;
-			}
-			*/
-			
 		break;
 		}
 	}
@@ -79,7 +62,6 @@ void Game::GameLoop()
 void Game::ShowMap(int LevelId, View view){
 	Map map;
 	map.Show(_mainWindow, LevelId, view);
-	std::cout << "Ich hab hier schon COUT Probiert!" << std::endl;
 	_gameState = Game::ShowingMenu;
 }
 
