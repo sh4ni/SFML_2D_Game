@@ -1,0 +1,11 @@
+﻿ToDo
+
+- Animation Playermoddel
+- Kollisionsabfrage
+- Monster
+- Interface
+
+- Mapübergänge / Maps laden
+- Intro und Menü
+
+- Dialoge/Story
