@@ -8,7 +8,7 @@
 
 #define FPS 60U
 
-#define VERSION "The Journey - 0.02 Alpha Build - " __DATE__ " " __TIME__
+#define VERSION "The Journey - 0.05 Alpha Build - " __DATE__ " " __TIME__
 
 #define TILESIZE 32
 

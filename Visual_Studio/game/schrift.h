@@ -9,6 +9,7 @@ class Schrift{
 public:
 	void Render		(RenderWindow &Window);
 	Schrift			(float X, float Y, String myText);
+	void Update		(String myText);
 private:
 	Font font;
 	Text printText;

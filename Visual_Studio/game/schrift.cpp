@@ -16,6 +16,10 @@ Schrift::Schrift(float X, float Y, String myText){
 	printText.setPosition(X,Y);
 }
 
+void Schrift::Update(String myText){
+	printText.setString(myText);
+}
+
 void Schrift::Render(RenderWindow &Window){
 	Window.draw(printText);
 }

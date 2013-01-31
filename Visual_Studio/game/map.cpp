@@ -15,12 +15,18 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
 	int TileType;
 	TilePart TileMap[100][100];
 
-	std::string FileName = "include/map/map1.txt";
+	std::string MapPath = "include/map/map";
+	std::string MapFileType = ".txt";
+	char MapNumber[3];	
+	sprintf(MapNumber,"%d",LevelId);
+
+	std::string FileName = MapPath + MapNumber + MapFileType;
+
 	std::ifstream openfile(FileName);
 	if( openfile.is_open() ){
 		openfile >> MapSizeX >> MapSizeY;
 		while( !openfile.eof() ){
-			openfile >> TileType;  /*MapFile[LoadCounterX][LoadCounterY];*/
+			openfile >> TileType;
 			IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
 			subRect.top=TileType/10*TILESIZE;
@@ -38,49 +44,35 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
 	else {
 		//throw("Map konnte nicht geoeffnet werden. Fehler: 01.1"); // 01.X = Texturenfehler allgemein 01.1 genau der hier
 	}
-
 	
 	
 	Clock clock;
 	
 	Player P1("include/texture/player/player.png");
-
-	Schrift Texter(0,50,"Map");
 	
 	Event currentEvent;
 
+	float LastTime = 1.f;
+	Schrift DisplayFPS(0,0,"Fps Anzeige");
 	while(true)
 	{
 		float ElapsedTime = (float)clock.restart().asMilliseconds();
+
+		float Frames = 1.f /( ElapsedTime / 1000 );
+		LastTime = ElapsedTime;
+		char text[15];
+		//std::cout << "FPS: " << Frames << std::endl;
+		sprintf(text,"FPS: %f",Frames);
+		DisplayFPS.Update(text);
 		
-		renderWindow.clear(Color(255,0,255));
-		//DrawMap(renderWindow);
-		//RectangleShape Tile;
 		for( int y = 0 ; y < MapSizeY ; y++ ){
 			for( int x = 0 ; x < MapSizeX ; x++ ){
 				TileMap[x][y].TexturePart->setPosition( x * TILESIZE, y * TILESIZE );
-				//Tile.setSize( Vector2f( TILESIZE, TILESIZE ) );
-				//Tile.setPosition( x * TILESIZE, y * TILESIZE );
-				/*switch( MapFile[x][y] ){
-				case 1:
-					Tile.setFillColor( Color::Blue );
-					break;
-				case 2:
-					Tile.setFillColor( Color::Green );
-					break;
-				case 3:
-					Tile.setFillColor( Color::Magenta );
-					break;
-				default:
-					//throw("Unbekannte Textur angefordert. Fehler 01.2");
-					Tile.setFillColor( Color::Black );
-					break;
-				}*/
 				renderWindow.draw(*TileMap[x][y].TexturePart);
 				//std::cout << "Zeichne " << x << "/" << y << " Tile ID=" << MapFile[x][y] << "=" << std::endl;
 			}
 		}
-		Texter.Render(renderWindow);
+		DisplayFPS.Render(renderWindow);
 		P1.Render(renderWindow);
 		P1.Update(renderWindow, ElapsedTime);
 		
@@ -94,22 +86,17 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
 				}
 			}
 		}
-		view.setCenter(P1.getPosX(),P1.getPosY());
+		int CamX = P1.getPosX();
+		int CamY = P1.getPosY();
+
+		if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
+		if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
+		if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = MapSizeX * TILESIZE - WIDTH/2;
+		if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
+
+		view.setCenter(CamX,CamY);
 		
 		renderWindow.setView(view);
 		renderWindow.display();
 	}
 }
-
-/*void Map::InitMap(std::string FileName){
-
-}
-
-void Map::DrawMap(RenderWindow &window){
-
-
-}
-
-void TextureLoader::LoadTexture(std::string TextureFile){
-}
-*/
