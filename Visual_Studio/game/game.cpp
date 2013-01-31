@@ -7,9 +7,8 @@ void Game::Start(void)
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
 	_mainWindow.create(VideoMode(WIDTH, HEIGHT), VERSION);
 	//_mainWindow.setIcon(32,32,*windowIcon);
-
+	
 	// Hier folgt der Rest
-
 
 	// Setze den Spielstatus auf Playing
 	_gameState = Game::ShowingIntro;
@@ -35,6 +34,8 @@ bool Game::IsExiting()
 
 void Game::GameLoop()
 {
+	View view  = _mainWindow.getView();
+	
 	Event currentEvent;
 	_mainWindow.pollEvent(currentEvent);
 	_mainWindow.setFramerateLimit(FPS);
@@ -53,9 +54,9 @@ void Game::GameLoop()
 		case Game::Playing:{
 			// Hier ist das Hauptspiel
 			std::cout << "Spiel - Map" << std::endl;
-			_mainWindow.clear(Color(255,0,255));
-			_mainWindow.display();
-			ShowMap(1);				// 1 = Level 1 -> Hauptkarte / Oberwelt
+			//_mainWindow.clear(Color(255,0,255));
+			//_mainWindow.display();
+			ShowMap(1,view);				// 1 = Level 1 -> Hauptkarte / Oberwelt
 			
 			
 			/*
@@ -75,9 +76,9 @@ void Game::GameLoop()
 		}
 	}
 }
-void Game::ShowMap(int LevelId){
+void Game::ShowMap(int LevelId, View view){
 	Map map;
-	map.Show(_mainWindow, LevelId);
+	map.Show(_mainWindow, LevelId, view);
 	std::cout << "Ich hab hier schon COUT Probiert!" << std::endl;
 	_gameState = Game::ShowingMenu;
 }

@@ -24,7 +24,7 @@ private:
 
 class Map{
 public:
-	void Show(RenderWindow& window, int LevelId);
+	void Show(RenderWindow& window, int LevelId, View view);
 	void InitMap(std::string FileName);
 
 private:

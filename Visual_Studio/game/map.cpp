@@ -1,6 +1,6 @@
 #include "include.h"
 
-void Map::Show(RenderWindow& renderWindow, int LevelId){
+void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
 	
 	std::cout << "Lade Map..." << LevelId << std::endl;
 
@@ -53,7 +53,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId){
 	{
 		float ElapsedTime = (float)clock.restart().asMilliseconds();
 		
-
+		renderWindow.clear(Color(255,0,255));
 		//DrawMap(renderWindow);
 		//RectangleShape Tile;
 		for( int y = 0 ; y < MapSizeY ; y++ ){
@@ -85,21 +85,19 @@ void Map::Show(RenderWindow& renderWindow, int LevelId){
 		P1.Update(renderWindow, ElapsedTime);
 		
 		
-
-		
 		while(renderWindow.pollEvent(currentEvent))
 		{
 			if(currentEvent.type == Event::KeyPressed){
-				std::cout << " test " << std::endl;	
-				
 				if(currentEvent.key.code == Keyboard::Escape){
-					std::cout << " tes2222222t " << std::endl;	
+					std::cout << " Pause " << std::endl;	
 					getchar();
 				}
 			}
 		}
+		view.setCenter(P1.getPosX(),P1.getPosY());
+		
+		renderWindow.setView(view);
 		renderWindow.display();
-
 	}
 }
 

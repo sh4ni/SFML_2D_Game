@@ -16,9 +16,17 @@ Player::Player(String tex){
 	sprite.setPosition(WIDTH/2,HEIGHT/2);
 }
 
+float Player::getPosX(void){
+	return this->x;
+}
+
+float Player::getPosY(void){
+	return this->y;
+}
+
 void Player::Update(RenderWindow &Window, float ElapsedTime){
-	float x = sprite.getPosition().x;
-	float y = sprite.getPosition().y;
+	this->x = sprite.getPosition().x;
+	this->y = sprite.getPosition().y;
 	
 	std::cout << x << " - " << y << std::endl;
 

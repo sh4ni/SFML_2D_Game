@@ -11,7 +11,7 @@ private:
 	static void ShowIntro();
 	static void ShowMenu();
 	static void GameLoop();
-	static void ShowMap(int LevelId);
+	static void ShowMap(int LevelId, View view);
 	static bool IsExiting();
 
 	enum GameState { Uninitialized, ShowingIntro, Paused, ShowingMenu, Playing, Exiting };
