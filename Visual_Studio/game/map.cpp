@@ -1,9 +1,9 @@
 #include "include.h"
 
-void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
-	
-	std::cout << "Lade Map..." << LevelId << std::endl;
-
+void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
+	#if DEBUG 1
+		std::cout << "Lade Map..." << LevelId << std::endl;
+	#endif
 	// Hier wird die Textur für die Map geladen.
 	static Texture LevelTexture;
 	LevelTexture.loadFromFile("include/texture/world/overworld.png");		// Lade Texturedatei
@@ -19,7 +19,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
 	std::string MapFileType = ".txt";
 	char MapNumber[3];	
 	sprintf(MapNumber,"%d",LevelId);
-
+	
 	std::string FileName = MapPath + MapNumber + MapFileType;
 
 	std::ifstream openfile(FileName);
@@ -38,7 +38,9 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
 				LoadCounterY++;
 			}
 		}
-		std::cout << "Map erfolgreich Eingelesen" << std::endl;
+		#if DEBUG 1
+			std::cout << "Map erfolgreich Eingelesen" << std::endl;
+		#endif
 		std::ifstream closefile(FileName);
 	}
 	else {
@@ -50,10 +52,10 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
 	
 	Player P1("include/texture/player/player.png");
 	
-	Event currentEvent;
-
+	
 	float LastTime = 1.f;
-	Schrift DisplayFPS(0,0,"Fps Anzeige");
+	Schrift DisplayFPS(0,0,"Fps Anzeige",20);
+	
 	while(true)
 	{
 		float ElapsedTime = (float)clock.restart().asMilliseconds();
@@ -64,6 +66,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
 		//std::cout << "FPS: " << Frames << std::endl;
 		sprintf(text,"FPS: %f",Frames);
 		DisplayFPS.Update(text);
+		// FPSText.SetPosition(window.ConvertCoords(20, 20, defaultCamera));
 		
 		for( int y = 0 ; y < MapSizeY ; y++ ){
 			for( int x = 0 ; x < MapSizeX ; x++ ){
@@ -76,27 +79,40 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View view){
 		P1.Render(renderWindow);
 		P1.Update(renderWindow, ElapsedTime);
 		
-		
+		Event currentEvent;
 		while(renderWindow.pollEvent(currentEvent))
 		{
 			if(currentEvent.type == Event::KeyPressed){
 				if(currentEvent.key.code == Keyboard::Escape){
-					std::cout << " Pause " << std::endl;	
+					#if DEBUG 1
+						std::cout << " Pause " << std::endl;	
+					#endif
+					Schrift Pause(viewCamera.getCenter().x,viewCamera.getCenter().y,"Pause",50);
+					Pause.Render(renderWindow);
+					renderWindow.display();
 					getchar();
+					/*
+					while(1){
+						if(currentEvent.key.code == Keyboard::Escape) break;
+					}
+					*/
 				}
+			}else if(currentEvent.type == Event::Closed){
+				return;
 			}
 		}
-		int CamX = P1.getPosX();
-		int CamY = P1.getPosY();
+
+		float CamX = P1.getPosX();
+		float CamY = P1.getPosY();
 
 		if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
 		if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
-		if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = MapSizeX * TILESIZE - WIDTH/2;
-		if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
+		if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = float(MapSizeX * TILESIZE - WIDTH/2);
+		if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = float(MapSizeY * TILESIZE - HEIGHT/2);
 
-		view.setCenter(CamX,CamY);
+		viewCamera.setCenter(CamX,CamY);
 		
-		renderWindow.setView(view);
+		renderWindow.setView(viewCamera);
 		renderWindow.display();
 	}
 }

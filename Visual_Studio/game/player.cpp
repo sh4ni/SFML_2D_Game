@@ -2,18 +2,21 @@
 #include "player.h"
 
 Player::Player(String tex){
-	Speed = 0.4f;
+	Speed = PLAYERSPEED;
 
 	if(!texture.loadFromFile(tex)){
 		std::cout << "Fehler beim Laden der Textur!" << std::endl;	
 	}else{
-		std::cout << "Textur wurde erfolgreich geladen!" << std::endl;
+		#if DEBUG 1
+			std::cout << "Textur wurde erfolgreich geladen!" << std::endl;
+		#endif
 	}
 
 	texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,16.f);
 	sprite.setPosition(WIDTH/2,HEIGHT/2);
+	sprite.setScale(1.1f,1.1f); // player wird 110% groß skaliert
 }
 
 float Player::getPosX(void){
@@ -28,7 +31,9 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;
 	
-	std::cout << x << " - " << y << std::endl;
+	#if DEBUG 1
+		std::cout << x << " - " << y << std::endl;
+	#endif
 
 	if(Keyboard::isKeyPressed(Keyboard::Left)){
 		sprite.setRotation(270.f);

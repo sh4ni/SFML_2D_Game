@@ -5,12 +5,11 @@ void Game::Start(void)
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
-	_mainWindow.create(VideoMode(WIDTH, HEIGHT), VERSION);
-	//_mainWindow.setIcon(32,32,*windowIcon);
+	_mainWindow.create(VideoMode(WIDTH, HEIGHT), VERSION,sf::Style::Titlebar);
 	
-	// Hier folgt der Rest
+	//_mainWindow.setIcon(32,32,*windowIcon);
 
-	// Setze den Spielstatus auf Playing
+	// Setze den Spielstatus auf Intro -> Intro wird angezeigt
 	_gameState = Game::ShowingIntro;
 	//_gameState = Game::Playing;
 	// Solange das Spiel nicht beendet wird, führe GameLoop aus
@@ -34,35 +33,42 @@ bool Game::IsExiting()
 
 void Game::GameLoop()
 {
-	View view  = _mainWindow.getView();
+	View viewCamera  = _mainWindow.getView();
 	
-	Event currentEvent;
-	_mainWindow.pollEvent(currentEvent);
+	//Event currentEvent;
+	//_mainWindow.pollEvent(currentEvent);
 	_mainWindow.setFramerateLimit(FPS);
+	_mainWindow.setVerticalSyncEnabled(true);
 
 	switch(_gameState){
 		case Game::ShowingIntro:{
-			std::cout << "Intro" << std::endl;
+			#if DEBUG 1
+				std::cout << "Intro" << std::endl;
+			#endif
 			ShowIntro();
 		break;
 		}
 		case Game::ShowingMenu:{
-			std::cout << "Menu" << std::endl;
+			#if DEBUG 1
+				std::cout << "Menu" << std::endl;
+			#endif
 			ShowMenu();
 		break;
 		}
 		case Game::Playing:{
 			// Hier wird die Map geladen
-			std::cout << "Spiel - Map" << std::endl;
-			ShowMap(1,view);				// 1 = Level 1 -> Hauptkarte / Oberwelt
+			#if DEBUG 1
+				std::cout << "Spiel - Map" << std::endl;
+			#endif
+			ShowMap(1,viewCamera);				// 1 = Level 1 -> Hauptkarte / Oberwelt
 		break;
 		}
 	}
 }
-void Game::ShowMap(int LevelId, View view){
+void Game::ShowMap(int LevelId, View viewCamera){
 	Map map;
-	map.Show(_mainWindow, LevelId, view);
-	_gameState = Game::ShowingMenu;
+	map.Show(_mainWindow, LevelId, viewCamera);
+	_gameState = Game::Exiting;
 }
 
 void Game::ShowIntro(){

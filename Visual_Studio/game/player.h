@@ -18,8 +18,15 @@ private:
 	Sprite sprite;
 	float x;
 	float y;
+	int current_live;
+
+	
 	/*
 	
+	Anfangswert von Leben auf = 10; -> max_life = 10;
+	Beim Speichern wird der Wert gespeichert und beim laden wieder neu gesetzt
+	wenn das Level steigt erhöht sich auch das Maximale Leben
+
 	current_life, max_life, 
 	exp, level
 
