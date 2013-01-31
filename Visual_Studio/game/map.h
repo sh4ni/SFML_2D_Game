@@ -5,8 +5,6 @@
 
 using namespace sf;
 
-#define TILESIZE 32
-
 /*class TextureLoader{
 public:
 	void LoadTexture(std::string TextureFile);

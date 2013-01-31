@@ -13,34 +13,14 @@ void Menu::Show(RenderWindow& renderWindow){
 	Schrift Texter(0,50,"Menu");
 	Texter.Render(renderWindow);
 
-	//////////////////////////////
-	//////////////////////////////
-	//////////////////////////////
-	Clock clock;
-
-	float ElapsedTime = (float)clock.restart().asMilliseconds();
-
-	Player P1("include/texture/player/player.png");
-
-	// Ist hier Falsch, da dass Fenster so nicht aktualisiert wird
-	P1.Render(renderWindow);
-	P1.Update(renderWindow, ElapsedTime);
-	//////////////////////////////
-	//////////////////////////////
-	//////////////////////////////
-
 	renderWindow.display();
-
-
-	
-	
 
 	while(true)
 	{
 		Event event;
 		while(renderWindow.pollEvent(event))
 		{
-			if(event.type == Event::MouseButtonPressed || event.type == Event::KeyPressed){
+			if(event.type == Event::KeyPressed){
 				return;
 			}else if(event.type == Event::Closed){
 				return;

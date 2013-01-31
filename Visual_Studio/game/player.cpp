@@ -19,6 +19,8 @@ Player::Player(String tex){
 void Player::Update(RenderWindow &Window, float ElapsedTime){
 	float x = sprite.getPosition().x;
 	float y = sprite.getPosition().y;
+	
+	std::cout << x << " - " << y << std::endl;
 
 	if(Keyboard::isKeyPressed(Keyboard::Left)){
 		sprite.setRotation(270.f);
@@ -54,9 +56,11 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 			y += (Speed*ElapsedTime);
 		}
 	}
+	/*
 	if(Keyboard::isKeyPressed(Keyboard::Escape)){
 		exit(EXIT_SUCCESS);
 	}
+	*/
 	sprite.setPosition(x,y);
 }
 

@@ -1,12 +1,8 @@
 #include "include.h"
 
-
-
-
 void Map::Show(RenderWindow& renderWindow, int LevelId){
 	
-	//LoadMap("include/map/map1.txt");
-	std::cout << "lade Map " << LevelId << std::endl;
+	std::cout << "Lade Map..." << LevelId << std::endl;
 
 	// Hier wird die Textur für die Map geladen.
 	static Texture LevelTexture;
@@ -17,7 +13,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId){
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
 	int TileType;
-	//int MapFile[100][100] = {0};
 	TilePart TileMap[100][100];
 
 	std::string FileName = "include/map/map1.txt";
@@ -45,52 +40,66 @@ void Map::Show(RenderWindow& renderWindow, int LevelId){
 	}
 
 	
-
-	//DrawMap(renderWindow);
-	//RectangleShape Tile;
-	for( int y = 0 ; y < MapSizeY ; y++ ){
-		for( int x = 0 ; x < MapSizeX ; x++ ){
-			TileMap[x][y].TexturePart->setPosition( x * TILESIZE, y * TILESIZE );
-			//Tile.setSize( Vector2f( TILESIZE, TILESIZE ) );
-			//Tile.setPosition( x * TILESIZE, y * TILESIZE );
-			/*switch( MapFile[x][y] ){
-			case 1:
-				Tile.setFillColor( Color::Blue );
-				break;
-			case 2:
-				Tile.setFillColor( Color::Green );
-				break;
-			case 3:
-				Tile.setFillColor( Color::Magenta );
-				break;
-			default:
-				//throw("Unbekannte Textur angefordert. Fehler 01.2");
-				Tile.setFillColor( Color::Black );
-				break;
-			}*/
-			renderWindow.draw(*TileMap[x][y].TexturePart);
-			//std::cout << "Zeichne " << x << "/" << y << " Tile ID=" << MapFile[x][y] << "=" << std::endl;
-		}
-	}
-
 	
+	Clock clock;
+	
+	Player P1("include/texture/player/player.png");
+
 	Schrift Texter(0,50,"Map");
-	Texter.Render(renderWindow);
-
-
-	renderWindow.display();
+	
+	Event currentEvent;
 
 	while(true)
 	{
-		Event event;
-		while(renderWindow.pollEvent(event))
-		{
-			if(event.type == Event::MouseButtonPressed || event.type == Event::KeyPressed){
-				return;
-			}else if(event.type == Event::Closed){
-				return;
+		float ElapsedTime = (float)clock.restart().asMilliseconds();
+		
+
+		//DrawMap(renderWindow);
+		//RectangleShape Tile;
+		for( int y = 0 ; y < MapSizeY ; y++ ){
+			for( int x = 0 ; x < MapSizeX ; x++ ){
+				TileMap[x][y].TexturePart->setPosition( x * TILESIZE, y * TILESIZE );
+				//Tile.setSize( Vector2f( TILESIZE, TILESIZE ) );
+				//Tile.setPosition( x * TILESIZE, y * TILESIZE );
+				/*switch( MapFile[x][y] ){
+				case 1:
+					Tile.setFillColor( Color::Blue );
+					break;
+				case 2:
+					Tile.setFillColor( Color::Green );
+					break;
+				case 3:
+					Tile.setFillColor( Color::Magenta );
+					break;
+				default:
+					//throw("Unbekannte Textur angefordert. Fehler 01.2");
+					Tile.setFillColor( Color::Black );
+					break;
+				}*/
+				renderWindow.draw(*TileMap[x][y].TexturePart);
+				//std::cout << "Zeichne " << x << "/" << y << " Tile ID=" << MapFile[x][y] << "=" << std::endl;
 			}
 		}
+		Texter.Render(renderWindow);
+		P1.Render(renderWindow);
+		P1.Update(renderWindow, ElapsedTime);
+		
+		
+
+		
+		while(renderWindow.pollEvent(currentEvent))
+		{
+			if(currentEvent.type == Event::KeyPressed){
+				std::cout << " test " << std::endl;	
+				
+				if(currentEvent.key.code == Keyboard::Escape){
+					std::cout << " tes2222222t " << std::endl;	
+					getchar();
+				}
+			}
+		}
+		renderWindow.display();
+
 	}
 }
 
