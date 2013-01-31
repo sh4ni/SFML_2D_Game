@@ -7,5 +7,6 @@
 
 - Mapübergänge / Maps laden
 - Intro und Menü
+- Map Editor
 
 - Dialoge/Story
