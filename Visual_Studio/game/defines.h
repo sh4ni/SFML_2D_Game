@@ -8,8 +8,11 @@
 
 #define FPS 60U
 
-#define VERSION "The Journey - 0.05 Alpha Build - " __DATE__ " " __TIME__
-
+#if DEBUG == 1
+	#define VERSION "The Journey - 0.05 Alpha Build - " __DATE__ " " __TIME__ " DEBUGGING "
+#else
+	#define VERSION "The Journey - 0.05 Alpha Build - " __DATE__ " " __TIME__ " STABLE "
+#endif
 
 
 // used in map.cpp
@@ -17,8 +20,6 @@
 
 // used in player.cpp
 #define PLAYERSPEED 0.4f
-
-
 
 
 #define EXP_LVL_2 100

@@ -42,14 +42,14 @@ void Game::GameLoop()
 
 	switch(_gameState){
 		case Game::ShowingIntro:{
-			#if DEBUG 1
+			#if DEBUG==1
 				std::cout << "Intro" << std::endl;
 			#endif
 			ShowIntro();
 		break;
 		}
 		case Game::ShowingMenu:{
-			#if DEBUG 1
+			#if DEBUG == 1
 				std::cout << "Menu" << std::endl;
 			#endif
 			ShowMenu();
@@ -57,7 +57,7 @@ void Game::GameLoop()
 		}
 		case Game::Playing:{
 			// Hier wird die Map geladen
-			#if DEBUG 1
+			#if DEBUG == 1
 				std::cout << "Spiel - Map" << std::endl;
 			#endif
 			ShowMap(1,viewCamera);				// 1 = Level 1 -> Hauptkarte / Oberwelt

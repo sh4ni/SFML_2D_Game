@@ -1,7 +1,7 @@
 #include "include.h"
 
 void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
-	#if DEBUG 1
+	#if DEBUG == 1
 		std::cout << "Lade Map..." << LevelId << std::endl;
 	#endif
 	// Hier wird die Textur für die Map geladen.
@@ -38,7 +38,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 				LoadCounterY++;
 			}
 		}
-		#if DEBUG 1
+		#if DEBUG == 1
 			std::cout << "Map erfolgreich Eingelesen" << std::endl;
 		#endif
 		std::ifstream closefile(FileName);
@@ -50,7 +50,11 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	
 	Clock clock;
 	
-	Player P1("include/texture/player/player.png");
+	#if DEBUG == 1
+		Player P1("include/texture/player/player_debug.png");
+	#else
+		Player P1("include/texture/player/player.png");
+	#endif
 	
 	
 	float LastTime = 1.f;
@@ -84,7 +88,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		{
 			if(currentEvent.type == Event::KeyPressed){
 				if(currentEvent.key.code == Keyboard::Escape){
-					#if DEBUG 1
+					#if DEBUG == 1
 						std::cout << " Pause " << std::endl;	
 					#endif
 					Schrift Pause(viewCamera.getCenter().x,viewCamera.getCenter().y,"Pause",50);
