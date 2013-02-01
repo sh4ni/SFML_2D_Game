@@ -12,14 +12,14 @@ void Intro::Show(RenderWindow & renderWindow)
 	renderWindow.draw(sprite);
 	renderWindow.display();
 
-	Event event;
+	Event currentEvent;
 	while(true)
 	{
-		while(renderWindow.pollEvent(event))
+		while(renderWindow.pollEvent(currentEvent))
 		{
-			if(event.type == Event::KeyPressed || event.type == Event::MouseButtonPressed ){
+			if(currentEvent.type == Event::KeyPressed || currentEvent.type == Event::MouseButtonPressed ){
 				return;
-			}else if(event.type == Event::Closed){
+			}else if(currentEvent.type == Event::Closed){
 				return;
 			}
 		}

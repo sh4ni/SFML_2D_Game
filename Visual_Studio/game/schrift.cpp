@@ -1,19 +1,22 @@
 #include "schrift.h"
 #include "defines.h"
 
-Schrift::Schrift(float X, float Y, String myText){
+Schrift::Schrift(float X, float Y, String myText, int size){
 	
 	if(!font.loadFromFile("include/fonts/arial.ttf"))
-		std::cout << "Fehler beim Laden!" << std::endl;
+		std::cout << "Fehler beim Laden der Schrift!\a" << std::endl;
 	else
-		std::cout << "Font geladen!" << std::endl;
+		#if DEBUG == 1
+			std::cout << "Font geladen!" << std::endl;
+		#endif
 
 	printText.setString(myText);
 	printText.setFont(font);
-	printText.setCharacterSize(10);
-
-	//printText.setPosition(0,HEIGHT-10);
+	printText.setCharacterSize(size);
+	printText.setColor(sf::Color(255,255,255));
+	//printText.setOrigin(size,size);
 	printText.setPosition(X,Y);
+	
 }
 
 void Schrift::Update(String myText){

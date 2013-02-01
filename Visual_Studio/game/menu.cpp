@@ -1,17 +1,17 @@
 #include "include.h"
 
 void Menu::Show(RenderWindow& renderWindow){
-	Texture image;
-	if(image.loadFromFile("include/interface/menu.png") != true){
+	Texture background;
+	if(background.loadFromFile("include/interface/menu.png") != true){
 		return;
 	}
 
-	Sprite sprite(image);
+	Sprite sprite(background);
 	
 	renderWindow.draw(sprite);
 	
-	Schrift Texter(0,50,"Menu");
-	Texter.Render(renderWindow);
+	Schrift Menu_Start(175,235,"Spiel Starten",30);
+	Menu_Start.Render(renderWindow);
 
 	renderWindow.display();
 
