@@ -32,7 +32,7 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	this->y = sprite.getPosition().y;
 	
 	#if DEBUG == 1
-		//std::cout << x << " - " << y << std::endl;
+		std::cout << x << " - " << y << std::endl;
 	#endif
 
 	if(Keyboard::isKeyPressed(Keyboard::Left)){
