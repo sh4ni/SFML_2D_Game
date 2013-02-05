@@ -28,9 +28,9 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window)
 	//Exit menu item coordinates
 	MenuItem exitButton;
 	exitButton.rect.top = 321;
-	exitButton.rect.height = 382;
+	exitButton.rect.width = 382;
 	exitButton.rect.left = 160;
-	exitButton.rect.width = 862;
+	exitButton.rect.height = 862;
 
 	exitButton.action = Exit;
 
