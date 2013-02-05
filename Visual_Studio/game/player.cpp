@@ -16,7 +16,7 @@ Player::Player(String tex){
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,16.f);
 	sprite.setPosition(WIDTH/2,HEIGHT/2);
-	sprite.setScale(2.1f,2.1f); // player wird 110% gro� skaliert
+	sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
 }
 
 float Player::getPosX(void){

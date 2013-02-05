@@ -1,6 +1,7 @@
 #include "npc.h"
 
 // Wegen Static im Header, hier wird texture bekannt gemacht
+/*
 Texture Npc::texture;
 
 Npc::Npc(){
@@ -48,3 +49,4 @@ void Npc::loadTexture(String text){
 			std::cout << "Bilddatei erfolgreich geladen!" << std::endl;
 		}
 }
+*/

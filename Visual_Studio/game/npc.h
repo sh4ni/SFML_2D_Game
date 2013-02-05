@@ -1,3 +1,4 @@
+/*
 #ifndef _NPC_H_
 #define _NPC_H_
 
@@ -24,3 +25,4 @@ private:
 
 
 #endif
+*/

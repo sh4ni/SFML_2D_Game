@@ -19,7 +19,7 @@ Alle Includes hier rein
 
 #include "defines.h"
 #include "player.h"
-#include "npc.h"
+//#include "npc.h"
 #include "schrift.h"
 #include "map.h"
 #include "intro.h"

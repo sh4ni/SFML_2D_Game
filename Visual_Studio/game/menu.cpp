@@ -1,7 +1,4 @@
-
 #include "include.h"
-
-
 
 MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window)
 {

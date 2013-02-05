@@ -103,15 +103,12 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 			if(levelLoop.type == Event::KeyPressed){
 				if(levelLoop.key.code == Keyboard::Escape){
 					pause(renderWindow,viewCamera,levelLoop,paused);
-				}else if(levelLoop.key.code == Keyboard::End){
-					return;
 				}else if(levelLoop.key.code == Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
 					if(Screen.saveToFile("screenshots\screenshot-"__DATE__"-.png")){
 						#if DEBUG == 1
 							std::cout << " Screenshot gespeichert.. " << std::endl;	
 						#endif
-
 					}
 				}
 			}else if(levelLoop.type == Event::LostFocus){
