@@ -26,5 +26,6 @@ Visual_Studio/Debug/
 Visual_Studio/Release/
 Visual_Studio/game/Debug/
 Visual_Studio/game/Release/
+Visual_Studio/screenshots/
 *.sdf
 *.sln

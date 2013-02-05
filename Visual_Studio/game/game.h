@@ -7,6 +7,8 @@ class Game
 {
 public:
 	static void Start();
+	static sf::RenderWindow& GetWindow();
+	const static sf::Event& GetInput();
 private:
 	static void ShowIntro();
 	static void ShowMenu();
@@ -14,7 +16,7 @@ private:
 	static void ShowMap(int LevelId, View viewCamera);
 	static bool IsExiting();
 
-	enum GameState { Uninitialized, ShowingIntro, Paused, ShowingMenu, Playing, Exiting };
+	enum GameState { Uninitialized, ShowingIntro, Paused, ShowingMenu, Playing, Options, Exiting };
 
 	static GameState _gameState;
 	static RenderWindow _mainWindow;

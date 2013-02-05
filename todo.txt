@@ -5,8 +5,15 @@
 - Monster
 - Interface
 
+- Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
 - Intro und Menü
 - Map Editor
 
 - Dialoge/Story
+- Spielstand Speichern / Laden
+
+ Improvements
+
+- Nur sichtbare Tiles rendern
+- Speicher im Maploader dynamisch holen

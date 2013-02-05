@@ -27,7 +27,8 @@ public:
 	void Show(RenderWindow& window, int LevelId, View viewCamera);
 	void InitMap(std::string FileName);
 private:
-
+	static void pause(RenderWindow& window, View viewCamera, Event levelLoop, bool paused);
+	static void resume();
 };
 
 #endif

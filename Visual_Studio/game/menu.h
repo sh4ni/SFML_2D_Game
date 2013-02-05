@@ -2,10 +2,27 @@
 #define _MENU_H_
 
 #include "include.h"
+#include <list>
 
-class Menu{
+class MainMenu
+{
+
 public:
-	void Show(RenderWindow& window);
+	enum MenuResult { Nothing, Exit, Options, Play };	
+	
+	class MenuItem
+		{
+		public:
+			sf::Rect<int> rect;
+			MenuResult action;
+		};
+	
+	MenuResult Show(RenderWindow& renderWindow);
+
+private:
+	MenuResult GetMenuResponse(RenderWindow& window);
+	MenuResult HandleClick(int x, int y);
+	std::list<MenuItem> _menuItems;
 };
 
 #endif

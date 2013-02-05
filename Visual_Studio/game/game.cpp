@@ -5,8 +5,9 @@ void Game::Start(void)
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
+
 	_mainWindow.create(VideoMode(WIDTH, HEIGHT), VERSION, Style::Titlebar);
-	
+
 	//_mainWindow.setIcon(32,32,*windowIcon);
 
 	// Setze den Spielstatus auf Intro -> Intro wird angezeigt
@@ -16,8 +17,10 @@ void Game::Start(void)
 	while(!IsExiting()){
 		GameLoop();
 	}
+	
 	// Wenn der GameLoop beendet wurde, schlieﬂe das Fenster
 	_mainWindow.close();
+	system("pause");
 }
 
 bool Game::IsExiting()
@@ -35,8 +38,6 @@ void Game::GameLoop()
 {
 	View viewCamera  = _mainWindow.getView();
 	
-	//Event currentEvent;
-	//_mainWindow.pollEvent(currentEvent);
 	_mainWindow.setFramerateLimit(FPS);
 	_mainWindow.setVerticalSyncEnabled(true);
 
@@ -68,7 +69,10 @@ void Game::GameLoop()
 void Game::ShowMap(int LevelId, View viewCamera){
 	Map map;
 	map.Show(_mainWindow, LevelId, viewCamera);
-	_gameState = Game::Exiting;
+	#if DEBUG == 1
+		std::cout << "Es wurde END gedr¸ckt -> _gameState = Exiting!" << std::endl;
+	#endif
+	_gameState = Exiting;
 }
 
 void Game::ShowIntro(){
@@ -77,10 +81,35 @@ void Game::ShowIntro(){
 	_gameState = Game::ShowingMenu;
 }
 
+
 void Game::ShowMenu(){
-	Menu menu;
-	menu.Show(_mainWindow);
-	_gameState = Game::Playing;
+	MainMenu mainMenu;
+	MainMenu::MenuResult result = mainMenu.Show(_mainWindow);
+	switch(result)
+	{
+		case MainMenu::Exit:
+			#if DEBUG == 1
+				std::cout << "Menu -> Exit Button gedrueckt" << std::endl;
+				//getchar();
+				//_gameState = ShowingMenu;
+			//#else
+				_gameState = Game::Exiting;
+			#endif
+			break;
+		case MainMenu::Play:
+			#if DEBUG == 1
+				std::cout << "Menu -> Play Button gedrueckt " << std::endl;	
+				//getchar();
+				//_gameState = ShowingMenu;
+			//#else
+				_gameState = Playing;	
+			#endif
+			break;
+		case MainMenu::Options:
+			// code
+			//_gameState = Options;
+			break;
+	}
 }
 
 

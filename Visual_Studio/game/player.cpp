@@ -1,11 +1,11 @@
-#include "defines.h"
+ï»¿#include "defines.h"
 #include "player.h"
 
 Player::Player(String tex){
 	Speed = PLAYERSPEED;
 
 	if(!texture.loadFromFile(tex)){
-		std::cout << "Fehler beim Laden der Textur!\a" << std::endl;	
+		std::cout << "Fehler beim Laden der Textur!" << std::endl;	
 	}else{
 		#if DEBUG == 1
 			std::cout << "Textur wurde erfolgreich geladen!" << std::endl;
@@ -16,7 +16,7 @@ Player::Player(String tex){
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,16.f);
 	sprite.setPosition(WIDTH/2,HEIGHT/2);
-	sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
+	sprite.setScale(2.1f,2.1f); // player wird 110% groï¿½ skaliert
 }
 
 float Player::getPosX(void){
