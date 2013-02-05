@@ -68,7 +68,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		float Frames = 1.f /( ElapsedTime / 1000 );
 		LastTime = ElapsedTime;
 		char text[15];
-		//std::cout << "FPS: " << Frames << std::endl;
+		
 		sprintf(text,"FPS: %f",Frames);
 		DisplayFPS.Update(text);
 		// FPSText.SetPosition(window.ConvertCoords(20, 20, defaultCamera));
@@ -85,9 +85,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		P1.Update(renderWindow, ElapsedTime);
 		
 		Event levelLoop;
-		while(renderWindow.pollEvent(levelLoop))
-		{
-
+		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == Event::KeyPressed){
 				if(levelLoop.key.code == Keyboard::Escape){
 					pause(renderWindow,viewCamera,levelLoop,paused);
@@ -127,7 +125,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		renderWindow.display();
 	}
 }
-
 
 void Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused){
 
