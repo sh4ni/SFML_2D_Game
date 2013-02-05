@@ -15,7 +15,7 @@ Alle Includes hier rein
 
 #include <vector>
 #include <fstream>				// Für Texture und Map-Loader
-#include <string>
+#include <sstream>				// Für Umwandlung von Zahlen in Strings... z.b. FPS anzeige usw.
 
 #include "defines.h"
 #include "player.h"

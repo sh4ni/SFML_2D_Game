@@ -8,12 +8,12 @@ using namespace sf;
 class Schrift{
 public:
 	void Render		(RenderWindow &Window);
-	Schrift			(float X, float Y, String myText, int size);
+	Schrift			(int X, int Y, String myText, int size);
 	void Update		(String myText);
 private:
 	Font font;
 	Text printText;
-	float X, Y;
+	int X, Y;
 	String myText;
 };
 

@@ -5,12 +5,6 @@
 
 using namespace sf;
 
-/*class TextureLoader{
-public:
-	void LoadTexture(std::string TextureFile);
-private:
-};*/
-
 class TilePart{
 public:
 	void LoadTile(Texture Texture);
@@ -18,7 +12,6 @@ public:
 	void SetTileType(int TileNumber);
 	Sprite* TexturePart;
 private:
-	
 	int TileType;
 };
 

@@ -74,7 +74,7 @@ MainMenu::MenuResult  MainMenu::GetMenuResponse(sf::RenderWindow& window)
 		{
 			if(menuEvent.type == sf::Event::MouseButtonPressed)
 			{
-				#if DEBUG == 1
+				#ifdef DEBUG
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
 

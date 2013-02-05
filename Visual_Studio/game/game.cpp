@@ -43,14 +43,14 @@ void Game::GameLoop()
 
 	switch(_gameState){
 		case Game::ShowingIntro:{
-			#if DEBUG==1
+			#ifdef DEBUG
 				std::cout << "Intro" << std::endl;
 			#endif
 			ShowIntro();
 		break;
 		}
 		case Game::ShowingMenu:{
-			#if DEBUG == 1
+			#ifdef DEBUG
 				std::cout << "Menu" << std::endl;
 			#endif
 			ShowMenu();
@@ -58,7 +58,7 @@ void Game::GameLoop()
 		}
 		case Game::Playing:{
 			// Hier wird die Map geladen
-			#if DEBUG == 1
+			#ifdef DEBUG
 				std::cout << "Spiel - Map" << std::endl;
 			#endif
 			ShowMap(1,viewCamera);				// 1 = Level 1 -> Hauptkarte / Oberwelt
@@ -69,7 +69,7 @@ void Game::GameLoop()
 void Game::ShowMap(int LevelId, View viewCamera){
 	Map map;
 	map.Show(_mainWindow, LevelId, viewCamera);
-	#if DEBUG == 1
+	#ifdef DEBUG
 		std::cout << "Es wurde END gedrückt -> _gameState = Exiting!" << std::endl;
 	#endif
 	_gameState = Exiting;
@@ -88,7 +88,7 @@ void Game::ShowMenu(){
 	switch(result)
 	{
 		case MainMenu::Exit:
-			#if DEBUG == 1
+			#ifdef DEBUG
 				std::cout << "Menu -> Exit Button gedrueckt" << std::endl;
 				//getchar();
 				//_gameState = ShowingMenu;
@@ -97,7 +97,7 @@ void Game::ShowMenu(){
 			#endif
 			break;
 		case MainMenu::Play:
-			#if DEBUG == 1
+			#ifdef DEBUG
 				std::cout << "Menu -> Play Button gedrueckt " << std::endl;	
 				//getchar();
 				//_gameState = ShowingMenu;
