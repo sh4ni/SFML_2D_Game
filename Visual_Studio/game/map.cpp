@@ -14,18 +14,21 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
 	int TileType;
-	TilePart TileMap[100][100];
+	TilePart** TileMap;
 
-	std::string MapPath = "include/map/map";
-	std::string MapFileType = ".txt";
-	char MapNumber[3];	
-	sprintf(MapNumber,"%d",LevelId);
-	
-	std::string FileName = MapPath + MapNumber + MapFileType;
+	char FileName[30];
+	sprintf(FileName,"include/map/map%d.txt",LevelId);
 
+	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName);
 	if( openfile.is_open() ){
 		openfile >> MapSizeX >> MapSizeY;
+
+		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.
+		for ( int i = 0 ; i < MapSizeX ; i++ ){		// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
+			TileMap[i] = new TilePart[MapSizeY];
+		}
+
 		while( !openfile.eof() ){
 			openfile >> TileType;
 			IntRect subRect;
@@ -41,7 +44,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		}
 		#if DEBUG == 1
 			std::cout << "Map erfolgreich eingelesen." << std::endl;
-
 		#endif
 		std::ifstream closefile(FileName);
 	}
@@ -58,26 +60,38 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	#endif
 
 	float LastTime = 1.f;
+	float ElapsedTime;
+	float Frames;
+	char text[16];
+
 	Schrift DisplayFPS(0,0,"Fps Anzeige",20);
 
 	bool paused = false;
 	while(true)
 	{
-		float ElapsedTime = (float)clock.restart().asMilliseconds();
+		ElapsedTime = (float)clock.restart().asMilliseconds();
 
-		float Frames = 1.f /( ElapsedTime / 1000 );
+		Frames = 1.f /( ElapsedTime / 1000 );
 		LastTime = ElapsedTime;
-		char text[15];
 		
 		sprintf(text,"FPS: %f",Frames);
 		DisplayFPS.Update(text);
 		// FPSText.SetPosition(window.ConvertCoords(20, 20, defaultCamera));
 		
-		for( int y = 0 ; y < MapSizeY ; y++ ){
-			for( int x = 0 ; x < MapSizeX ; x++ ){
-				TileMap[x][y].TexturePart->setPosition( x * TILESIZE, y * TILESIZE );
+		float CamX = P1.getPosX();
+		float CamY = P1.getPosY();
+
+		// Kamera folgt dem Spieler, geht aber nicht übers Kartenende hinaus
+		if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
+		if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
+		if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = float(MapSizeX * TILESIZE - WIDTH/2);
+		if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = float(MapSizeY * TILESIZE - HEIGHT/2);
+
+		// Orientierung an der Kamera, damit nur sichtbare Sprites neu gezeichnet werden.
+		for( int y = ((int)CamY-(HEIGHT/2))/TILESIZE ; y < ((int)CamY+(HEIGHT/2)+TILESIZE-1)/TILESIZE ; y++ ){		// abbruchbedingung könnte evtl noch minimal optimiert werden,
+			for( int x = ((int)CamX-(WIDTH/2))/TILESIZE ; x < ((int)CamX+(WIDTH/2)+TILESIZE-1)/TILESIZE ; x++ ){	// sollte so aber recht gut funktionieren.
+				TileMap[x][y].TexturePart->setPosition( x * TILESIZE, y * TILESIZE );								// sollten aufnahmefehler beim bewegen auftreten, dann stimmt hier was nicht.
 				renderWindow.draw(*TileMap[x][y].TexturePart);
-				//std::cout << "Zeichne " << x << "/" << y << " Tile ID=" << MapFile[x][y] << "=" << std::endl;
 			}
 		}
 		DisplayFPS.Render(renderWindow);
@@ -110,14 +124,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 			}
 			//sf::sleep(sf::microseconds(1000));
 		}
-
-		float CamX = P1.getPosX();
-		float CamY = P1.getPosY();
-
-		if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
-		if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
-		if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = float(MapSizeX * TILESIZE - WIDTH/2);
-		if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = float(MapSizeY * TILESIZE - HEIGHT/2);
 
 		viewCamera.setCenter(CamX,CamY);
 		

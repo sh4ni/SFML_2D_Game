@@ -14,6 +14,3 @@
 - Spielstand Speichern / Laden
 
  Improvements
-
-- Nur sichtbare Tiles rendern
-- Speicher im Maploader dynamisch holen
