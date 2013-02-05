@@ -39,9 +39,9 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 				LoadCounterY++;
 			}
 		}
-
 		#if DEBUG == 1
 			std::cout << "Map erfolgreich eingelesen." << std::endl;
+
 		#endif
 		std::ifstream closefile(FileName);
 	}
@@ -87,6 +87,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		Event levelLoop;
 		while(renderWindow.pollEvent(levelLoop))
 		{
+
 			if(levelLoop.type == Event::KeyPressed){
 				if(levelLoop.key.code == Keyboard::Escape){
 					pause(renderWindow,viewCamera,levelLoop,paused);
@@ -98,6 +99,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 						#if DEBUG == 1
 							std::cout << " Screenshot gespeichert.. " << std::endl;	
 						#endif
+
 					}
 				}
 			}else if(levelLoop.type == Event::LostFocus){
