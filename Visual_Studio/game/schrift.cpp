@@ -4,7 +4,7 @@
 Schrift::Schrift(float X, float Y, String myText, int size){
 	
 	if(!font.loadFromFile("include/fonts/arial.ttf"))
-		std::cout << "Fehler beim Laden!" << std::endl;
+		std::cout << "Fehler beim Laden der Schrift!\a" << std::endl;
 	else
 		#if DEBUG == 1
 			std::cout << "Font geladen!" << std::endl;

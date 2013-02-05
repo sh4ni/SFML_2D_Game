@@ -12,6 +12,7 @@ Alle Includes hier rein
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+
 #include <vector>
 #include <fstream>				// Für Texture und Map-Loader
 #include <string>
