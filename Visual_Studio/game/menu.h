@@ -15,6 +15,7 @@ public:
 		public:
 			sf::Rect<int> rect;
 			MenuResult action;
+			bool active;
 		};
 	
 	MenuResult Show(RenderWindow& renderWindow);
