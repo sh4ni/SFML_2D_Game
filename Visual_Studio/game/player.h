@@ -9,16 +9,18 @@ class Player{
 public:
 	void Update		(RenderWindow &Window, float ElapsedTime);
 	void Render		(RenderWindow &Window);
-	Player			(String texture);
+	Player			(String tex,IntRect*** CollisionMap);
 	float			getPosX(void);
 	float			getPosY(void);
 private:
 	float Speed;
 	Texture texture;
 	Sprite sprite;
+	IntRect*** ColMap;
+	IntRect Collision;
 	float x;
 	float y;
-	int current_live;
+	//int current_live;
 
 	
 	/*

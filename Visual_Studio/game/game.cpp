@@ -66,7 +66,7 @@ void Game::GameLoop()
 			#ifdef DEBUG
 				std::cout << "Spiel - Map" << std::endl;
 			#endif
-			ShowMap(1,viewCamera);				// 1 = Level 1 -> Hauptkarte / Oberwelt
+			ShowMap(2,viewCamera);				// 1 = Level 1 -> Hauptkarte / Oberwelt
 		break;
 		}
 	}

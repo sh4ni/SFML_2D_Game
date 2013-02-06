@@ -1,4 +1,11 @@
 #include "include.h"
+#include <vector>
+
+/*IntRect Map::getRect(int x, int y){
+	x /= TILESIZE;
+	y /= TILESIZE;
+	return CollisionMap[x][y];
+}*/
 
 void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 
@@ -15,6 +22,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	int LoadCounterY = 0;
 	int TileType;
 	TilePart** TileMap;
+	IntRect*** CollisionMap;
 	
 	std::ostringstream FileName;	
 	FileName << "include/map/map" << LevelId << ".txt";
@@ -29,13 +37,27 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 			TileMap[i] = new TilePart[MapSizeY];
 		}
 
+		CollisionMap = new IntRect**[MapSizeX];
+		for ( int i = 0 ; i < MapSizeX ; i++ ){
+			CollisionMap[i] = new IntRect*[MapSizeY];
+		}
+
+
+
 		while( !openfile.eof() ){
 			openfile >> TileType;
 			IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
 			subRect.top=TileType/10*TILESIZE;
 			subRect.left=TileType%10*TILESIZE;
+			
 			TileMap[LoadCounterX][LoadCounterY].TexturePart = new Sprite(LevelTexture,subRect);
+			if(TileType >10  ){
+				CollisionMap[LoadCounterX][LoadCounterY]=new IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
+			}else{
+				CollisionMap[LoadCounterX][LoadCounterY]=NULL;
+			}
+			//CollisionMap[LoadCounterX][LoadCounterY] = IntRect(0,0,32,32) ;
 			LoadCounterX++;
 			if( LoadCounterX >= MapSizeX ){
 				LoadCounterX = 0;
@@ -54,9 +76,9 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	Clock clock;
 	
 	#ifdef DEBUG
-		Player P1("include/texture/player/player_female_debug.png");
+		Player P1("include/texture/player/player_female_debug.png",CollisionMap);
 	#else
-		Player P1("include/texture/player/player_female.png");
+		Player P1("include/texture/player/player_female.png",CollisionMap);
 	#endif
 
 	float LastTime = 1.f;
