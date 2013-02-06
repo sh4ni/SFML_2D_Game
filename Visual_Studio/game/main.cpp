@@ -1,8 +1,7 @@
 #include "game.h"
 
 int main(void){
-
+	//Game::Init();
 	Game::Start();
-	system("pause");
 	return 0;
 }

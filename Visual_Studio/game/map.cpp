@@ -15,7 +15,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	int LoadCounterY = 0;
 	int TileType;
 	TilePart** TileMap;
-
+	
 	//char FileName[30];
 	//sprintf(FileName,"include/map/map%d.txt",LevelId);
 	std::ostringstream FileName;	
@@ -56,9 +56,9 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	Clock clock;
 	
 	#ifdef DEBUG
-		Player P1("include/texture/player/player_debug.png");
+		Player P1("include/texture/player/player_female_debug.png");
 	#else
-		Player P1("include/texture/player/player.png");
+		Player P1("include/texture/player/player_female.png");
 	#endif
 
 	float LastTime = 1.f;
@@ -165,8 +165,13 @@ void Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bo
 		renderWindow.pollEvent(levelLoop); // sonst kann die pause nicht verlassen werden!
 		if ((levelLoop.type == sf::Event::KeyPressed) && (levelLoop.key.code == sf::Keyboard::Escape)){
 			paused = false;
-			std::cout << "Continue Playing.." << std::endl;
-		}else if(levelLoop.key.code == Keyboard::End){
+			#ifdef DEBUG
+				std::cout << "Continue Playing.." << std::endl;
+			#endif
+		}else if(levelLoop.key.code == Keyboard::Space){
+			#ifdef DEBUG
+				std::cout << "Spiel beenden!" << std::endl;
+			#endif
 			return;
 		}
 	}

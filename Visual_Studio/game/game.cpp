@@ -1,5 +1,10 @@
 #include "include.h"
 
+void Game::Init(void)
+{
+	// Do it!
+}
+
 void Game::Start(void)
 {
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
@@ -92,18 +97,16 @@ void Game::ShowMenu(){
 				std::cout << "Menu -> Exit Button gedrueckt" << std::endl;
 				//getchar();
 				//_gameState = ShowingMenu;
-			//#else
-				_gameState = Game::Exiting;
 			#endif
+				_gameState = Exiting;
 			break;
 		case MainMenu::Play:
 			#ifdef DEBUG
 				std::cout << "Menu -> Play Button gedrueckt " << std::endl;	
 				//getchar();
-				//_gameState = ShowingMenu;
-			//#else
-				_gameState = Playing;	
+				//_gameState = ShowingMenu;		
 			#endif
+				_gameState = Playing;	
 			break;
 		case MainMenu::Options:
 			// code
