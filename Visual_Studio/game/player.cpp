@@ -58,9 +58,12 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	int ty = ((int)y/TILESIZE)-1;
 	int tx = ((int)x/TILESIZE)-1;
 	for(int i=0;i<9;i++){
-		if(ColMap[tx+(i%3)][ty+i/3] != NULL){
+		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
 			if(Collision.intersects(*ColMap[tx+(i%3)][ty+i/3])){
-				std::cout << ".";
+				std::cout << i;
+				if( i < 3 ){
+					y += (Speed*ElapsedTime);
+				}
 			}
 		}	
 	}
