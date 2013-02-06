@@ -12,7 +12,9 @@ Player::Player(String tex){
 		#endif
 	}
 
-	texture.setSmooth(true);
+
+
+	//texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,32.f);
 	sprite.setPosition(WIDTH/2,HEIGHT/2);
@@ -32,20 +34,20 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	this->y = sprite.getPosition().y;
 	
 	if(Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)){
-		sprite.setRotation(270.f);
+		//sprite.setRotation(270.f);
 		x -= (Speed*ElapsedTime);
 	}
 	
 	if(Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right)){
-		sprite.setRotation(90.f);
+		//sprite.setRotation(90.f);
 		x += (Speed*ElapsedTime);
 	}
 	if(Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up)){
-		sprite.setRotation(0.f);
+		//sprite.setRotation(0.f);
 		y -= (Speed*ElapsedTime);
 	}
 	if(Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down)){
-		sprite.setRotation(180.f);
+		//sprite.setRotation(180.f);
 		y += (Speed*ElapsedTime);
 	}
 	/*

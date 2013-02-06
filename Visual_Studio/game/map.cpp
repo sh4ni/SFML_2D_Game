@@ -16,8 +16,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	int TileType;
 	TilePart** TileMap;
 	
-	//char FileName[30];
-	//sprintf(FileName,"include/map/map%d.txt",LevelId);
 	std::ostringstream FileName;	
 	FileName << "include/map/map" << LevelId << ".txt";
 
