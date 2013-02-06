@@ -145,7 +145,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 					pause(renderWindow,viewCamera,levelLoop,paused);
 				}else if(levelLoop.key.code == Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
-					if(Screen.saveToFile("screenshots\screenshot-"__DATE__"-.png")){
+					if(Screen.saveToFile("screenshots\\screenshot-"__DATE__"-.png")){
 						#ifdef DEBUG
 							std::cout << " Screenshot gespeichert.. " << std::endl;	
 						#endif

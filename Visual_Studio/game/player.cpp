@@ -32,8 +32,12 @@ float Player::getPosX(void){
 float Player::getPosY(void){
 	return this->y;
 }
-
+	bool colli = false;
 void Player::Update(RenderWindow &Window, float ElapsedTime){
+	
+	
+	//std::cout << colli;
+
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;
 	
@@ -41,43 +45,71 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	Collision.top = y-TILESIZE;
 
 	if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)){
-		x -= (Speed*ElapsedTime);
+		if(!colli){
+			x -= (Speed*ElapsedTime);
+			
+		}else{
+			x += (Speed*ElapsedTime);
+			colli = false;	
+		}
 	}
 	if(Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right)){
-		x += Speed*ElapsedTime;
+		if(!colli){
+			x += Speed*ElapsedTime;
+			
+		}else{
+			x -= (Speed*ElapsedTime);
+			colli = false;
+		}
 	}
 	if(Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up)){
-		y -= (Speed*ElapsedTime);
+		if(!colli){
+			y -= (Speed*ElapsedTime);
+			
+		}else{
+			y += (Speed*ElapsedTime);
+			colli = false;
+		}
 	}
 	if(Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down)){
-		y += (Speed*ElapsedTime);
+		if(!colli){
+			y += (Speed*ElapsedTime);
+			
+		}else{
+			y -= (Speed*ElapsedTime);
+			colli = false;
+		}
 	}
-	/*if(Keyboard::isKeyPressed(Keyboard::Escape)){
-		exit(EXIT_SUCCESS);
-	}*/
+
+
 	int ty = ((int)y/TILESIZE)-1;
 	int tx = ((int)x/TILESIZE)-1;
 	for(int i=0;i<9;i++){
 		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
 			if(Collision.intersects(*ColMap[tx+(i%3)][ty+i/3])){
-				
-				if( i <= 2 ){ // top
-					y += (Speed*ElapsedTime);
-					break;
-				}else if (!(i%3)){ // left
-					std::cout << i;
-					x += (Speed*ElapsedTime);
-					break;
-				}else if( !((i-2)%3) ){ // right
-					x -= (Speed*ElapsedTime);
-					break;
-				}else if( i >= 6){ // bottom
-					y -= (Speed*ElapsedTime);
-					break;
-				}
+				std::cout << "ein!";
+				//std::cout << i;
+				colli = true;
+				//if( i <= 2 ){ // top
+				//	y += (Speed*ElapsedTime);
+				//	break;
+				//}else if (!(i%3)){ // left
+				//	std::cout << i;
+				//	x += (Speed*ElapsedTime);
+				//	break;
+				//}else if( !((i-2)%3) ){ // right
+				//	x -= (Speed*ElapsedTime);
+				//	break;
+				//}else if( i >= 6){ // bottom
+				//	y -= (Speed*ElapsedTime);
+				//	break;
+				//}
 
 			}
-		}	
+		}else{
+				std::cout << "aus!";
+				colli = false;
+			}	
 	}
 
 
