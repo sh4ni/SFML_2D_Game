@@ -19,6 +19,6 @@
 
 // used in player.cpp
 #define PLAYERSPEED 0.4f
-#define COLLISIONTOLERANCE 6
+#define COLLISIONTOLERANCE 2
 
 #endif

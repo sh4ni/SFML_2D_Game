@@ -83,20 +83,51 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 
 	if( (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up)) && !blockUp ){
 		y -= (Speed*ElapsedTime);
+		blockDown = false;
 	}
 	if( (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down)) && !blockDown ){
 		y += (Speed*ElapsedTime);
+		blockUp = false;
 	}
 	if ( (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)) && !blockLeft ){
 		x -= (Speed*ElapsedTime);
+		blockRight = false;
 	}
 	if( (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right)) && !blockRight ){
 		x += Speed*ElapsedTime;
+		blockLeft = false;
 	}
 
 	if( blockUp ){
-		if( ((TILESIZE-(((int)y-TILESIZE)-((((int)y-TILESIZE)/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE) && ((TILESIZE-(((int)y-TILESIZE)-((((int)y-TILESIZE)/TILESIZE)*TILESIZE))) < TILESIZE) ){
-			std::cout << (((int)y-TILESIZE)/TILESIZE)*TILESIZE+TILESIZE*2-1 << " ";
+		if( (TILESIZE-(((int)y-TILESIZE)-((((int)y-TILESIZE)/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
+			y= (((int)y-TILESIZE)/TILESIZE)*TILESIZE+TILESIZE*2-1;
+			#ifdef DEBUG
+				std::cout << "Kolliskorrektur: OBEN - " << y << std::endl;
+			#endif
+		}
+	}
+	if( blockDown ){
+		if( (((int)y+TILESIZE)-((((int)y+TILESIZE)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
+			y= (((int)y+TILESIZE)/TILESIZE)*TILESIZE-TILESIZE+1;
+			#ifdef DEBUG
+				std::cout << "Kolliskorrektur: UNTEN - " << y << std::endl;
+			#endif
+		}
+	}
+	if( blockLeft ){
+		if( (TILESIZE-(((int)x-TILESIZE/2)-((((int)x-TILESIZE/2)/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
+			x= (((int)x-TILESIZE/2)/TILESIZE)*TILESIZE+TILESIZE*3/2-1;
+			#ifdef DEBUG
+				std::cout << "Kolliskorrektur: LINKS - " << x << std::endl;
+			#endif
+		}
+	}
+	if( blockRight ){
+		if( (((int)x+TILESIZE/2)-((((int)x+TILESIZE/2)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
+			x= (((int)x+TILESIZE/2)/TILESIZE)*TILESIZE-TILESIZE/2+1;
+			#ifdef DEBUG
+				std::cout << "Kolliskorrektur: RIGHT - " << x << std::endl;
+			#endif
 		}
 	}
 
