@@ -21,8 +21,12 @@ Player::Player(String tex, IntRect*** CollisionMap){
 	sprite.setPosition(WIDTH/2,HEIGHT/2);
 	//sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
 
-	Collision.height = TILESIZE*2;
-	Collision.width = TILESIZE;
+	CollisionX.height = TILESIZE*2-COLLISIONTOLERANCE*2;
+	CollisionX.width = TILESIZE;
+
+	CollisionY.height = TILESIZE*2;
+	CollisionY.width = TILESIZE-COLLISIONTOLERANCE*2;
+
 }
 
 float Player::getPosX(void){
@@ -41,8 +45,11 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	int tx = ((int)x/TILESIZE)-1;
 	int ty = ((int)y/TILESIZE)-1;
 
-	Collision.left = x-TILESIZE/2;
-	Collision.top = y-TILESIZE;
+	CollisionX.left = (int)x-TILESIZE/2;
+	CollisionX.top = (int)y-TILESIZE+COLLISIONTOLERANCE;
+
+	CollisionY.left = (int)x-TILESIZE/2+COLLISIONTOLERANCE;
+	CollisionY.top = (int)y-TILESIZE;
 
 	bool blockUp = false;
 	bool blockDown = false;
@@ -51,16 +58,7 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 
 	for(int i=0;i<9;i++){
 		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
-			if(Collision.intersects(*ColMap[tx+(i%3)][ty+i/3])){
-				std::cout << i;
-				if( i <= 2 ){ // top
-					//y += (Speed*ElapsedTime);
-					blockUp = true;
-				}
-				if( i >= 6){ // bottom
-					//y -= (Speed*ElapsedTime);
-					blockDown = true;
-				}
+			if(CollisionX.intersects(*ColMap[tx+(i%3)][ty+i/3])){
 				if (!(i%3)){ // left
 					//x += (Speed*ElapsedTime);
 					blockLeft = true;
@@ -68,6 +66,16 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 				if( !((i-2)%3) ){ // right
 					//x -= (Speed*ElapsedTime);
 					blockRight = true;
+				}
+			}
+			if(CollisionY.intersects(*ColMap[tx+(i%3)][ty+i/3])){
+				if( i <= 2 ){ // top
+					//y += (Speed*ElapsedTime);
+					blockUp = true;
+				}
+				if( i >= 6){ // bottom
+					//y -= (Speed*ElapsedTime);
+					blockDown = true;
 				}
 			}
 		}

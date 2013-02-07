@@ -37,7 +37,8 @@ private:
 	Texture texture;
 	Sprite sprite;
 	IntRect*** ColMap;
-	IntRect Collision;
+	IntRect CollisionX;
+	IntRect CollisionY;
 	float x;
 	float y;
 	//int current_live;
