@@ -79,7 +79,11 @@ MainMenu::MenuResult  MainMenu::GetMenuResponse(sf::RenderWindow& window)
 				#endif
 
 				return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
+			
+			}else if(menuEvent.type == sf::Event::KeyPressed){
+				return HandleClick(205,235);
 			}
+			
 			if(menuEvent.type == sf::Event::Closed)
 			{
 				return Exit;

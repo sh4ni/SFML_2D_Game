@@ -90,6 +90,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 
 	Schrift DisplayFPS(0,0,"FPS: 0",20);
 	Schrift DisplayKoord(0,20,"X: 0 Y: 0",20);
+	Schrift DisplaySpeed(0,40,"Speed: 0",20);
 
 
 	bool paused = false;
@@ -100,6 +101,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		Frames = 1.f /( ElapsedTime / 1000 );
 		LastTime = ElapsedTime;
 
+		// FPS
 		std::ostringstream FPSText;
 		FPSText.precision(0);
 		FPSText << std::fixed << "FPS: " << Frames;
@@ -115,6 +117,11 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		PlayerKoordText.precision(1);
 		PlayerKoordText << std::fixed << "X: " << CamX << " Y: " << CamY;
 		DisplayKoord.Update(PlayerKoordText.str());
+
+		std::ostringstream PlayerSpeedText;
+		PlayerSpeedText.precision(1);
+		PlayerSpeedText << std::fixed << "Speed: " << P1.getSpeed();
+		DisplaySpeed.Update(PlayerSpeedText.str());
 
 		// ...geht aber nicht übers Kartenende hinaus
 		if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
@@ -138,6 +145,8 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		P1.Render(renderWindow);
 		P1.Update(renderWindow, ElapsedTime);
 		
+		
+		
 		Event levelLoop;
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == Event::KeyPressed){
@@ -150,6 +159,13 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 							std::cout << " Screenshot gespeichert.. " << std::endl;	
 						#endif
 					}
+				}else if(levelLoop.key.code == Keyboard::E){
+					// player speed up
+					P1.increaseSpeed(0.1f);
+				}else if(levelLoop.key.code == Keyboard::Q){
+					// player speed runter
+					std::cout << "Speed runter!";
+					P1.decreaseSpeed(0.1f);
 				}
 			}else if(levelLoop.type == Event::LostFocus){
 				#ifdef DEBUG
@@ -165,6 +181,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		
 		DisplayFPS.Render(renderWindow); // FPS Anzeige
 		DisplayKoord.Render(renderWindow); // Spielerkoordinaten Anzeige
+		DisplaySpeed.Render(renderWindow); // Geschwindigkeit des Players
 
 		renderWindow.display();
 	}

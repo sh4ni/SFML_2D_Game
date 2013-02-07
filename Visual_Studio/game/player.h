@@ -12,6 +12,26 @@ public:
 	Player			(String tex,IntRect*** CollisionMap);
 	float			getPosX(void);
 	float			getPosY(void);
+	float			getSpeed(void){
+		return this->Speed;
+	}
+	void			increaseSpeed(float speedValue){
+		if(this->Speed < 10.f)
+			this->Speed += speedValue;
+		#ifdef DEBUG
+			std::cout << Speed << std::endl;
+		#endif
+	}
+	void			decreaseSpeed(float speedValue){
+		if(this->Speed <= 0.2f)
+			this->Speed = 0.1f;
+		else
+			this->Speed -= speedValue;
+
+		#ifdef DEBUG
+			std::cout << Speed << std::endl;
+		#endif
+	}
 private:
 	float Speed;
 	Texture texture;
