@@ -56,9 +56,42 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	bool blockLeft = false;
 	bool blockRight = false;
 
-	for(int i=0;i<9;i++){
+	// 14 Kollisionspunkte
+	int CollisionPoint[14][2] = {
+		{x-TILESIZE/2, y-TILESIZE}, // 0: Links Oben
+		{x-TILESIZE/2+COLLISIONTOLERANCE, y-TILESIZE}, // 1: Links Oben Hilfspunkt Oben
+		{x-TILESIZE/2, y-TILESIZE+COLLISIONTOLERANCE}, // 2: Links Oben Hilfspunkt Links
+
+		{x+TILESIZE/2-1, y-TILESIZE}, // 3: Rechts Oben
+		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y-TILESIZE}, // 4: Rechts Oben Hilfspunkt Oben
+		{x+TILESIZE/2-1, y-TILESIZE+COLLISIONTOLERANCE}, // 5: Rechts Oben Hilfspunkt Rechts
+
+		{x-TILESIZE/2, y}, // 6: Links Mitte
+		{x+TILESIZE/2-1, y}, // 7: Rechts Mitte
+
+		{x-TILESIZE/2, y+TILESIZE-1}, // 8: Links Unten
+		{x-TILESIZE/2+COLLISIONTOLERANCE, y+TILESIZE-1}, // 9: Links Unten Hilfspunkt Unten
+		{x-TILESIZE/2, y+TILESIZE-1-COLLISIONTOLERANCE}, // 10: Links Unten Hilfspunkt Links
+
+		{x+TILESIZE/2-1, y+TILESIZE-1}, // 11: Rechts Unten
+		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y+TILESIZE-1}, // 12: Rechts Unten Hilfspunkt Unten
+		{x+TILESIZE/2-1, y+TILESIZE-1-COLLISIONTOLERANCE} // 13: Rechts Unten Hilfspunkt Rechts
+	};
+
+	for( int i=0; i<9; i++){
+		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
+			for( int p=0; p<14; p++){
+				if( ColMap[tx+(i%3)][ty+i/3]->contains(CollisionPoint[p][0],CollisionPoint[p][1]) ){
+					std::cout << p << " ";
+				}
+			}
+		}
+	}
+
+	/*for(int i=0;i<9;i++){
 		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
 			if(CollisionX.intersects(*ColMap[tx+(i%3)][ty+i/3])){
+			std::cout << i;
 				if (!(i%3)){ // left
 					//x += (Speed*ElapsedTime);
 					blockLeft = true;
@@ -69,6 +102,7 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 				}
 			}
 			if(CollisionY.intersects(*ColMap[tx+(i%3)][ty+i/3])){
+			std::cout << i;
 				if( i <= 2 ){ // top
 					//y += (Speed*ElapsedTime);
 					blockUp = true;
@@ -79,7 +113,7 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 				}
 			}
 		}
-	}
+	}*/
 
 	if( (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up)) && !blockUp ){
 		y -= (Speed*ElapsedTime);
