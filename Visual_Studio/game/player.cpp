@@ -94,6 +94,12 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 		x += Speed*ElapsedTime;
 	}
 
+	if( blockUp ){
+		if( ((TILESIZE-(((int)y-TILESIZE)-((((int)y-TILESIZE)/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE) && ((TILESIZE-(((int)y-TILESIZE)-((((int)y-TILESIZE)/TILESIZE)*TILESIZE))) < TILESIZE) ){
+			std::cout << (((int)y-TILESIZE)/TILESIZE)*TILESIZE+TILESIZE*2-1 << " ";
+		}
+	}
+
 	sprite.setPosition(x,y);
 
 }
