@@ -164,7 +164,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 					P1.increaseSpeed(0.1f);
 				}else if(levelLoop.key.code == Keyboard::Q){
 					// player speed runter
-					std::cout << "Speed runter!";
 					P1.decreaseSpeed(0.1f);
 				}
 			}else if(levelLoop.type == Event::LostFocus){
