@@ -85,8 +85,8 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	float ElapsedTime;
 	float Frames;
 
-	float CamX;
-	float CamY;
+	int CamX;
+	int CamY;
 
 	Schrift DisplayFPS(0,0,"FPS: 0",20);
 	Schrift DisplayKoord(0,20,"X: 0 Y: 0",20);
@@ -108,13 +108,13 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		DisplayFPS.Update(FPSText.str());
 
 		// Kamera folgt dem Spieler...
-		CamX = P1.getPosX();
-		CamY = P1.getPosY();
+		CamX = (int)P1.getPosX();
+		CamY = (int)P1.getPosY();
 
 		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell für die Koordinatenanzeige
 		// und ruf aus performancegründen die getPos methode nicht 2 mal auf.
 		std::ostringstream PlayerKoordText;
-		PlayerKoordText.precision(1);
+		PlayerKoordText.precision(0);
 		PlayerKoordText << std::fixed << "X: " << CamX << " Y: " << CamY;
 		DisplayKoord.Update(PlayerKoordText.str());
 
@@ -126,8 +126,8 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		// ...geht aber nicht übers Kartenende hinaus
 		if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
 		if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
-		if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = float(MapSizeX * TILESIZE - WIDTH/2);
-		if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = float(MapSizeY * TILESIZE - HEIGHT/2);
+		if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = MapSizeX * TILESIZE - WIDTH/2;
+		if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
 
 		renderWindow.setView(viewCamera);
 		viewCamera.setCenter(CamX,CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
@@ -144,8 +144,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		// Rendern des Spielers
 		P1.Render(renderWindow);
 		P1.Update(renderWindow, ElapsedTime);
-		
-		
 		
 		Event levelLoop;
 		while(renderWindow.pollEvent(levelLoop)){
