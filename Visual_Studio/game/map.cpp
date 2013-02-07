@@ -151,7 +151,9 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == Event::KeyPressed){
 				if(levelLoop.key.code == Keyboard::Escape){
-					pause(renderWindow,viewCamera,levelLoop,paused);
+					bool test = pause(renderWindow,viewCamera,levelLoop,paused);
+					if(test)
+						return;
 				}else if(levelLoop.key.code == Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
 					if(Screen.saveToFile("screenshots\\screenshot-"__DATE__"-.png")){
@@ -186,7 +188,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	}
 }
 
-void Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused){
+bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused){
 
 	paused = true;
 					
@@ -208,7 +210,8 @@ void Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bo
 			#ifdef DEBUG
 				std::cout << "Spiel beenden!" << std::endl;
 			#endif
-			return;
+			return true; // gebe true zurueck damit das spiel anschließend beendet wird
 		}
 	}
+	return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
 }

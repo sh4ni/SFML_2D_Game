@@ -18,7 +18,7 @@ public:
 	void InitMap(std::string FileName);
 	IntRect getRect(int x, int y);
 private:
-	static void pause(RenderWindow& window, View viewCamera, Event levelLoop, bool paused);
+	static bool pause(RenderWindow& window, View viewCamera, Event levelLoop, bool paused);
 	static void resume();
 };
 
