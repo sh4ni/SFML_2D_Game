@@ -92,7 +92,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	Schrift DisplayKoord(0,20,"X: 0 Y: 0",20);
 	Schrift DisplaySpeed(0,40,"Speed: 0",20);
 
-
 	bool paused = false;
 	while(true)
 	{

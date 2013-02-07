@@ -30,8 +30,8 @@ private:
 	Texture texture;
 	Sprite sprite;
 	IntRect*** ColMap;
-	IntRect CollisionX;
-	IntRect CollisionY;
+	//IntRect CollisionX; alt
+	//IntRect CollisionY;
 	float x;
 	float y;
 	//int current_live;

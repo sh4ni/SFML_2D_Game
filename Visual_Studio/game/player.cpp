@@ -21,12 +21,15 @@ Player::Player(String tex, IntRect*** CollisionMap){
 	sprite.setPosition(WIDTH/2,HEIGHT/2);
 	//sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
 
-	CollisionX.height = TILESIZE*2-COLLISIONTOLERANCE*2;
+	/*CollisionX.height = TILESIZE*2-COLLISIONTOLERANCE*2;
 	CollisionX.width = TILESIZE;
 
 	CollisionY.height = TILESIZE*2;
-	CollisionY.width = TILESIZE-COLLISIONTOLERANCE*2;
+	CollisionY.width = TILESIZE-COLLISIONTOLERANCE*2;*/
 
+	/*RectangleShape box(Vector2f(5.f,5.f));
+	box.setPosition(50,50);
+	box.setFillColor(Color(0,0,0));*/
 }
 
 float Player::getPosX(void){
@@ -45,11 +48,11 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	int tx = ((int)x/TILESIZE)-1;
 	int ty = ((int)y/TILESIZE)-1;
 
-	CollisionX.left = (int)x-TILESIZE/2;
+	/*CollisionX.left = (int)x-TILESIZE/2;
 	CollisionX.top = (int)y-TILESIZE+COLLISIONTOLERANCE;
 
 	CollisionY.left = (int)x-TILESIZE/2+COLLISIONTOLERANCE;
-	CollisionY.top = (int)y-TILESIZE;
+	CollisionY.top = (int)y-TILESIZE;*/
 
 	bool blockUp = false;
 	bool blockDown = false;
@@ -57,36 +60,35 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	bool blockRight = false;
 
 	// 14 Kollisionspunkte
-	int CollisionPoint[14][2] = {
-		{x-TILESIZE/2, y-TILESIZE}, // 0: Links Oben
-		{x-TILESIZE/2+COLLISIONTOLERANCE, y-TILESIZE}, // 1: Links Oben Hilfspunkt Oben
-		{x-TILESIZE/2, y-TILESIZE+COLLISIONTOLERANCE}, // 2: Links Oben Hilfspunkt Links
+	int CollisionPoint[14][3] = {
+		{x-TILESIZE/2, y-TILESIZE,0},						//  0: Links Oben
+		{x+TILESIZE/2-1, y-TILESIZE,0},						//  1: Rechts Oben							Player
+		{x-TILESIZE/2, y+TILESIZE-1,0},						//  2: Links Unten						+---------------+
+		{x+TILESIZE/2-1, y+TILESIZE-1,0},					//  3: Rechts Unten						| 00 04   05 01 |
+		{x-TILESIZE/2+COLLISIONTOLERANCE, y-TILESIZE,0},	//  4: Links Oben Hilfspunkt Oben		| 08         09 |
+		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y-TILESIZE,0},	//  5: Rechts Oben Hilfspunkt Oben		|				|
+		{x-TILESIZE/2+COLLISIONTOLERANCE, y+TILESIZE-1,0},	//  6: Links Unten Hilfspunkt Unten		|				|
+		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y+TILESIZE-1,0},//  7: Rechts Unten Hilfspunkt Unten	| 12         13 |
+		{x-TILESIZE/2, y-TILESIZE+COLLISIONTOLERANCE,0},	//  8: Links Oben Hilfspunkt Links		|				|
+		{x+TILESIZE/2-1, y-TILESIZE+COLLISIONTOLERANCE,0},	//  9: Rechts Oben Hilfspunkt Rechts	|				|
+		{x-TILESIZE/2, y+TILESIZE-1-COLLISIONTOLERANCE,0},	// 10: Links Unten Hilfspunkt Links		| 10         11 |
+		{x+TILESIZE/2-1, y+TILESIZE-1-COLLISIONTOLERANCE,0},// 11: Rechts Unten Hilfspunkt Rechts	| 02 06   07 03 |
+		{x-TILESIZE/2, y,0},								// 12: Links Mitte						+---------------+
+		{x+TILESIZE/2-1, y,0},								// 13: Rechts Mitte
 
-		{x+TILESIZE/2-1, y-TILESIZE}, // 3: Rechts Oben
-		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y-TILESIZE}, // 4: Rechts Oben Hilfspunkt Oben
-		{x+TILESIZE/2-1, y-TILESIZE+COLLISIONTOLERANCE}, // 5: Rechts Oben Hilfspunkt Rechts
-
-		{x-TILESIZE/2, y}, // 6: Links Mitte
-		{x+TILESIZE/2-1, y}, // 7: Rechts Mitte
-
-		{x-TILESIZE/2, y+TILESIZE-1}, // 8: Links Unten
-		{x-TILESIZE/2+COLLISIONTOLERANCE, y+TILESIZE-1}, // 9: Links Unten Hilfspunkt Unten
-		{x-TILESIZE/2, y+TILESIZE-1-COLLISIONTOLERANCE}, // 10: Links Unten Hilfspunkt Links
-
-		{x+TILESIZE/2-1, y+TILESIZE-1}, // 11: Rechts Unten
-		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y+TILESIZE-1}, // 12: Rechts Unten Hilfspunkt Unten
-		{x+TILESIZE/2-1, y+TILESIZE-1-COLLISIONTOLERANCE} // 13: Rechts Unten Hilfspunkt Rechts
 	};
 
 	for( int i=0; i<9; i++){
 		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
 			for( int p=0; p<14; p++){
 				if( ColMap[tx+(i%3)][ty+i/3]->contains(CollisionPoint[p][0],CollisionPoint[p][1]) ){
-					std::cout << p << " ";
+					CollisionPoint[p][2] = 1;
 				}
 			}
 		}
 	}
+
+
 
 	/*for(int i=0;i<9;i++){
 		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
