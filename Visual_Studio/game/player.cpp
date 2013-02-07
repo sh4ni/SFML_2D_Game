@@ -32,95 +32,59 @@ float Player::getPosX(void){
 float Player::getPosY(void){
 	return this->y;
 }
-	bool colli = false;
+
 void Player::Update(RenderWindow &Window, float ElapsedTime){
 	
-	
-	//std::cout << colli;
-
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;
 	
+	int tx = ((int)x/TILESIZE)-1;
+	int ty = ((int)y/TILESIZE)-1;
+
 	Collision.left = x-TILESIZE/2;
 	Collision.top = y-TILESIZE;
 
-	if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)){
-		/*if(!colli){
-			x -= (Speed*ElapsedTime);
-			
-		}else{
-			x += (Speed*ElapsedTime);
-			colli = false;	
-		}*/
-		x -= (Speed*ElapsedTime);
-	}
-	if(Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right)){
-		/*if(!colli){
-			x += Speed*ElapsedTime;
-			
-		}else{
-			x -= (Speed*ElapsedTime);
-			colli = false;
-		}*/
-		x += (Speed*ElapsedTime);
-	}
-	if(Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up)){
-		/*if(!colli){
-			y -= (Speed*ElapsedTime);
-			
-		}else{
-			y += (Speed*ElapsedTime);
-			colli = false;
-		}*/
-		y -= (Speed*ElapsedTime);
-	}
-	if(Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down)){
-		/*if(!colli){
-			y += (Speed*ElapsedTime);
-			
-		}else{
-			y -= (Speed*ElapsedTime);
-			colli = false;
-		}*/
-		y += (Speed*ElapsedTime);
-	}
+	bool blockUp = false;
+	bool blockDown = false;
+	bool blockLeft = false;
+	bool blockRight = false;
 
-
-	int ty = ((int)y/TILESIZE)-1;
-	int tx = ((int)x/TILESIZE)-1;
 	for(int i=0;i<9;i++){
 		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
 			if(Collision.intersects(*ColMap[tx+(i%3)][ty+i/3])){
-				//std::cout << "ein!";
 				std::cout << i;
-				colli = true;
 				if( i <= 2 ){ // top
-					y -= (-1)*(Speed*ElapsedTime);
-					break;
-				}//else if (!(i%3)){ // left
-				//	std::cout << i;
-				//	x += (Speed*ElapsedTime);
-				//	break;
-				//}else if( !((i-2)%3) ){ // right
-				//	x -= (Speed*ElapsedTime);
-				//	break;
-				else if( i >= 6){ // bottom
-					y += (-1)*(Speed*ElapsedTime);
-					break;
+					//y += (Speed*ElapsedTime);
+					blockUp = true;
 				}
-				//Collision
-
+				if( i >= 6){ // bottom
+					//y -= (Speed*ElapsedTime);
+					blockDown = true;
+				}
+				if (!(i%3)){ // left
+					//x += (Speed*ElapsedTime);
+					blockLeft = true;
+				}
+				if( !((i-2)%3) ){ // right
+					//x -= (Speed*ElapsedTime);
+					blockRight = true;
+				}
 			}
-		}else{
-				//std::cout << "aus!";
-				colli = false;
-		}	
+		}
 	}
 
-
-	/*if ( Collision.intersects( *ColMap[(int)x/TILESIZE][(int)y/TILESIZE] ) ) {
-			std::cout << "." ;
-	}*/
+	if( (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up)) && !blockUp ){
+		y -= (Speed*ElapsedTime);
+	}
+	if( (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down)) && !blockDown ){
+		y += (Speed*ElapsedTime);
+	}
+	if ( (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)) && !blockLeft ){
+		x -= (Speed*ElapsedTime);
+	}
+	if( (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right)) && !blockRight ){
+		x += Speed*ElapsedTime;
+	}
 
 	sprite.setPosition(x,y);
 
