@@ -60,35 +60,81 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 	bool blockRight = false;
 
 	// 14 Kollisionspunkte
-	int CollisionPoint[14][3] = {
-		{x-TILESIZE/2, y-TILESIZE,0},						//  0: Links Oben
-		{x+TILESIZE/2-1, y-TILESIZE,0},						//  1: Rechts Oben							Player
-		{x-TILESIZE/2, y+TILESIZE-1,0},						//  2: Links Unten						+---------------+
-		{x+TILESIZE/2-1, y+TILESIZE-1,0},					//  3: Rechts Unten						| 00 04   05 01 |
-		{x-TILESIZE/2+COLLISIONTOLERANCE, y-TILESIZE,0},	//  4: Links Oben Hilfspunkt Oben		| 08         09 |
-		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y-TILESIZE,0},	//  5: Rechts Oben Hilfspunkt Oben		|				|
-		{x-TILESIZE/2+COLLISIONTOLERANCE, y+TILESIZE-1,0},	//  6: Links Unten Hilfspunkt Unten		|				|
-		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y+TILESIZE-1,0},//  7: Rechts Unten Hilfspunkt Unten	| 12         13 |
-		{x-TILESIZE/2, y-TILESIZE+COLLISIONTOLERANCE,0},	//  8: Links Oben Hilfspunkt Links		|				|
-		{x+TILESIZE/2-1, y-TILESIZE+COLLISIONTOLERANCE,0},	//  9: Rechts Oben Hilfspunkt Rechts	|				|
-		{x-TILESIZE/2, y+TILESIZE-1-COLLISIONTOLERANCE,0},	// 10: Links Unten Hilfspunkt Links		| 10         11 |
-		{x+TILESIZE/2-1, y+TILESIZE-1-COLLISIONTOLERANCE,0},// 11: Rechts Unten Hilfspunkt Rechts	| 02 06   07 03 |
-		{x-TILESIZE/2, y,0},								// 12: Links Mitte						+---------------+
-		{x+TILESIZE/2-1, y,0},								// 13: Rechts Mitte
+	int CollisionPoint[14][2] = {
+		{x-TILESIZE/2, y-TILESIZE},							//  0: Links Oben
+		{x+TILESIZE/2-1, y-TILESIZE},						//  1: Rechts Oben							Player
+		{x-TILESIZE/2, y+TILESIZE-1},						//  2: Links Unten						+---------------+
+		{x+TILESIZE/2-1, y+TILESIZE-1},						//  3: Rechts Unten						| 00 04   05 01 |
+		{x-TILESIZE/2+COLLISIONTOLERANCE, y-TILESIZE},		//  4: Links Oben Hilfspunkt Oben		| 08         09 |
+		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y-TILESIZE},	//  5: Rechts Oben Hilfspunkt Oben		|				|
+		{x-TILESIZE/2+COLLISIONTOLERANCE, y+TILESIZE-1},	//  6: Links Unten Hilfspunkt Unten		|				|
+		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y+TILESIZE-1},	//  7: Rechts Unten Hilfspunkt Unten	| 12         13 |
+		{x-TILESIZE/2, y-TILESIZE+COLLISIONTOLERANCE},		//  8: Links Oben Hilfspunkt Links		|				|
+		{x+TILESIZE/2-1, y-TILESIZE+COLLISIONTOLERANCE},	//  9: Rechts Oben Hilfspunkt Rechts	|				|
+		{x-TILESIZE/2, y+TILESIZE-1-COLLISIONTOLERANCE},	// 10: Links Unten Hilfspunkt Links		| 10         11 |
+		{x+TILESIZE/2-1, y+TILESIZE-1-COLLISIONTOLERANCE},	// 11: Rechts Unten Hilfspunkt Rechts	| 02 06   07 03 |
+		{x-TILESIZE/2, y},									// 12: Links Mitte						+---------------+
+		{x+TILESIZE/2-1, y},								// 13: Rechts Mitte
 
 	};
+
+	bool cp[14] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 	for( int i=0; i<9; i++){
 		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
 			for( int p=0; p<14; p++){
 				if( ColMap[tx+(i%3)][ty+i/3]->contains(CollisionPoint[p][0],CollisionPoint[p][1]) ){
-					CollisionPoint[p][2] = 1;
+					cp[p] = 1;
 				}
 			}
 		}
 	}
 
-
+	for( int i=0; i<14; i++){	// Punktabfrage ist noch immer nicht wirklich toll... Benötigt auf jedenfall noch etwas Arbeit!
+		//std::cout << cp[i];
+		if( cp[0] && cp[1] && cp[10] && cp[11] && !cp[2] && !cp[3] ){ // Bei sehr starker Auslastung (sollte sehr selten anschlagen)
+			blockUp = true;
+		}
+		if( cp[2] && cp[3] && cp[8] && cp[9] && !cp[0] && !cp[1] ){
+			blockDown = true;
+		}
+		if( cp[0] && cp[2] && cp[5] && cp[7] && !cp[1] && !cp[3] ){
+			blockLeft = true;
+		}
+		if( cp[1] && cp[3] && cp[4] && cp[6] && !cp[0] && !cp[2] ){
+			blockRight = true;
+		}
+		if( cp[0] && cp[1] && cp[12] && cp[13] && !cp[10] && !cp[11] ){ // Bei starker Auslastung
+			blockUp = true;
+		}
+		if( cp[2] && cp[3] && cp[12] && cp[13] && !cp[8] && !cp[9] ){
+			blockDown = true;
+		}
+		if( (cp[0] && cp[4] || cp[1] && cp[5]) && (cp[8] || cp[9]) && (!cp[12] || !cp[13]) ){ // Bei Auslastung
+			blockUp = true;
+		}
+		if( (cp[2] && cp[6] || cp[3] && cp[7]) && (cp[10] || cp[11]) && (!cp[12] || !cp[13]) ){
+			blockDown = true;
+		}
+		if( (cp[0] && cp[8] || cp[2] && cp[10]) && (cp[4] || cp[6]) && (!cp[5] || !cp[7]) ){
+			blockLeft = true;
+		}
+		if( (cp[1] && cp[9] || cp[3] && cp[11]) && (cp[5] || cp[7]) && (!cp[4] || !cp[6]) ){
+			blockRight = true;
+		}
+		if( (cp[0] && cp[4] || cp[1] && cp[5]) && (!cp[8] || !cp[9]) ){ // Bei Normaler Auslastung
+			blockUp = true;
+		}
+		if( (cp[2] && cp[6] || cp[3] && cp[7]) && (!cp[10] || !cp[11]) ){
+			blockDown = true;
+		}
+		if( (cp[0] && cp[8] || cp[2] && cp[10]) && (!cp[4] || !cp[6]) ){
+			blockLeft = true;
+		}
+		if( (cp[1] && cp[9] || cp[3] && cp[11]) && (!cp[5] || !cp[7]) ){
+			blockRight = true;
+		}
+	}
 
 	/*for(int i=0;i<9;i++){
 		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
