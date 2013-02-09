@@ -18,8 +18,8 @@ public:
 	int pExp;
 
 	int mLevelId;
-	int mPosX;
-	int mPosY;
+	float mPosX;
+	float mPosY;
 
 };
 

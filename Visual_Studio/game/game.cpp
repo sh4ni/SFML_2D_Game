@@ -10,7 +10,7 @@ void Game::Init(void)
 	std::ifstream loadgame;
 	loadgame.open("save.txt", std::ios::binary);
 	if(loadgame.is_open()){
-		std::cout << "Spielstand erkannt! Wird geladen..";
+		std::cout << "Spielstand erkannt! Wird geladen..\n";
 		
 		loadgame >> mySavegame.pHealth;
 		loadgame >> mySavegame.pLvl;
@@ -20,6 +20,10 @@ void Game::Init(void)
 		loadgame >> mySavegame.mPosX;
 		loadgame >> mySavegame.mPosY;
 		
+		#ifdef DEBUG
+			std::cout << "Spielstand Erfolgreich geladen." << std::endl;
+		#endif
+
 		loadgame.close();
 	}else{
 		std::cout << "Kein Spielstand erkannt! Default Spielstand wird erstellt..\a\n";
@@ -42,11 +46,12 @@ void Game::Init(void)
 			defaultsavegame << 2 << std::endl;
 			mySavegame.mLevelId = 2;
 			// Pos X auf Map
-			defaultsavegame << 50 << std::endl;
+			defaultsavegame << WIDTH/2 << std::endl;
 			mySavegame.mPosX = WIDTH/2;
 			// Pos Y auf Map
-			defaultsavegame << 50 << std::endl;
-			mySavegame.mPosY = HEIGHT/2;		
+			defaultsavegame << WIDTH/2 ;
+			mySavegame.mPosY = HEIGHT/2;	
+
 		}
 	}
 	Game::Start(mySavegame);
@@ -55,6 +60,8 @@ void Game::Init(void)
 
 void Game::Start(Savegame& currentSavegame)
 {
+	std::cout << currentSavegame.mPosY << std::endl;
+	system("pause");
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	
