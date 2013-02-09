@@ -10,8 +10,12 @@ public:
 	void Update		(RenderWindow &Window, float ElapsedTime);
 	void Render		(RenderWindow &Window);
 	Player			(String tex,IntRect*** CollisionMap);
-	float			getPosX(void);
-	float			getPosY(void);
+	float			getPosX(void){
+		return this->x;
+	}
+	float			getPosY(void){
+		return this->y;
+	}
 	float			getSpeed(void){
 		return this->Speed;
 	}
