@@ -63,6 +63,7 @@ private:
 	int pHealth;
 	int pLvl;
 	int pExp;
+	bool gender;	// 0 - male | 1 - female
 	char pName[11];
 	
 	/*

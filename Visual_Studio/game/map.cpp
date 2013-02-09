@@ -92,7 +92,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	std::cout << "setze default werte!" << std::endl;
 	P1.setHealth(99);
 	P1.setExp(1);
-	P1.setLvl(1);
+	P1.setLvl(5);
 
 	Map::load(P1);
 	//
@@ -140,7 +140,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 
 		std::ostringstream PlayerLvlText;
 		PlayerLvlText.precision(0);
-		PlayerLvlText << std::fixed << "Level: " << P1.getExp();
+		PlayerLvlText << std::fixed << "Level: " << P1.getLvl();
 		DisplayLvl.Update(PlayerLvlText.str());
 
 		// ...geht aber nicht übers Kartenende hinaus
@@ -208,7 +208,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	}
 }
 
-bool Map::load(Player P1)
+bool Map::load(Player& P1)
 {
 	std::cout << "lade..";
 	std::ifstream loadgame;
@@ -234,24 +234,23 @@ bool Map::load(Player P1)
 	return true;
 }
 
-bool Map::save(Player P1)
+bool Map::save(Player& P1)
 {
 	std::cout << "speichere..";
 	std::ofstream savegame;
 	savegame.open("save.txt", std::ios::binary);
 	if(savegame.is_open()){
-		float test = P1.getHealth();
-		savegame << test << std::endl;
-
-		test = 50.f;
-		savegame << test << std::endl;
+		float tmp = P1.getHealth();
+		savegame << tmp << std::endl;
+		tmp = P1.getLvl();
+		savegame << tmp << std::endl;
 
 		savegame.close();
 	}
 	return true;
 }
 
-bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused, Player P1){
+bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused, Player& P1){
 	
 	//Map::save(P1);
 
