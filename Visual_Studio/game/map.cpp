@@ -89,9 +89,12 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	int CamY;
 
 	// Muss noch richtig gesetzt werden!!
+	std::cout << "setze default werte!" << std::endl;
 	P1.setHealth(99);
 	P1.setExp(1);
 	P1.setLvl(1);
+
+	Map::load(P1);
 	//
 
 	Schrift DisplayFPS(0,0,"FPS: 0",20);
@@ -166,7 +169,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == Event::KeyPressed){
 				if(levelLoop.key.code == Keyboard::Escape){
-					bool test = pause(renderWindow,viewCamera,levelLoop,paused);
+					bool test = pause(renderWindow,viewCamera,levelLoop,paused,P1);
 					if(test)
 						return;
 				}else if(levelLoop.key.code == Keyboard::F10) {
@@ -187,7 +190,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 				#ifdef DEBUG
 					std::cout << " Ausserhalb Fenster!.. " << std::endl;	
 				#endif
-				pause(renderWindow,viewCamera,levelLoop,paused);
+				pause(renderWindow,viewCamera,levelLoop,paused,P1);
 			}else if(levelLoop.type == Event::Closed){
 				return;
 			}
@@ -205,8 +208,56 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	}
 }
 
-bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused){
+bool Map::load(Player P1)
+{
+	std::cout << "lade..";
+	std::ifstream loadgame;
+	loadgame.open("save.txt", std::ios::binary);
+	if(loadgame.is_open()){
+		float tester;
+	
+		loadgame >> tester;
+		
+		std::cout << tester << std::endl;
+	
+		P1.setHealth(tester);
+		P1.setLvl(50);
 
+		loadgame >> tester;
+
+		loadgame.close();
+	}else{
+		std::cout << "fehler beim öffnen der datei!" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool Map::save(Player P1)
+{
+	std::cout << "speichere..";
+	std::ofstream savegame;
+	savegame.open("save.txt", std::ios::binary);
+	if(savegame.is_open()){
+		float test = P1.getHealth();
+		savegame << test << std::endl;
+
+		test = 50.f;
+		savegame << test << std::endl;
+
+		savegame.close();
+	}
+	return true;
+}
+
+bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused, Player P1){
+	
+	//Map::save(P1);
+
+	Map::load(P1);
+
+	
 	paused = true;
 					
 	Schrift Pause((int)viewCamera.getCenter().x-75,(int)viewCamera.getCenter().y-25,"Pause",50);

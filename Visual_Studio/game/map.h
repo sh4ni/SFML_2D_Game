@@ -18,8 +18,10 @@ public:
 	void InitMap(std::string FileName);
 	IntRect getRect(int x, int y);
 private:
-	static bool pause(RenderWindow& window, View viewCamera, Event levelLoop, bool paused);
+	static bool pause(RenderWindow& window, View viewCamera, Event levelLoop, bool paused, Player P1);
 	static void resume();
+	static bool save(Player P1);
+	static bool load(Player P1);
 };
 
 #endif
