@@ -21,6 +21,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window)
 	playButton.rect.height = 862;
 
 	playButton.action = Play;
+	playButton.active = true;
 
 	//Exit menu item coordinates
 	MenuItem exitButton;
@@ -63,6 +64,11 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y)
 	return Nothing;
 }
 
+MainMenu::MenuResult MainMenu::HandleKeyboard(int code)
+{
+	return Nothing;
+}
+
 MainMenu::MenuResult  MainMenu::GetMenuResponse(sf::RenderWindow& window)
 {
 	sf::Event menuEvent;
@@ -82,6 +88,8 @@ MainMenu::MenuResult  MainMenu::GetMenuResponse(sf::RenderWindow& window)
 			
 			}else if(menuEvent.type == sf::Event::KeyPressed){
 				return HandleClick(205,235);
+				if(menuEvent.key.code == Keyboard::Down)
+					return HandleKeyboard(2);
 			}
 			
 			if(menuEvent.type == sf::Event::Closed)

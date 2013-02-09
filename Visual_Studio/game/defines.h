@@ -9,16 +9,16 @@
 #define FPS 60U
 
 #ifdef DEBUG
-	#define VERSION "The Journey - 0.05 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled "
+	#define VERSION "The Journey - 0.10 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled "
 #else
-	#define VERSION "The Journey - 0.05 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled "
+	#define VERSION "The Journey - 0.10 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled "
 #endif
 
 // used in map.cpp
 #define TILESIZE 32
 
 // used in player.cpp
-#define PLAYERSPEED 0.4f
+#define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
 
 #endif

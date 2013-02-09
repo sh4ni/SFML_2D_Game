@@ -16,7 +16,7 @@ public:
 		return this->Speed;
 	}
 	void			increaseSpeed(float speedValue){
-		if(this->Speed < 10.f)
+		if(this->Speed < 0.35f)
 			this->Speed += speedValue;
 	}
 	void			decreaseSpeed(float speedValue){
@@ -24,6 +24,30 @@ public:
 			this->Speed = 0.1f;
 		else
 			this->Speed -= speedValue;
+	}
+	void setHealth(int pHealth){
+		this->pHealth = pHealth;
+	}
+	void setLvl(int pLvl){
+		this->pLvl = pLvl;
+	}
+	void setExp(int pExp){
+		this->pExp = pExp;
+	}
+	void setName(char const * pName){
+		strcpy(this->pName,pName);
+	}
+	int getHealth(void){
+		return this->pHealth;
+	}
+	int getLvl(void){
+		return this->pLvl;
+	}
+	int getExp(void){
+		return this->pExp;
+	}
+	char * getName(void){
+		return this->pName;
 	}
 private:
 	float Speed;
@@ -34,8 +58,12 @@ private:
 	//IntRect CollisionY;
 	float x;
 	float y;
-	//int current_live;
+	
 
+	int pHealth;
+	int pLvl;
+	int pExp;
+	char pName[11];
 	
 	/*
 	

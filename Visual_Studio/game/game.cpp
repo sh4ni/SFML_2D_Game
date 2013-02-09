@@ -3,17 +3,23 @@
 void Game::Init(void)
 {
 	// Do it!
+
 }
 
 void Game::Start(void)
 {
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
+	
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
-
 	_mainWindow.create(VideoMode(WIDTH, HEIGHT), VERSION, Style::Titlebar);
 
-	//_mainWindow.setIcon(32,32,*windowIcon);
+	// Lade und setze das Fenstericon
+	sf::Image Icon;
+	if(!Icon.loadFromFile("include/interface/icon.bmp"))
+		std::cout << "Fehler beim Laden des Icons!" << std::endl;
+	else
+		_mainWindow.setIcon(32,32,Icon.getPixelsPtr());
 
 	// Setze den Spielstatus auf Intro -> Intro wird angezeigt
 	_gameState = Game::ShowingIntro;
@@ -25,7 +31,7 @@ void Game::Start(void)
 	
 	// Wenn der GameLoop beendet wurde, schlieﬂe das Fenster
 	_mainWindow.close();
-	system("pause");
+	//system("pause");
 }
 
 bool Game::IsExiting()

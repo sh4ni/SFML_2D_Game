@@ -23,6 +23,7 @@ public:
 private:
 	MenuResult GetMenuResponse(RenderWindow& window);
 	MenuResult HandleClick(int x, int y);
+	MenuResult HandleKeyboard(int result);
 	std::list<MenuItem> _menuItems;
 };
 

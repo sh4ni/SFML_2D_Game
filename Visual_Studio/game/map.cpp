@@ -88,9 +88,17 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	int CamX;
 	int CamY;
 
+	// Muss noch richtig gesetzt werden!!
+	P1.setHealth(99);
+	P1.setExp(1);
+	P1.setLvl(1);
+	//
+
 	Schrift DisplayFPS(0,0,"FPS: 0",20);
 	Schrift DisplayKoord(0,20,"X: 0 Y: 0",20);
 	Schrift DisplaySpeed(0,40,"Speed: 0",20);
+	Schrift DisplayHealth((WIDTH-115),0,"Health: 0",20);
+	Schrift DisplayLvl((WIDTH-115),20,"Lvl: 0",20);
 
 	bool paused = false;
 	while(true)
@@ -121,6 +129,16 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		PlayerSpeedText.precision(1);
 		PlayerSpeedText << std::fixed << "Speed: " << P1.getSpeed();
 		DisplaySpeed.Update(PlayerSpeedText.str());
+
+		std::ostringstream PlayerHealthText;
+		PlayerHealthText.precision(0);
+		PlayerHealthText << std::fixed << "Health: " << P1.getHealth();
+		DisplayHealth.Update(PlayerHealthText.str());
+
+		std::ostringstream PlayerLvlText;
+		PlayerLvlText.precision(0);
+		PlayerLvlText << std::fixed << "Level: " << P1.getExp();
+		DisplayLvl.Update(PlayerLvlText.str());
 
 		// ...geht aber nicht übers Kartenende hinaus
 		if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
@@ -180,6 +198,8 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		DisplayFPS.Render(renderWindow); // FPS Anzeige
 		DisplayKoord.Render(renderWindow); // Spielerkoordinaten Anzeige
 		DisplaySpeed.Render(renderWindow); // Geschwindigkeit des Players
+		DisplayHealth.Render(renderWindow); // Health Player
+		DisplayLvl.Render(renderWindow); // Level of Player
 
 		renderWindow.display();
 	}
