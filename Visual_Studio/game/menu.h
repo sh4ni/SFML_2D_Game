@@ -1,7 +1,8 @@
 #ifndef _MENU_H_
 #define _MENU_H_
 
-#include "include.h"
+#include <SFML/Graphics.hpp>
+#include "schrift.h"
 #include <list>
 
 class MainMenu

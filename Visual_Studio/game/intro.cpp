@@ -1,25 +1,26 @@
-#include "include.h"
-void Intro::Show(RenderWindow & renderWindow)
+#include "intro.h"
+
+void Intro::Show(sf::RenderWindow& renderWindow)
 {
-	Texture image;
+	sf::Texture image;
 	if(image.loadFromFile("include/interface/intro.png") != true)
 	{
 		return;
 	}
 
-	Sprite sprite(image);
+	sf::Sprite sprite(image);
 	
 	renderWindow.draw(sprite);
 	renderWindow.display();
 
-	Event currentEvent;
+	sf::Event currentEvent;
 	while(true)
 	{
 		while(renderWindow.pollEvent(currentEvent))
 		{
-			if(currentEvent.type == Event::KeyPressed || currentEvent.type == Event::MouseButtonPressed ){
+			if(currentEvent.type == sf::Event::KeyPressed || currentEvent.type == sf::Event::MouseButtonPressed ){
 				return;
-			}else if(currentEvent.type == Event::Closed){
+			}else if(currentEvent.type == sf::Event::Closed){
 				return;
 			}
 		}

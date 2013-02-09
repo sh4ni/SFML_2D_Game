@@ -1,18 +1,65 @@
-#include "include.h"
+//#include "include.h"
+#include "game.h"
+
 
 void Game::Init(void)
 {
 	// Do it!
+	Savegame mySavegame;
 
+	std::ifstream loadgame;
+	loadgame.open("save.txt", std::ios::binary);
+	if(loadgame.is_open()){
+		std::cout << "Spielstand erkannt! Wird geladen..";
+		
+		loadgame >> mySavegame.pHealth;
+		loadgame >> mySavegame.pLvl;
+		loadgame >> mySavegame.pExp;
+
+		loadgame >> mySavegame.mLevelId;
+		loadgame >> mySavegame.mPosX;
+		loadgame >> mySavegame.mPosY;
+		
+		loadgame.close();
+	}else{
+		std::cout << "Kein Spielstand erkannt! Default Spielstand wird erstellt..\a\n";
+		std::ofstream defaultsavegame;
+		defaultsavegame.open("save.txt", std::ios::binary);
+		if(defaultsavegame.is_open()){
+			// Health
+			defaultsavegame << 100 << std::endl;
+			mySavegame.pHealth = 100;
+			// Level
+			defaultsavegame << 1 << std::endl;
+			mySavegame.pLvl = 1;
+			// Exp
+			defaultsavegame << 1 << std::endl;
+			mySavegame.pExp = 1;
+			// Gender
+			// Name
+
+			// Map
+			defaultsavegame << 2 << std::endl;
+			mySavegame.mLevelId = 2;
+			// Pos X auf Map
+			defaultsavegame << 50 << std::endl;
+			mySavegame.mPosX = WIDTH/2;
+			// Pos Y auf Map
+			defaultsavegame << 50 << std::endl;
+			mySavegame.mPosY = HEIGHT/2;		
+		}
+	}
+	Game::Start(mySavegame);
+	
 }
 
-void Game::Start(void)
+void Game::Start(Savegame& currentSavegame)
 {
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
-	_mainWindow.create(VideoMode(WIDTH, HEIGHT), VERSION, Style::Titlebar);
+	_mainWindow.create(sf::VideoMode(WIDTH, HEIGHT), VERSION, sf::Style::Titlebar);
 
 	// Lade und setze das Fenstericon
 	sf::Image Icon;
@@ -26,7 +73,7 @@ void Game::Start(void)
 	//_gameState = Game::Playing;
 	// Solange das Spiel nicht beendet wird, führe GameLoop aus
 	while(!IsExiting()){
-		GameLoop();
+		GameLoop(currentSavegame);
 	}
 	
 	// Wenn der GameLoop beendet wurde, schließe das Fenster
@@ -45,9 +92,9 @@ bool Game::IsExiting()
 	// Möglichkeit das Spiel zu Speichern
 }
 
-void Game::GameLoop()
+void Game::GameLoop(Savegame& currentSavegame)
 {
-	View viewCamera  = _mainWindow.getView();
+	sf::View viewCamera  = _mainWindow.getView();
 	
 	_mainWindow.setFramerateLimit(FPS);
 	_mainWindow.setVerticalSyncEnabled(true);
@@ -72,14 +119,14 @@ void Game::GameLoop()
 			#ifdef DEBUG
 				std::cout << "Spiel - Map" << std::endl;
 			#endif
-			ShowMap(2,viewCamera);				// 1 = Level 1 -> Hauptkarte / Oberwelt
+			ShowMap(viewCamera,currentSavegame);				// 1 = Level 1 -> Hauptkarte / Oberwelt
 		break;
 		}
 	}
 }
-void Game::ShowMap(int LevelId, View viewCamera){
+void Game::ShowMap(sf::View viewCamera, Savegame& currentSavegame){
 	Map map;
-	map.Show(_mainWindow, LevelId, viewCamera);
+	map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
 	#ifdef DEBUG
 		std::cout << "Es wurde END gedrückt -> _gameState = Exiting!" << std::endl;
 	#endif
@@ -121,7 +168,6 @@ void Game::ShowMenu(){
 	}
 }
 
-
 // static member variables need to be instantiated outside of the class
 Game::GameState Game::_gameState = Uninitialized;
-RenderWindow Game::_mainWindow;
+sf::RenderWindow Game::_mainWindow;

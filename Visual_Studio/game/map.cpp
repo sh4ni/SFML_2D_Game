@@ -1,5 +1,4 @@
-#include "include.h"
-#include <vector>
+#include "map.h"
 
 /*IntRect Map::getRect(int x, int y){
 	x /= TILESIZE;
@@ -7,7 +6,7 @@
 	return CollisionMap[x][y];
 }*/
 
-void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
+void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera, Savegame& currentSavegame){
 
 	#ifdef DEBUG
 		std::cout << "Lade Map Nr: " << LevelId << "." << std::endl;
@@ -43,7 +42,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		}
 
 
-
 		while( !openfile.eof() ){
 			openfile >> TileType;
 			IntRect subRect;
@@ -76,10 +74,17 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 	Clock clock;
 	
 	#ifdef DEBUG
-		Player P1("include/texture/player/player_female_debug.png",CollisionMap);
+		Player P1("include/texture/player/player_female_debug.png",CollisionMap,currentSavegame);
 	#else
-		Player P1("include/texture/player/player_female.png",CollisionMap);
+		Player P1("include/texture/player/player_female.png",CollisionMap,currentSavegame);
 	#endif
+		
+	P1.setHealth(currentSavegame.pHealth);
+	P1.setExp(currentSavegame.pExp);
+	P1.setLvl(currentSavegame.pLvl);
+
+
+
 
 	float LastTime = 1.f;
 	float ElapsedTime;
@@ -87,15 +92,6 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 
 	int CamX;
 	int CamY;
-
-	// Muss noch richtig gesetzt werden!!
-	std::cout << "setze default werte!" << std::endl;
-	P1.setHealth(99);
-	P1.setExp(1);
-	P1.setLvl(5);
-
-	Map::load(P1);
-	//
 
 	Schrift DisplayFPS(0,0,"FPS: 0",20);
 	Schrift DisplayKoord(0,20,"X: 0 Y: 0",20);
@@ -169,7 +165,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == Event::KeyPressed){
 				if(levelLoop.key.code == Keyboard::Escape){
-					bool test = pause(renderWindow,viewCamera,levelLoop,paused,P1);
+					bool test = pause(renderWindow,viewCamera,levelLoop,paused,P1,LevelId, currentSavegame);
 					if(test)
 						return;
 				}else if(levelLoop.key.code == Keyboard::F10) {
@@ -190,7 +186,7 @@ void Map::Show(RenderWindow& renderWindow, int LevelId, View viewCamera){
 				#ifdef DEBUG
 					std::cout << " Ausserhalb Fenster!.. " << std::endl;	
 				#endif
-				pause(renderWindow,viewCamera,levelLoop,paused,P1);
+					pause(renderWindow,viewCamera,levelLoop,paused,P1,LevelId, currentSavegame);
 			}else if(levelLoop.type == Event::Closed){
 				return;
 			}
@@ -234,28 +230,45 @@ bool Map::load(Player& P1)
 	return true;
 }
 
-bool Map::save(Player& P1)
+bool Map::save(Player& P1, int LevelId)
 {
 	std::cout << "speichere..";
 	std::ofstream savegame;
 	savegame.open("save.txt", std::ios::binary);
 	if(savegame.is_open()){
-		float tmp = P1.getHealth();
-		savegame << tmp << std::endl;
-		tmp = P1.getLvl();
-		savegame << tmp << std::endl;
+		// Health
+		savegame << P1.getHealth() << std::endl;
+		// Level
+		savegame << P1.getLvl() << std::endl;
+		// Exp
+		savegame << P1.getExp() << std::endl;
+		// Gender
+		// Name
+
+
+		// Map
+		savegame << LevelId << std::endl;
+		// Pos X auf Map
+		savegame << P1.getPosX() << std::endl;
+		// Pos Y auf Map
+		savegame << P1.getPosY() << std::endl;
+		
+		
 
 		savegame.close();
 	}
 	return true;
 }
 
-bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused, Player& P1){
+bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused, Player& P1, int LevelId, Savegame& currentSavegame){
 	
-	//Map::save(P1);
+	Map::save(P1, LevelId);
 
-	Map::load(P1);
+	//Map::load(P1);
 
+	
+	
+	
 	
 	paused = true;
 					
