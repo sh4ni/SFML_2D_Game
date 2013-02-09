@@ -33,19 +33,7 @@ Player::Player(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSav
 	box.setFillColor(Color(0,0,0));*/
 }
 
-<<<<<<< HEAD
-void Player::Update(RenderWindow &Window, float ElapsedTime){
-=======
-float Player::getPosX(void){
-	return this->x;
-}
-
-float Player::getPosY(void){
-	return this->y;
-}
-
 void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
->>>>>>> abca42ed017d8073d2c2a3adc9a370512d723554
 	
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;

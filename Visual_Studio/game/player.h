@@ -9,27 +9,15 @@
 
 class Player{
 public:
-<<<<<<< HEAD
-	void Update		(RenderWindow &Window, float ElapsedTime);
-	void Render		(RenderWindow &Window);
-	Player			(String tex,IntRect*** CollisionMap);
+	void Update		(sf::RenderWindow &Window, float ElapsedTime);
+	void Render		(sf::RenderWindow &Window);
+	Player			(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSavegame);
 	float			getPosX(void){
 		return this->x;
 	}
 	float			getPosY(void){
 		return this->y;
 	}
-=======
-	void Update		(sf::RenderWindow &Window, float ElapsedTime);
-	void Render		(sf::RenderWindow &Window);
-	Player			(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSavegame);
-
-
-
-
-	float			getPosX(void);
-	float			getPosY(void);
->>>>>>> abca42ed017d8073d2c2a3adc9a370512d723554
 	float			getSpeed(void){
 		return this->Speed;
 	}
