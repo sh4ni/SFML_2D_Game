@@ -1,7 +1,7 @@
-﻿#include "defines.h"
-#include "player.h"
+﻿#include "player.h"
 
-Player::Player(String tex, IntRect*** CollisionMap){
+
+Player::Player(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 
 	this->ColMap = CollisionMap;
 
@@ -18,7 +18,8 @@ Player::Player(String tex, IntRect*** CollisionMap){
 	//texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,32.f);
-	sprite.setPosition(WIDTH/2,HEIGHT/2);
+	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
+	//sprite.setPosition(WIDTH/2,HEIGHT/2);
 	//sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
 
 	/*CollisionX.height = TILESIZE*2-COLLISIONTOLERANCE*2;
@@ -32,7 +33,19 @@ Player::Player(String tex, IntRect*** CollisionMap){
 	box.setFillColor(Color(0,0,0));*/
 }
 
+<<<<<<< HEAD
 void Player::Update(RenderWindow &Window, float ElapsedTime){
+=======
+float Player::getPosX(void){
+	return this->x;
+}
+
+float Player::getPosY(void){
+	return this->y;
+}
+
+void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
+>>>>>>> abca42ed017d8073d2c2a3adc9a370512d723554
 	
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;
@@ -182,19 +195,19 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 		}
 	}*/
 
-	if( (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up)) && !blockUp ){
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !blockUp ){
 		y -= (Speed*ElapsedTime);
 		//blockDown = false;
 	}
-	if( (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down)) && !blockDown ){
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !blockDown ){
 		y += (Speed*ElapsedTime);
 		//blockUp = false;
 	}
-	if ( (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)) && !blockLeft ){
+	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !blockLeft ){
 		x -= (Speed*ElapsedTime);
 		//blockRight = false;
 	}
-	if( (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right)) && !blockRight ){
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !blockRight ){
 		x += Speed*ElapsedTime;
 		//blockLeft = false;
 	}
@@ -236,6 +249,6 @@ void Player::Update(RenderWindow &Window, float ElapsedTime){
 
 }
 
-void Player::Render(RenderWindow &Window){
+void Player::Render(sf::RenderWindow& Window){
 	Window.draw(sprite);
 }

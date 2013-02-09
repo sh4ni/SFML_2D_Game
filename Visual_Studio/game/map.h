@@ -1,9 +1,15 @@
 #ifndef MAP_H_
 #define MAP_H_
 
-#include "include.h"
 
-using namespace sf;
+#include <sstream>
+
+#include "game.h"
+#include "player.h"
+#include "savegame.h"
+#include <vector>  
+
+
 
 class TilePart{
 public:
@@ -14,13 +20,13 @@ private:
 
 class Map{
 public:
-	void Show(RenderWindow& window, int LevelId, View viewCamera);
+	void Show(sf::RenderWindow& window, int LevelId, sf::View viewCamera, Savegame& currentSavegame);
 	void InitMap(std::string FileName);
-	IntRect getRect(int x, int y);
+	sf::IntRect getRect(int x, int y);
 private:
-	static bool pause(RenderWindow& window, View viewCamera, Event levelLoop, bool paused, Player& P1);
+	static bool pause(sf::RenderWindow& window, View viewCamera, Event levelLoop, bool paused, Player& P1, int LevelId, Savegame& currentSavegame);
 	static void resume();
-	static bool save(Player& P1);
+	static bool save(Player& P1, int level);
 	static bool load(Player& P1);
 };
 

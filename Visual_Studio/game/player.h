@@ -1,12 +1,15 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
+
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "defines.h"
+#include "savegame.h"
 
-using namespace sf;
 
 class Player{
 public:
+<<<<<<< HEAD
 	void Update		(RenderWindow &Window, float ElapsedTime);
 	void Render		(RenderWindow &Window);
 	Player			(String tex,IntRect*** CollisionMap);
@@ -16,6 +19,17 @@ public:
 	float			getPosY(void){
 		return this->y;
 	}
+=======
+	void Update		(sf::RenderWindow &Window, float ElapsedTime);
+	void Render		(sf::RenderWindow &Window);
+	Player			(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSavegame);
+
+
+
+
+	float			getPosX(void);
+	float			getPosY(void);
+>>>>>>> abca42ed017d8073d2c2a3adc9a370512d723554
 	float			getSpeed(void){
 		return this->Speed;
 	}
@@ -55,9 +69,9 @@ public:
 	}
 private:
 	float Speed;
-	Texture texture;
-	Sprite sprite;
-	IntRect*** ColMap;
+	sf::Texture texture;
+	sf::Sprite sprite;
+	sf::IntRect*** ColMap;
 	//IntRect CollisionX; alt
 	//IntRect CollisionY;
 	float x;
@@ -68,7 +82,7 @@ private:
 	int pLvl;
 	int pExp;
 	bool gender;	// 0 - male | 1 - female
-	char pName[11];
+	static char pName[11] ;
 	
 	/*
 	
