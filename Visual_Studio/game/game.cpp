@@ -60,8 +60,6 @@ void Game::Init(void)
 
 void Game::Start(Savegame& currentSavegame)
 {
-	std::cout << currentSavegame.mPosY << std::endl;
-	system("pause");
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	
