@@ -22,4 +22,7 @@
 #define COLLISIONTOLERANCE 4
 #define ANIMATIONSPEED 64.0f
 
+
+#define SAVEGAME "save.txt"
+
 #endif
