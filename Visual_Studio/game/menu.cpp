@@ -1,6 +1,6 @@
 #include "menu.h"
 
-MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window)
+MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame)
 {
 	//Load menu image from file
 	sf::Texture image;
