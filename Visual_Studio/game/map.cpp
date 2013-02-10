@@ -50,11 +50,46 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 			subRect.left=TileType%10*TILESIZE;
 			
 			TileMap[LoadCounterX][LoadCounterY].TexturePart = new Sprite(LevelTexture,subRect);
-			if(TileType >10  ){
+			switch( TileType ){
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
+			case 19:
+			case 22:
+			case 23:
+			case 24:
+			case 25:
+			case 26:
+			case 27:
+			case 28:
+			case 29:
+			case 30:
+				CollisionMap[LoadCounterX][LoadCounterY]=NULL;
+					break;
+			default:
+				CollisionMap[LoadCounterX][LoadCounterY]=new IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
+				break;
+
+			}
+			/*if(TileType >10  ){
 				CollisionMap[LoadCounterX][LoadCounterY]=new IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
 			}else{
 				CollisionMap[LoadCounterX][LoadCounterY]=NULL;
-			}
+			}*/
 			//CollisionMap[LoadCounterX][LoadCounterY] = IntRect(0,0,32,32) ;
 			LoadCounterX++;
 			if( LoadCounterX >= MapSizeX ){
