@@ -107,13 +107,9 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	}
 	
 	Clock clock;
-	
-	#ifdef DEBUG
-		Player P1("include/texture/player/player_male.png",CollisionMap,currentSavegame);
-	#else
-		Player P1("include/texture/player/player_male.png",CollisionMap,currentSavegame);
-	#endif
-		
+
+	Player P1(1,CollisionMap,currentSavegame);
+			
 	P1.setHealth(currentSavegame.pHealth);
 	P1.setExp(currentSavegame.pExp);
 	P1.setLvl(currentSavegame.pLvl);

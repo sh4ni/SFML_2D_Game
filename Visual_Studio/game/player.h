@@ -13,7 +13,7 @@ public:
 	void Render		(sf::RenderWindow &Window){
 		Window.draw(sprite);
 	}
-	Player			(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSavegame);
+	Player			(bool gender, sf::IntRect*** CollisionMap, Savegame& currentSavegame);
 	float			getPosX(void){
 		return this->x;
 	}

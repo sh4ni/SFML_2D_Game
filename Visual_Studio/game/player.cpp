@@ -1,9 +1,26 @@
 ﻿#include "player.h"
 
 
-Player::Player(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSavegame){
+Player::Player(bool gender, sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 
 	this->ColMap = CollisionMap;
+	this->gender = gender;
+
+	sf::String tex;
+	if(gender){
+		#ifdef DEBUG
+			tex.insert(0,"include/texture/player/player_female.png");
+		#else
+			tex.insert(0,"include/texture/player/player_female.png");
+		#endif
+	}
+	else {
+		#ifdef DEBUG
+			tex.insert(0,"include/texture/player/player_male.png");
+		#else
+			tex.insert(0,"include/texture/player/player_male.png");
+		#endif
+	}
 
 	Speed = PLAYERSPEED;
 
