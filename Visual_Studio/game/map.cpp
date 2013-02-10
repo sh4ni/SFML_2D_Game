@@ -119,8 +119,6 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	P1.setLvl(currentSavegame.pLvl);
 
 
-
-
 	float LastTime = 1.f;
 	float ElapsedTime;
 	float Frames;
