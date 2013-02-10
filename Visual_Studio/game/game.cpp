@@ -23,8 +23,9 @@ void Game::Init(void)
 		#ifdef DEBUG
 			std::cout << "Spielstand Erfolgreich geladen." << std::endl;
 		#endif
-
 		loadgame.close();
+
+		Game::Start(mySavegame);	// Da ein Spielstand vorhanden ist Defaultmäßig der zweite Paramter false
 	}else{
 		std::cout << "Kein Spielstand erkannt! Default Spielstand wird erstellt..\a\n";
 		std::ofstream defaultsavegame;
@@ -51,14 +52,13 @@ void Game::Init(void)
 			// Pos Y auf Map
 			defaultsavegame << WIDTH/2 ;
 			mySavegame.mPosY = HEIGHT/2;	
-
+			Game::Start(mySavegame, true);
 		}
 	}
-	Game::Start(mySavegame);
-	
+	Game::Start(mySavegame, true);
 }
 
-void Game::Start(Savegame& currentSavegame)
+void Game::Start(Savegame& currentSavegame, bool newgame)
 {
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
@@ -76,14 +76,17 @@ void Game::Start(Savegame& currentSavegame)
 	else
 		_mainWindow.setIcon(32,32,Icon.getPixelsPtr());
 
+	_mainWindow.setFramerateLimit(FPS);
+	_mainWindow.setVerticalSyncEnabled(true);
+
 	// Setze den Spielstatus auf Intro -> Intro wird angezeigt
 	_gameState = Game::ShowingIntro;
 	
 	// Solange das Spiel nicht beendet wird, führe GameLoop aus
 	while(!IsExiting()){
-		GameLoop(currentSavegame);
+		GameLoop(currentSavegame, newgame);
 	}
-	
+
 	// Wenn der GameLoop beendet wurde, schließe das Fenster
 	_mainWindow.close();
 	//system("pause");
@@ -100,12 +103,9 @@ bool Game::IsExiting()
 	// Möglichkeit das Spiel zu Speichern
 }
 
-void Game::GameLoop(Savegame& currentSavegame)
+void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 {
 	sf::View viewCamera  = _mainWindow.getView();
-	
-	_mainWindow.setFramerateLimit(FPS);
-	_mainWindow.setVerticalSyncEnabled(true);
 
 	switch(_gameState){
 		case Game::ShowingIntro:{
@@ -119,7 +119,7 @@ void Game::GameLoop(Savegame& currentSavegame)
 			#ifdef DEBUG
 				std::cout << "Menu" << std::endl;
 			#endif
-			ShowMenu();
+			ShowMenu(newgame);
 		break;
 		}
 		case Game::Playing:{
@@ -148,9 +148,9 @@ void Game::ShowIntro(){
 }
 
 
-void Game::ShowMenu(){
+void Game::ShowMenu(bool newgame){
 	MainMenu mainMenu;
-	MainMenu::MenuResult result = mainMenu.Show(_mainWindow);
+	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
 	switch(result)
 	{
 		case MainMenu::Exit:
@@ -169,7 +169,7 @@ void Game::ShowMenu(){
 			#endif
 				_gameState = Playing;	
 			break;
-		case MainMenu::Options:
+		case MainMenu::Continue:
 			// code
 			//_gameState = Options;
 			break;

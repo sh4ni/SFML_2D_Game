@@ -9,7 +9,7 @@ class MainMenu
 {
 
 public:
-	enum MenuResult { Nothing, Exit, Options, Play };	
+	enum MenuResult { Nothing, Exit, Continue, Options, Play };	
 	
 	class MenuItem
 		{
@@ -19,7 +19,7 @@ public:
 			bool active;
 		};
 	
-	MenuResult Show(RenderWindow& renderWindow);
+	MenuResult Show(RenderWindow& renderWindow, bool newgame = false);
 
 private:
 	MenuResult GetMenuResponse(RenderWindow& window);

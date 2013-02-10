@@ -16,14 +16,14 @@ class Game
 {
 public:
 	static void Init();
-	static void Start(Savegame& currentSave);
+	static void Start(Savegame& currentSave, bool newgame = false);
 	static sf::RenderWindow& GetWindow();
 	const static sf::Event& GetInput();
 	
 private:
 	static void ShowIntro();
-	static void ShowMenu();
-	static void GameLoop(Savegame& currentSave);
+	static void ShowMenu(bool newgame = false);
+	static void GameLoop(Savegame& currentSave, bool newgame = false);
 	static void ShowMap(sf::View viewCamera, Savegame& currentSave);
 	static bool IsExiting();
 
