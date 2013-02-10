@@ -18,19 +18,10 @@ Player::Player(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSav
 	//texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,32.f);
-	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
-	//sprite.setPosition(WIDTH/2,HEIGHT/2);
+	//sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
+	sprite.setPosition(WIDTH/2,HEIGHT/2);
 	//sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
 
-	/*CollisionX.height = TILESIZE*2-COLLISIONTOLERANCE*2;
-	CollisionX.width = TILESIZE;
-
-	CollisionY.height = TILESIZE*2;
-	CollisionY.width = TILESIZE-COLLISIONTOLERANCE*2;*/
-
-	/*RectangleShape box(Vector2f(5.f,5.f));
-	box.setPosition(50,50);
-	box.setFillColor(Color(0,0,0));*/
 }
 
 void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
@@ -40,12 +31,6 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	
 	int tx = ((int)x/TILESIZE)-1;
 	int ty = ((int)y/TILESIZE)-1;
-
-	/*CollisionX.left = (int)x-TILESIZE/2;
-	CollisionX.top = (int)y-TILESIZE+COLLISIONTOLERANCE;
-
-	CollisionY.left = (int)x-TILESIZE/2+COLLISIONTOLERANCE;
-	CollisionY.top = (int)y-TILESIZE;*/
 
 	bool blockUp = false;
 	bool blockDown = false;
@@ -115,94 +100,36 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 			blockUp = true;
 		}
 		else if( cp[2] && cp[3] && !cp[0] && !cp[1] ){
-			blockUp = true;
+			blockDown = true;
 		}
 		else if( cp[0] && cp[2] && !cp[1] && !cp[3] ){
-			blockUp = true;
+			blockLeft = true;
 		}
 		else if( cp[1] && cp[3] && !cp[0] && !cp[2] ){
-			blockUp = true;
-		}
-
-		/*if( cp[0] && cp[1] && cp[10] && cp[11] && !cp[2] && !cp[3] ){ // Bei sehr starker Auslastung (sollte sehr selten anschlagen)
-			blockUp = true;
-		}
-		if( cp[2] && cp[3] && cp[8] && cp[9] && !cp[0] && !cp[1] ){
-			blockDown = true;
-		}
-		if( cp[0] && cp[2] && cp[5] && cp[7] && !cp[1] && !cp[3] ){
-			blockLeft = true;
-		}
-		if( cp[1] && cp[3] && cp[4] && cp[6] && !cp[0] && !cp[2] ){
 			blockRight = true;
 		}
-		if( cp[0] && cp[1] && cp[12] && cp[13] && !cp[10] && !cp[11] ){ // Bei starker Auslastung
-			blockUp = true;
-		}
-		if( cp[2] && cp[3] && cp[12] && cp[13] && !cp[8] && !cp[9] ){
-			blockDown = true;
-		}
-		if( (cp[0] && cp[4] || cp[1] && cp[5]) && (cp[8] || cp[9]) && (!cp[12] || !cp[13]) ){ // Bei Auslastung
-			blockUp = true;
-		}
-		if( (cp[2] && cp[6] || cp[3] && cp[7]) && (cp[10] || cp[11]) && (!cp[12] || !cp[13]) ){
-			blockDown = true;
-		}
-		if( (cp[0] && cp[8] || cp[2] && cp[10]) && (cp[4] || cp[6]) && (!cp[5] || !cp[7]) ){
-			blockLeft = true;
-		}
-		if( (cp[1] && cp[9] || cp[3] && cp[11]) && (cp[5] || cp[7]) && (!cp[4] || !cp[6]) ){
-			blockRight = true;
-		}*/
 	}
-
-	/*for(int i=0;i<9;i++){
-		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
-			if(CollisionX.intersects(*ColMap[tx+(i%3)][ty+i/3])){
-			std::cout << i;
-				if (!(i%3)){ // left
-					//x += (Speed*ElapsedTime);
-					blockLeft = true;
-				}
-				if( !((i-2)%3) ){ // right
-					//x -= (Speed*ElapsedTime);
-					blockRight = true;
-				}
-			}
-			if(CollisionY.intersects(*ColMap[tx+(i%3)][ty+i/3])){
-			std::cout << i;
-				if( i <= 2 ){ // top
-					//y += (Speed*ElapsedTime);
-					blockUp = true;
-				}
-				if( i >= 6){ // bottom
-					//y -= (Speed*ElapsedTime);
-					blockDown = true;
-				}
-			}
-		}
-	}*/
 
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !blockUp ){
 		y -= (Speed*ElapsedTime);
-		//blockDown = false;
+		blockDown = false;
 	}
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !blockDown ){
 		y += (Speed*ElapsedTime);
-		//blockUp = false;
+		blockUp = false;
 	}
 	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !blockLeft ){
 		x -= (Speed*ElapsedTime);
-		//blockRight = false;
+		blockRight = false;
 	}
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !blockRight ){
 		x += Speed*ElapsedTime;
-		//blockLeft = false;
+		blockLeft = false;
 	}
 
 	if( blockUp ){
 		if( (TILESIZE-((int)y-(((int)y/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
-			y= ((int)y/TILESIZE)*TILESIZE+TILESIZE*3/2-1;
+			y= ((int)y/TILESIZE)*TILESIZE+TILESIZE-1; // OK
 			#ifdef DEBUG
 				std::cout << "Kolliskorrektur: OBEN - " << y << std::endl;
 			#endif
@@ -210,7 +137,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	}
 	if( blockDown ){
 		if( (((int)y+TILESIZE)-((((int)y+TILESIZE)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
-			y= (((int)y+TILESIZE)/TILESIZE)*TILESIZE-TILESIZE/2+1;
+			y= (((int)y+TILESIZE)/TILESIZE)*TILESIZE-TILESIZE+1;
 			#ifdef DEBUG
 				std::cout << "Kolliskorrektur: UNTEN - " << y << std::endl;
 			#endif

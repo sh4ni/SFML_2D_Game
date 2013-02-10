@@ -60,8 +60,6 @@ private:
 	sf::Texture texture;
 	sf::Sprite sprite;
 	sf::IntRect*** ColMap;
-	//IntRect CollisionX; alt
-	//IntRect CollisionY;
 	float x;
 	float y;
 	
