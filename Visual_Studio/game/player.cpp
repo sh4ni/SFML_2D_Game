@@ -9,15 +9,17 @@ Player::Player(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSav
 
 	if(!texture.loadFromFile(tex)){
 		std::cout << "Fehler beim Laden der Textur!" << std::endl;	
-	}else{
-		#ifdef DEBUG
-			std::cout << "Textur wurde erfolgreich geladen!" << std::endl;
-		#endif
 	}
+	#ifdef DEBUG
+	else {
+		std::cout << "Textur wurde erfolgreich geladen!" << std::endl;
+	}
+	#endif
 
 	//texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,32.f);
+	sprite.setTextureRect(sf::IntRect(0.f,0.f,TILESIZE,TILESIZE*2));
 	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
 	//sprite.setPosition(WIDTH/2,HEIGHT/2);
 	//sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
@@ -113,23 +115,31 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !blockUp ){
 		y -= (Speed*ElapsedTime);
 		blockDown = false;
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)(Speed*ANIMATIONSPEED))%3),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+		Animation++;
 	}
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !blockDown ){
 		y += (Speed*ElapsedTime);
 		blockUp = false;
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)(Speed*ANIMATIONSPEED))%3),0,TILESIZE,TILESIZE*2));
+		Animation++;
 	}
 	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !blockLeft ){
 		x -= (Speed*ElapsedTime);
 		blockRight = false;
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)(Speed*ANIMATIONSPEED))%3),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+		Animation++;
 	}
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !blockRight ){
 		x += Speed*ElapsedTime;
 		blockLeft = false;
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)(Speed*ANIMATIONSPEED))%3),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+		Animation++;
 	}
 
 	if( blockUp ){
 		if( (TILESIZE-((int)y-(((int)y/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
-			y= ((int)y/TILESIZE)*TILESIZE+TILESIZE-1; // OK
+			y= (float)(((int)y/TILESIZE)*TILESIZE+TILESIZE-1);
 			#ifdef DEBUG
 				std::cout << "Kolliskorrektur: OBEN - " << y << std::endl;
 			#endif
@@ -137,7 +147,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	}
 	if( blockDown ){
 		if( (((int)y+TILESIZE)-((((int)y+TILESIZE)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
-			y= (((int)y+TILESIZE)/TILESIZE)*TILESIZE-TILESIZE+1;
+			y= (float)((((int)y+TILESIZE)/TILESIZE)*TILESIZE-TILESIZE+1);
 			#ifdef DEBUG
 				std::cout << "Kolliskorrektur: UNTEN - " << y << std::endl;
 			#endif
@@ -145,7 +155,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	}
 	if( blockLeft ){
 		if( (TILESIZE-(((int)x-TILESIZE/2)-((((int)x-TILESIZE/2)/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
-			x= (((int)x-TILESIZE/2)/TILESIZE)*TILESIZE+TILESIZE*3/2-1;
+			x= (float)((((int)x-TILESIZE/2)/TILESIZE)*TILESIZE+TILESIZE*3/2-1);
 			#ifdef DEBUG
 				std::cout << "Kolliskorrektur: LINKS - " << x << std::endl;
 			#endif
@@ -153,7 +163,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	}
 	if( blockRight ){
 		if( (((int)x+TILESIZE/2)-((((int)x+TILESIZE/2)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
-			x= (((int)x+TILESIZE/2)/TILESIZE)*TILESIZE-TILESIZE/2+1;
+			x= (float)((((int)x+TILESIZE/2)/TILESIZE)*TILESIZE-TILESIZE/2+1);
 			#ifdef DEBUG
 				std::cout << "Kolliskorrektur: RIGHT - " << x << std::endl;
 			#endif
@@ -162,8 +172,4 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 
 	sprite.setPosition(x,y);
 
-}
-
-void Player::Render(sf::RenderWindow& Window){
-	Window.draw(sprite);
 }

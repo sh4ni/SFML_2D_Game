@@ -109,9 +109,9 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	Clock clock;
 	
 	#ifdef DEBUG
-		Player P1("include/texture/player/player_female_debug.png",CollisionMap,currentSavegame);
+		Player P1("include/texture/player/player_male.png",CollisionMap,currentSavegame);
 	#else
-		Player P1("include/texture/player/player_female.png",CollisionMap,currentSavegame);
+		Player P1("include/texture/player/player_male.png",CollisionMap,currentSavegame);
 	#endif
 		
 	P1.setHealth(currentSavegame.pHealth);
@@ -179,7 +179,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
 
 		renderWindow.setView(viewCamera);
-		viewCamera.setCenter(CamX,CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
+		viewCamera.setCenter((float)CamX,(float)CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
 
 		// Hier wird die Map gerendert.
 		// Orientierung an der Kamera, damit nur sichtbare Sprites neu gezeichnet werden.

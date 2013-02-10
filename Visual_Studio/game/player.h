@@ -10,7 +10,9 @@
 class Player{
 public:
 	void Update		(sf::RenderWindow &Window, float ElapsedTime);
-	void Render		(sf::RenderWindow &Window);
+	void Render		(sf::RenderWindow &Window){
+		Window.draw(sprite);
+	}
 	Player			(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSavegame);
 	float			getPosX(void){
 		return this->x;
@@ -62,7 +64,7 @@ private:
 	sf::IntRect*** ColMap;
 	float x;
 	float y;
-	
+	unsigned char Animation;
 
 	int pHealth;
 	int pLvl;
