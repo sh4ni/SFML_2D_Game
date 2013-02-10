@@ -8,7 +8,7 @@ void Game::Init(void)
 	Savegame mySavegame;
 
 	std::ifstream loadgame;
-	loadgame.open("save.txt", std::ios::binary);
+	loadgame.open(SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
 		std::cout << "Spielstand erkannt! Wird geladen..\n";
 		
@@ -28,7 +28,7 @@ void Game::Init(void)
 	}else{
 		std::cout << "Kein Spielstand erkannt! Default Spielstand wird erstellt..\a\n";
 		std::ofstream defaultsavegame;
-		defaultsavegame.open("save.txt", std::ios::binary);
+		defaultsavegame.open(SAVEGAME, std::ios::binary);
 		if(defaultsavegame.is_open()){
 			// Health
 			defaultsavegame << 20 << std::endl;

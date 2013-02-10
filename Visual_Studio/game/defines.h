@@ -21,4 +21,7 @@
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
 
+
+#define SAVEGAME "save.txt"
+
 #endif

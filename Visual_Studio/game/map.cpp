@@ -117,7 +117,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	P1.setHealth(currentSavegame.pHealth);
 	P1.setExp(currentSavegame.pExp);
 	P1.setLvl(currentSavegame.pLvl);
-
+	
 
 	float LastTime = 1.f;
 	float ElapsedTime;
@@ -132,7 +132,6 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	Schrift DisplayHealth((WIDTH-115),0,"Health: 0",20);
 	Schrift DisplayLvl((WIDTH-115),20,"Lvl: 0",20);
 
-	bool paused = false;
 	while(true)
 	{
 		ElapsedTime = (float)clock.restart().asMilliseconds();
@@ -198,8 +197,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == Event::KeyPressed){
 				if(levelLoop.key.code == Keyboard::Escape){
-					bool test = pause(renderWindow,viewCamera,levelLoop,paused,P1,LevelId, currentSavegame);
-					if(test)
+					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
+					if(quitGame)
 						return;
 				}else if(levelLoop.key.code == Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
@@ -219,7 +218,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				#ifdef DEBUG
 					std::cout << " Ausserhalb Fenster!.. " << std::endl;	
 				#endif
-					pause(renderWindow,viewCamera,levelLoop,paused,P1,LevelId, currentSavegame);
+					pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
 			}else if(levelLoop.type == Event::Closed){
 				return;
 			}
@@ -239,11 +238,11 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 
 bool Map::load(Player& P1)
 {
-	std::cout << "lade..";
+	std::cout << "loading savegame..";
 	std::ifstream loadgame;
-	loadgame.open("save.txt", std::ios::binary);
+	loadgame.open(SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
-		float tester;
+		int tester;
 	
 		loadgame >> tester;
 		
@@ -265,9 +264,9 @@ bool Map::load(Player& P1)
 
 bool Map::save(Player& P1, int LevelId)
 {
-	std::cout << "speichere..";
+	std::cout << "saving..\n";
 	std::ofstream savegame;
-	savegame.open("save.txt", std::ios::binary);
+	savegame.open(SAVEGAME, std::ios::binary);
 	if(savegame.is_open()){
 		// Health
 		savegame << P1.getHealth() << std::endl;
@@ -285,23 +284,24 @@ bool Map::save(Player& P1, int LevelId)
 		savegame << P1.getPosX() << std::endl;
 		// Pos Y auf Map
 		savegame << P1.getPosY() << std::endl;
-		
-		
 
 		savegame.close();
+		std::cout << "saved..\n";
+	}else{
+		std::cout << "FAILURE by saving the game..\a\n";
 	}
+	
 	return true;
 }
 
-bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused, Player& P1, int LevelId, Savegame& currentSavegame){
-	
+bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, Player& P1, int LevelId, Savegame& currentSavegame){
 	
 
 	//Map::load(P1);
 
-	
-	paused = true;
-	
+	#ifdef DEBUG
+		std::cout << "Pause gestartet.." << std::endl;	
+	#endif
 
 	sf::Texture Image;
 	Image.loadFromFile("include/interface/pause.png");
@@ -317,24 +317,23 @@ bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bo
 	Pause.Render(renderWindow);
 	renderWindow.display();
 	
-	#ifdef DEBUG
-		std::cout << "Pause" << std::endl;	
-	#endif
-	while(paused){
-		renderWindow.pollEvent(levelLoop); // sonst kann die pause nicht verlassen werden!
-		if ((levelLoop.type == sf::Event::KeyPressed) && (levelLoop.key.code == sf::Keyboard::Escape)){
-			paused = false;
-			#ifdef DEBUG
-				std::cout << "Continue Playing.." << std::endl;
-			#endif
-		}else if(levelLoop.key.code == Keyboard::Space){
-			#ifdef DEBUG
-				std::cout << "Spiel beenden!" << std::endl;
-			#endif
-			return true; // gebe true zurueck damit das spiel anschließend beendet wird
-		}else if(levelLoop.key.code == Keyboard::F6){
-			Map::save(P1, LevelId);
-			renderWindow.pollEvent(levelLoop);
+	while(renderWindow.waitEvent(levelLoop)){
+		if(levelLoop.type == sf::Event::KeyPressed){
+			if (levelLoop.key.code == sf::Keyboard::Escape){
+				#ifdef DEBUG
+					std::cout << "Continue Playing.." << std::endl;
+				#endif
+					return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
+			}else if(levelLoop.key.code == Keyboard::Space){
+				#ifdef DEBUG
+					std::cout << "Spiel beenden!" << std::endl;
+				#endif
+					return true; // gebe true zurueck damit das spiel anschließend beendet wird
+			}else if(levelLoop.key.code == Keyboard::F6){
+				Map::save(P1, LevelId);
+			}else if(levelLoop.key.code == Keyboard::F9){
+				Map::load(P1);
+			}
 		}
 	}
 	return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
