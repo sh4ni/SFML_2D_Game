@@ -300,14 +300,16 @@ bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bo
 	//Map::load(P1);
 
 	
-	
-	
-	
 	paused = true;
+	
 
 	sf::Texture Image;
 	Image.loadFromFile("include/interface/pause.png");
 	sf::Sprite sprite(Image);
+	
+	sprite.setScale(1.1f,1.1f);
+	sprite.setPosition(viewCamera.getCenter().x-513,viewCamera.getCenter().y-385);
+	
 	sprite.setColor(sf::Color(128,128,128,100));
 	renderWindow.draw(sprite);
 
@@ -332,6 +334,7 @@ bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bo
 			return true; // gebe true zurueck damit das spiel anschlieﬂend beendet wird
 		}else if(levelLoop.key.code == Keyboard::F6){
 			Map::save(P1, LevelId);
+			renderWindow.pollEvent(levelLoop);
 		}
 	}
 	return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!

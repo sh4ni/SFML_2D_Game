@@ -78,7 +78,7 @@ void Game::Start(Savegame& currentSavegame)
 
 	// Setze den Spielstatus auf Intro -> Intro wird angezeigt
 	_gameState = Game::ShowingIntro;
-	//_gameState = Game::Playing;
+	
 	// Solange das Spiel nicht beendet wird, führe GameLoop aus
 	while(!IsExiting()){
 		GameLoop(currentSavegame);

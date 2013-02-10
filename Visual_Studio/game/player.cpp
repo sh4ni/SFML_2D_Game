@@ -18,8 +18,8 @@ Player::Player(sf::String tex, sf::IntRect*** CollisionMap, Savegame& currentSav
 	//texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,32.f);
-	//sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
-	sprite.setPosition(WIDTH/2,HEIGHT/2);
+	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
+	//sprite.setPosition(WIDTH/2,HEIGHT/2);
 	//sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
 
 }
