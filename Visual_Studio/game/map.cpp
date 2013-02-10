@@ -310,7 +310,7 @@ bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bo
 	sprite.setScale(1.1f,1.1f);
 	sprite.setPosition(viewCamera.getCenter().x-(WIDTH/2),viewCamera.getCenter().y-(HEIGHT/2));
 	
-	sprite.setColor(sf::Color(128,128,128,100));
+	sprite.setColor(sf::Color(0,0,0,100));
 	renderWindow.draw(sprite);
 
 	Schrift Pause((int)viewCamera.getCenter().x-75,(int)viewCamera.getCenter().y-25,"Pause",50);
