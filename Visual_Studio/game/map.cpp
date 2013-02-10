@@ -260,7 +260,7 @@ bool Map::save(Player& P1, int LevelId)
 
 bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bool paused, Player& P1, int LevelId, Savegame& currentSavegame){
 	
-	Map::save(P1, LevelId);
+	
 
 	//Map::load(P1);
 
@@ -269,7 +269,13 @@ bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bo
 	
 	
 	paused = true;
-					
+
+	sf::Texture Image;
+	Image.loadFromFile("include/interface/pause.png");
+	sf::Sprite sprite(Image);
+	sprite.setColor(sf::Color(128,128,128,100));
+	renderWindow.draw(sprite);
+
 	Schrift Pause((int)viewCamera.getCenter().x-75,(int)viewCamera.getCenter().y-25,"Pause",50);
 	Pause.Render(renderWindow);
 	renderWindow.display();
@@ -289,6 +295,8 @@ bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bo
 				std::cout << "Spiel beenden!" << std::endl;
 			#endif
 			return true; // gebe true zurueck damit das spiel anschließend beendet wird
+		}else if(levelLoop.key.code == Keyboard::F6){
+			Map::save(P1, LevelId);
 		}
 	}
 	return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!

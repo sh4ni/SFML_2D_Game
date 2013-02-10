@@ -9,9 +9,9 @@
 #define FPS 60U
 
 #ifdef DEBUG
-	#define VERSION "The Journey - 0.10 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled "
+	#define VERSION "The Journey - 0.11 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled "
 #else
-	#define VERSION "The Journey - 0.10 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled "
+	#define VERSION "The Journey - 0.11 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled "
 #endif
 
 // used in map.cpp

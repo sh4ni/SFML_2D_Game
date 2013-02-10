@@ -31,7 +31,7 @@ void Game::Init(void)
 		defaultsavegame.open("save.txt", std::ios::binary);
 		if(defaultsavegame.is_open()){
 			// Health
-			defaultsavegame << 100 << std::endl;
+			defaultsavegame << 20 << std::endl;
 			mySavegame.pHealth = 100;
 			// Level
 			defaultsavegame << 1 << std::endl;
@@ -65,6 +65,9 @@ void Game::Start(Savegame& currentSavegame)
 	
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
 	_mainWindow.create(sf::VideoMode(WIDTH, HEIGHT), VERSION, sf::Style::Titlebar);
+
+	// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
+	//_mainWindow.setMouseCursorVisible(false);
 
 	// Lade und setze das Fenstericon
 	sf::Image Icon;
