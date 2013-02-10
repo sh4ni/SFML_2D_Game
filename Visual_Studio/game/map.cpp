@@ -308,7 +308,7 @@ bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, bo
 	sf::Sprite sprite(Image);
 	
 	sprite.setScale(1.1f,1.1f);
-	sprite.setPosition(viewCamera.getCenter().x-513,viewCamera.getCenter().y-385);
+	sprite.setPosition(viewCamera.getCenter().x-(WIDTH/2),viewCamera.getCenter().y-(HEIGHT/2));
 	
 	sprite.setColor(sf::Color(128,128,128,100));
 	renderWindow.draw(sprite);
