@@ -102,7 +102,6 @@ void Game::Init(void)
 			std::cout << "Spielstand okay...!\n";
 		else
 			defaultSavegame(mySavegame,true);
-		
 
 		#ifdef DEBUG
 			std::cout << "Spielstand Erfolgreich geladen." << std::endl;
