@@ -1,6 +1,4 @@
-//#include "include.h"
 #include "game.h"
-
 
 void Game::Init(void)
 {
@@ -15,11 +13,28 @@ void Game::Init(void)
 		loadgame >> mySavegame.pHealth;
 		loadgame >> mySavegame.pLvl;
 		loadgame >> mySavegame.pExp;
+		loadgame >> mySavegame.pGender;
 
 		loadgame >> mySavegame.mLevelId;
 		loadgame >> mySavegame.mPosX;
 		loadgame >> mySavegame.mPosY;
 		
+		loadgame >> mySavegame.checksum;
+
+		if(mySavegame.checksum == ((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM))
+			std::cout << "Spielstand okay...!\n";
+		else{
+			std::cout << "Spielstand korrupt..!\a\n";
+			mySavegame.pHealth = DEFAULT_HEALTH;
+			mySavegame.pLvl = DEFAULT_LVL;
+			mySavegame.pExp = DEFAULT_EXP;
+			mySavegame.pGender = 'M';
+
+			mySavegame.mLevelId = DEFAULT_LEVEL;
+			mySavegame.mPosX = DEFAULT_POSX;
+			mySavegame.mPosY = DEFAULT_POSY;
+		}
+
 		#ifdef DEBUG
 			std::cout << "Spielstand Erfolgreich geladen." << std::endl;
 		#endif
@@ -32,26 +47,46 @@ void Game::Init(void)
 		defaultsavegame.open(SAVEGAME, std::ios::binary);
 		if(defaultsavegame.is_open()){
 			// Health
-			defaultsavegame << 20 << std::endl;
-			mySavegame.pHealth = 100;
+			defaultsavegame << DEFAULT_HEALTH << std::endl;
+			mySavegame.pHealth = DEFAULT_HEALTH;
 			// Level
-			defaultsavegame << 1 << std::endl;
-			mySavegame.pLvl = 1;
+			defaultsavegame << DEFAULT_LVL << std::endl;
+			mySavegame.pLvl = DEFAULT_LVL;
 			// Exp
-			defaultsavegame << 1 << std::endl;
-			mySavegame.pExp = 1;
+			defaultsavegame << DEFAULT_EXP << std::endl;
+			mySavegame.pExp = DEFAULT_EXP;
 			// Gender
+			srand((unsigned int)time(NULL));
+			int tmp = (rand() % 2);
+			char gender;
+			if(tmp)
+				gender = 'M';
+			else
+				gender = 'F';
+
+			defaultsavegame << gender << std::endl;
+			mySavegame.pGender = gender;
+		
 			// Name
 
 			// Map
-			defaultsavegame << 2 << std::endl;
-			mySavegame.mLevelId = 2;
+			defaultsavegame << DEFAULT_LEVEL << std::endl;
+			mySavegame.mLevelId = DEFAULT_LEVEL;
 			// Pos X auf Map
-			defaultsavegame << WIDTH/2 << std::endl;
-			mySavegame.mPosX = WIDTH/2;
+			defaultsavegame << DEFAULT_POSX << std::endl;
+			mySavegame.mPosX = DEFAULT_POSX;
 			// Pos Y auf Map
-			defaultsavegame << WIDTH/2 ;
-			mySavegame.mPosY = HEIGHT/2;	
+			defaultsavegame << DEFAULT_POSY << std::endl;
+			mySavegame.mPosY = DEFAULT_POSY;	
+
+			int checksum = (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM;
+			std::cout << checksum << std::endl;
+
+			defaultsavegame << checksum;
+			mySavegame.checksum;
+
+			defaultsavegame.close();
+
 			Game::Start(mySavegame, true);
 		}
 	}

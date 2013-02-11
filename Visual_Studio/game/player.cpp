@@ -1,20 +1,23 @@
 ﻿#include "player.h"
 
 
-Player::Player(bool gender, sf::IntRect*** CollisionMap, Savegame& currentSavegame){
+Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 
 	this->ColMap = CollisionMap;
-	this->gender = gender;
+	
+	this->pHealth = currentSavegame.pHealth;
+	this->pLvl = currentSavegame.pLvl;
+	this->pExp = currentSavegame.pExp;
+	this->pGender = currentSavegame.pGender;
 
 	sf::String tex;
-	if(gender){
+	if(pGender == 'F'){
 		#ifdef DEBUG
 			tex.insert(0,"include/texture/player/player_female.png");
 		#else
 			tex.insert(0,"include/texture/player/player_female.png");
 		#endif
-	}
-	else {
+	}else {
 		#ifdef DEBUG
 			tex.insert(0,"include/texture/player/player_male.png");
 		#else

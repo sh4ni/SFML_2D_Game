@@ -108,12 +108,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	
 	Clock clock;
 
-	Player P1(1,CollisionMap,currentSavegame);
-			
-	P1.setHealth(currentSavegame.pHealth);
-	P1.setExp(currentSavegame.pExp);
-	P1.setLvl(currentSavegame.pLvl);
-	
+	Player P1(CollisionMap, currentSavegame);
+
 
 	float LastTime = 1.f;
 	float ElapsedTime;
@@ -127,6 +123,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	Schrift DisplaySpeed(0,40,"Speed: 0",20);
 	Schrift DisplayHealth((WIDTH-115),0,"Health: 0",20);
 	Schrift DisplayLvl((WIDTH-115),20,"Lvl: 0",20);
+
+	Map::save(P1, LevelId);
 
 	while(true)
 	{
@@ -262,7 +260,7 @@ bool Map::save(Player& P1, int LevelId)
 {
 	std::cout << "saving..\n";
 	std::ofstream savegame;
-	savegame.open(SAVEGAME, std::ios::binary);
+	savegame.open(SAVEGAME, std::ios::trunc | std::ios::binary);
 	if(savegame.is_open()){
 		// Health
 		savegame << P1.getHealth() << std::endl;
@@ -271,6 +269,7 @@ bool Map::save(Player& P1, int LevelId)
 		// Exp
 		savegame << P1.getExp() << std::endl;
 		// Gender
+		savegame << P1.getGender() << std::endl;
 		// Name
 
 
@@ -280,6 +279,8 @@ bool Map::save(Player& P1, int LevelId)
 		savegame << P1.getPosX() << std::endl;
 		// Pos Y auf Map
 		savegame << P1.getPosY() << std::endl;
+
+		savegame << ((P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + LevelId) + CHECKSUM);
 
 		savegame.close();
 		std::cout << "saved..\n";

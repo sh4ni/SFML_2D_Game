@@ -16,10 +16,13 @@ public:
 	int pHealth;
 	int pLvl;
 	int pExp;
+	char pGender;
 
 	int mLevelId;
 	float mPosX;
 	float mPosY;
+
+	double checksum;
 
 };
 

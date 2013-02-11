@@ -23,6 +23,18 @@
 #define ANIMATIONSPEED 64.0f
 
 
+
 #define SAVEGAME "save.txt"
+#define CHECKSUM 1337
+
+#define DEFAULT_HEALTH 20
+#define DEFAULT_LVL 1
+#define DEFAULT_EXP 1
+
+
+
+#define DEFAULT_LEVEL 2
+#define DEFAULT_POSX WIDTH/2
+#define DEFAULT_POSY HEIGHT/2
 
 #endif
