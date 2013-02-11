@@ -1,16 +1,16 @@
 ﻿ToDo
 
-- Animation Playermoddel
-- Kollisionsabfrage
 - Monster
-- Interface
+- Interface (kimiko: würd ich gern machen wenn du nix dagegen hast)
 
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
-- Intro und Menü
 - Map Editor
 
 - Dialoge/Story
-- Spielstand Speichern / Laden
 
- Improvements
+Improvements
+
+- Startmenü bilder bearbeiten (button entfernen) (kimiko)
+- Startmenü ändern mit bewegten hintergrund (kimiko)
+- intro und menü für variable auflösungen anpassen (überwiegend bildbearbeitung) (kimiko)
