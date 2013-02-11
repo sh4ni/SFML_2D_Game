@@ -108,17 +108,9 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	
 	Clock clock;
 
-//<<<<<<< HEAD
+
 	Player P1(CollisionMap,currentSavegame);
 	P1.setMapSize( MapSizeX, MapSizeY );
-			
-	P1.setHealth(currentSavegame.pHealth);
-	P1.setExp(currentSavegame.pExp);
-	P1.setLvl(currentSavegame.pLvl);
-/*======= hier auch
-	Player P1(CollisionMap, currentSavegame);
-
->>>>>>> 47e4842aa24bdde41fc8ce9ef9cf2aeb831b5f72*/
 
 	float LastTime = 1.f;
 	float ElapsedTime;
