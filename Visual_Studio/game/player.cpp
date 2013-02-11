@@ -100,19 +100,19 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 		else if( (cp[1] && cp[9] || cp[3] && cp[11]) && (!cp[5] || !cp[7]) ){
 			blockRight = true;
 		}
-		if( cp[0] && cp[4] && cp[8] && !cp[1] && !cp[2] ){ // bei hoher Auslastung
+		if( (cp[0] && cp[4] && cp[8] && !cp[1] && !cp[2])||(cp[0] && cp[1] && cp[2]) ){ // bei hoher Auslastung
 			blockUp = true;
 			blockLeft = true;
 		}
-		else if( cp[1] && cp[5] && cp[9] && !cp[0] && !cp[3] ){
+		else if( (cp[1] && cp[5] && cp[9] && !cp[0] && !cp[3])||(cp[1] && cp[0] && cp[3]) ){
 			blockUp = true;
 			blockRight = true;
 		}
-		else if( cp[2] && cp[6] && cp[10] && !cp[0] && !cp[3] ){
+		else if( (cp[2] && cp[6] && cp[10] && !cp[0] && !cp[3])||(cp[2] && cp[0] && cp[3]) ){
 			blockDown = true;
 			blockLeft = true;
 		}
-		else if( cp[3] && cp[7] && cp[11] && !cp[1] && !cp[2] ){
+		else if( (cp[3] && cp[7] && cp[11] && !cp[1] && !cp[2])||(cp[3] && cp[1] && cp[2]) ){
 			blockDown = true;
 			blockRight = true;
 		}
@@ -127,6 +127,9 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 		}
 		else if( cp[1] && cp[3] && !cp[0] && !cp[2] ){
 			blockRight = true;
+		}
+		else if( cp[0] && cp[1] && cp[2] && cp[3] ){
+			std::cout << "KOLLISION ÜBERALL" << std::endl;	// teleport an sicheren ort
 		}
 	}
 
