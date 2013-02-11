@@ -166,23 +166,36 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		DisplayLvl.Update(PlayerLvlText.str());
 
 		// ...geht aber nicht übers Kartenende hinaus
-		if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
-		if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
-		if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = MapSizeX * TILESIZE - WIDTH/2;
-		if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
+		if ( MapSizeX*TILESIZE < WIDTH ) CamX = MapSizeX*TILESIZE/2;
+		else if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
+		else if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = MapSizeX * TILESIZE - WIDTH/2;
+		if ( MapSizeY*TILESIZE < HEIGHT ) CamY = MapSizeY*TILESIZE/2;
+		else if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
+		else if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
 
+		renderWindow.clear();
 		renderWindow.setView(viewCamera);
 		viewCamera.setCenter((float)CamX,(float)CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
 
 		// Hier wird die Map gerendert.
 		// Orientierung an der Kamera, damit nur sichtbare Sprites neu gezeichnet werden.
-		for( int y = ((int)CamY-(HEIGHT/2))/TILESIZE ; y < ((int)CamY+(HEIGHT/2)+TILESIZE-1)/TILESIZE ; y++ ){		// abbruchbedingung könnte evtl noch minimal optimiert werden,
-			for( int x = ((int)CamX-(WIDTH/2))/TILESIZE ; x < ((int)CamX+(WIDTH/2)+TILESIZE-1)/TILESIZE ; x++ ){	// sollte so aber recht gut funktionieren.
-				TileMap[x][y].TexturePart->setPosition( (float)(x * TILESIZE), (float)(y * TILESIZE) );				// sollten aufnahmefehler beim bewegen auftreten, dann stimmt hier was nicht.
-				renderWindow.draw(*TileMap[x][y].TexturePart);
+
+		{// Klammer, wegen sichtbarkeit der variablen.
+			int y = ((int)CamY-(HEIGHT/2))/TILESIZE;
+			if( y<0 ) y=0;
+			while( (y < ((int)CamY+(HEIGHT/2)+TILESIZE-1)/TILESIZE)&&(y<MapSizeY) ){
+				int x = ((int)CamX-(WIDTH/2))/TILESIZE;
+				if( x<0 ) x=0;
+				while( (x < ((int)CamX+(WIDTH/2)+TILESIZE-1)/TILESIZE)&&(x<MapSizeX) ){
+					TileMap[x][y].TexturePart->setPosition( (float)(x * TILESIZE), (float)(y * TILESIZE) );
+					renderWindow.draw(*TileMap[x][y].TexturePart);
+					x++;
+				}
+				y++;
 			}
 		}
-		P1.setPosX(500);
+
+		P1.setPosX(500);// ähm... brauchen wir das?! wtf?! seh ich grad zum 1. mal o_O -k
 		// Rendern des Spielers
 		P1.Render(renderWindow);
 		P1.Update(renderWindow, ElapsedTime);
