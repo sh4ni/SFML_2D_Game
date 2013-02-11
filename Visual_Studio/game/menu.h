@@ -5,20 +5,17 @@
 #include "schrift.h"
 #include <list>
 
-class MainMenu
-{
-
+class MainMenu{
 public:
 	enum MenuResult { Nothing, Exit, Continue, Options, Play };	
-	
-	class MenuItem
-		{
+	class MenuItem{
 		public:
-			sf::Rect<int> rect;
+			sf::IntRect rect;
+			sf::Sprite image;
+			sf::Text text;
 			MenuResult action;
 			bool active;
 		};
-	
 	MenuResult Show(RenderWindow& renderWindow, bool newgame = false);
 
 private:

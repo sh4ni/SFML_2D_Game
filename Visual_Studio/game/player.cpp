@@ -37,7 +37,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	}
 	#endif
 
-	texture.setSmooth(true);
+	//texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,32.f);
 	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
@@ -192,7 +192,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 		if( (((int)x+TILESIZE/2)-((((int)x+TILESIZE/2)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
 			x= (float)((((int)x+TILESIZE/2)/TILESIZE)*TILESIZE-TILESIZE/2+1);
 			#ifdef DEBUG
-				std::cout << "Kolliskorrektur: RIGHT - " << x << std::endl;
+				std::cout << "Kolliskorrektur: RECHTS - " << x << std::endl;
 			#endif
 		}
 	}
