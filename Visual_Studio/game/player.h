@@ -73,7 +73,7 @@ private:
 	int pLvl;
 	int pExp;
 	char pGender;	// M - Male | F - Female
-	static char pName[11] ;
+	char pName[DEFAULT_NAME_LENGTH] ;
 	
 	/*
 	

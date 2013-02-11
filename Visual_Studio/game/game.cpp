@@ -1,5 +1,81 @@
 #include "game.h"
 
+void defaultSavegame(Savegame& mySavegame, bool corrput){
+	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
+	// wird eine neuer erstellt mit vordefinierten defaultwerte
+
+	#ifdef DEBUG
+		if(corrput)
+			std::cout << "Spielstand korrupt! Default Spielstand wird erstellt..\a\n";
+		else
+			std::cout << "Kein Spielstand erkannt! Default Spielstand wird erstellt..\a\n";
+	#endif
+
+	std::ofstream defaultsavegame;
+	defaultsavegame.open(SAVEGAME, std::ios::trunc & std::ios::binary);
+	if(defaultsavegame.is_open()){
+
+		// Health
+		defaultsavegame << DEFAULT_HEALTH << std::endl;
+		mySavegame.pHealth = DEFAULT_HEALTH;
+
+		// Level
+		defaultsavegame << DEFAULT_LVL << std::endl;
+		mySavegame.pLvl = DEFAULT_LVL;
+
+			// Exp
+		defaultsavegame << DEFAULT_EXP << std::endl;
+		mySavegame.pExp = DEFAULT_EXP;
+
+		srand((unsigned int)time(NULL));
+		int tmp = (rand() % 2);
+		char pGender;
+		char pName[DEFAULT_NAME_LENGTH];
+		if(tmp){
+			pGender = 'M';
+			strncpy(pName,DEFAULT_M_NAME,sizeof(DEFAULT_M_NAME));
+		}
+		else{
+			pGender = 'F';
+			strncpy(pName,DEFAULT_F_NAME,sizeof(DEFAULT_F_NAME));
+		}
+
+		// Gender
+		defaultsavegame << pGender << std::endl;
+		mySavegame.pGender = pGender;
+
+		// Name
+		defaultsavegame << pName << std::endl;
+		strncpy(mySavegame.pName,pName,sizeof(pName));
+
+		////////////////////////////////////////////////////
+
+		// Map
+		defaultsavegame << DEFAULT_LEVEL << std::endl;
+		mySavegame.mLevelId = DEFAULT_LEVEL;
+
+		// Pos X auf Map
+		defaultsavegame << DEFAULT_POSX << std::endl;
+		mySavegame.mPosX = DEFAULT_POSX;
+
+		// Pos Y auf Map
+		defaultsavegame << DEFAULT_POSY << std::endl;
+		mySavegame.mPosY = DEFAULT_POSY;
+
+
+
+		int checksum = (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM;
+		#ifdef DEBUG
+			std::cout << "Savegame Checksum " << checksum << std::endl;
+		#endif
+
+		defaultsavegame << checksum;
+		mySavegame.checksum;
+
+		defaultsavegame.close();
+	}
+}
+
 void Game::Init(void)
 {
 	// Do it!
@@ -14,6 +90,7 @@ void Game::Init(void)
 		loadgame >> mySavegame.pLvl;
 		loadgame >> mySavegame.pExp;
 		loadgame >> mySavegame.pGender;
+		loadgame >> mySavegame.pName;
 
 		loadgame >> mySavegame.mLevelId;
 		loadgame >> mySavegame.mPosX;
@@ -23,17 +100,9 @@ void Game::Init(void)
 
 		if(mySavegame.checksum == ((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM))
 			std::cout << "Spielstand okay...!\n";
-		else{
-			std::cout << "Spielstand korrupt..!\a\n";
-			mySavegame.pHealth = DEFAULT_HEALTH;
-			mySavegame.pLvl = DEFAULT_LVL;
-			mySavegame.pExp = DEFAULT_EXP;
-			mySavegame.pGender = 'M';
-
-			mySavegame.mLevelId = DEFAULT_LEVEL;
-			mySavegame.mPosX = DEFAULT_POSX;
-			mySavegame.mPosY = DEFAULT_POSY;
-		}
+		else
+			defaultSavegame(mySavegame,true);
+		
 
 		#ifdef DEBUG
 			std::cout << "Spielstand Erfolgreich geladen." << std::endl;
@@ -43,52 +112,40 @@ void Game::Init(void)
 		Game::Start(mySavegame);	// Da ein Spielstand vorhanden ist Defaultmäßig der zweite Paramter false
 	}else{
 		std::cout << "Kein Spielstand erkannt! Default Spielstand wird erstellt..\a\n";
-		std::ofstream defaultsavegame;
-		defaultsavegame.open(SAVEGAME, std::ios::binary);
-		if(defaultsavegame.is_open()){
-			// Health
-			defaultsavegame << DEFAULT_HEALTH << std::endl;
-			mySavegame.pHealth = DEFAULT_HEALTH;
-			// Level
-			defaultsavegame << DEFAULT_LVL << std::endl;
-			mySavegame.pLvl = DEFAULT_LVL;
-			// Exp
-			defaultsavegame << DEFAULT_EXP << std::endl;
-			mySavegame.pExp = DEFAULT_EXP;
-			// Gender
-			srand((unsigned int)time(NULL));
-			int tmp = (rand() % 2);
-			char gender;
-			if(tmp)
-				gender = 'M';
-			else
-				gender = 'F';
 
-			defaultsavegame << gender << std::endl;
-			mySavegame.pGender = gender;
-		
-			// Name
+		defaultSavegame(mySavegame,false);
+		//std::ofstream defaultsavegame;
+		//defaultsavegame.open(SAVEGAME, std::ios::binary);
+		//if(defaultsavegame.is_open()){
+		//	char gender = defaultSavegame(mySavegame);
+		//	// Health
+		//	defaultsavegame << DEFAULT_HEALTH << std::endl;
+		//	// Level
+		//	defaultsavegame << DEFAULT_LVL << std::endl;
+		//	// Exp
+		//	defaultsavegame << DEFAULT_EXP << std::endl;
+		//	// Gender
+		//	defaultsavegame << gender << std::endl;
+		//	
+		//	// Name
 
-			// Map
-			defaultsavegame << DEFAULT_LEVEL << std::endl;
-			mySavegame.mLevelId = DEFAULT_LEVEL;
-			// Pos X auf Map
-			defaultsavegame << DEFAULT_POSX << std::endl;
-			mySavegame.mPosX = DEFAULT_POSX;
-			// Pos Y auf Map
-			defaultsavegame << DEFAULT_POSY << std::endl;
-			mySavegame.mPosY = DEFAULT_POSY;	
+		//	// Map
+		//	defaultsavegame << DEFAULT_LEVEL << std::endl;
+		//	// Pos X auf Map
+		//	defaultsavegame << DEFAULT_POSX << std::endl;
+		//	// Pos Y auf Map
+		//	defaultsavegame << DEFAULT_POSY << std::endl;
 
-			int checksum = (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM;
-			std::cout << checksum << std::endl;
+		//	int checksum = (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM;
+		//	std::cout << checksum << std::endl;
 
-			defaultsavegame << checksum;
-			mySavegame.checksum;
+		//	defaultsavegame << checksum;
+		//	mySavegame.checksum;
 
-			defaultsavegame.close();
+		//	defaultsavegame.close();
 
-			Game::Start(mySavegame, true);
-		}
+		//	Game::Start(mySavegame, true);
+		//}
 	}
 	Game::Start(mySavegame, true);
 }

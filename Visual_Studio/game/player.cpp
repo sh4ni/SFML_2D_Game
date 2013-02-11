@@ -9,6 +9,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	this->pLvl = currentSavegame.pLvl;
 	this->pExp = currentSavegame.pExp;
 	this->pGender = currentSavegame.pGender;
+	strncpy(this->pName,currentSavegame.pName,sizeof(currentSavegame.pName));
 
 	sf::String tex;
 	if(pGender == 'F'){

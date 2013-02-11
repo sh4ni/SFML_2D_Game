@@ -124,7 +124,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	Schrift DisplayHealth((WIDTH-115),0,"Health: 0",20);
 	Schrift DisplayLvl((WIDTH-115),20,"Lvl: 0",20);
 
-	Map::save(P1, LevelId);
+	std::cout << P1.getName() << std::endl;
 
 	while(true)
 	{
@@ -271,7 +271,7 @@ bool Map::save(Player& P1, int LevelId)
 		// Gender
 		savegame << P1.getGender() << std::endl;
 		// Name
-
+		savegame << P1.getName() << std::endl;
 
 		// Map
 		savegame << LevelId << std::endl;
