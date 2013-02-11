@@ -20,6 +20,12 @@ public:
 	float			getPosY(void){
 		return this->y;
 	}
+	void			setPosX(float PosX){
+		this->x = PosX;
+	}
+	void			setPosY(float PosY){
+		this->y = PosY;
+	}
 	float			getSpeed(void){
 		return this->Speed;
 	}

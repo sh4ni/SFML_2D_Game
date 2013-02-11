@@ -25,6 +25,7 @@
 
 
 #define SAVEGAME "save.txt"
+#define CHECKSAVE 1
 #define CHECKSUM 1337
 
 #define DEFAULT_HEALTH 20
@@ -32,8 +33,8 @@
 #define DEFAULT_EXP 1
 
 #define DEFAULT_NAME_LENGTH 6
-#define DEFAULT_M_NAME "Lilli"
-#define DEFAULT_F_NAME "Fabel"
+#define DEFAULT_F_NAME "Lilli"
+#define DEFAULT_M_NAME "Fabel"
 
 
 #define DEFAULT_LEVEL 2

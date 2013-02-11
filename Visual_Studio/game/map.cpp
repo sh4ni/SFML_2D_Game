@@ -124,7 +124,6 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	Schrift DisplayHealth((WIDTH-115),0,"Health: 0",20);
 	Schrift DisplayLvl((WIDTH-115),20,"Lvl: 0",20);
 
-	std::cout << P1.getName() << std::endl;
 
 	while(true)
 	{
@@ -182,7 +181,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				renderWindow.draw(*TileMap[x][y].TexturePart);
 			}
 		}
-
+		P1.setPosX(500);
 		// Rendern des Spielers
 		P1.Render(renderWindow);
 		P1.Update(renderWindow, ElapsedTime);
@@ -236,16 +235,28 @@ bool Map::load(Player& P1)
 	std::ifstream loadgame;
 	loadgame.open(SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
-		int tester;
-	
-		loadgame >> tester;
-		
-		std::cout << tester << std::endl;
-	
-		P1.setHealth(tester);
-		P1.setLvl(50);
 
-		loadgame >> tester;
+		int tmp;
+		loadgame >> tmp;
+		P1.setHealth(tmp);
+		loadgame >> tmp;
+		P1.setLvl(tmp);
+		loadgame >> tmp;
+		P1.setExp(tmp);
+		
+		char tmper;
+		loadgame >> tmper; // gender
+		char temperer[DEFAULT_NAME_LENGTH];
+		loadgame >> temperer; // name
+		loadgame >> tmp; // mapid
+		
+		float temp;
+		loadgame >> temp;
+		P1.setPosX(temp);
+		loadgame >> temp;
+		
+		P1.setPosY(temp);
+
 
 		loadgame.close();
 	}else{

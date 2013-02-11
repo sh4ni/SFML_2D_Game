@@ -98,7 +98,7 @@ void Game::Init(void)
 		
 		loadgame >> mySavegame.checksum;
 
-		if(mySavegame.checksum == ((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM))
+		if(mySavegame.checksum == ((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM) && CHECKSAVE == 1)
 			std::cout << "Spielstand okay...!\n";
 		else
 			defaultSavegame(mySavegame,true);

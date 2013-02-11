@@ -37,14 +37,11 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	}
 	#endif
 
-	//texture.setSmooth(true);
+	texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,32.f);
 	sprite.setTextureRect(sf::IntRect(0.f,0.f,TILESIZE,TILESIZE*2));
 	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
-	//sprite.setPosition(WIDTH/2,HEIGHT/2);
-	//sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
-
 }
 
 void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
@@ -192,5 +189,4 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	}
 
 	sprite.setPosition(x,y);
-
 }

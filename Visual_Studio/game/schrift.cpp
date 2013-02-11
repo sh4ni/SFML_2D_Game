@@ -14,7 +14,7 @@ Schrift::Schrift(int X, int Y, String myText, int size){
 	printText.setString(myText);
 	printText.setFont(font);
 	printText.setCharacterSize(size);
-	printText.setColor(sf::Color(255,255,255));
+	printText.setColor(sf::Color(255,255,255,250));
 	printText.setPosition((float)X,(float)Y);
 }
 
