@@ -108,12 +108,17 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	
 	Clock clock;
 
-	Player P1(0,CollisionMap,currentSavegame);
+//<<<<<<< HEAD
+	Player P1(CollisionMap,currentSavegame);
 	P1.setMapSize( MapSizeX, MapSizeY );
 			
 	P1.setHealth(currentSavegame.pHealth);
 	P1.setExp(currentSavegame.pExp);
 	P1.setLvl(currentSavegame.pLvl);
+/*======= hier auch
+	Player P1(CollisionMap, currentSavegame);
+
+>>>>>>> 47e4842aa24bdde41fc8ce9ef9cf2aeb831b5f72*/
 
 	float LastTime = 1.f;
 	float ElapsedTime;
@@ -127,6 +132,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	Schrift DisplaySpeed(0,40,"Speed: Error",20);
 	Schrift DisplayHealth((WIDTH-115),0,"Health: Error",20);
 	Schrift DisplayLvl((WIDTH-115),20,"Lvl: Error",20);
+
 
 	while(true)
 	{
@@ -184,7 +190,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				renderWindow.draw(*TileMap[x][y].TexturePart);
 			}
 		}
-
+		P1.setPosX(500);
 		// Rendern des Spielers
 		P1.Render(renderWindow);
 		P1.Update(renderWindow, ElapsedTime);
@@ -238,16 +244,28 @@ bool Map::load(Player& P1)
 	std::ifstream loadgame;
 	loadgame.open(SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
-		int tester;
-	
-		loadgame >> tester;
-		
-		std::cout << tester << std::endl;
-	
-		P1.setHealth(tester);
-		P1.setLvl(50);
 
-		loadgame >> tester;
+		int tmp;
+		loadgame >> tmp;
+		P1.setHealth(tmp);
+		loadgame >> tmp;
+		P1.setLvl(tmp);
+		loadgame >> tmp;
+		P1.setExp(tmp);
+		
+		char tmper;
+		loadgame >> tmper; // gender
+		char temperer[DEFAULT_NAME_LENGTH];
+		loadgame >> temperer; // name
+		loadgame >> tmp; // mapid
+		
+		float temp;
+		loadgame >> temp;
+		P1.setPosX(temp);
+		loadgame >> temp;
+		
+		P1.setPosY(temp);
+
 
 		loadgame.close();
 	}else{
@@ -262,7 +280,7 @@ bool Map::save(Player& P1, int LevelId)
 {
 	std::cout << "saving..\n";
 	std::ofstream savegame;
-	savegame.open(SAVEGAME, std::ios::binary);
+	savegame.open(SAVEGAME, std::ios::trunc | std::ios::binary);
 	if(savegame.is_open()){
 		// Health
 		savegame << P1.getHealth() << std::endl;
@@ -271,8 +289,9 @@ bool Map::save(Player& P1, int LevelId)
 		// Exp
 		savegame << P1.getExp() << std::endl;
 		// Gender
+		savegame << P1.getGender() << std::endl;
 		// Name
-
+		savegame << P1.getName() << std::endl;
 
 		// Map
 		savegame << LevelId << std::endl;
@@ -280,6 +299,8 @@ bool Map::save(Player& P1, int LevelId)
 		savegame << P1.getPosX() << std::endl;
 		// Pos Y auf Map
 		savegame << P1.getPosY() << std::endl;
+
+		savegame << ((P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + LevelId) + CHECKSUM);
 
 		savegame.close();
 		std::cout << "saved..\n";

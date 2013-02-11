@@ -13,12 +13,18 @@ public:
 	void Render		(sf::RenderWindow &Window){
 		Window.draw(sprite);
 	}
-	Player			(bool gender, sf::IntRect*** CollisionMap, Savegame& currentSavegame);
+	Player			(sf::IntRect*** CollisionMap, Savegame& currentSavegame);
 	float			getPosX(void){
 		return this->x;
 	}
 	float			getPosY(void){
 		return this->y;
+	}
+	void			setPosX(float PosX){
+		this->x = PosX;
+	}
+	void			setPosY(float PosY){
+		this->y = PosY;
 	}
 	float			getSpeed(void){
 		return this->Speed;
@@ -54,6 +60,9 @@ public:
 	int getExp(void){
 		return this->pExp;
 	}
+	char getGender(void){
+		return this->pGender;
+	}
 	char * getName(void){
 		return this->pName;
 	}
@@ -74,8 +83,8 @@ private:
 	int pHealth;
 	int pLvl;
 	int pExp;
-	bool gender;	// 0 - male | 1 - female
-	static char pName[11] ;
+	char pGender;	// M - Male | F - Female
+	char pName[DEFAULT_NAME_LENGTH] ;
 	
 	/*
 	

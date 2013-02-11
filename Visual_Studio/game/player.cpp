@@ -1,20 +1,24 @@
 ﻿#include "player.h"
 
 
-Player::Player(bool gender, sf::IntRect*** CollisionMap, Savegame& currentSavegame){
+Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 
 	this->ColMap = CollisionMap;
-	this->gender = gender;
+	
+	this->pHealth = currentSavegame.pHealth;
+	this->pLvl = currentSavegame.pLvl;
+	this->pExp = currentSavegame.pExp;
+	this->pGender = currentSavegame.pGender;
+	strncpy(this->pName,currentSavegame.pName,sizeof(currentSavegame.pName));
 
 	sf::String tex;
-	if(gender){
+	if(pGender == 'F'){
 		#ifdef DEBUG
 			tex.insert(0,"include/texture/player/player_female.png");
 		#else
 			tex.insert(0,"include/texture/player/player_female.png");
 		#endif
-	}
-	else {
+	}else {
 		#ifdef DEBUG
 			tex.insert(0,"include/texture/player/player_male.png");
 		#else
@@ -33,14 +37,11 @@ Player::Player(bool gender, sf::IntRect*** CollisionMap, Savegame& currentSavega
 	}
 	#endif
 
-	//texture.setSmooth(true);
+	texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,32.f);
 	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
 	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
-	//sprite.setPosition(WIDTH/2,HEIGHT/2);
-	//sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
-
 }
 
 void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
@@ -194,5 +195,4 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	}
 
 	sprite.setPosition(x,y);
-
 }
