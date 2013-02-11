@@ -1,14 +1,26 @@
 #include "menu.h"
+#include "defines.h"
+#include <iostream>
 
 MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame)
 {
 	//Load menu image from file
 	sf::Texture image;
-	image.loadFromFile("include/interface/menu.png");
+	sf::Texture imageBackground;
+	if(!image.loadFromFile("include/interface/menu.png")){
+		exit(1); // fehlerbehebung fehlt noch...
+	}
+	if(!imageBackground.loadFromFile("include/interface/menu_back.png")){
+		exit(1); // und noch mehr fehlerbehebung hier einsetzen :p
+	}
 	sf::Sprite sprite(image);
+	sf:Sprite spriteBackground(imageBackground);
 
-	Schrift PlayText(165,225,"Play..",50);
-	Schrift ExitText(165,321,"Exit..",50);
+	sprite.setOrigin(image.getSize().x/2,image.getSize().y/2);
+	sprite.setPosition(WIDTH/2,HEIGHT/2);
+	
+	Schrift PlayText(WIDTH/2-BUTTONWIDTH/2+5,225,"Continue",50);
+	Schrift ExitText(WIDTH/2-BUTTONWIDTH/2+5,321,"Exit",50);
 
 	//Setup clickable regions
 
@@ -35,13 +47,13 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame)
 	_menuItems.push_back(playButton);
 	_menuItems.push_back(exitButton);
 
+	window.draw(spriteBackground);
 	window.draw(sprite);
 
 	PlayText.Render(window);
 	ExitText.Render(window);
 
 	window.display();
-
 	return GetMenuResponse(window);
 }
 

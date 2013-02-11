@@ -14,7 +14,11 @@
 	#define VERSION "The Journey - 0.20 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled "
 #endif
 
-// used in map.cpp
+// used in menues
+#define BUTTONWIDTH 704
+#define BUTTONHEIGHT 64
+
+// used in map.cpp and player.cpp
 #define TILESIZE 32
 
 // used in player.cpp
