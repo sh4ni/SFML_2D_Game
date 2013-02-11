@@ -20,7 +20,7 @@
 // used in player.cpp
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
-#define ANIMATIONSPEED 64.0f
+#define ANIMATIONSPEED 4.0f	// Mehr = langsamere Animation
 
 
 #define SAVEGAME "save.txt"

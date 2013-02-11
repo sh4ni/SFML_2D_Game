@@ -57,11 +57,16 @@ public:
 	char * getName(void){
 		return this->pName;
 	}
+	void setMapSize( int xMax, int yMax){
+		this->MapSize.x = xMax;
+		this->MapSize.y = yMax;
+	}
 private:
 	float Speed;
 	sf::Texture texture;
 	sf::Sprite sprite;
 	sf::IntRect*** ColMap;
+	sf::Vector2i MapSize;
 	float x;
 	float y;
 	unsigned char Animation;

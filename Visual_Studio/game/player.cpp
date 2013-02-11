@@ -36,7 +36,7 @@ Player::Player(bool gender, sf::IntRect*** CollisionMap, Savegame& currentSavega
 	//texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setOrigin(16.f,32.f);
-	sprite.setTextureRect(sf::IntRect(0.f,0.f,TILESIZE,TILESIZE*2));
+	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
 	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
 	//sprite.setPosition(WIDTH/2,HEIGHT/2);
 	//sprite.setScale(2.1f,2.1f); // player wird 110% groß skaliert
@@ -58,25 +58,25 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 
 	// 12 Kollisionspunkte
 	int CollisionPoint[12][2] = {
-		{x-TILESIZE/2, y},									//  0: Links Oben						+--- Player ----+
-		{x+TILESIZE/2-1, y},								//  1: Rechts Oben						|				|
-		{x-TILESIZE/2, y+TILESIZE-1},						//  2: Links Unten						|				|
-		{x+TILESIZE/2-1, y+TILESIZE-1},						//  3: Rechts Unten						|				| keine Kollisionsabfrage im oberen bereich.
-		{x-TILESIZE/2+COLLISIONTOLERANCE, y},				//  4: Links Oben Hilfspunkt Oben		|				|
-		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y},				//  5: Rechts Oben Hilfspunkt Oben		|				|
-		{x-TILESIZE/2+COLLISIONTOLERANCE, y+TILESIZE-1},	//  6: Links Unten Hilfspunkt Unten		| 00 04   05 01 |
-		{x+TILESIZE/2-1-COLLISIONTOLERANCE, y+TILESIZE-1},	//  7: Rechts Unten Hilfspunkt Unten	| 08         09 |
-		{x-TILESIZE/2, y+COLLISIONTOLERANCE},				//  8: Links Oben Hilfspunkt Links		|				|
-		{x+TILESIZE/2-1, y+COLLISIONTOLERANCE},				//  9: Rechts Oben Hilfspunkt Rechts	| 10         11 |
-		{x-TILESIZE/2, y+TILESIZE-1-COLLISIONTOLERANCE},	// 10: Links Unten Hilfspunkt Links		| 02 06   07 03 |
-		{x+TILESIZE/2-1, y+TILESIZE-1-COLLISIONTOLERANCE},	// 11: Rechts Unten Hilfspunkt Rechts	+---------------+
+		{(int)x-TILESIZE/2, (int)y},									//  0: Links Oben						+--- Player ----+
+		{(int)x+TILESIZE/2-1, (int)y},									//  1: Rechts Oben						|				|
+		{(int)x-TILESIZE/2, (int)y+TILESIZE-1},							//  2: Links Unten						|				|
+		{(int)x+TILESIZE/2-1, (int)y+TILESIZE-1},						//  3: Rechts Unten						|				| keine Kollisionsabfrage im oberen bereich.
+		{(int)x-TILESIZE/2+COLLISIONTOLERANCE, (int)y},					//  4: Links Oben Hilfspunkt Oben		|				|
+		{(int)x+TILESIZE/2-1-COLLISIONTOLERANCE, (int)y},				//  5: Rechts Oben Hilfspunkt Oben		|				|
+		{(int)x-TILESIZE/2+COLLISIONTOLERANCE, (int)y+TILESIZE-1},		//  6: Links Unten Hilfspunkt Unten		| 00 04   05 01 |
+		{(int)x+TILESIZE/2-1-COLLISIONTOLERANCE, (int)y+TILESIZE-1},	//  7: Rechts Unten Hilfspunkt Unten	| 08         09 |
+		{(int)x-TILESIZE/2, (int)y+COLLISIONTOLERANCE},					//  8: Links Oben Hilfspunkt Links		|				|
+		{(int)x+TILESIZE/2-1, (int)y+COLLISIONTOLERANCE},				//  9: Rechts Oben Hilfspunkt Rechts	| 10         11 |
+		{(int)x-TILESIZE/2, (int)y+TILESIZE-1-COLLISIONTOLERANCE},		// 10: Links Unten Hilfspunkt Links		| 02 06   07 03 |
+		{(int)x+TILESIZE/2-1, (int)y+TILESIZE-1-COLLISIONTOLERANCE},	// 11: Rechts Unten Hilfspunkt Rechts	+---------------+
 
 	};
 
 	bool cp[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
 
 	for( int i=0; i<9; i++){
-		if(tx+(i%3) > 0 && ty+i/3 > 0 && ColMap[tx+(i%3)][ty+i/3] != NULL){
+		if(tx+(i%3) >= 0 && ty+i/3 >= 0 && tx+(i%3) < MapSize.x && ty+i/3 < MapSize.y && ColMap[tx+(i%3)][ty+i/3] != NULL){
 			for( int p=0; p<12; p++){
 				if( ColMap[tx+(i%3)][ty+i/3]->contains(CollisionPoint[p][0],CollisionPoint[p][1]) ){
 					cp[p] = 1;
@@ -129,28 +129,34 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 		}
 	}
 
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !blockUp ){
+	bool walking = false;
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !blockUp ){
 		y -= (Speed*ElapsedTime);
 		blockDown = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)(Speed*ANIMATIONSPEED))%3),TILESIZE*2*3,TILESIZE,TILESIZE*2));
-		Animation++;
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%3),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+		walking = true;
 	}
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !blockDown ){
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !blockDown ){
 		y += (Speed*ElapsedTime);
 		blockUp = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)(Speed*ANIMATIONSPEED))%3),0,TILESIZE,TILESIZE*2));
-		Animation++;
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%3),0,TILESIZE,TILESIZE*2));
+		walking = true;
 	}
-	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !blockLeft ){
+	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !blockLeft ){
 		x -= (Speed*ElapsedTime);
 		blockRight = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)(Speed*ANIMATIONSPEED))%3),TILESIZE*2*1,TILESIZE,TILESIZE*2));
-		Animation++;
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%3),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+		walking = true;
 	}
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !blockRight ){
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !blockRight ){
 		x += Speed*ElapsedTime;
 		blockLeft = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)(Speed*ANIMATIONSPEED))%3),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%3),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+		walking = true;
+	}
+
+	if( walking ){
+		if( (Animation/(int)((1/Speed)*ANIMATIONSPEED)) >= 3) Animation = 0;
 		Animation++;
 	}
 

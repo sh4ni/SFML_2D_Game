@@ -44,8 +44,8 @@ void Game::Init(void)
 			// Name
 
 			// Map
-			defaultsavegame << 2 << std::endl;
-			mySavegame.mLevelId = 2;
+			defaultsavegame << 1 << std::endl;
+			mySavegame.mLevelId = 1;
 			// Pos X auf Map
 			defaultsavegame << WIDTH/2 << std::endl;
 			mySavegame.mPosX = WIDTH/2;

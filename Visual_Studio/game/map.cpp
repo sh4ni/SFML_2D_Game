@@ -15,8 +15,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	static Texture LevelTexture;
 	LevelTexture.loadFromFile("include/texture/world/overworld.png");		// Lade Texturedatei
 
-	int MapSizeX = 0;
-	int MapSizeY = 0;
+	int MapSizeX = 0U;
+	int MapSizeY = 0U;
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
 	int TileType;
@@ -108,12 +108,12 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	
 	Clock clock;
 
-	Player P1(1,CollisionMap,currentSavegame);
+	Player P1(0,CollisionMap,currentSavegame);
+	P1.setMapSize( MapSizeX, MapSizeY );
 			
 	P1.setHealth(currentSavegame.pHealth);
 	P1.setExp(currentSavegame.pExp);
 	P1.setLvl(currentSavegame.pLvl);
-	
 
 	float LastTime = 1.f;
 	float ElapsedTime;
@@ -122,11 +122,11 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	int CamX;
 	int CamY;
 
-	Schrift DisplayFPS(0,0,"FPS: 0",20);
-	Schrift DisplayKoord(0,20,"X: 0 Y: 0",20);
-	Schrift DisplaySpeed(0,40,"Speed: 0",20);
-	Schrift DisplayHealth((WIDTH-115),0,"Health: 0",20);
-	Schrift DisplayLvl((WIDTH-115),20,"Lvl: 0",20);
+	Schrift DisplayFPS(0,0,"FPS: Error",20);
+	Schrift DisplayKoord(0,20,"X: Error Y: Error",20);
+	Schrift DisplaySpeed(0,40,"Speed: Error",20);
+	Schrift DisplayHealth((WIDTH-115),0,"Health: Error",20);
+	Schrift DisplayLvl((WIDTH-115),20,"Lvl: Error",20);
 
 	while(true)
 	{
