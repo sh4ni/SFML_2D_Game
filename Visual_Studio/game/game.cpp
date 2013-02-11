@@ -111,70 +111,7 @@ void Game::Init(void)
 
 		Game::Start(mySavegame);	// Da ein Spielstand vorhanden ist Defaultm‰ﬂig der zweite Paramter false
 	}else{
-		std::cout << "Kein Spielstand erkannt! Default Spielstand wird erstellt..\a\n";
-//<<<<<<< HEAD
-		std::ofstream defaultsavegame;
-		defaultsavegame.open(SAVEGAME, std::ios::binary);
-		if(defaultsavegame.is_open()){
-			// Health
-			defaultsavegame << 20 << std::endl;
-			mySavegame.pHealth = 100;
-			// Level
-			defaultsavegame << 1 << std::endl;
-			mySavegame.pLvl = 1;
-			// Exp
-			defaultsavegame << 1 << std::endl;
-			mySavegame.pExp = 1;
-			// Gender
-			// Name
-
-			// Map
-			defaultsavegame << 1 << std::endl;
-			mySavegame.mLevelId = 1;
-			// Pos X auf Map
-			defaultsavegame << WIDTH/2 << std::endl;
-			mySavegame.mPosX = WIDTH/2;
-			// Pos Y auf Map
-			defaultsavegame << WIDTH/2 ;
-			mySavegame.mPosY = HEIGHT/2;	
-			Game::Start(mySavegame, true);
-		}
-/*======= bitte mal schauen filip, git hat nen konflikt.
-
 		defaultSavegame(mySavegame,false);
-		//std::ofstream defaultsavegame;
-		//defaultsavegame.open(SAVEGAME, std::ios::binary);
-		//if(defaultsavegame.is_open()){
-		//	char gender = defaultSavegame(mySavegame);
-		//	// Health
-		//	defaultsavegame << DEFAULT_HEALTH << std::endl;
-		//	// Level
-		//	defaultsavegame << DEFAULT_LVL << std::endl;
-		//	// Exp
-		//	defaultsavegame << DEFAULT_EXP << std::endl;
-		//	// Gender
-		//	defaultsavegame << gender << std::endl;
-		//	
-		//	// Name
-
-		//	// Map
-		//	defaultsavegame << DEFAULT_LEVEL << std::endl;
-		//	// Pos X auf Map
-		//	defaultsavegame << DEFAULT_POSX << std::endl;
-		//	// Pos Y auf Map
-		//	defaultsavegame << DEFAULT_POSY << std::endl;
-
-		//	int checksum = (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM;
-		//	std::cout << checksum << std::endl;
-
-		//	defaultsavegame << checksum;
-		//	mySavegame.checksum;
-
-		//	defaultsavegame.close();
-
-		//	Game::Start(mySavegame, true);
-		//}
->>>>>>> 47e4842aa24bdde41fc8ce9ef9cf2aeb831b5f72*/
 	}
 	Game::Start(mySavegame, true);
 }
