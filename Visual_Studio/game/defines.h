@@ -9,9 +9,9 @@
 #define FPS 60U
 
 #ifdef DEBUG
-	#define VERSION "The Journey - 0.20 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled "
+	#define VERSION "The Journey - 0.24 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled "
 #else
-	#define VERSION "The Journey - 0.20 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled "
+	#define VERSION "The Journey - 0.24 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled "
 #endif
 
 // used in menues
