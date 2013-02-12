@@ -134,6 +134,16 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	iface.setOrigin(ifaceImage.getSize().x/2,ifaceImage.getSize().y);
 	iface.setPosition(WIDTH/2,HEIGHT);
 
+	sf::RectangleShape HPBar;
+	HPBar.setFillColor(sf::Color(255,0,0));
+	HPBar.setPosition(WIDTH/2-55,HEIGHT-61);
+	HPBar.setSize(sf::Vector2f(180.f,28.f));
+
+	sf::RectangleShape EXPBar;
+	EXPBar.setFillColor(sf::Color(0,255,0));
+	EXPBar.setPosition(WIDTH/2-55,HEIGHT-30);
+	EXPBar.setSize(sf::Vector2f(180.f,28.f));
+
 	Schrift DisplayHP(WIDTH/2+122,HEIGHT-58,"Error",18,0);
 	Schrift DisplayEXP(WIDTH/2+123,HEIGHT-27,"Error",18,0);
 	Schrift DisplayLevel(WIDTH/2-128,HEIGHT-76,"Err",18,0);
@@ -215,26 +225,31 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
 					if(quitGame)
 						return;
-				}else if(levelLoop.key.code == Keyboard::F10) {
+				}
+				else if(levelLoop.key.code == Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
 					if(Screen.saveToFile("screenshots\\screenshot-"__DATE__"-.png")){
 						#ifdef DEBUG
 							std::cout << " Screenshot gespeichert.. " << std::endl;	
 						#endif
 					}
-				}else if(levelLoop.key.code == Keyboard::E){
+				}
+				else if(levelLoop.key.code == Keyboard::E){
 					// player speed up
 					P1.increaseSpeed(0.1f);
-				}else if(levelLoop.key.code == Keyboard::Q){
+				}
+				else if(levelLoop.key.code == Keyboard::Q){
 					// player speed runter
 					P1.decreaseSpeed(0.1f);
 				}
-			}else if(levelLoop.type == Event::LostFocus){
+			}
+			else if(levelLoop.type == Event::LostFocus){
 				#ifdef DEBUG
 					std::cout << " Ausserhalb Fenster!.. " << std::endl;	
 				#endif
 					pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
-			}else if(levelLoop.type == Event::Closed){
+			}
+			else if(levelLoop.type == Event::Closed){
 				return;
 			}
 		}
@@ -242,6 +257,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		renderWindow.setView(renderWindow.getDefaultView());	// Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
 		
 		renderWindow.draw(iface);
+		renderWindow.draw(HPBar);
+		renderWindow.draw(EXPBar);
 
 		DisplayHP.printText.setOrigin(DisplayHP.printText.getGlobalBounds().width,0);			// Text Rechtsbündig
 		DisplayEXP.printText.setOrigin(DisplayEXP.printText.getGlobalBounds().width,0);

@@ -41,7 +41,7 @@
 #define DEFAULT_M_NAME "Fabel"
 
 
-#define DEFAULT_LEVEL 2
+#define DEFAULT_LEVEL 1
 #define DEFAULT_POSX WIDTH/2
 #define DEFAULT_POSY HEIGHT/2
 
