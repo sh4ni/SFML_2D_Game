@@ -17,7 +17,7 @@ public:
 	int pLvl;
 	int pExp;
 	char pGender;
-	char pName[DEFAULT_NAME_LENGTH];
+	std::string pName;
 
 	int mLevelId;
 	float mPosX;

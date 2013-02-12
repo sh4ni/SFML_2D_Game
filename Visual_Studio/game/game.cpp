@@ -46,7 +46,7 @@ void defaultSavegame(Savegame& mySavegame, bool corrput){
 
 		// Name
 		defaultsavegame << pName << std::endl;
-		strncpy(mySavegame.pName,pName,sizeof(pName));
+		mySavegame.pName = pName;
 
 		////////////////////////////////////////////////////
 

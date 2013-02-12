@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "defines.h"
 #include "savegame.h"
 
@@ -45,8 +46,8 @@ public:
 	void setExp(int pExp){
 		this->pExp = pExp;
 	}
-	void setName(char const * pName){
-		strcpy(this->pName,pName);
+	void setName(std::string pName){
+		this->pName = pName;
 	}
 	int getHealth(void){
 		return this->pHealth;
@@ -60,7 +61,7 @@ public:
 	char getGender(void){
 		return this->pGender;
 	}
-	char * getName(void){
+	std::string getName(void){
 		return this->pName;
 	}
 	int getHealthMax(void){
@@ -89,7 +90,8 @@ private:
 	int pExp;
 	int pExpMax;	// Exp needed Until Levelup
 	char pGender;	// M - Male | F - Female
-	char pName[DEFAULT_NAME_LENGTH] ;
+	//char pName[DEFAULT_NAME_LENGTH] ;
+	std::string pName; 
 	
 	/*
 	

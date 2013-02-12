@@ -9,7 +9,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	this->pLvl = currentSavegame.pLvl;
 	this->pExp = currentSavegame.pExp;
 	this->pGender = currentSavegame.pGender;
-	strncpy(this->pName,currentSavegame.pName,sizeof(currentSavegame.pName));
+	this->pName = currentSavegame.pName;
 
 	this->pHealthMax = 90+ this->pLvl*10;
 	this->pExpMax = 50* pow(1.15f,(this->pLvl-1));	// 50 = Grundwert, 1.15f = Levelfaktor.

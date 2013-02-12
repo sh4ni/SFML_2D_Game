@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "defines.h"
 #include "intro.h"
 #include "menu.h"
