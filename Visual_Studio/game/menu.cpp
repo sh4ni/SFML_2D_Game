@@ -20,8 +20,8 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 	// Menü und Hintergrund
 	sf::Sprite sprite(imageMenu);
 	sf::Sprite spriteBackground(imageBackground);
-	sprite.setOrigin(imageMenu.getSize().x/2,imageMenu.getSize().y/2);
-	sprite.setPosition(WIDTH/2,HEIGHT/2);
+	sprite.setOrigin((float)imageMenu.getSize().x/2.f,(float)imageMenu.getSize().y/2.f);
+	sprite.setPosition((float)WIDTH/2.f,(float)HEIGHT/2.f);
 	window.draw(spriteBackground);
 	window.draw(sprite);
 	
@@ -36,15 +36,15 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 	for( int i=0; i<buttons; i++){
 		button[i].image.setTexture(imageButton);
 		button[i].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT*2,BUTTONWIDTH,BUTTONHEIGHT));
-		button[i].image.setPosition(WIDTH/2-BUTTONWIDTH/2,HEIGHT/2-160+i*BUTTONHEIGHT*3/2);
+		button[i].image.setPosition((float)WIDTH/2.f-(float)BUTTONWIDTH/2.f,(float)HEIGHT/2.f-160.f+(float)i*(float)BUTTONHEIGHT*3.f/2.f);
 		button[i].rect.left = WIDTH/2-BUTTONWIDTH/2;
 		button[i].rect.top = HEIGHT/2-160+i*BUTTONHEIGHT*3/2;
 		button[i].rect.width = BUTTONWIDTH;
 		button[i].rect.height = BUTTONHEIGHT;
-		button[i].text.setPosition(WIDTH/2-BUTTONWIDTH/2+10,HEIGHT/2-160+i*BUTTONHEIGHT*3/2+7);
+		button[i].text.setPosition((float)WIDTH/2.f-(float)BUTTONWIDTH/2.f+10.f,(float)HEIGHT/2.f-160.f+(float)i*(float)BUTTONHEIGHT*3.f/2.f+7.f);
 		button[i].text.setFont(font);
-		button[i].text.setCharacterSize(40);
-		button[i].text.setColor(sf::Color(100,100,100));
+		button[i].text.setCharacterSize(40U);
+		button[i].text.setColor(sf::Color(100U,100U,100U));
 
 		button[i].active = false;
 		switch(i){
@@ -74,55 +74,12 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 		}
 		if( button[i].active ){	// Andere Textur und Textfarbe für klickbare Buttons
 			button[i].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
-			button[i].text.setColor(sf::Color(255,255,255));
+			button[i].text.setColor(sf::Color(255U,255U,255U));
 		}
 		_menuItems.push_back(button[i]);
 		window.draw(button[i].image);
 		window.draw(button[i].text);
 	}
-
-	/*Schrift PlayText(WIDTH/2-BUTTONWIDTH/2+5,225,"Continue",50);
-	Schrift ExitText(WIDTH/2-BUTTONWIDTH/2+5,321,"Exit",50);
-	PlayText.Render(window);
-	ExitText.Render(window);*/
-
-	/*MenuItem buttonContinue;
-	MenuItem buttonNewGame;
-	MenuItem buttonExit;
-
-	buttonContinue.image.setTexture(imageButton);
-	buttonNewGame.image.setTexture(imageButton);
-	buttonExit.image.setTexture(imageButton);*/
-	
-	//.setTexture(texture);
-	//.setOrigin(16.f,32.f);
-	//.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
-	//.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
-	
-	//Setup clickable regions
-
-	//Play menu item coordinates
-	/*MenuItem playButton;
-	
-	playButton.rect.top= 225;
-	playButton.rect.width = 288;
-	playButton.rect.left = 160;
-	playButton.rect.height = 862;
-
-	playButton.action = Play;
-	playButton.active = true;
-
-	//Exit menu item coordinates
-	MenuItem exitButton;
-	exitButton.rect.top = 321;
-	exitButton.rect.width = 382;
-	exitButton.rect.left = 160;
-	exitButton.rect.height = 862;
-
-	exitButton.action = Exit;
-
-	_menuItems.push_back(playButton);
-	_menuItems.push_back(exitButton);*/
 
 	window.display();
 	return GetMenuResponse(window);
@@ -136,13 +93,6 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 		if( menuItemRect.contains(x,y) ){
 			return (*it).action;
 		}
-		/*if( menuItemRect.width > y 
-			&& menuItemRect.top < y 
-			&& menuItemRect.left < x 
-			&& menuItemRect.height > x)
-			{
-				return (*it).action;
-			}*/
 	}
 	return Nothing;
 }
