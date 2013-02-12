@@ -30,14 +30,13 @@ void defaultSavegame(Savegame& mySavegame, bool corrput){
 		srand((unsigned int)time(NULL));
 		int tmp = (rand() % 2);
 		char pGender;
-		char pName[DEFAULT_NAME_LENGTH];
+		std::string pName;
 		if(tmp){
 			pGender = 'M';
-			strncpy(pName,DEFAULT_M_NAME,sizeof(DEFAULT_M_NAME));
-		}
-		else{
+			pName = DEFAULT_M_NAME;
+		}else{
 			pGender = 'F';
-			strncpy(pName,DEFAULT_F_NAME,sizeof(DEFAULT_F_NAME));
+			pName = DEFAULT_F_NAME;
 		}
 
 		// Gender
