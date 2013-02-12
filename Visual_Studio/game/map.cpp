@@ -245,7 +245,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 
 		DisplayHP.printText.setOrigin(DisplayHP.printText.getGlobalBounds().width,0);			// Text Rechtsbündig
 		DisplayEXP.printText.setOrigin(DisplayEXP.printText.getGlobalBounds().width,0);
-		DisplayLevel.printText.setOrigin(DisplayLevel.printText.getGlobalBounds().width/2,0);	// Text Zentrieren
+		DisplayLevel.printText.setOrigin(DisplayLevel.printText.getGlobalBounds().width/2+1,0);	// Text Zentrieren
 
 		std::ostringstream PlayerHealthText;
 		PlayerHealthText.precision(0);

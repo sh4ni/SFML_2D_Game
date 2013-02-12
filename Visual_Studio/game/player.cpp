@@ -86,7 +86,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 		}
 	}
 
-	for( int i=0; i<12; i++){	// Punktabfrage ist noch immer nicht wirklich toll... Benötigt auf jedenfall noch etwas Arbeit!
+	for( int i=0; i<12; i++){	// Punktabfrage sollte jetzt passen. Fall zu untersuchen: 0 !4 !8 und dann gegen die ecke laufen...
 		//std::cout << cp[i];
 		if( (cp[0] && cp[4] || cp[1] && cp[5]) && (!cp[8] || !cp[9]) ){ // Bei Normaler Auslastung
 			blockUp = true;
@@ -137,31 +137,34 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !blockUp ){
 		y -= (Speed*ElapsedTime);
 		blockDown = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%3),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 		walking = true;
 	}
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !blockDown ){
 		y += (Speed*ElapsedTime);
 		blockUp = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%3),0,TILESIZE,TILESIZE*2));
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
 		walking = true;
 	}
 	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !blockLeft ){
 		x -= (Speed*ElapsedTime);
 		blockRight = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%3),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 		walking = true;
 	}
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !blockRight ){
 		x += Speed*ElapsedTime;
 		blockLeft = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%3),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 		walking = true;
 	}
 
 	if( walking ){
-		if( (Animation/(int)((1/Speed)*ANIMATIONSPEED)) >= 3) Animation = 0;
+		if( (Animation/(int)((1/Speed)*ANIMATIONSPEED)) >= 4) Animation = 0;
 		Animation++;
+	}
+	else {
+		sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
 	}
 
 	if( blockUp ){
