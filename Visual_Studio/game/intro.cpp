@@ -10,8 +10,8 @@ void Intro::Show(sf::RenderWindow& renderWindow)
 
 	sf::Sprite sprite(image);
 
-	sprite.setOrigin(image.getSize().x/2,image.getSize().y/2);
-	sprite.setPosition(WIDTH/2,HEIGHT/2);
+	sprite.setOrigin((float)image.getSize().x/2,(float)image.getSize().y/2);
+	sprite.setPosition((float)WIDTH/2.f,(float)HEIGHT/2.f);
 
 	renderWindow.clear(sf::Color(50,50,50)); // Hintergrundfarbe im Intro
 	renderWindow.draw(sprite);

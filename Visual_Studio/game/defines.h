@@ -39,9 +39,9 @@
 #define DEFAULT_LVL 1
 #define DEFAULT_EXP 1
 
-#define DEFAULT_NAME_LENGTH 6
-#define DEFAULT_F_NAME "Lilli"
-#define DEFAULT_M_NAME "Fabel"
+#define DEFAULT_NAME_LENGTH 7	// todo für f
+#define DEFAULT_F_NAME "Ashley"
+#define DEFAULT_M_NAME "Fabi"
 
 
 #define DEFAULT_LEVEL 1
