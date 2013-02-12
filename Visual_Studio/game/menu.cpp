@@ -49,14 +49,16 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 		button[i].active = false;
 		switch(i){
 		case 0:
-			button[i].action = Play;
-			button[i].active = true;
+			if(!newgame){
+				button[i].active = true;
+				button[i].action = Play;
+			}
 			button[i].text.setString("Continue");
 			break;
 		case 1:
 			button[i].text.setString("New Game");
-			if(newgame)
-				button[i].active = true;
+			button[i].active = true;
+			button[i].action = Play;
 			break;
 		case 2:
 			button[i].text.setString("Map Editor");
