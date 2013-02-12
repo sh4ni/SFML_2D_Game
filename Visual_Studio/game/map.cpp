@@ -314,7 +314,7 @@ bool Map::load(Player& P1)
 		
 		char tmper;
 		loadgame >> tmper; // gender
-		char temperer[DEFAULT_NAME_LENGTH];
+		std::string temperer;
 		loadgame >> temperer; // name
 		loadgame >> tmp; // mapid
 		
