@@ -11,8 +11,8 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	this->pGender = currentSavegame.pGender;
 	strncpy(this->pName,currentSavegame.pName,sizeof(currentSavegame.pName));
 
-	this->pHealthMax = 90+ this->pLvl*10;
-	this->pExpMax = 50* pow(1.15f,(this->pLvl-1));	// 50 = Grundwert, 1.15f = Levelfaktor.
+	this->pHealthMax = BASEHEALTH-HEALTHPERLEVEL+this->pLvl*HEALTHPERLEVEL;
+	this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->pLvl-1));
 
 	sf::String tex;
 	if(pGender == 'F'){
@@ -167,7 +167,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 		Animation++;
 	}
 	else {
-		sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
+		sprite.setTextureRect(sf::IntRect(0,sprite.getTextureRect().top,TILESIZE,TILESIZE*2));
 	}
 
 	if( blockUp ){

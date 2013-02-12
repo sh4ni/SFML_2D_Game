@@ -26,7 +26,10 @@
 #define COLLISIONTOLERANCE 4
 #define ANIMATIONSPEED 4.0f	// Mehr = langsamere Animation
 
-
+#define BASEHEALTH 100
+#define HEALTHPERLEVEL 10
+#define BASEEXP 50
+#define EXPMULTIPLICATOR 1.15f
 
 #define SAVEGAME "save.txt"
 #define CHECKSAVE 1
