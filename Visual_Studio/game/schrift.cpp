@@ -1,7 +1,7 @@
 #include "schrift.h"
 #include "defines.h"
 
-Schrift::Schrift(int X, int Y, String myText, int size){
+Schrift::Schrift(int X, int Y, String myText, int size, int color){
 	
 	if(!font.loadFromFile("include/fonts/arial.ttf")){
 		std::cout << "Fehler beim Laden der Schrift!\a" << std::endl;
@@ -14,7 +14,7 @@ Schrift::Schrift(int X, int Y, String myText, int size){
 	printText.setString(myText);
 	printText.setFont(font);
 	printText.setCharacterSize(size);
-	printText.setColor(sf::Color(255,255,255,250));
+	printText.setColor(sf::Color(color,color,color));
 	printText.setPosition((float)X,(float)Y);
 }
 

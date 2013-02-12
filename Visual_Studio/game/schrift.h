@@ -8,11 +8,11 @@ using namespace sf;
 class Schrift{
 public:
 	void Render		(RenderWindow &Window);
-	Schrift			(int X, int Y, String myText, int size);
+	Schrift			(int X, int Y, String myText, int size, int color = 255);
 	void Update		(String myText);
+	Text printText;
 private:
 	Font font;
-	Text printText;
 	int X, Y;
 	String myText;
 };

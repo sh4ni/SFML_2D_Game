@@ -118,13 +118,29 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 
 	int CamX;
 	int CamY;
+	
+	sf::Texture ifaceImage;
+	if( P1.getGender() == 'F' ){
+		if(!ifaceImage.loadFromFile("include/interface/interface-female.png")){
+			//fehlerbehebung
+		}
+	}
+	else {
+		if(!ifaceImage.loadFromFile("include/interface/interface-male.png")){
+			//fehlerbehebung
+		}
+	}
+	sf::Sprite iface(ifaceImage);
+	iface.setOrigin(ifaceImage.getSize().x/2,ifaceImage.getSize().y);
+	iface.setPosition(WIDTH/2,HEIGHT);
+
+	Schrift DisplayHP(WIDTH/2+122,HEIGHT-58,"Error",18,0);
+	Schrift DisplayEXP(WIDTH/2+123,HEIGHT-27,"Error",18,0);
+	Schrift DisplayLevel(WIDTH/2-128,HEIGHT-76,"Err",18,0);
 
 	Schrift DisplayFPS(0,0,"FPS: Error",20);
 	Schrift DisplayKoord(0,20,"X: Error Y: Error",20);
 	Schrift DisplaySpeed(0,40,"Speed: Error",20);
-	Schrift DisplayHealth((WIDTH-115),0,"Health: Error",20);
-	Schrift DisplayLvl((WIDTH-115),20,"Lvl: Error",20);
-
 
 	while(true)
 	{
@@ -155,25 +171,17 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		PlayerSpeedText << std::fixed << "Speed: " << P1.getSpeed();
 		DisplaySpeed.Update(PlayerSpeedText.str());
 
-		std::ostringstream PlayerHealthText;
-		PlayerHealthText.precision(0);
-		PlayerHealthText << std::fixed << "Health: " << P1.getHealth();
-		DisplayHealth.Update(PlayerHealthText.str());
-
-		std::ostringstream PlayerLvlText;
-		PlayerLvlText.precision(0);
-		PlayerLvlText << std::fixed << "Level: " << P1.getLvl();
-		DisplayLvl.Update(PlayerLvlText.str());
-
 		// ...geht aber nicht übers Kartenende hinaus
-		if ( MapSizeX*TILESIZE < WIDTH ) CamX = MapSizeX*TILESIZE/2;
+		if ( MapSizeX*TILESIZE < WIDTH ){
+			CamX = MapSizeX*TILESIZE/2;
+			renderWindow.clear();
+		}
 		else if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
 		else if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = MapSizeX * TILESIZE - WIDTH/2;
 		if ( MapSizeY*TILESIZE < HEIGHT ) CamY = MapSizeY*TILESIZE/2;
 		else if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
 		else if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
 
-		renderWindow.clear();
 		renderWindow.setView(viewCamera);
 		viewCamera.setCenter((float)CamX,(float)CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
 
@@ -233,11 +241,34 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 
 		renderWindow.setView(renderWindow.getDefaultView());	// Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
 		
-		DisplayFPS.Render(renderWindow); // FPS Anzeige
-		DisplayKoord.Render(renderWindow); // Spielerkoordinaten Anzeige
-		DisplaySpeed.Render(renderWindow); // Geschwindigkeit des Players
-		DisplayHealth.Render(renderWindow); // Health Player
-		DisplayLvl.Render(renderWindow); // Level of Player
+		renderWindow.draw(iface);
+
+		DisplayHP.printText.setOrigin(DisplayHP.printText.getGlobalBounds().width,0);			// Text Rechtsbündig
+		DisplayEXP.printText.setOrigin(DisplayEXP.printText.getGlobalBounds().width,0);
+		DisplayLevel.printText.setOrigin(DisplayLevel.printText.getGlobalBounds().width/2,0);	// Text Zentrieren
+
+		std::ostringstream PlayerHealthText;
+		PlayerHealthText.precision(0);
+		PlayerHealthText << std::fixed << P1.getHealth() << "/120";
+		DisplayHP.Update(PlayerHealthText.str());
+
+		std::ostringstream PlayerExpText;
+		PlayerExpText.precision(0);
+		PlayerExpText << std::fixed << P1.getExp() << "/120";
+		DisplayEXP.Update(PlayerHealthText.str());
+
+		std::ostringstream PlayerLvlText;
+		PlayerLvlText.precision(0);
+		PlayerLvlText << std::fixed << P1.getLvl();
+		DisplayLevel.Update(PlayerLvlText.str());
+
+		DisplayHP.Render(renderWindow);
+		DisplayEXP.Render(renderWindow);
+		DisplayLevel.Render(renderWindow);
+
+		DisplayFPS.Render(renderWindow);	// FPS Anzeige
+		DisplayKoord.Render(renderWindow);	// Spielerkoordinaten Anzeige
+		DisplaySpeed.Render(renderWindow);	// Geschwindigkeit des Players
 
 		renderWindow.display();
 	}

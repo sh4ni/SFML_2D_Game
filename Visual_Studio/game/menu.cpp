@@ -44,7 +44,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 		button[i].text.setPosition(WIDTH/2-BUTTONWIDTH/2+10,HEIGHT/2-160+i*BUTTONHEIGHT*3/2+7);
 		button[i].text.setFont(font);
 		button[i].text.setCharacterSize(40);
-		button[i].text.setColor(sf::Color(100,100,100,250));
+		button[i].text.setColor(sf::Color(100,100,100));
 
 		button[i].active = false;
 		switch(i){
@@ -70,7 +70,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 		}
 		if( button[i].active ){	// Andere Textur und Textfarbe für klickbare Buttons
 			button[i].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
-			button[i].text.setColor(sf::Color(255,255,255,250));
+			button[i].text.setColor(sf::Color(255,255,255));
 		}
 		_menuItems.push_back(button[i]);
 		window.draw(button[i].image);
