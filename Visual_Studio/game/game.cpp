@@ -63,8 +63,7 @@ void defaultSavegame(Savegame& mySavegame, bool corrput){
 		mySavegame.mPosY = DEFAULT_POSY;
 
 
-
-		int checksum = (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM;
+		int checksum = (int)(mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mPosX + mySavegame.mPosY + mySavegame.mLevelId) + CHECKSUM;
 		#ifdef DEBUG
 			std::cout << "Savegame Checksum " << checksum << std::endl;
 		#endif
@@ -98,7 +97,7 @@ void Game::Init(void)
 		
 		loadgame >> mySavegame.checksum;
 
-		if(mySavegame.checksum == ((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM) && CHECKSAVE == 1)
+		if(mySavegame.checksum == (int)((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mPosX + mySavegame.mPosY + mySavegame.mLevelId) + CHECKSUM) && CHECKSAVE == 1)
 			std::cout << "Spielstand okay...!\n";
 		else
 			defaultSavegame(mySavegame,true);
@@ -230,7 +229,7 @@ void Game::ShowMenu(bool newgame){
 			#ifdef DEBUG
 				std::cout << "Menu -> NewGame Button pressed " << std::endl;	
 			#endif
-			_gameState = Playing;
+			_gameState = NewGame;
 			break;
 	}
 }
