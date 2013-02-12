@@ -176,7 +176,7 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 			#ifdef DEBUG
 				std::cout << "Menu" << std::endl;
 			#endif
-			ShowMenu(newgame);
+			ShowMenu(currentSavegame,newgame);
 		break;
 		}
 		case Game::Playing:{
@@ -184,7 +184,7 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 			#ifdef DEBUG
 				std::cout << "Spiel - Map" << std::endl;
 			#endif
-			ShowMap(viewCamera,currentSavegame);				// 1 = Level 1 -> Hauptkarte / Oberwelt
+			ShowMap(viewCamera,currentSavegame);				
 		break;
 		}
 	}
@@ -205,7 +205,7 @@ void Game::ShowIntro(){
 }
 
 
-void Game::ShowMenu(bool newgame){
+void Game::ShowMenu(Savegame& currentSavegame, bool newgame){
 	MainMenu mainMenu;
 	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
 	switch(result)
@@ -218,17 +218,19 @@ void Game::ShowMenu(bool newgame){
 			#endif
 				_gameState = Exiting;
 			break;
-		case MainMenu::Play:
+		case MainMenu::Continue:
 			#ifdef DEBUG
-				std::cout << "Menu -> Play Button gedrueckt " << std::endl;	
+				std::cout << "Menu -> Continue Button pressed " << std::endl;	
 				//getchar();
 				//_gameState = ShowingMenu;		
 			#endif
 				_gameState = Playing;	
 			break;
-		case MainMenu::Continue:
+		case MainMenu::NewGame:
 			// code
 			//_gameState = Options;
+			defaultSavegame(currentSavegame,false);
+			_gameState = Playing;
 			break;
 	}
 }

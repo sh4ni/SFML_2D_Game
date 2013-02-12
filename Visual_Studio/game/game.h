@@ -22,7 +22,7 @@ public:
 	
 private:
 	static void ShowIntro();
-	static void ShowMenu(bool newgame = false);
+	static void ShowMenu(Savegame& currentSave, bool newgame = false);
 	static void GameLoop(Savegame& currentSave, bool newgame = false);
 	static void ShowMap(sf::View viewCamera, Savegame& currentSave);
 	static bool IsExiting();

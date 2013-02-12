@@ -108,7 +108,6 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	
 	Clock clock;
 
-
 	Player P1(CollisionMap,currentSavegame);
 	P1.setMapSize( MapSizeX, MapSizeY );
 
