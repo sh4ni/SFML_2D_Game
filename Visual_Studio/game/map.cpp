@@ -135,12 +135,12 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	iface.setPosition(WIDTH/2,HEIGHT);
 
 	sf::RectangleShape HPBar;
-	HPBar.setFillColor(sf::Color(255,0,0));
+	HPBar.setFillColor(sf::Color(0x99,0x33,0x33));
 	HPBar.setPosition(WIDTH/2-55,HEIGHT-61);
 	HPBar.setSize(sf::Vector2f(180.f,28.f));
 
 	sf::RectangleShape EXPBar;
-	EXPBar.setFillColor(sf::Color(0,255,0));
+	EXPBar.setFillColor(sf::Color(0x00,0xCC,0x33));
 	EXPBar.setPosition(WIDTH/2-55,HEIGHT-30);
 	EXPBar.setSize(sf::Vector2f(180.f,28.f));
 
