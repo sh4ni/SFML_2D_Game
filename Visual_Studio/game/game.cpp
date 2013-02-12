@@ -63,8 +63,7 @@ void defaultSavegame(Savegame& mySavegame, bool corrput){
 		mySavegame.mPosY = DEFAULT_POSY;
 
 
-
-		int checksum = (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM;
+		int checksum = (int)(mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mPosX + mySavegame.mPosY + mySavegame.mLevelId) + CHECKSUM;
 		#ifdef DEBUG
 			std::cout << "Savegame Checksum " << checksum << std::endl;
 		#endif
@@ -98,7 +97,7 @@ void Game::Init(void)
 		
 		loadgame >> mySavegame.checksum;
 
-		if(mySavegame.checksum == ((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mLevelId) + CHECKSUM) && CHECKSAVE == 1)
+		if(mySavegame.checksum == (int)((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mPosX + mySavegame.mPosY + mySavegame.mLevelId) + CHECKSUM) && CHECKSAVE == 1)
 			std::cout << "Spielstand okay...!\n";
 		else
 			defaultSavegame(mySavegame,true);
@@ -176,7 +175,7 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 			#ifdef DEBUG
 				std::cout << "Menu" << std::endl;
 			#endif
-			ShowMenu(currentSavegame,newgame);
+			ShowMenu(newgame);
 		break;
 		}
 		case Game::Playing:{
@@ -186,6 +185,10 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 			#endif
 			ShowMap(viewCamera,currentSavegame);				
 		break;
+		}
+		case Game::NewGame:{
+			defaultSavegame(currentSavegame,false);
+			ShowMap(viewCamera,currentSavegame);
 		}
 	}
 }
@@ -205,32 +208,28 @@ void Game::ShowIntro(){
 }
 
 
-void Game::ShowMenu(Savegame& currentSavegame, bool newgame){
+void Game::ShowMenu(bool newgame){
 	MainMenu mainMenu;
 	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
 	switch(result)
 	{
 		case MainMenu::Exit:
 			#ifdef DEBUG
-				std::cout << "Menu -> Exit Button gedrueckt" << std::endl;
-				//getchar();
-				//_gameState = ShowingMenu;
+				std::cout << "Menu -> Exit Button pressed" << std::endl;
 			#endif
 				_gameState = Exiting;
 			break;
 		case MainMenu::Continue:
 			#ifdef DEBUG
 				std::cout << "Menu -> Continue Button pressed " << std::endl;	
-				//getchar();
-				//_gameState = ShowingMenu;		
 			#endif
 				_gameState = Playing;	
 			break;
 		case MainMenu::NewGame:
-			// code
-			//_gameState = Options;
-			defaultSavegame(currentSavegame,false);
-			_gameState = Playing;
+			#ifdef DEBUG
+				std::cout << "Menu -> NewGame Button pressed " << std::endl;	
+			#endif
+			_gameState = NewGame;
 			break;
 	}
 }

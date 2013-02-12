@@ -7,7 +7,7 @@
 }*/
 
 void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera, Savegame& currentSavegame){
-
+	renderWindow.setMouseCursorVisible(false);
 	#ifdef DEBUG
 		std::cout << "Lade Map Nr: " << LevelId << "." << std::endl;
 	#endif
