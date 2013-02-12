@@ -11,7 +11,7 @@
 #ifdef DEBUG
 	#define VERSION "The Journey - 0.25 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled "
 #else
-	#define VERSION "The Journey - 0.25w Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled "
+	#define VERSION "The Journey - 0.25 Alpha Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled "
 #endif
 
 // used in menues
@@ -37,7 +37,7 @@
 
 #define DEFAULT_HEALTH 100
 #define DEFAULT_LVL 1
-#define DEFAULT_EXP 1
+#define DEFAULT_EXP 0
 
 #define DEFAULT_F_NAME "Ashley"
 #define DEFAULT_M_NAME "Fabi"	// in memories
