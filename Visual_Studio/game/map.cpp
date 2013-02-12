@@ -130,7 +130,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		}
 	}
 	sf::Sprite iface(ifaceImage);
-	iface.setOrigin(ifaceImage.getSize().x/2,ifaceImage.getSize().y);
+	iface.setOrigin((float)ifaceImage.getSize().x/2.f,(float)ifaceImage.getSize().y);
 	iface.setPosition(WIDTH/2,HEIGHT);
 
 	sf::RectangleShape HPBar;
