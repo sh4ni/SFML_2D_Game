@@ -32,7 +32,7 @@
 #define CHECKSAVE 1
 #define CHECKSUM 1337
 
-#define DEFAULT_HEALTH 20
+#define DEFAULT_HEALTH 100
 #define DEFAULT_LVL 1
 #define DEFAULT_EXP 1
 

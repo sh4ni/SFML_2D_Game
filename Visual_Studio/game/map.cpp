@@ -215,7 +215,6 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 			}
 		}
 
-		P1.setPosX(500);// ähm... brauchen wir das?! wtf?! seh ich grad zum 1. mal o_O -k
 		// Rendern des Spielers
 		P1.Render(renderWindow);
 		P1.Update(renderWindow, ElapsedTime);
@@ -321,11 +320,12 @@ bool Map::load(Player& P1)
 		loadgame >> tmp; // mapid
 		
 		float temp;
+		float temp2;
 		loadgame >> temp;
-		P1.setPosX(temp);
-		loadgame >> temp;
+		//P1.setPosX(temp);
+		loadgame >> temp2;
 		
-		P1.setPosY(temp);
+		P1.setPosition(temp,temp2);
 
 
 		loadgame.close();
