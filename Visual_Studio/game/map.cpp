@@ -144,6 +144,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	EXPBar.setPosition(WIDTH/2-55,HEIGHT-30);
 	EXPBar.setSize(sf::Vector2f(180.f,28.f));
 
+	Schrift DisplayHPText(WIDTH/2-53,HEIGHT-58,"HP",18,0);
+	Schrift DisplayEXPText(WIDTH/2-53,HEIGHT-27,"EXP",18,0);
 	Schrift DisplayHP(WIDTH/2+122,HEIGHT-58,"Error",18,0);
 	Schrift DisplayEXP(WIDTH/2+123,HEIGHT-27,"Error",18,0);
 	Schrift DisplayLevel(WIDTH/2-128,HEIGHT-76,"Err",18,0);
@@ -257,6 +259,10 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		renderWindow.setView(renderWindow.getDefaultView());	// Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
 		
 		renderWindow.draw(iface);
+
+		HPBar.setSize(sf::Vector2f((float)P1.getHealth()/(float)P1.getHealthMax()*180.f,28.f));
+		EXPBar.setSize(sf::Vector2f((float)P1.getExp()/(float)P1.getExpMax()*180.f,28.f));
+
 		renderWindow.draw(HPBar);
 		renderWindow.draw(EXPBar);
 
@@ -266,19 +272,21 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 
 		std::ostringstream PlayerHealthText;
 		PlayerHealthText.precision(0);
-		PlayerHealthText << std::fixed << P1.getHealth() << "/120";
+		PlayerHealthText << std::fixed << P1.getHealth() << "/" << P1.getHealthMax();
 		DisplayHP.Update(PlayerHealthText.str());
 
 		std::ostringstream PlayerExpText;
 		PlayerExpText.precision(0);
-		PlayerExpText << std::fixed << P1.getExp() << "/120";
-		DisplayEXP.Update(PlayerHealthText.str());
+		PlayerExpText << std::fixed << P1.getExp() << "/" << P1.getExpMax();
+		DisplayEXP.Update(PlayerExpText.str());
 
 		std::ostringstream PlayerLvlText;
 		PlayerLvlText.precision(0);
 		PlayerLvlText << std::fixed << P1.getLvl();
 		DisplayLevel.Update(PlayerLvlText.str());
 
+		DisplayHPText.Render(renderWindow);
+		DisplayEXPText.Render(renderWindow);
 		DisplayHP.Render(renderWindow);
 		DisplayEXP.Render(renderWindow);
 		DisplayLevel.Render(renderWindow);

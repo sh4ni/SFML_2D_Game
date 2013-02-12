@@ -66,6 +66,12 @@ public:
 	char * getName(void){
 		return this->pName;
 	}
+	int getHealthMax(void){
+		return this->pHealthMax;
+	}
+	int getExpMax(void){
+		return this->pExpMax;
+	}
 	void setMapSize( int xMax, int yMax){
 		this->MapSize.x = xMax;
 		this->MapSize.y = yMax;
@@ -81,8 +87,10 @@ private:
 	unsigned char Animation;
 
 	int pHealth;
+	int pHealthMax;
 	int pLvl;
 	int pExp;
+	int pExpMax;	// Exp needed Until Levelup
 	char pGender;	// M - Male | F - Female
 	char pName[DEFAULT_NAME_LENGTH] ;
 	

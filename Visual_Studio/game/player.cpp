@@ -1,5 +1,5 @@
-﻿#include "player.h"
-
+﻿#include <math.h>
+#include "player.h"
 
 Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 
@@ -10,6 +10,9 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	this->pExp = currentSavegame.pExp;
 	this->pGender = currentSavegame.pGender;
 	strncpy(this->pName,currentSavegame.pName,sizeof(currentSavegame.pName));
+
+	this->pHealthMax = 90+ this->pLvl*10;
+	this->pExpMax = 50* pow(1.15f,(this->pLvl-1));	// 50 = Grundwert, 1.15f = Levelfaktor.
 
 	sf::String tex;
 	if(pGender == 'F'){
@@ -45,7 +48,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 }
 
 void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
-	
+
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;
 	
