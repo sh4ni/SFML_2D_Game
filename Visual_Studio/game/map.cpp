@@ -12,7 +12,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		std::cout << "Lade Map Nr: " << LevelId << "." << std::endl;
 	#endif
 	// Hier wird die Textur für die Map geladen.
-	static Texture LevelTexture;
+	static sf::Texture LevelTexture;
 	LevelTexture.loadFromFile("include/texture/world/overworld.png");		// Lade Texturedatei
 
 	int MapSizeX = 0U;
@@ -21,7 +21,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	int LoadCounterY = 0;
 	int TileType;
 	TilePart** TileMap;
-	IntRect*** CollisionMap;
+	sf::IntRect*** CollisionMap;
 	
 	std::ostringstream FileName;	
 	FileName << "include/map/map" << LevelId << ".txt";
@@ -36,20 +36,20 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 			TileMap[i] = new TilePart[MapSizeY];
 		}
 
-		CollisionMap = new IntRect**[MapSizeX];
+		CollisionMap = new sf::IntRect**[MapSizeX];
 		for ( int i = 0 ; i < MapSizeX ; i++ ){
-			CollisionMap[i] = new IntRect*[MapSizeY];
+			CollisionMap[i] = new sf::IntRect*[MapSizeY];
 		}
 
 
 		while( !openfile.eof() ){
 			openfile >> TileType;
-			IntRect subRect;
+			sf::IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
 			subRect.top=TileType/10*TILESIZE;
 			subRect.left=TileType%10*TILESIZE;
 			
-			TileMap[LoadCounterX][LoadCounterY].TexturePart = new Sprite(LevelTexture,subRect);
+			TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect);
 			switch( TileType ){
 			case 0:
 			case 1:
@@ -81,7 +81,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				CollisionMap[LoadCounterX][LoadCounterY]=NULL;
 					break;
 			default:
-				CollisionMap[LoadCounterX][LoadCounterY]=new IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
+				CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
 				break;
 
 			}
@@ -106,7 +106,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		//throw("Map konnte nicht geoeffnet werden. Fehler: 01.1"); // 01.X = Texturenfehler allgemein 01.1 genau der hier
 	}
 	
-	Clock clock;
+	sf::Clock clock;
 
 	Player P1(CollisionMap,currentSavegame);
 	P1.setMapSize( MapSizeX, MapSizeY );
@@ -218,15 +218,15 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		P1.Render(renderWindow);
 		P1.Update(renderWindow, ElapsedTime);
 		
-		Event levelLoop;
+		sf::Event levelLoop;
 		while(renderWindow.pollEvent(levelLoop)){
-			if(levelLoop.type == Event::KeyPressed){
-				if(levelLoop.key.code == Keyboard::Escape){
+			if(levelLoop.type == sf::Event::KeyPressed){
+				if(levelLoop.key.code == sf::Keyboard::Escape){
 					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
 					if(quitGame)
 						return;
 				}
-				else if(levelLoop.key.code == Keyboard::F10) {
+				else if(levelLoop.key.code == sf::Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
 					if(Screen.saveToFile("screenshots\\screenshot-"__DATE__"-.png")){
 						#ifdef DEBUG
@@ -234,22 +234,22 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 						#endif
 					}
 				}
-				else if(levelLoop.key.code == Keyboard::E){
+				else if(levelLoop.key.code == sf::Keyboard::E){
 					// player speed up
 					P1.increaseSpeed(0.1f);
 				}
-				else if(levelLoop.key.code == Keyboard::Q){
+				else if(levelLoop.key.code == sf::Keyboard::Q){
 					// player speed runter
 					P1.decreaseSpeed(0.1f);
 				}
 			}
-			else if(levelLoop.type == Event::LostFocus){
+			else if(levelLoop.type == sf::Event::LostFocus){
 				#ifdef DEBUG
 					std::cout << " Ausserhalb Fenster!.. " << std::endl;	
 				#endif
 					pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
 			}
-			else if(levelLoop.type == Event::Closed){
+			else if(levelLoop.type == sf::Event::Closed){
 				return;
 			}
 		}
@@ -371,7 +371,7 @@ bool Map::save(Player& P1, int LevelId)
 	return true;
 }
 
-bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, Player& P1, int LevelId, Savegame& currentSavegame){
+bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId, Savegame& currentSavegame){
 	
 
 	//Map::load(P1);
@@ -423,14 +423,14 @@ bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, Pl
 					std::cout << "Continue Playing.." << std::endl;
 				#endif
 					return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
-			}else if(levelLoop.key.code == Keyboard::Space){
+			}else if(levelLoop.key.code == sf::Keyboard::Space){
 				#ifdef DEBUG
 					std::cout << "Spiel beenden!" << std::endl;
 				#endif
 					return true; // gebe true zurueck damit das spiel anschließend beendet wird
-			}else if(levelLoop.key.code == Keyboard::F6){
+			}else if(levelLoop.key.code == sf::Keyboard::F6){
 				Map::save(P1, LevelId);
-			}else if(levelLoop.key.code == Keyboard::F9){
+			}else if(levelLoop.key.code == sf::Keyboard::F9){
 				Map::load(P1);
 			}
 		}

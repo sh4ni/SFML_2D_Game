@@ -16,10 +16,10 @@ public:
 			MenuResult action;
 			bool active;
 		};
-	MenuResult Show(RenderWindow& renderWindow, bool newgame = false);
+	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false);
 
 private:
-	MenuResult GetMenuResponse(RenderWindow& window);
+	MenuResult GetMenuResponse(sf::RenderWindow& window);
 	MenuResult HandleClick(int x, int y);
 	MenuResult HandleKeyboard(int result);
 	std::list<MenuItem> _menuItems;

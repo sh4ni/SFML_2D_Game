@@ -81,6 +81,10 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 		window.draw(button[i].text);
 	}
 
+	Schrift Version(WIDTH-5,HEIGHT-5,VERSION,16,0);
+	Version.printText.setOrigin(Version.printText.getGlobalBounds().width,Version.printText.getGlobalBounds().height);
+	Version.Render(window);
+
 	window.display();
 	return GetMenuResponse(window);
 }
@@ -115,7 +119,7 @@ MainMenu::MenuResult  MainMenu::GetMenuResponse(sf::RenderWindow& window){
 			}
 			else if(menuEvent.type == sf::Event::KeyPressed){
 				return HandleClick(205,235);
-				if(menuEvent.key.code == Keyboard::Down)
+				if(menuEvent.key.code == sf::Keyboard::Down)
 					return HandleKeyboard(2);
 			}
 			

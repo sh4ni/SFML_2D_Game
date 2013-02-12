@@ -119,7 +119,7 @@ void Game::Start(Savegame& currentSavegame, bool newgame)
 	if(_gameState != Uninitialized) return;
 	
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
-	_mainWindow.create(sf::VideoMode(WIDTH, HEIGHT), VERSION, sf::Style::Titlebar);
+	_mainWindow.create(sf::VideoMode(WIDTH, HEIGHT), WINDOWTITLE, sf::Style::Titlebar);
 
 	// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
 	//_mainWindow.setMouseCursorVisible(false);

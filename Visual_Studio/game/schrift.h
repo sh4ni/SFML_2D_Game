@@ -3,8 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-using namespace sf;	// OMG :( ohne das ding is der code VOLL mit fehlern ._. -k
-
 class Schrift{
 public:
 	void Render		(sf::RenderWindow &Window);
