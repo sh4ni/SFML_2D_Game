@@ -3,18 +3,19 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-using namespace sf;
+using namespace sf;	// OMG :( ohne das ding is der code VOLL mit fehlern ._. -k
 
 class Schrift{
 public:
-	void Render		(RenderWindow &Window);
-	Schrift			(int X, int Y, String myText, int size, int color = 255);
-	void Update		(String myText);
-	Text printText;
+	void Render		(sf::RenderWindow &Window);
+	Schrift			(int X, int Y, sf::String myText, int size, int color = 255);
+	void Update		(sf::String myText);
+	sf::Text printText;
 private:
-	Font font;
+	static bool FontLoaded;
+	static sf::Font font;
 	int X, Y;
-	String myText;
+	sf::String myText;
 };
 
 #endif

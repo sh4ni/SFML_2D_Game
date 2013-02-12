@@ -380,16 +380,40 @@ bool Map::pause(RenderWindow& renderWindow, View viewCamera, Event levelLoop, Pl
 		std::cout << "Pause gestartet.." << std::endl;	
 	#endif
 
-	sf::RectangleShape sprite(sf::Vector2f(WIDTH, HEIGHT));
-    sprite.setPosition(500.f, 480.f);
-    sprite.setFillColor(sf::Color(0, 0, 0,100));
-	sprite.setScale(1.1f,1.1f);
-	sprite.setPosition(viewCamera.getCenter().x-(WIDTH/2),viewCamera.getCenter().y-(HEIGHT/2));
-	
-	renderWindow.draw(sprite);
+	int CenterX = (int)viewCamera.getCenter().x;
+	int CenterY = (int)viewCamera.getCenter().y;
 
-	Schrift Pause((int)viewCamera.getCenter().x-75,(int)viewCamera.getCenter().y-25,"Pause",50);
+	// Hintergrund Box
+	sf::RectangleShape Background(sf::Vector2f(WIDTH, HEIGHT));
+    Background.setFillColor(sf::Color(0, 0, 0,100));
+	Background.setPosition((float)CenterX-(float)WIDTH/2.f,(float)CenterY-(float)HEIGHT/2.f);
+
+	// Pause Schriftzug
+	Schrift Pause(CenterX,CenterY-100,"Pause",50);
+	Pause.printText.setOrigin(Pause.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
+
+	// Logo im Pausemenü
+	sf::Texture LogoImage;
+	if(!LogoImage.loadFromFile("include/interface/splashscreen.png")){
+		// Fehlerbehebung
+	}
+	sf::Sprite Logo(LogoImage);
+	Logo.setOrigin((float)LogoImage.getSize().x/2.f,0);
+	Logo.setPosition((float)CenterX,(float)CenterY-200.f);
+
+	// Hilfetext
+	Schrift HilfeTasten(CenterX-50,CenterY,"ESC:\nF6\nF9:\nSpace:",20);
+	Schrift HilfeText(CenterX+70,CenterY,"Continue\nSave\nLoad\nExit Game",20);
+	HilfeTasten.printText.setOrigin(HilfeTasten.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
+	HilfeText.printText.setOrigin(HilfeText.printText.getGlobalBounds().width/2.f+1.f,0);		// Textbox zentrieren
+
+	// LOS! ZEICHNE ES NIEDERER SKLAVE!
+	renderWindow.draw(Background);
+	renderWindow.draw(Logo);
 	Pause.Render(renderWindow);
+	HilfeTasten.Render(renderWindow);
+	HilfeText.Render(renderWindow);
+
 	renderWindow.display();
 	
 	while(renderWindow.waitEvent(levelLoop)){
