@@ -5,7 +5,7 @@
 void Intro::Show(sf::RenderWindow& renderWindow)
 {
 	sf::Texture image;
-	if(!image.loadFromFile("include/interface/splashscreen.png")){
+	if(!image.loadFromFile(PATH"include/interface/splashscreen.png")){
 		exit(1); // exeption werfen oder sonst was...
 	}
 

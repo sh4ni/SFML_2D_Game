@@ -132,7 +132,7 @@ void Game::Start(Savegame& currentSavegame, bool newgame)
 
 	// Lade und setze das Fenstericon
 	sf::Image Icon;
-	if(!Icon.loadFromFile("include/interface/icon.bmp"))
+	if(!Icon.loadFromFile(PATH"include/interface/icon.bmp"))
 		std::cout << "Failed to load the Windowicon" << std::endl;
 	else
 		_mainWindow.setIcon(32,32,Icon.getPixelsPtr());

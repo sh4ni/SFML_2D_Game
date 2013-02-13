@@ -7,13 +7,13 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 	sf::Texture imageMenu;
 	sf::Texture imageBackground;
 	sf::Texture imageButton;
-	if(!imageMenu.loadFromFile("include/interface/menu.png")){
+	if(!imageMenu.loadFromFile(PATH"include/interface/menu.png")){
 		exit(1); // fehlerbehebung fehlt noch...
 	}
-	if(!imageBackground.loadFromFile("include/interface/menu_back.png")){
+	if(!imageBackground.loadFromFile(PATH"include/interface/menu_back.png")){
 		exit(1); // und noch mehr fehlerbehebung hier einsetzen :p
 	}
-	if(!imageButton.loadFromFile("include/interface/button.png")){
+	if(!imageButton.loadFromFile(PATH"include/interface/button.png")){
 		exit(1); // .....
 	}
 
@@ -25,7 +25,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 	spriteMenu.setPosition((float)WIDTH/2.f,(float)HEIGHT/2.f);
 	
 	sf::Font font;
-	if(!font.loadFromFile("include/fonts/arial.ttf")){
+	if(!font.loadFromFile(PATH"include/fonts/arial.ttf")){
 		std::cout << "Failed to load the font!\a" << std::endl;
 	}
 

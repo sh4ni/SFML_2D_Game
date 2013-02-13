@@ -13,7 +13,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	#endif
 	// Hier wird die Textur für die Map geladen.
 	static sf::Texture LevelTexture;
-	LevelTexture.loadFromFile("include/texture/world/overworld.png");		// Lade Texturedatei
+	LevelTexture.loadFromFile(PATH"include/texture/world/overworld.png");		// Lade Texturedatei
 
 	int MapSizeX = 0U;
 	int MapSizeY = 0U;
@@ -23,11 +23,13 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	TilePart** TileMap;
 	sf::IntRect*** CollisionMap;
 	
-	std::ostringstream FileName;	
-	FileName << "include/map/map" << LevelId << ".txt";
+	//std::ostringstream FileName;
+	//FileName << PATH"include/map/map" << LevelId << ".txt";   Funktioniert NUR in Visual Studio! Nicht standard C++
+    char FileName[30];
+	sprintf(FileName,PATH"include/map/map%d.txt",LevelId);
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
-	std::ifstream openfile(FileName.str());
+	std::ifstream openfile(FileName/*.str()*/);
 	if( openfile.is_open() ){
 		openfile >> MapSizeX >> MapSizeY;
 
@@ -100,7 +102,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		#ifdef DEBUG
 			std::cout << "Map erfolgreich eingelesen." << std::endl;
 		#endif
-		std::ifstream closefile(FileName.str());
+		std::ifstream closefile(FileName/*.str()*/);
 	}
 	else {
 		//throw("Map konnte nicht geoeffnet werden. Fehler: 01.1"); // 01.X = Texturenfehler allgemein 01.1 genau der hier
@@ -120,12 +122,12 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	
 	sf::Texture ifaceImage;
 	if( P1.getGender() == 'F' ){
-		if(!ifaceImage.loadFromFile("include/interface/interface-female.png")){
+		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
 			//fehlerbehebung
 		}
 	}
 	else {
-		if(!ifaceImage.loadFromFile("include/interface/interface-male.png")){
+		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-male.png")){
 			//fehlerbehebung
 		}
 	}
@@ -398,7 +400,7 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 
 	// Logo im Pausemenü
 	sf::Texture LogoImage;
-	if(!LogoImage.loadFromFile("include/interface/splashscreen.png")){
+	if(!LogoImage.loadFromFile(PATH"include/interface/splashscreen.png")){
 		// Fehlerbehebung
 	}
 	sf::Sprite Logo(LogoImage);

@@ -17,15 +17,15 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	sf::String tex;
 	if(pGender == 'F'){
 		#ifdef DEBUG
-			tex.insert(0,"include/texture/player/player_female.png");
+			tex.insert(0,PATH"include/texture/player/player_female.png");
 		#else
-			tex.insert(0,"include/texture/player/player_female.png");
+			tex.insert(0,PATH"include/texture/player/player_female.png");
 		#endif
 	}else {
 		#ifdef DEBUG
-			tex.insert(0,"include/texture/player/player_male.png");
+			tex.insert(0,PATH"include/texture/player/player_male.png");
 		#else
-			tex.insert(0,"include/texture/player/player_male.png");
+			tex.insert(0,PATH"include/texture/player/player_male.png");
 		#endif
 	}
 
