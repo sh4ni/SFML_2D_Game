@@ -5,9 +5,15 @@
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
 - Map Editor
+- Select Gender afer start a new game
 
 - Dialoge/Story
 
 Improvements
 
 - Startmenü ändern mit bewegten hintergrund (kimiko)
+
+Nice to Have
+- Spielernamen selbst wählen
+- XBOX Controller Support
+
