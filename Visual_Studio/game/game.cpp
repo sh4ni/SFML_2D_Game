@@ -61,14 +61,16 @@ void defaultSavegame(Savegame& mySavegame, bool corrput){
 		defaultsavegame << DEFAULT_POSY << std::endl;
 		mySavegame.mPosY = DEFAULT_POSY;
 
+		std::stringstream ss;
+		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + mySavegame.mLevelId + CHECKSUM);
+		std::string checksum = md5(ss.str());
 
-		int checksum = (int)(mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mPosX + mySavegame.mPosY + mySavegame.mLevelId) + CHECKSUM;
 		#ifdef DEBUG
-			std::cout << "Savegame Checksum " << checksum << std::endl;
+			std::cout << "Savegame Checksum -> " << checksum << std::endl;
 		#endif
 
-		defaultsavegame << checksum;
-		mySavegame.checksum;
+		defaultsavegame << checksum;	
+		mySavegame.checksum = checksum;
 
 		defaultsavegame.close();
 	}
@@ -95,8 +97,12 @@ void Game::Init(void)
 		loadgame >> mySavegame.mPosY;
 		
 		loadgame >> mySavegame.checksum;
-
-		if(mySavegame.checksum == (int)((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mPosX + mySavegame.mPosY + mySavegame.mLevelId) + CHECKSUM) && CHECKSAVE == 1)
+		
+		std::stringstream ss;
+		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + mySavegame.mLevelId + CHECKSUM);
+		std::string s = md5(ss.str());
+		
+		if(mySavegame.checksum.compare(s) == 0)
 			std::cout << "Savegame okay...!\n";
 		else
 			defaultSavegame(mySavegame,true);

@@ -3,6 +3,7 @@
 
 
 #include <fstream>
+#include "md5.h"
 
 class Savegame
 {
@@ -23,7 +24,7 @@ public:
 	float mPosX;
 	float mPosY;
 
-	double checksum;
+	std::string checksum;
 
 
 };

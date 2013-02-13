@@ -359,7 +359,14 @@ bool Map::save(Player& P1, int LevelId)
 		// Pos Y auf Map
 		savegame << P1.getPosY() << std::endl;
 
-		savegame << ((int)(P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + P1.getPosX() + P1.getPosY() + LevelId) + CHECKSUM);
+		std::stringstream ss;
+		ss << (P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + (int)P1.getPosX() + (int)P1.getPosY() +LevelId + CHECKSUM);
+		std::string checksum = md5(ss.str());
+
+		savegame << checksum;
+		#ifdef DEBUG
+			std::cout << "Savegame Checksum -> " << checksum << std::endl;
+		#endif
 
 		savegame.close();
 		std::cout << "saved..\n";
