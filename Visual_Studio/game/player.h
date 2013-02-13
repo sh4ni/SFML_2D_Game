@@ -90,20 +90,8 @@ private:
 	int pExp;
 	int pExpMax;	// Exp needed Until Levelup
 	char pGender;	// M - Male | F - Female
-	//char pName[DEFAULT_NAME_LENGTH] ;
 	std::string pName; 
-	
-	/*
-	
-	Anfangswert von Leben auf = 10; -> max_life = 10;
-	Beim Speichern wird der Wert gespeichert und beim laden wieder neu gesetzt
-	wenn das Level steigt erhöht sich auch das Maximale Leben
 
-	current_life, max_life, 
-	exp, level
-
-
-	*/
 };
 
 #endif

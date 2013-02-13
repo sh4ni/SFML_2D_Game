@@ -32,11 +32,11 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	Speed = PLAYERSPEED;
 
 	if(!texture.loadFromFile(tex)){
-		std::cout << "Fehler beim Laden der Textur!" << std::endl;	
+		std::cout << "Failed to load the texture!" << std::endl;	
 	}
 	#ifdef DEBUG
 	else {
-		std::cout << "Textur wurde erfolgreich geladen!" << std::endl;
+		std::cout << "Successfully loaded the texture!" << std::endl;
 	}
 	#endif
 

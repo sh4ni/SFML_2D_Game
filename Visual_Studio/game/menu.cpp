@@ -26,7 +26,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 	
 	sf::Font font;
 	if(!font.loadFromFile("include/fonts/arial.ttf")){
-		std::cout << "Fehler beim Laden der Schrift!\a" << std::endl;
+		std::cout << "Failed to load the font!\a" << std::endl;
 	}
 
 	buttons = 5;	// Wieviele Buttons brauchen wir? Ja richtig! 5 verdammt noch mal!

@@ -328,7 +328,7 @@ bool Map::load(Player& P1)
 
 		loadgame.close();
 	}else{
-		std::cout << "fehler beim öffnen der datei!" << std::endl;
+		std::cout << "An error occurred during loading the saved game.." << std::endl;
 		return false;
 	}
 
@@ -359,12 +359,12 @@ bool Map::save(Player& P1, int LevelId)
 		// Pos Y auf Map
 		savegame << P1.getPosY() << std::endl;
 
-		savegame << ((P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + LevelId) + CHECKSUM);
+		savegame << ((int)(P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + P1.getPosX() + P1.getPosY() + LevelId) + CHECKSUM);
 
 		savegame.close();
 		std::cout << "saved..\n";
 	}else{
-		std::cout << "FAILURE by saving the game..\a\n";
+		std::cout << "An error occurred during saving the game..\a\n";
 	}
 	
 	return true;
@@ -374,7 +374,7 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 	
 	//Map::load(P1);
 	#ifdef DEBUG
-		std::cout << "Pause gestartet.." << std::endl;	
+		std::cout << "Paused.." << std::endl;	
 	#endif
 
 	int CenterX = (int)viewCamera.getCenter().x;
@@ -386,7 +386,7 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 	Background.setPosition((float)CenterX-(float)WIDTH/2.f,(float)CenterY-(float)HEIGHT/2.f);
 
 	// Pause Schriftzug
-	Schrift Pause(CenterX,CenterY-100,"Pause",50);
+	Schrift Pause(CenterX,CenterY-100,"Paused",50);
 	Pause.printText.setOrigin(Pause.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
 
 	// Logo im Pausemenü
@@ -396,7 +396,7 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 	}
 	sf::Sprite Logo(LogoImage);
 	Logo.setOrigin((float)LogoImage.getSize().x/2.f,0);
-	Logo.setPosition((float)CenterX,(float)CenterY-200.f);
+	Logo.setPosition((float)CenterX,(float)CenterY-300.f);
 
 	// Hilfetext
 	Schrift HilfeTasten(CenterX-50,CenterY,"ESC:\nF6\nF9:\nSpace:",20);
@@ -422,7 +422,7 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 					return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
 			}else if(levelLoop.key.code == sf::Keyboard::Space){
 				#ifdef DEBUG
-					std::cout << "Spiel beenden!" << std::endl;
+					std::cout << "Quit Game!" << std::endl;
 				#endif
 					return true; // gebe true zurueck damit das spiel anschließend beendet wird
 			}else if(levelLoop.key.code == sf::Keyboard::F6){

@@ -6,9 +6,9 @@ void defaultSavegame(Savegame& mySavegame, bool corrput){
 
 	#ifdef DEBUG
 		if(corrput)
-			std::cout << "Spielstand korrupt! Default Spielstand wird erstellt..\a\n";
+			std::cout << "The savegame is corrupt! Default savegame will be loaded..\a\n";
 		else
-			std::cout << "Kein Spielstand erkannt! Default Spielstand wird erstellt..\a\n";
+			std::cout << "No savegame detected! Default savegame will be loaded..\a\n";
 	#endif
 
 	std::ofstream defaultsavegame;
@@ -82,7 +82,7 @@ void Game::Init(void)
 	std::ifstream loadgame;
 	loadgame.open(SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
-		std::cout << "Spielstand erkannt! Wird geladen..\n";
+		std::cout << "Savegame detected! Loading..\n";
 		
 		loadgame >> mySavegame.pHealth;
 		loadgame >> mySavegame.pLvl;
@@ -97,12 +97,12 @@ void Game::Init(void)
 		loadgame >> mySavegame.checksum;
 
 		if(mySavegame.checksum == (int)((mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + mySavegame.mPosX + mySavegame.mPosY + mySavegame.mLevelId) + CHECKSUM) && CHECKSAVE == 1)
-			std::cout << "Spielstand okay...!\n";
+			std::cout << "Savegame okay...!\n";
 		else
 			defaultSavegame(mySavegame,true);
 
 		#ifdef DEBUG
-			std::cout << "Spielstand Erfolgreich geladen." << std::endl;
+			std::cout << "Savegame successfully loaded.." << std::endl;
 		#endif
 		loadgame.close();
 
@@ -127,7 +127,7 @@ void Game::Start(Savegame& currentSavegame, bool newgame)
 	// Lade und setze das Fenstericon
 	sf::Image Icon;
 	if(!Icon.loadFromFile("include/interface/icon.bmp"))
-		std::cout << "Fehler beim Laden des Icons!" << std::endl;
+		std::cout << "Failed to load the Windowicon" << std::endl;
 	else
 		_mainWindow.setIcon(32,32,Icon.getPixelsPtr());
 
@@ -165,14 +165,14 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 	switch(_gameState){
 		case Game::ShowingIntro:{
 			#ifdef DEBUG
-				std::cout << "Intro" << std::endl;
+				std::cout << "Show the Intro" << std::endl;
 			#endif
 			ShowIntro();
 		break;
 		}
 		case Game::ShowingMenu:{
 			#ifdef DEBUG
-				std::cout << "Menu" << std::endl;
+				std::cout << "Show the Menu" << std::endl;
 			#endif
 			ShowMenu(newgame);
 		break;
@@ -180,7 +180,7 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 		case Game::Playing:{
 			// Hier wird die Map geladen
 			#ifdef DEBUG
-				std::cout << "Spiel - Map" << std::endl;
+				std::cout << "Show the Map / Level" << std::endl;
 			#endif
 			ShowMap(viewCamera,currentSavegame);				
 		break;
@@ -195,7 +195,7 @@ void Game::ShowMap(sf::View viewCamera, Savegame& currentSavegame){
 	Map map;
 	map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
 	#ifdef DEBUG
-		std::cout << "Es wurde END gedrückt -> _gameState = Exiting!" << std::endl;
+		std::cout << "_gameState = Exiting!" << std::endl;
 	#endif
 	_gameState = Exiting;
 }
