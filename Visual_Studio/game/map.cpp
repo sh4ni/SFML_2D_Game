@@ -20,8 +20,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
 	int TileType;
-	TilePart** TileMap;
-	sf::IntRect*** CollisionMap;
+	TilePart** TileMap = 0;
+	sf::IntRect*** CollisionMap = 0;
 	
 	//std::ostringstream FileName;
 	//FileName << PATH"include/map/map" << LevelId << ".txt";   Funktioniert NUR in Visual Studio! Nicht standard C++
@@ -31,6 +31,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName/*.str()*/);
 	if( openfile.is_open() ){
+        LoadCounterX = 0;
+        LoadCounterY = 0;
 		openfile >> MapSizeX >> MapSizeY;
 
 		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.

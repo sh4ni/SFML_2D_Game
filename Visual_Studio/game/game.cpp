@@ -208,8 +208,8 @@ void Game::ShowMap(sf::View viewCamera, Savegame& currentSavegame){
 
 void Game::ShowIntro(){
 	Intro intro;
-	intro.Show(_mainWindow);
 	_gameState = Game::ShowingMenu;
+	intro.Show(_mainWindow);
 }
 
 
