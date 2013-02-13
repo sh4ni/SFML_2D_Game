@@ -12,7 +12,7 @@ Schrift::Schrift(int X, int Y, sf::String myText, int size, int color){
 		}
 		else {
 			FontLoaded = true;
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Font geladen!" << std::endl;
 			#endif
 		}

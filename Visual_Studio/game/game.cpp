@@ -4,7 +4,7 @@ void defaultSavegame(Savegame& mySavegame, bool corrput){
 	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
 
-	#ifdef DEBUG
+	#ifdef DEBUGINFO
 		if(corrput)
 			std::cout << "The savegame is corrupt! Default savegame will be loaded..\a\n";
 		else
@@ -65,7 +65,7 @@ void defaultSavegame(Savegame& mySavegame, bool corrput){
 		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + mySavegame.mLevelId + CHECKSUM);
 		std::string checksum = md5(ss.str());
 
-		#ifdef DEBUG
+		#ifdef DEBUGINFO
 			std::cout << "Savegame Checksum -> " << checksum << std::endl;
 		#endif
 
@@ -107,7 +107,7 @@ void Game::Init(void)
 		else
 			defaultSavegame(mySavegame,true);
 
-		#ifdef DEBUG
+		#ifdef DEBUGINFO
 			std::cout << "Savegame successfully loaded.." << std::endl;
 		#endif
 		loadgame.close();
@@ -170,14 +170,14 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 
 	switch(_gameState){
 		case Game::ShowingIntro:{
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Show the Intro" << std::endl;
 			#endif
 			ShowIntro();
 		break;
 		}
 		case Game::ShowingMenu:{
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Show the Menu" << std::endl;
 			#endif
 			ShowMenu(newgame);
@@ -185,7 +185,7 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 		}
 		case Game::Playing:{
 			// Hier wird die Map geladen
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Show the Map / Level" << std::endl;
 			#endif
 			ShowMap(viewCamera,currentSavegame);				
@@ -195,12 +195,14 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 			defaultSavegame(currentSavegame,false);
 			ShowMap(viewCamera,currentSavegame);
 		}
+        default:
+            break;
 	}
 }
 void Game::ShowMap(sf::View viewCamera, Savegame& currentSavegame){
 	Map map;
 	map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
-	#ifdef DEBUG
+	#ifdef DEBUGINFO
 		std::cout << "_gameState = Exiting!" << std::endl;
 	#endif
 	_gameState = Exiting;
@@ -219,23 +221,25 @@ void Game::ShowMenu(bool newgame){
 	switch(result)
 	{
 		case MainMenu::Exit:
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Menu -> Exit Button pressed" << std::endl;
 			#endif
 				_gameState = Exiting;
 			break;
 		case MainMenu::Continue:
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Menu -> Continue Button pressed " << std::endl;	
 			#endif
 				_gameState = Playing;	
 			break;
 		case MainMenu::NewGame:
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Menu -> NewGame Button pressed " << std::endl;	
 			#endif
 			_gameState = NewGame;
 			break;
+        default:
+            break;
 	}
 }
 

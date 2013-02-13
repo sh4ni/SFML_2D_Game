@@ -16,13 +16,13 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 
 	sf::String tex;
 	if(pGender == 'F'){
-		#ifdef DEBUG
+		#ifdef DEBUGINFO
 			tex.insert(0,PATH"include/texture/player/player_female.png");
 		#else
 			tex.insert(0,PATH"include/texture/player/player_female.png");
 		#endif
 	}else {
-		#ifdef DEBUG
+		#ifdef DEBUGINFO
 			tex.insert(0,PATH"include/texture/player/player_male.png");
 		#else
 			tex.insert(0,PATH"include/texture/player/player_male.png");
@@ -34,7 +34,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	if(!texture.loadFromFile(tex)){
 		std::cout << "Failed to load the texture!" << std::endl;	
 	}
-	#ifdef DEBUG
+	#ifdef DEBUGINFO
 	else {
 		std::cout << "Successfully loaded the texture!" << std::endl;
 	}
@@ -91,16 +91,16 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 
 	for( int i=0; i<12; i++){	// Punktabfrage sollte jetzt passen. Fall zu untersuchen: 0 !4 !8 und dann gegen die ecke laufen...
 		//std::cout << cp[i];
-		if( (cp[0] && cp[4] || cp[1] && cp[5]) && (!cp[8] || !cp[9]) ){ // Bei Normaler Auslastung
+		if( ((cp[0] && cp[4]) || (cp[1] && cp[5])) && (!cp[8] || !cp[9]) ){ // Bei Normaler Auslastung
 			blockUp = true;
 		}
-		else if( (cp[2] && cp[6] || cp[3] && cp[7]) && (!cp[10] || !cp[11]) ){
+		else if( ((cp[2] && cp[6]) || (cp[3] && cp[7])) && (!cp[10] || !cp[11]) ){
 			blockDown = true;
 		}
-		if( (cp[0] && cp[8] || cp[2] && cp[10]) && (!cp[4] || !cp[6]) ){
+		if( ((cp[0] && cp[8]) || (cp[2] && cp[10])) && (!cp[4] || !cp[6]) ){
 			blockLeft = true;
 		}
-		else if( (cp[1] && cp[9] || cp[3] && cp[11]) && (!cp[5] || !cp[7]) ){
+		else if( ((cp[1] && cp[9]) || (cp[3] && cp[11])) && (!cp[5] || !cp[7]) ){
 			blockRight = true;
 		}
 		if( (cp[0] && cp[4] && cp[8] && !cp[1] && !cp[2])||(cp[0] && cp[1] && cp[2]) ){ // bei hoher Auslastung
@@ -173,7 +173,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	if( blockUp ){
 		if( (TILESIZE-((int)y-(((int)y/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
 			y= (float)(((int)y/TILESIZE)*TILESIZE+TILESIZE-1);
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Kolliskorrektur: OBEN - " << y << std::endl;
 			#endif
 		}
@@ -181,7 +181,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	if( blockDown ){
 		if( (((int)y+TILESIZE)-((((int)y+TILESIZE)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
 			y= (float)((((int)y+TILESIZE)/TILESIZE)*TILESIZE-TILESIZE+1);
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Kolliskorrektur: UNTEN - " << y << std::endl;
 			#endif
 		}
@@ -189,7 +189,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	if( blockLeft ){
 		if( (TILESIZE-(((int)x-TILESIZE/2)-((((int)x-TILESIZE/2)/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
 			x= (float)((((int)x-TILESIZE/2)/TILESIZE)*TILESIZE+TILESIZE*3/2-1);
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Kolliskorrektur: LINKS - " << x << std::endl;
 			#endif
 		}
@@ -197,7 +197,7 @@ void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
 	if( blockRight ){
 		if( (((int)x+TILESIZE/2)-((((int)x+TILESIZE/2)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
 			x= (float)((((int)x+TILESIZE/2)/TILESIZE)*TILESIZE-TILESIZE/2+1);
-			#ifdef DEBUG
+			#ifdef DEBUGINFO
 				std::cout << "Kolliskorrektur: RECHTS - " << x << std::endl;
 			#endif
 		}

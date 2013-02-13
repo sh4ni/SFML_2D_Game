@@ -134,7 +134,7 @@ MainMenu::MenuResult  MainMenu::GetMenuResponse(sf::RenderWindow& window){
 			button[active[selected]].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT,BUTTONWIDTH,BUTTONHEIGHT));
 			Update(window);
 			if(menuEvent.type == sf::Event::MouseButtonPressed){
-				#ifdef DEBUG
+				#ifdef DEBUGINFO
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
 				return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);

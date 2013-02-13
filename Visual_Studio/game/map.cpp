@@ -8,7 +8,7 @@
 
 void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera, Savegame& currentSavegame){
 	renderWindow.setMouseCursorVisible(false);
-	#ifdef DEBUG
+	#ifdef DEBUGINFO
 		std::cout << "Lade Map Nr: " << LevelId << "." << std::endl;
 	#endif
 	// Hier wird die Textur für die Map geladen.
@@ -100,7 +100,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				LoadCounterY++;
 			}
 		}
-		#ifdef DEBUG
+		#ifdef DEBUGINFOINFO
 			std::cout << "Map erfolgreich eingelesen." << std::endl;
 		#endif
 		std::ifstream closefile(FileName/*.str()*/);
@@ -231,7 +231,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
 					if(Screen.saveToFile("screenshots\\screenshot-"__DATE__"-.png")){
-						#ifdef DEBUG
+						#ifdef DEBUGINFO
 							std::cout << " Screenshot gespeichert.. " << std::endl;	
 						#endif
 					}
@@ -246,7 +246,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				}
 			}
 			else if(levelLoop.type == sf::Event::LostFocus){
-				#ifdef DEBUG
+				#ifdef DEBUGINFO
 					std::cout << " Ausserhalb Fenster!.. " << std::endl;	
 				#endif
 					pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
@@ -367,7 +367,7 @@ bool Map::save(Player& P1, int LevelId)
 		std::string checksum = md5(ss.str());
 
 		savegame << checksum;
-		#ifdef DEBUG
+		#ifdef DEBUGINFO
 			std::cout << "Savegame Checksum -> " << checksum << std::endl;
 		#endif
 
@@ -383,7 +383,7 @@ bool Map::save(Player& P1, int LevelId)
 bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId, Savegame& currentSavegame){
 	
 	//Map::load(P1);
-	#ifdef DEBUG
+	#ifdef DEBUGINFO
 		std::cout << "Paused.." << std::endl;	
 	#endif
 
@@ -426,12 +426,12 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 	while(renderWindow.waitEvent(levelLoop)){
 		if(levelLoop.type == sf::Event::KeyPressed){
 			if (levelLoop.key.code == sf::Keyboard::Escape){
-				#ifdef DEBUG
+				#ifdef DEBUGINFO
 					std::cout << "Continue Playing.." << std::endl;
 				#endif
 					return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
 			}else if(levelLoop.key.code == sf::Keyboard::Space){
-				#ifdef DEBUG
+				#ifdef DEBUGINFO
 					std::cout << "Quit Game!" << std::endl;
 				#endif
 					return true; // gebe true zurueck damit das spiel anschließend beendet wird

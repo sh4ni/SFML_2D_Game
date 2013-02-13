@@ -1,7 +1,7 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
-#define DEBUG 
+#define DEBUGINFO 
 
 #define WIDTH 1024
 #define HEIGHT 768
@@ -11,18 +11,14 @@
 // Used in intro and menues
 #define VERSION "0.26 Alpha"
 
-#ifdef DEBUG
+#ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
 #else
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled"
 #endif
 
 // path du /include folder
-#ifdef _MSC_VER
-    #define PATH ""
-#else
-    #define PATH "/Users/Kimiko/Documents/Git/SFML_2D_Game/Visual_Studio/game/"
-#endif
+#define PATH ""
 
 // used in menues
 #define BUTTONWIDTH 704
