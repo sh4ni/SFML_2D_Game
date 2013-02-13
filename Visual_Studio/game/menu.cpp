@@ -18,21 +18,20 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 	}
 
 	// Menü und Hintergrund
-	sf::Sprite sprite(imageMenu);
-	sf::Sprite spriteBackground(imageBackground);
-	sprite.setOrigin((float)imageMenu.getSize().x/2.f,(float)imageMenu.getSize().y/2.f);
-	sprite.setPosition((float)WIDTH/2.f,(float)HEIGHT/2.f);
-	window.draw(spriteBackground);
-	window.draw(sprite);
+	spriteMenu.setTexture(imageMenu);
+	spriteBackground.setTexture(imageBackground);
+
+	spriteMenu.setOrigin((float)imageMenu.getSize().x/2.f,(float)imageMenu.getSize().y/2.f);
+	spriteMenu.setPosition((float)WIDTH/2.f,(float)HEIGHT/2.f);
 	
 	sf::Font font;
 	if(!font.loadFromFile("include/fonts/arial.ttf")){
 		std::cout << "Fehler beim Laden der Schrift!\a" << std::endl;
 	}
 
-	MenuItem button[5];		// Es werden 4 Buttons erzeugt!
+	buttons = 5;
+	button = new MenuItem[buttons];
 
-	int buttons = sizeof(button)/sizeof(button[0]);
 	for( int i=0; i<buttons; i++){
 		button[i].image.setTexture(imageButton);
 		button[i].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT*2,BUTTONWIDTH,BUTTONHEIGHT));
@@ -49,11 +48,11 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 		button[i].active = false;
 		switch(i){
 		case 0:
+			button[i].text.setString("Continue");
 			if(!newgame){
 				button[i].active = true;
 				button[i].action = Continue;
 			}
-			button[i].text.setString("Continue");
 			break;
 		case 1:
 			button[i].text.setString("New Game");
@@ -61,7 +60,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 			button[i].action = NewGame;
 			break;
 		case 2:
-			button[i].text.setString("Map Editor");
+			button[i].text.setString("Senseless Button");
 			break;
 		case 3:
 			button[i].text.setString("Options");
@@ -77,16 +76,30 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 			button[i].text.setColor(sf::Color(255U,255U,255U));
 		}
 		_menuItems.push_back(button[i]);
+	}
+
+	Version.setPosition((float)WIDTH-5.f,(float)HEIGHT-5.f);
+	Version.setString(VERSION);
+	Version.setCharacterSize(16U);
+	Version.setFont(font);
+	Version.setColor(sf::Color(0U,0U,0U));
+	Version.setOrigin(Version.getGlobalBounds().width,Version.getGlobalBounds().height);
+
+	Update(window);
+
+	return GetMenuResponse(window);
+}
+
+void MainMenu::Update(sf::RenderWindow& window){
+	window.draw(spriteBackground);
+	window.draw(spriteMenu);
+	for( int i=0; i<this->buttons; i++ ){
 		window.draw(button[i].image);
 		window.draw(button[i].text);
 	}
-
-	Schrift Version(WIDTH-5,HEIGHT-5,VERSION,16,0);
-	Version.printText.setOrigin(Version.printText.getGlobalBounds().width,Version.printText.getGlobalBounds().height);
-	Version.Render(window);
+	window.draw(Version);
 
 	window.display();
-	return GetMenuResponse(window);
 }
 
 MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
@@ -101,29 +114,49 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 	return Nothing;
 }
 
-MainMenu::MenuResult MainMenu::HandleKeyboard(int code){
+/*MainMenu::MenuResult MainMenu::HandleKeyboard(int code){
 	return Nothing;
-}
+}*/
 
 MainMenu::MenuResult  MainMenu::GetMenuResponse(sf::RenderWindow& window){
 	sf::Event menuEvent;
+	int selected = 0;
+	int *active;
+	active = new int[buttons];
+	int activeButtons = 0;
+	for( int i=0; i<buttons; i++){
+		if( button[i].active ){
+			active[activeButtons++] = i;
+		}
+	}
 	while(true){
 		while(window.pollEvent(menuEvent)){
-
+			button[active[selected]].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT,BUTTONWIDTH,BUTTONHEIGHT));
+			Update(window);
 			if(menuEvent.type == sf::Event::MouseButtonPressed){
 				#ifdef DEBUG
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
 				return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
-
 			}
 			else if(menuEvent.type == sf::Event::KeyPressed){
-				return HandleClick(205,235);
-				if(menuEvent.key.code == sf::Keyboard::Down)
-					return HandleKeyboard(2);
+				if(menuEvent.key.code == sf::Keyboard::Return){
+					return button[active[selected]].action;
+				}
+				else if(menuEvent.key.code == sf::Keyboard::Up){
+					if( selected > 0 ){
+						button[active[selected]].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
+						selected--;
+					}
+				}
+				else if(menuEvent.key.code == sf::Keyboard::Down){
+					if( selected < activeButtons-1 ){
+						button[active[selected]].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
+						selected++;
+					}
+				}
 			}
-			
-			if(menuEvent.type == sf::Event::Closed){
+			else if(menuEvent.type == sf::Event::Closed){
 				return Exit;
 			}
 		}

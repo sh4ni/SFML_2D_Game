@@ -21,8 +21,14 @@ public:
 private:
 	MenuResult GetMenuResponse(sf::RenderWindow& window);
 	MenuResult HandleClick(int x, int y);
-	MenuResult HandleKeyboard(int result);
+	//MenuResult HandleKeyboard(int result);
 	std::list<MenuItem> _menuItems;
+	void Update(sf::RenderWindow &Window);
+	int buttons;
+	MenuItem* button;
+	sf::Sprite spriteMenu;
+	sf::Sprite spriteBackground;
+	sf::Text Version;
 };
 
 #endif
