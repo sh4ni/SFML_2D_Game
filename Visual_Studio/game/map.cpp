@@ -192,7 +192,6 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		if ( MapSizeY*TILESIZE < HEIGHT ) CamY = MapSizeY*TILESIZE/2;
 		else if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
 		else if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
-
 		renderWindow.setView(viewCamera);
 		viewCamera.setCenter((float)CamX,(float)CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
 
@@ -373,9 +372,7 @@ bool Map::save(Player& P1, int LevelId)
 
 bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId, Savegame& currentSavegame){
 	
-
 	//Map::load(P1);
-
 	#ifdef DEBUG
 		std::cout << "Pause gestartet.." << std::endl;	
 	#endif

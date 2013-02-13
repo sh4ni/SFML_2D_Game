@@ -29,7 +29,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame){
 		std::cout << "Fehler beim Laden der Schrift!\a" << std::endl;
 	}
 
-	buttons = 5;
+	buttons = 5;	// Wieviele Buttons brauchen wir? Ja richtig! 5 verdammt noch mal!
 	button = new MenuItem[buttons];
 
 	for( int i=0; i<buttons; i++){

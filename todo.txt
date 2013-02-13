@@ -1,7 +1,6 @@
 ﻿ToDo
 
 - Monster
-- Interface (kimiko: würd ich gern machen wenn du nix dagegen hast)
 
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
@@ -11,6 +10,4 @@
 
 Improvements
 
-- Startmenü bilder bearbeiten (button entfernen) (kimiko)
 - Startmenü ändern mit bewegten hintergrund (kimiko)
-- intro und menü für variable auflösungen anpassen (überwiegend bildbearbeitung) (kimiko)
