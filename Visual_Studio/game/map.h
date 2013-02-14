@@ -23,6 +23,8 @@ public:
 	void Show(sf::RenderWindow& window, int LevelId, sf::View viewCamera, Savegame& currentSavegame);
 	void InitMap(std::string FileName);
 	sf::IntRect getRect(int x, int y);
+	static sf::RenderWindow& GetWindow();
+	const static sf::Event& GetInput();
 private:
 	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId);
 	static void resume();

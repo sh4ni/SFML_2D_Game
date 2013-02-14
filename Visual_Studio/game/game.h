@@ -16,8 +16,7 @@ class Game{
 public:
 	static void Init();
 	static void Start(Savegame& currentSave, bool newgame = false);
-	static sf::RenderWindow& GetWindow();
-	const static sf::Event& GetInput();
+	
 private:
 	enum GameState { Uninitialized, Initialized, ShowingIntro, Paused, ShowingMenu, Playing, NewGame, Options, Exiting, ShowingGenderMenu };
 	static void ShowIntro();

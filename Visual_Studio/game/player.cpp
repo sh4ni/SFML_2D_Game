@@ -47,7 +47,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
 }
 
-void Player::Update(sf::RenderWindow& Window, float ElapsedTime){
+void Player::Update(float ElapsedTime){
 
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;

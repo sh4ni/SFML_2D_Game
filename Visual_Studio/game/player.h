@@ -10,7 +10,7 @@
 
 class Player{
 public:
-	void Update		(sf::RenderWindow &Window, float ElapsedTime);
+	void Update		(float ElapsedTime);
 	void Render		(sf::RenderWindow &Window){
 		Window.draw(sprite);
 	}

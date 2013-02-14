@@ -218,9 +218,10 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 
 		// Rendern des Spielers
 		P1.Render(renderWindow);
-		P1.Update(renderWindow, ElapsedTime);
+		P1.Update(ElapsedTime);
 		
 		sf::Event levelLoop;
+
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape){
@@ -244,15 +245,17 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 					// player speed down
 					P1.decreaseSpeed(0.1f);
 				}
-			}
-			else if(levelLoop.type == sf::Event::LostFocus){
+			}else if(levelLoop.type == sf::Event::LostFocus){
 				#ifdef DEBUGINFO
-					std::cout << " Ausserhalb Fenster!.. " << std::endl;	
+					std::cout << " Outside the window!.. " << std::endl;	
 				#endif
 					pause(renderWindow,viewCamera,levelLoop,P1,LevelId);
-			}
-			else if(levelLoop.type == sf::Event::Closed){
+			}else if(levelLoop.type == sf::Event::Closed){
 				return;
+			}else if(levelLoop.type== sf::Event::JoystickButtonPressed){
+				#ifdef DEBUGINFO
+					std::cout << " Controller pressed.. " << std::endl;	
+				#endif
 			}
 		}
 

@@ -8,8 +8,8 @@ sf::Font Schrift::font;
 Schrift::Schrift(int X, int Y, sf::String myText, int size, sf::Uint8 color){
 	
 	if( !FontLoaded ){
-		if(!Schrift::font.loadFromFile(PATH"include/fonts/arial.ttf")){
-			std::cout << "Fehler beim Laden der Schrift!\a" << std::endl;
+		if(!Schrift::font.loadFromFile(PATH"include/fo1nts/arial.ttf")){
+			throw "error during loading the font!\a";
 		}
 		else {
 			FontLoaded = true;
