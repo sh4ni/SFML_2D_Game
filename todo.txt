@@ -1,19 +1,15 @@
-﻿ToDo
-
+ToDo
 - Monster
-
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
 - Map Editor
 - Select Gender afer start a new game
-
 - Dialoge/Story
 
 Improvements
-
+- laufanimation zu langsam bei schlechten fps (kimiko)
 - Startmenü ändern mit bewegten hintergrund (kimiko)
 
 Nice to Have
 - Spielernamen selbst wählen
 - XBOX Controller Support
-

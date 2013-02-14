@@ -23,6 +23,7 @@
 // used in menues
 #define BUTTONWIDTH 704
 #define BUTTONHEIGHT 64
+#define GENDERBUTTON 128
 
 // used in map.cpp and player.cpp
 #define TILESIZE 32

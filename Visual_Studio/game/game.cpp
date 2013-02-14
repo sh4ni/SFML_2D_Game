@@ -85,7 +85,6 @@ void Game::Init(void)
 	loadgame.open(SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
 		std::cout << "Savegame detected! Loading..\n";
-		
 		loadgame >> mySavegame.pHealth;
 		loadgame >> mySavegame.pLvl;
 		loadgame >> mySavegame.pExp;
@@ -169,32 +168,31 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 	sf::View viewCamera  = _mainWindow.getView();
 
 	switch(_gameState){
-		case Game::ShowingIntro:{
+		case Game::ShowingIntro:
 			#ifdef DEBUGINFO
 				std::cout << "Show the Intro" << std::endl;
 			#endif
 			ShowIntro();
 		break;
-		}
-		case Game::ShowingMenu:{
+		case Game::ShowingMenu:
 			#ifdef DEBUGINFO
 				std::cout << "Show the Menu" << std::endl;
 			#endif
 			ShowMenu(newgame);
+            break;
+        case Game::ShowingGenderMenu:
+            ShowMenuGender();
 		break;
-		}
-		case Game::Playing:{
+		case Game::Playing:
 			// Hier wird die Map geladen
 			#ifdef DEBUGINFO
 				std::cout << "Show the Map / Level" << std::endl;
 			#endif
 			ShowMap(viewCamera,currentSavegame);				
-		break;
-		}
-		case Game::NewGame:{
+            break;
+		case Game::NewGame:
 			defaultSavegame(currentSavegame,false);
 			ShowMap(viewCamera,currentSavegame);
-		}
         default:
             break;
 	}
@@ -230,17 +228,33 @@ void Game::ShowMenu(bool newgame){
 			#ifdef DEBUGINFO
 				std::cout << "Menu -> Continue Button pressed " << std::endl;	
 			#endif
-				_gameState = Playing;	
+				_gameState = Playing;
 			break;
-		case MainMenu::NewGame:
+		/*case MainMenu::NewGame:
 			#ifdef DEBUGINFO
 				std::cout << "Menu -> NewGame Button pressed " << std::endl;	
 			#endif
 			_gameState = NewGame;
-			break;
+			break;*/
+        case MainMenu::NewGameGender:
+            _gameState = ShowingGenderMenu;
         default:
             break;
 	}
+}
+
+void Game::ShowMenuGender(){
+    MainMenu genderMenu;
+    MainMenu::MenuResult result = genderMenu.Show(_mainWindow, false, true);
+    switch (result) {
+        case MainMenu::Female:
+            _gameState = NewGame;   // @f: weis grad nicht wie ich ab hier weiter machen soll...
+            break;                  //  vlt fŠllt dir was ein. ich wŸsst auch grad nicht wie ich
+        case MainMenu::Male:        // aufs savegame zugreifen kann. evtl das auch static machen?
+            _gameState = NewGame;   // meh...
+        default:
+            break;
+    }
 }
 
 // static member variables need to be instantiated outside of the class

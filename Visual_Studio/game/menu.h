@@ -7,7 +7,7 @@
 
 class MainMenu{
 public:
-	enum MenuResult { Nothing, Exit, Continue, Options, NewGame };	
+	enum MenuResult { Nothing, Exit, Continue, Options, NewGame, NewGameGender, Female, Male };
 	class MenuItem{
 		public:
 			sf::IntRect rect;
@@ -16,10 +16,10 @@ public:
 			MenuResult action;
 			bool active;
 		};
-	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false);
+	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, bool gendermenu = false);
 
 private:
-	MenuResult GetMenuResponse(sf::RenderWindow& window);
+	MenuResult GetMenuResponse(sf::RenderWindow& window, bool gendermenu = false);
 	MenuResult HandleClick(int x, int y);
 	//MenuResult HandleKeyboard(int result);
 	std::list<MenuItem> _menuItems;
