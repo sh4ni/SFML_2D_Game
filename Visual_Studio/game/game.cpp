@@ -7,7 +7,7 @@ void defaultSavegame(Savegame& mySavegame, const char pGender = 'M'){
 	std::cout << "No savegame detected! Default savegame will be loaded..\a\n";
 	
 	std::ofstream defaultsavegame;
-	defaultsavegame.open(SAVEGAME, std::ios::trunc & std::ios::binary);
+	defaultsavegame.open(PATH SAVEGAME, std::ios::trunc & std::ios::binary);
 	if(defaultsavegame.is_open()){
 
 		// Health
@@ -71,7 +71,7 @@ void Game::Init(void)
 	Savegame mySavegame;
 
 	std::ifstream loadgame;
-	loadgame.open(SAVEGAME, std::ios::binary);
+	loadgame.open(PATH SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
 		std::cout << "Savegame detected! Loading..\n";
 		loadgame >> mySavegame.pHealth;
@@ -250,8 +250,10 @@ const char Game::ShowMenuGender(){
             _gameState = NewGame;   
 			return 'M';
 			break;
+        case MainMenu::Menue:
+            _gameState = ShowingMenu;
+            break;
         default:
-			return 'M';
             break;
     }
 }

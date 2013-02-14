@@ -1,7 +1,10 @@
 # OS generated files
 Thumbs.db
 .DS_Store
+
+# Xcode files
 *.xcodeproj
+game-Info.plist
 
 # Compiled Object files
 *.slo
@@ -17,6 +20,7 @@ Thumbs.db
 *.la
 *.a
 
+# Visual Studio Files
 *.vcxproj*
 *.ncb
 *.aps

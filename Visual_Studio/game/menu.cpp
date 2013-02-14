@@ -6,12 +6,11 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
 	//Load menu image from file
 	sf::Texture imageMenu;
 	sf::Texture imageBackground;
-	sf::Texture imageButton;
 	if(!imageMenu.loadFromFile(PATH"include/interface/menu.png")){
-		exit(1); // fehlerbehebung fehlt noch...
+        throw "Error: include/interface/menu.png not found.";
 	}
 	if(!imageBackground.loadFromFile(PATH"include/interface/menu_back.png")){
-		exit(1); // und noch mehr fehlerbehebung hier einsetzen :p
+        throw "Error: include/interface/menu_back.png not found.";
 	}
 
 	// Menü und Hintergrund
@@ -23,22 +22,47 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
 	
 	sf::Font font;
 	if(!font.loadFromFile(PATH"include/fonts/arial.ttf")){
-		std::cout << "Failed to load the font!\a" << std::endl;
+        throw "Error: include/fonts/arial.ttf not found.";
 	}
 
-    
+    sf::Texture imageGenderButton;
+    sf::Texture imageButton;
+    if(!imageButton.loadFromFile(PATH"include/interface/button.png")){
+        throw "Error: include/interface/button.png not found.";
+    }
     if( gendermenu ){
-        if(!imageButton.loadFromFile(PATH"include/interface/genderbutton.png")){
-            exit(1); // .....
+        if(!imageGenderButton.loadFromFile(PATH"include/interface/genderbutton.png")){
+            throw "Error: include/interface/genderbutton.png not found.";
         }
-        buttons = 2;
+        buttons = 3;    // Wieviel buttons im geschlechtsauswahlscreen? achtung! die ersten 2 buttons sind speziell!
         button = new MenuItem[buttons];
         
+        button[0].text.setString("Select your hero");
+        button[0].text.setPosition(WIDTH/2,HEIGHT/2-120);
+        button[0].text.setFont(font);
+        button[0].text.setCharacterSize(40U);
+        button[0].text.setColor(sf::Color(0U,0U,0U));
+        button[0].text.setOrigin(button[0].text.getGlobalBounds().width/2+1,0);
+        
         for( int i=0; i<buttons; i++){
-            button[i].rect.left = WIDTH/2-GENDERBUTTON/2+(i?100:-100);
-            button[i].rect.top = HEIGHT/2-25;
-            button[i].rect.width = GENDERBUTTON;
-            button[i].rect.height = GENDERBUTTON;
+            if( i<2 ){
+                button[i].rect.left = WIDTH/2-GENDERBUTTON/2+(i?100:-100);
+                button[i].rect.top = HEIGHT/2-25;
+                button[i].rect.width = GENDERBUTTON;
+                button[i].rect.height = GENDERBUTTON;
+                button[i].image.setTexture(imageGenderButton);
+            }
+            else {
+                button[i].rect.left = WIDTH/2-BUTTONWIDTH/2;
+                button[i].rect.top = HEIGHT/2-160+(i+2)*BUTTONHEIGHT*3/2;
+                button[i].rect.width = BUTTONWIDTH;
+                button[i].rect.height = BUTTONHEIGHT;
+                button[i].image.setTexture(imageButton);
+                button[i].text.setPosition(button[i].rect.left+10.f,button[i].rect.top+7.f);
+                button[i].text.setFont(font);
+                button[i].text.setCharacterSize(40U);
+                button[i].text.setColor(sf::Color(255U,255U,255U));
+            }
             button[i].active = true;
             switch(i){
                 case 0:
@@ -49,28 +73,29 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
                     button[i].image.setTextureRect(sf::IntRect(0,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
                     button[i].action = Male;
                     break;
+                case 2:
+                    button[i].text.setString("Back");
+                    button[i].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
+                    button[i].action = Menue;
+                    break;
             }
-            button[i].image.setTexture(imageButton);
-            button[i].image.setPosition((float)WIDTH/2.f-(float)GENDERBUTTON/2.f+(i?100.f:-100.f),(float)HEIGHT/2.f-25.f);
+            button[i].image.setPosition(button[i].rect.left,button[i].rect.top);
             _menuItems.push_back(button[i]);
         }
     }
     else {
-        if(!imageButton.loadFromFile(PATH"include/interface/button.png")){
-            exit(1); // .....
-        }
-        buttons = 5;	// Wieviele Buttons brauchen wir? Ja richtig! 5 verdammt noch mal!
+        buttons = 4;	// Wieviele Buttons brauchen wir? Ja richtig! 5 verdammt noch mal!
         button = new MenuItem[buttons];
         
         for( int i=0; i<buttons; i++){
-            button[i].image.setTexture(imageButton);
-            button[i].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT*2,BUTTONWIDTH,BUTTONHEIGHT));
-            button[i].image.setPosition((float)WIDTH/2.f-(float)BUTTONWIDTH/2.f,(float)HEIGHT/2.f-160.f+(float)i*(float)BUTTONHEIGHT*3.f/2.f);
             button[i].rect.left = WIDTH/2-BUTTONWIDTH/2;
-            button[i].rect.top = HEIGHT/2-160+i*BUTTONHEIGHT*3/2;
+            button[i].rect.top = HEIGHT/2-160+((i<3)?i:i+1)*BUTTONHEIGHT*3/2;   // ((i<3)?i:i+1) = nach den 1. 3 buttons ein button abstand
             button[i].rect.width = BUTTONWIDTH;
             button[i].rect.height = BUTTONHEIGHT;
-            button[i].text.setPosition((float)WIDTH/2.f-(float)BUTTONWIDTH/2.f+10.f,(float)HEIGHT/2.f-160.f+(float)i*(float)BUTTONHEIGHT*3.f/2.f+7.f);
+            button[i].image.setTexture(imageButton);
+            button[i].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT*2,BUTTONWIDTH,BUTTONHEIGHT));
+            button[i].image.setPosition(button[i].rect.left,button[i].rect.top);
+            button[i].text.setPosition(button[i].rect.left+10.f,button[i].rect.top+7.f);
             button[i].text.setFont(font);
             button[i].text.setCharacterSize(40U);
             button[i].text.setColor(sf::Color(100U,100U,100U));
@@ -80,25 +105,22 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
                 case 0:
                     button[i].text.setString("Continue");
                     if(!newgame){
-                        button[i].active = true;
                         button[i].action = Continue;
+                        button[i].active = true;
                     }
                     break;
                 case 1:
                     button[i].text.setString("New Game");
-                    button[i].active = true;
                     button[i].action = NewGameGender;
+                    button[i].active = true;
                     break;
                 case 2:
-                    button[i].text.setString("Senseless Button");
-                    break;
-                case 3:
                     button[i].text.setString("Options");
                     break;
-                case 4:
+                case 3:
+                    button[i].text.setString("Exit");
                     button[i].action = Exit;
                     button[i].active = true;
-                    button[i].text.setString("Exit");
                     break;
             }
             if( button[i].active ){	// Andere Textur und Textfarbe für klickbare Buttons
@@ -163,11 +185,16 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 	while(true){
 		while(window.pollEvent(menuEvent)){
             if( gendermenu ){
-                if(!active[selected]){
-                    button[active[selected]].image.setTextureRect(sf::IntRect(GENDERBUTTON,0,GENDERBUTTON,GENDERBUTTON));
-                }
-                else {
-                    button[active[selected]].image.setTextureRect(sf::IntRect(GENDERBUTTON,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
+                switch(active[selected]){
+                    case 0:
+                        button[active[selected]].image.setTextureRect(sf::IntRect(GENDERBUTTON,0,GENDERBUTTON,GENDERBUTTON));
+                        break;
+                    case 1:
+                        button[active[selected]].image.setTextureRect(sf::IntRect(GENDERBUTTON,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
+                        break;
+                    case 2:
+                        button[active[selected]].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT,BUTTONWIDTH,BUTTONHEIGHT));
+                        break;
                 }
             }
             else {
@@ -187,11 +214,16 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 				else if(menuEvent.key.code == sf::Keyboard::Up || menuEvent.key.code == sf::Keyboard::Left){
 					if( selected > 0 ){
                         if( gendermenu ){
-                            if(!active[selected]){
-                                button[active[selected]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));
-                            }
-                            else {
-                                button[active[selected]].image.setTextureRect(sf::IntRect(0,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
+                            switch(active[selected]){
+                                case 0:
+                                    button[active[selected]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));
+                                    break;
+                                case 1:
+                                    button[active[selected]].image.setTextureRect(sf::IntRect(0,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
+                                    break;
+                                case 2:
+                                    button[active[selected]].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
+                                    break;
                             }
                         }
                         else {
@@ -203,11 +235,16 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 				else if(menuEvent.key.code == sf::Keyboard::Down || menuEvent.key.code == sf::Keyboard::Right){
 					if( selected < activeButtons-1 ){
                         if( gendermenu ){
-                            if(!active[selected]){
-                                button[active[selected]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));
-                            }
-                            else {
-                                button[active[selected]].image.setTextureRect(sf::IntRect(0,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
+                            switch(active[selected]){
+                                case 0:
+                                    button[active[selected]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));
+                                    break;
+                                case 1:
+                                    button[active[selected]].image.setTextureRect(sf::IntRect(0,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
+                                    break;
+                                case 2:
+                                    button[active[selected]].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
+                                    break;
                             }
                         }
                         else {

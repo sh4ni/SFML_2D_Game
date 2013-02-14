@@ -7,7 +7,7 @@
 
 class MainMenu{
 public:
-	enum MenuResult { Nothing, Exit, Continue, Options, NewGame, NewGameGender, Female, Male };
+	enum MenuResult { Nothing, Exit, Continue, Options, NewGame, NewGameGender, Female, Male, Menue };
 	class MenuItem{
 		public:
 			sf::IntRect rect;

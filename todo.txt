@@ -1,10 +1,12 @@
 ToDo
-- Monster
+- Zurück button im menü
+- get/set methoden für hp (schaden); exp (levelup usw.)
+- passive Monster, aggresive Monster / Freundliche NPCs
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
 - Map Editor
-- Select Gender afer start a new game
 - Dialoge/Story
+- Dialogboxen im Spiel bei Unterhaltungen
 
 Improvements
 - laufanimation zu langsam bei schlechten fps (kimiko)
