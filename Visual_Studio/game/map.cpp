@@ -30,7 +30,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	sprintf(FileName,PATH"include/map/map%d.txt",LevelId);
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
-	std::ifstream openfile(FileName/*.str()*/,std::ios::in);
+	std::ifstream openfile(FileName/*.str()*/);
 	if( openfile.is_open() ){
 		openfile >> MapSizeX >> MapSizeY;
 
