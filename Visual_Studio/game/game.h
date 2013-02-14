@@ -22,7 +22,7 @@ private:
 	enum GameState { Uninitialized, Initialized, ShowingIntro, Paused, ShowingMenu, Playing, NewGame, Options, Exiting, ShowingGenderMenu };
 	static void ShowIntro();
 	static void ShowMenu(bool newgame = false);
-    static void ShowMenuGender();
+    static const char ShowMenuGender();
 	static void GameLoop(Savegame& currentSave, bool newgame = false);
 	static void ShowMap(sf::View viewCamera, Savegame& currentSave);
 	static bool IsExiting();

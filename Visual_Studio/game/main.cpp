@@ -1,7 +1,11 @@
 #include "game.h"
 
 int main(void){
-	Game::Init();
-	//Game::Start();
+	try{
+		Game::Init();
+	}
+	catch(...){
+		std::cout << "error" << std::endl;
+	}
 	return 0;
 }

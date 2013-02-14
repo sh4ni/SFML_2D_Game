@@ -6,7 +6,7 @@
 class Schrift{
 public:
 	void Render		(sf::RenderWindow &Window);
-	Schrift			(int X = 0, int Y = 0, sf::String myText = "", int size = 16, int color = 255);
+	Schrift			(int X = 0, int Y = 0, sf::String myText = "", int size = 16, sf::Uint8 color = 255);
 	void Update		(sf::String myText);
 	sf::Text printText;
 private:

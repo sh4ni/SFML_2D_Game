@@ -24,7 +24,7 @@ public:
 	void InitMap(std::string FileName);
 	sf::IntRect getRect(int x, int y);
 private:
-	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId, Savegame& currentSavegame);
+	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId);
 	static void resume();
 	static bool save(Player& P1, int level);
 	static bool load(Player& P1);

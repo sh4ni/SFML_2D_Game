@@ -4,7 +4,8 @@
 bool Schrift::FontLoaded = false;
 sf::Font Schrift::font;
 
-Schrift::Schrift(int X, int Y, sf::String myText, int size, int color){
+
+Schrift::Schrift(int X, int Y, sf::String myText, int size, sf::Uint8 color){
 	
 	if( !FontLoaded ){
 		if(!Schrift::font.loadFromFile(PATH"include/fonts/arial.ttf")){
@@ -13,7 +14,7 @@ Schrift::Schrift(int X, int Y, sf::String myText, int size, int color){
 		else {
 			FontLoaded = true;
 			#ifdef DEBUGINFO
-				std::cout << "Font geladen!" << std::endl;
+				std::cout << "Font loaded!" << std::endl;
 			#endif
 		}
 	}
@@ -21,6 +22,7 @@ Schrift::Schrift(int X, int Y, sf::String myText, int size, int color){
 	printText.setString(myText);
 	printText.setFont(this->font);
 	printText.setCharacterSize(size);
+	
 	printText.setColor(sf::Color(color,color,color));
 	printText.setPosition((float)X,(float)Y);
 }

@@ -149,7 +149,7 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 	return Nothing;
 }*/
 
-MainMenu::MenuResult  MainMenu::GetMenuResponse(sf::RenderWindow& window, bool gendermenu){
+MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool gendermenu){
 	sf::Event menuEvent;
 	int selected = 0;
 	int *active;

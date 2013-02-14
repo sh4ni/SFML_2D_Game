@@ -27,6 +27,7 @@ void defaultSavegame(Savegame& mySavegame, const char pGender = 'M'){
 			pName = DEFAULT_M_NAME;
 		else
 			pName = DEFAULT_F_NAME;
+		
 
 		// Gender
 		defaultsavegame << pGender << std::endl;
@@ -245,9 +246,10 @@ const char Game::ShowMenuGender(){
         case MainMenu::Female:
             _gameState = NewGame;
 			return 'F';									
-            break;                 
-        case MainMenu::Male:        
-            _gameState = NewGame;   
+									// @f: weis grad nicht wie ich ab hier weiter machen soll...
+            break;                  //  vlt fŠllt dir was ein. ich wŸsst auch grad nicht wie ich
+        case MainMenu::Male:        // aufs savegame zugreifen kann. evtl das auch static machen?
+            _gameState = NewGame;   // meh...
 			return 'M';
 			break;
         default:

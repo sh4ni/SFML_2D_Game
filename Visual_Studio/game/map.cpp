@@ -9,7 +9,7 @@
 void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera, Savegame& currentSavegame){
 	renderWindow.setMouseCursorVisible(false);
 	#ifdef DEBUGINFO
-		std::cout << "Lade Map Nr: " << LevelId << "." << std::endl;
+		std::cout << "Load Map #: " << LevelId << std::endl;
 	#endif
 	// Hier wird die Textur für die Map geladen.
 	static sf::Texture LevelTexture;
@@ -100,8 +100,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				LoadCounterY++;
 			}
 		}
-		#ifdef DEBUGINFOINFO
-			std::cout << "Map erfolgreich eingelesen." << std::endl;
+		#ifdef DEBUGINFO
+			std::cout << "Map successfully loaded." << std::endl;
 		#endif
 		std::ifstream closefile(FileName/*.str()*/);
 	}
@@ -224,7 +224,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape){
-					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
+					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId);
 					if(quitGame)
 						return;
 				}
@@ -241,7 +241,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 					P1.increaseSpeed(0.1f);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::Q){
-					// player speed runter
+					// player speed down
 					P1.decreaseSpeed(0.1f);
 				}
 			}
@@ -249,7 +249,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				#ifdef DEBUGINFO
 					std::cout << " Ausserhalb Fenster!.. " << std::endl;	
 				#endif
-					pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
+					pause(renderWindow,viewCamera,levelLoop,P1,LevelId);
 			}
 			else if(levelLoop.type == sf::Event::Closed){
 				return;
@@ -380,7 +380,7 @@ bool Map::save(Player& P1, int LevelId)
 	return true;
 }
 
-bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId, Savegame& currentSavegame){
+bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId){
 	
 	//Map::load(P1);
 	#ifdef DEBUGINFO
