@@ -13,8 +13,9 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	#endif
 	// Hier wird die Textur für die Map geladen.
 	static sf::Texture LevelTexture;
-	LevelTexture.loadFromFile(PATH"include/texture/world/overworld.png");		// Lade Texturedatei
-
+	if( !LevelTexture.loadFromFile(PATH"include/texture/world/overworld.png") ){		// Lade Texturedatei
+        throw "Error: include/texture/world/overworld.png not found.";
+    }
 	int MapSizeX = 0U;
 	int MapSizeY = 0U;
 	int LoadCounterX = 0;
@@ -106,7 +107,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		std::ifstream closefile(FileName/*.str()*/);
 	}
 	else {
-		//throw("Map konnte nicht geoeffnet werden. Fehler: 01.1"); // 01.X = Texturenfehler allgemein 01.1 genau der hier
+		throw "Error: Mapfile not found.";
 	}
 	
 	sf::Clock clock;
@@ -124,12 +125,12 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	sf::Texture ifaceImage;
 	if( P1.getGender() == 'F' ){
 		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
-			//fehlerbehebung
+			throw "Error: include/interface/interface-female.png not found.";
 		}
 	}
 	else {
 		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-male.png")){
-			//fehlerbehebung
+			throw "Error: include/interface/interface-male.png not found.";
 		}
 	}
 	sf::Sprite iface(ifaceImage);
@@ -405,7 +406,7 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 	// Logo im Pausemenü
 	sf::Texture LogoImage;
 	if(!LogoImage.loadFromFile(PATH"include/interface/splashscreen.png")){
-		// Fehlerbehebung
+		throw "Error: include/interface/splashscreen.png not found.";
 	}
 	sf::Sprite Logo(LogoImage);
 	Logo.setOrigin((float)LogoImage.getSize().x/2.f,0);

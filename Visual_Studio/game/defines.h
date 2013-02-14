@@ -3,8 +3,8 @@
 
 #define DEBUGINFO 
 
-#define WIDTH 1024
-#define HEIGHT 768
+#define WIDTH 800
+#define HEIGHT 600
 
 #define FPS 60U
 
@@ -31,7 +31,7 @@
 // used in player.cpp
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
-#define ANIMATIONSPEED 4.0f	// Mehr = langsamere Animation
+#define ANIMATIONSPEED 2.8f	// Mehr = langsamere Animation
 
 #define BASEHEALTH 100
 #define HEALTHPERLEVEL 10

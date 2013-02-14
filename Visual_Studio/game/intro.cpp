@@ -6,7 +6,7 @@ void Intro::Show(sf::RenderWindow& renderWindow)
 {
 	sf::Texture image;
 	if(!image.loadFromFile(PATH"include/interface/splashscreen.png")){
-		exit(1); // exeption werfen oder sonst was...
+        throw "Error: include/interface/splashscreen.png not found.";
 	}
 
 	sf::Sprite sprite(image);
@@ -27,7 +27,7 @@ void Intro::Show(sf::RenderWindow& renderWindow)
 	{
 		while(renderWindow.pollEvent(currentEvent))
 		{
-			if(currentEvent.type == sf::Event::KeyPressed || currentEvent.type == sf::Event::MouseButtonPressed ){
+			if(currentEvent.type == sf::Event::KeyPressed || currentEvent.type == sf::Event::MouseButtonPressed || currentEvent.type == sf::Event::JoystickButtonPressed ){
 				return;
 			}else if(currentEvent.type == sf::Event::Closed){
 				return;

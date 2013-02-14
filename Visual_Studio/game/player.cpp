@@ -32,7 +32,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	Speed = PLAYERSPEED;
 
 	if(!texture.loadFromFile(tex)){
-		std::cout << "Failed to load the texture!" << std::endl;	
+		throw "Error: Playertexture not found.";
 	}
 	#ifdef DEBUGINFO
 	else {
@@ -135,27 +135,43 @@ void Player::Update(float ElapsedTime){
 			std::cout << "KOLLISION ÜBERALL" << std::endl;	// teleport an sicheren ort
 		}
 	}
-
+    
 	bool walking = false;
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !blockUp ){
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+         sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
+         sf::Joystick::isButtonPressed(0,11) )
+       && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+       && !blockUp ){
 		y -= (Speed*ElapsedTime);
 		blockDown = false;
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 		walking = true;
-	}
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) && !blockDown ){
+	}    
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+         sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
+         sf::Joystick::isButtonPressed(0,12))
+       && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+       && !blockDown ){
 		y += (Speed*ElapsedTime);
 		blockUp = false;
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
 		walking = true;
 	}
-	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !blockLeft ){
+	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+          sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
+          sf::Joystick::isButtonPressed(0,13))
+        && !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        && !blockLeft ){
 		x -= (Speed*ElapsedTime);
 		blockRight = false;
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 		walking = true;
 	}
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) && !blockRight ){
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
+         sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
+         sf::Joystick::isButtonPressed(0,14))
+       && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+       && !blockRight ){
 		x += Speed*ElapsedTime;
 		blockLeft = false;
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
@@ -163,7 +179,7 @@ void Player::Update(float ElapsedTime){
 	}
 
 	if( walking ){
-		if( (Animation/(int)((1/Speed)*ANIMATIONSPEED)) >= 4) Animation = 0;
+		if( (Animation/(int)((1/Speed)*ElapsedTime*ANIMATIONSPEED)) >= 4) Animation = 0;
 		Animation++;
 	}
 	else {

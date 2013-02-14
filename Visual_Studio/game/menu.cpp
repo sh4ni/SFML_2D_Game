@@ -207,11 +207,19 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 				#endif
 				return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
 			}
-			else if(menuEvent.type == sf::Event::KeyPressed){
-				if(menuEvent.key.code == sf::Keyboard::Return){
+			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed ){
+                if(menuEvent.key.code == sf::Keyboard::Return || (menuEvent.type == sf::Event::JoystickButtonPressed && menuEvent.joystickButton.button == 0) ){
 					return button[active[selected]].action;
 				}
-				else if(menuEvent.key.code == sf::Keyboard::Up || menuEvent.key.code == sf::Keyboard::Left){
+                else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == 1 ){
+                    if(gendermenu){
+                        return Menue;
+                    }
+                    else {
+                        return Exit;
+                    }
+                }
+                else if(menuEvent.key.code == sf::Keyboard::Up || menuEvent.key.code == sf::Keyboard::Left || menuEvent.joystickButton.button == 11 || menuEvent.joystickButton.button == 13 ){
 					if( selected > 0 ){
                         if( gendermenu ){
                             switch(active[selected]){
@@ -232,7 +240,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 						selected--;
 					}
 				}
-				else if(menuEvent.key.code == sf::Keyboard::Down || menuEvent.key.code == sf::Keyboard::Right){
+				else if(menuEvent.key.code == sf::Keyboard::Down || menuEvent.key.code == sf::Keyboard::Right || menuEvent.joystickButton.button == 12 || menuEvent.joystickButton.button == 14 ){
 					if( selected < activeButtons-1 ){
                         if( gendermenu ){
                             switch(active[selected]){

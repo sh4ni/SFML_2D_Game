@@ -1,5 +1,4 @@
 ToDo
-- Zurück button im menü
 - get/set methoden für hp (schaden); exp (levelup usw.)
 - passive Monster, aggresive Monster / Freundliche NPCs
 - Monster aus Mapfiles laden
@@ -9,7 +8,7 @@ ToDo
 - Dialogboxen im Spiel bei Unterhaltungen
 
 Improvements
-- laufanimation zu langsam bei schlechten fps (kimiko)
++ laufanimation zu langsam bei schlechten fps // sollte gefixt sein, bitte testen
 - Startmenü ändern mit bewegten hintergrund (kimiko)
 
 Nice to Have

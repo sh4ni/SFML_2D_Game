@@ -9,7 +9,7 @@ Schrift::Schrift(int X, int Y, sf::String myText, int size, sf::Uint8 color){
 	
 	if( !FontLoaded ){
 		if(!Schrift::font.loadFromFile(PATH"include/fonts/arial.ttf")){
-			throw "error during loading the font!\a";
+			throw "Error: Font not found.";
 		}
 		else {
 			FontLoaded = true;
