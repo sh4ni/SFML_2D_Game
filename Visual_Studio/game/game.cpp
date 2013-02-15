@@ -92,7 +92,8 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
             gender = ShowMenuGender();
-			currentSavegame.saveSavegame(currentSavegame,gender);
+			if(!gender)	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
+				currentSavegame.saveSavegame(currentSavegame,gender);
 		break;
 		case Game::Playing:
 			// Hier wird die Map geladen

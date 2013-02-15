@@ -112,12 +112,12 @@ bool Savegame::loadSavegame(Savegame& mySavegame){
 		#ifdef DEBUGINFO
 			std::cout << "Savegame successfully loaded.." << std::endl;
 		#endif
-		loadgame.close();
 
+		loadgame.close();
 		
 		return true;
 	}else{
-		//defaultSavegame(mySavegame,false);
+		saveSavegame(mySavegame);
 	}
 	return false;
 }
