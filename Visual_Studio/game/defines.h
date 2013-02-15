@@ -3,8 +3,8 @@
 
 #define DEBUGINFO 
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 1024
+#define HEIGHT 768
 
 #define FPS 60U
 

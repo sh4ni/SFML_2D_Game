@@ -1,5 +1,6 @@
 #include "map.h"
 
+
 /*IntRect Map::getRect(int x, int y){
 	x /= TILESIZE;
 	y /= TILESIZE;
@@ -7,7 +8,7 @@
 }*/
 
 void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera, Savegame& currentSavegame){
-	renderWindow.setMouseCursorVisible(false);
+	//renderWindow.setMouseCursorVisible(false);
 	#ifdef DEBUGINFO
 		std::cout << "Load Map : " << currentSavegame.mLevelId << std::endl;
 	#endif
@@ -259,6 +260,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 					P1.setBlockControl(false);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
+					mkdir("screenshots");
 					sf::Image Screen = renderWindow.capture();
 					if(Screen.saveToFile("screenshots/screenshot-"__DATE__"-.png")){
 						#ifdef DEBUGINFO
@@ -297,8 +299,10 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
             else if(levelLoop.type == sf::Event::Closed){
 				return;
 			}
+			
 		}
-
+		
+		
 		renderWindow.setView(renderWindow.getDefaultView());	// Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
 		
 		renderWindow.draw(iface);
@@ -362,16 +366,13 @@ bool Map::load(Player& P1)
 		loadgame >> tmper; // gender
 		std::string temperer;
 		loadgame >> temperer; // name
-		loadgame >> tmp; // mapid
+		loadgame >> temperer; // mapid
 		
-		float temp;
-		float temp2;
-		loadgame >> temp;
-		//P1.setPosX(temp);
-		loadgame >> temp2;
+		float X,Y;
+		loadgame >> X;
+		loadgame >> Y;
 		
-		P1.setPosition(temp,temp2);
-
+		P1.setPosition(X,Y);
 
 		loadgame.close();
 	}else{

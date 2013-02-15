@@ -1,9 +1,10 @@
 #include "game.h"
 
+
 void defaultSavegame(Savegame& mySavegame, const char pGender = 'M'){
 	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
-
+	
 	std::cout << "No savegame detected! Default savegame will be loaded..\a\n";
 	
 	std::ofstream defaultsavegame;
@@ -53,6 +54,7 @@ void defaultSavegame(Savegame& mySavegame, const char pGender = 'M'){
 		std::stringstream ss;
 		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
 		std::string checksum = md5(ss.str());
+		//std::string checksum = md5(ss.str()+mySavegame.mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
 
 		#ifdef DEBUGINFO
 			std::cout << "Savegame Checksum -> " << checksum << std::endl;

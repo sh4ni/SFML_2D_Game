@@ -8,7 +8,7 @@
 #include "player.h"
 #include "savegame.h"
 #include <vector>  
-
+#include <direct.h>	// to create a folder with mkdir
 
 
 class TilePart{

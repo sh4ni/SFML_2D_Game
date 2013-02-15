@@ -107,8 +107,9 @@ public:
             this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->pLvl-1));
         }
     }
-	void setBlockControl(bool block){
+	void setBlockControl(bool block=false){
 		this->blockControl = block;
+		std::cout << "block " << block << std::endl;
 	}
 private:
     int controller;
