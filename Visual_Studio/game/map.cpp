@@ -16,8 +16,8 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	if( !LevelTexture.loadFromFile(PATH"include/texture/world/overworld.png") ){		// Lade Texturedatei
         throw "Error: include/texture/world/overworld.png not found.";
     }
-	int MapSizeX = 0U;
-	int MapSizeY = 0U;
+	unsigned MapSizeX = 0U;
+	unsigned MapSizeY = 0U;
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
 	int TileType;

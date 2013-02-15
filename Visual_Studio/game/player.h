@@ -75,11 +75,11 @@ public:
 		this->MapSize.x = xMax;
 		this->MapSize.y = yMax;
 	}
-    void playerDamage( float damage, int level ){
+    void playerDamage( int damage, int level ){
         int levelDif = level-this->pLvl;
-        damage += (float)(levelDif*(level/10));
-        if ( damage <= 0.f ){
-            damage = 1.f;
+        damage += (levelDif*(level/10));
+        if ( damage <= 0 ){
+            damage = 1;
         }
         this->pHealth -= damage;
         if( this->pHealth < 0 ){
@@ -103,6 +103,7 @@ public:
             this->pExp -= this->pExpMax;
             this->pLvl++;
             this->pHealthMax = BASEHEALTH-HEALTHPERLEVEL+this->pLvl*HEALTHPERLEVEL;
+			this->pHealth = this->pHealthMax;
             this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->pLvl-1));
         }
     }
@@ -115,7 +116,8 @@ private:
 	sf::Vector2i MapSize;
 	float x;
 	float y;
-	unsigned char Animation;
+	int Animation;
+	int HealTickRate;
 	int pHealth;
 	int pHealthMax;
 	int pLvl;

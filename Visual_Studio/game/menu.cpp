@@ -2,6 +2,8 @@
 #include "defines.h"
 #include <iostream>
 
+int MainMenu::animation = 0;
+
 MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool gendermenu){
 	//Load menu image from file
 	sf::Texture imageMenu;
@@ -173,7 +175,6 @@ void MainMenu::Update(sf::RenderWindow& window){    // methode zum neu zeichnen 
 
 MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 	std::list<MenuItem>::iterator it;
-
 	for ( it = _menuItems.begin(); it != _menuItems.end(); it++){
 		sf::IntRect menuItemRect = (*it).rect;
 		if( menuItemRect.contains(x,y) ){   // wenn man einen button klickt...
@@ -189,7 +190,7 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 
 MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool gendermenu){
 	sf::Event menuEvent;
-    int animation = 0;      // laufvariable für das durchlaufende hintergrundbild
+    
 	int selected = 0;
 	int *active;
 	if(!(active = new int[buttons])){
@@ -202,7 +203,6 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 		}
 	}
 	while(true){
-        Update(window);
 		while(window.pollEvent(menuEvent)){
             if( gendermenu ){
                 switch(active[selected]){   // aktiver button wird anders dargestellt.
@@ -224,7 +224,8 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 				#ifdef DEBUGINFO
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
-				return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
+				if(HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y) != Nothing) // wenn kein button gedr¸ckt wurde, mache nichts
+					return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
 			}
 /*           _                            _
         _.-'`4`-._                    _,-'5`'-._
@@ -294,6 +295,9 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 						selected++;
 					}
 				}
+				#ifdef DEBUGINFO
+					std::cout << "button " << menuEvent.joystickButton.button << " pressed." << std::endl;
+				#endif
 			}
 			else if(menuEvent.type == sf::Event::Closed){
 				return Exit;
@@ -303,5 +307,6 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
         spriteBackgroundRepeat.setPosition(-animation+spriteBackground.getGlobalBounds().width,0);
         if( animation > spriteBackground.getGlobalBounds().width ) animation = 0;   // zurücksetzen wenn bildbreite erreicht wurde.
         animation++;            // LAUF FORREST! LAUF!
+		Update(window);
 	}
 }

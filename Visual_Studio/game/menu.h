@@ -29,6 +29,7 @@ private:
 	sf::Sprite spriteMenu;
 	sf::Sprite spriteBackground;
 	sf::Sprite spriteBackgroundRepeat;
+	static int animation;      // laufvariable für das durchlaufende hintergrundbild
 	sf::Text Version;
 };
 

@@ -90,7 +90,7 @@ void Game::Init(void)
 		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + mySavegame.mLevelId + CHECKSUM);
 		std::string s = md5(ss.str());
 		
-		if(mySavegame.checksum.compare(s) == 0)
+		if(mySavegame.checksum.compare(s) == 0 && CHECKSAVE == 1)
 			std::cout << "Savegame okay...!\n";
 		else
 			//defaultSavegame(mySavegame,'M',true);
@@ -254,11 +254,10 @@ const char Game::ShowMenuGender(){
         case MainMenu::Menue:
             _gameState = ShowingMenu;
             break;
-        default:
-			return 'M';
-            break;  // und hier auch nix...
+		default:
+            break; 
     }
-    return 'M';	// hier wird er nie hin kommen..
+    return 'F';
 }
 
 // static member variables need to be instantiated outside of the class

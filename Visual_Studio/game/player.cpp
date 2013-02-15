@@ -30,6 +30,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	}
 
 	Speed = PLAYERSPEED;
+	HealTickRate = 0;
 
 	if(!texture.loadFromFile(tex)){
 		throw "Error: Playertexture not found.";
@@ -205,10 +206,17 @@ void Player::Update(float ElapsedTime){
 	if( walking ){      // nur animieren wenn spieler läuft
 		if( (Animation/(int)((1/Speed)*ElapsedTime*ANIMATIONSPEED)) >= 4) Animation = 0;
 		Animation++;
+		HealTickRate = -COOLDOWN + IDLEHEAL;	// Cool Down Phase, erst danach werden die HP regeneriert
+
 	}
 	else {
 		sprite.setTextureRect(sf::IntRect(0,sprite.getTextureRect().top,TILESIZE,TILESIZE*2));  // spieler "steht", wenn er sich nicht bewegt.
-        this->playerHeal(ElapsedTime*(this->pHealthMax/100)*IDLEHEAL);     // Heilt den Player wenn er sich nicht bewegt.
+        if( HealTickRate >= IDLEHEAL ){
+			HealTickRate = 0;
+			this->playerHeal((int)(  (this->pHealthMax/100) ));     // Heilt den Player wenn er sich nicht bewegt.
+		}
+		//std::cout << HealTickRate << std::endl;
+		HealTickRate++;
 	}
     
     // falls das spiel lagt, hier korrekturen für die kollisionsabfrage.

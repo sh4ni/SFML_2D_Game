@@ -3,8 +3,8 @@
 
 #define DEBUGINFO 
 
-#define WIDTH 1024
-#define HEIGHT 768
+#define WIDTH 800
+#define HEIGHT 600
 
 #define FPS 60U
 
@@ -33,7 +33,8 @@
 #define COLLISIONTOLERANCE 4
 #define ANIMATIONSPEED 2.8f         // Mehr = langsamere Animation
 #define CONTROLLERTOLERANCE 22.f    // Analogstick nie komplett in der 0 possition
-#define IDLEHEAL 0.0008f            // Um welchen faktor der Spieler geheilt wird, wenn er sich nicht bewegt.
+#define IDLEHEAL 85					// Alle mach das am Schluss
+#define COOLDOWN 200
 
 #define BASEHEALTH 100
 #define HEALTHPERLEVEL 10
