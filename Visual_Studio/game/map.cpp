@@ -6,18 +6,16 @@
 	return CollisionMap[x][y];
 }*/
 
-void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera, Savegame& currentSavegame){
+void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera, Savegame& currentSavegame){
 	renderWindow.setMouseCursorVisible(false);
 	#ifdef DEBUGINFO
-		std::cout << "Load Map #: " << LevelId << std::endl;
+		std::cout << "Load Map : " << currentSavegame.mLevelId << std::endl;
 	#endif
 	// Hier wird die Textur für die Map geladen.
 	static sf::Texture LevelTexture;
-	if( !LevelTexture.loadFromFile(PATH"include/texture/world/overworld.png") ){		// Lade Texturedatei
-        throw "Error: include/texture/world/overworld.png not found.";
-    }
-	unsigned MapSizeX = 0U;
-	unsigned MapSizeY = 0U;
+	
+	int MapSizeX = 0U;
+	int MapSizeY = 0U;
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
 	int TileType;
@@ -26,17 +24,19 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	
 	//std::ostringstream FileName;
 	//FileName << PATH"include/map/map" << LevelId << ".txt";   Funktioniert NUR in Visual Studio! Nicht standard C++
-    char* FileName;
-    if( !(FileName = new char[sizeof(PATH) +25]) ){
+    /*char* FileName;
+    if( !(FileName = new char[sizeof(PATH) +50]) ){
         throw "Error: Could not allocate space for 'FileName'";
     }
-	sprintf(FileName,PATH"include/map/map%d.txt",LevelId);
+	sprintf(FileName,PATH"include/map/map%d.txt",LevelId);*/
+
+	std::string FileName = PATH"include/map/" + currentSavegame.mLevelId + ".txt";
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
-	std::ifstream openfile(FileName/*.str()*/);
+	std::ifstream openfile(FileName.c_str());
 	if( openfile.is_open() ){
-		openfile >> MapSizeX >> MapSizeY;
-
+		openfile >> MapSizeX >> MapSizeY >> this->mapTheme;
+		
 		if(!(TileMap = new TilePart*[MapSizeX])){
             throw "Error: Could not allocate space for 'TilePart*'";
         }                                           // Map Speicher Dynamisch reservieren.
@@ -118,10 +118,15 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		#ifdef DEBUGINFO
 			std::cout << "Map successfully loaded." << std::endl;
 		#endif
-		std::ifstream closefile(FileName/*.str()*/);
+		std::ifstream closefile(FileName);
 	}
 	else {
 		throw "Error: Mapfile not found.";
+	}
+
+	FileName = PATH"include/texture/world/" + mapTheme + ".png";
+	if( !LevelTexture.loadFromFile(FileName.c_str()) ){		// Lade Texturedatei
+		throw "Error: include/texture/world/" + mapTheme + " not loaded!";
 	}
 	
 	sf::Clock clock;
@@ -240,9 +245,11 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
+					P1.setBlockControl(true);
 					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId);
 					if(quitGame)
 						return;
+					P1.setBlockControl(false);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
@@ -263,7 +270,13 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
                     P1.playerExp(10, P1.getLvl());
                 }
                 else if(levelLoop.key.code == sf::Keyboard::Num2){
-                    P1.playerDamage(10.f, 10);
+                    P1.playerDamage(10, 10);
+                }
+				else if(levelLoop.key.code == sf::Keyboard::Num0){
+                    P1.setBlockControl(true);
+                }
+				else if(levelLoop.key.code == sf::Keyboard::Num9){
+                    P1.setBlockControl(false);
                 }
                 #endif
 			}
@@ -271,6 +284,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 				#ifdef DEBUGINFO
 					std::cout << " Outside the window!.. " << std::endl;	
 				#endif
+					P1.setBlockControl(true);
 					pause(renderWindow,viewCamera,levelLoop,P1,LevelId);
 			}
             else if(levelLoop.type == sf::Event::Closed){
@@ -361,7 +375,7 @@ bool Map::load(Player& P1)
 	return true;
 }
 
-bool Map::save(Player& P1, int LevelId)
+bool Map::save(Player& P1, std::string LevelId)
 {
 	std::cout << "saving..\n";
 	std::ofstream savegame;
@@ -386,7 +400,7 @@ bool Map::save(Player& P1, int LevelId)
 		savegame << P1.getPosY() << std::endl;
 
 		std::stringstream ss;
-		ss << (P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + (int)P1.getPosX() + (int)P1.getPosY() +LevelId + CHECKSUM);
+		ss << (P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + (int)P1.getPosX() + (int)P1.getPosY() + CHECKSUM);
 		std::string checksum = md5(ss.str());
 
 		savegame << checksum;
@@ -403,7 +417,7 @@ bool Map::save(Player& P1, int LevelId)
 	return true;
 }
 
-bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId){
+bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId){
 	
 	//Map::load(P1);
 	#ifdef DEBUGINFO

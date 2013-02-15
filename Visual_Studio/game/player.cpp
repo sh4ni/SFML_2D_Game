@@ -1,10 +1,9 @@
 ﻿#include <math.h>
 #include "player.h"
 
-Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
-
+Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame, int controller){
 	this->ColMap = CollisionMap;
-	
+
 	this->pHealth = currentSavegame.pHealth;
 	this->pLvl = currentSavegame.pLvl;
 	this->pExp = currentSavegame.pExp;
@@ -13,6 +12,9 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 
 	this->pHealthMax = BASEHEALTH-HEALTHPERLEVEL+this->pLvl*HEALTHPERLEVEL;
 	this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->pLvl-1));
+
+	this->controller = controller;
+	this->blockControl = false;
 
 	sf::String tex;
 	if(pGender == 'F'){         // spielertextur abhängig vom gewählten helden.
@@ -136,71 +138,73 @@ void Player::Update(float ElapsedTime){
 	}
             
 	bool walking = false;
-    if( sf::Joystick::isConnected(controller) ){    // analoge axen des controllers nur nutzen, falls auch einer angeschlossen ist
-        if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp ){
-            y += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
-            blockDown = false;
-            sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
-            walking = true;
-        }
-        if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE) && !blockDown ){
-            y += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
-            blockUp = false;
-            sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
-            walking = true;
-        }
-        if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE) && !blockLeft ){
-            x += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
-            blockRight = false;
-            sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
-            walking = true;
-        }
-        if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE) && !blockRight ){
-            x += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
-            blockLeft = false;
-            sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
-            walking = true;
-        }
-    }                       // hier nochmal die tastenabfragen. siehe menu.cpp ganz unten für tastenbelegung
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-         sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
-         sf::Joystick::isButtonPressed(controller,11) )
-       && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-       && !blockUp ){
-		y -= (Speed*ElapsedTime);
-		blockDown = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
-		walking = true;
-	}    
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
-         sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
-         sf::Joystick::isButtonPressed(controller,12))
-       && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-       && !blockDown ){
-		y += (Speed*ElapsedTime);
-		blockUp = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
-		walking = true;
-	}
-	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
-          sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
-          sf::Joystick::isButtonPressed(controller,13))
-        && !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        && !blockLeft ){
-		x -= (Speed*ElapsedTime);
-		blockRight = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
-		walking = true;
-	}
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
-         sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
-         sf::Joystick::isButtonPressed(controller,14))
-       && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-       && !blockRight ){
-		x += Speed*ElapsedTime;
-		blockLeft = false;
-		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
-		walking = true;
+	if(!blockControl){
+		if( sf::Joystick::isConnected(controller) ){    // analoge axen des controllers nur nutzen, falls auch einer angeschlossen ist
+			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp ){
+				y += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
+				blockDown = false;
+				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+				walking = true;
+			}
+			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE) && !blockDown ){
+				y += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
+				blockUp = false;
+				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
+				walking = true;
+			}
+			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE) && !blockLeft ){
+				x += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
+				blockRight = false;
+				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+				walking = true;
+			}
+			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE) && !blockRight ){
+				x += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
+				blockLeft = false;
+				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+				walking = true;
+			}
+		}                       // hier nochmal die tastenabfragen. siehe menu.cpp ganz unten für tastenbelegung
+		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+			 sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
+			 sf::Joystick::isButtonPressed(controller,11) )
+		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		   && !blockUp ){
+			y -= (Speed*ElapsedTime);
+			blockDown = false;
+			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+			walking = true;
+		}    
+		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+			 sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
+			 sf::Joystick::isButtonPressed(controller,12))
+		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		   && !blockDown ){
+			y += (Speed*ElapsedTime);
+			blockUp = false;
+			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
+			walking = true;
+		}
+		if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+			  sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
+			  sf::Joystick::isButtonPressed(controller,13))
+			&& !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+			&& !blockLeft ){
+			x -= (Speed*ElapsedTime);
+			blockRight = false;
+			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+			walking = true;
+		}
+		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
+			 sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
+			 sf::Joystick::isButtonPressed(controller,14))
+		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		   && !blockRight ){
+			x += Speed*ElapsedTime;
+			blockLeft = false;
+			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+			walking = true;
+		}
 	}
 
 	if( walking ){      // nur animieren wenn spieler läuft

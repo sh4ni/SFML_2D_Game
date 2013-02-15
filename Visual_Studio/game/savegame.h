@@ -20,7 +20,7 @@ public:
 	char pGender;
 	std::string pName;
 
-	int mLevelId;
+	std::string mLevelId;
 	float mPosX;
 	float mPosY;
 

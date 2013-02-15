@@ -15,7 +15,7 @@ public:
 	void Render		(sf::RenderWindow &Window){
 		Window.draw(sprite);
 	}
-	Player			(sf::IntRect*** CollisionMap, Savegame& currentSavegame);
+	Player			(sf::IntRect*** CollisionMap, Savegame& currentSavegame, int controller=0);
 	float			getPosX(void){
 		return this->x;
 	}
@@ -107,8 +107,12 @@ public:
             this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->pLvl-1));
         }
     }
+	void setBlockControl(bool block){
+		this->blockControl = block;
+	}
 private:
-    const static int controller = 0;
+    int controller;
+	bool blockControl;
 	float Speed;
 	sf::Texture texture;
 	sf::Sprite sprite;

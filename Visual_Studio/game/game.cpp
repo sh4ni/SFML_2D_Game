@@ -51,7 +51,7 @@ void defaultSavegame(Savegame& mySavegame, const char pGender = 'M'){
 		mySavegame.mPosY = DEFAULT_POSY;
 
 		std::stringstream ss;
-		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + mySavegame.mLevelId + CHECKSUM);
+		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
 		std::string checksum = md5(ss.str());
 
 		#ifdef DEBUGINFO
@@ -87,7 +87,7 @@ void Game::Init(void)
 		loadgame >> mySavegame.checksum;
 		
 		std::stringstream ss;
-		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + mySavegame.mLevelId + CHECKSUM);
+		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
 		std::string s = md5(ss.str());
 		
 		if(mySavegame.checksum.compare(s) == 0 && CHECKSAVE == 1)

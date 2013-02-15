@@ -20,16 +20,17 @@ private:
 
 class Map{
 public:
-	void Show(sf::RenderWindow& window, int LevelId, sf::View viewCamera, Savegame& currentSavegame);
+	void Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera, Savegame& currentSavegame);
 	void InitMap(std::string FileName);
 	sf::IntRect getRect(int x, int y);
 	static sf::RenderWindow& GetWindow();
 	const static sf::Event& GetInput();
 private:
-	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId);
+	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId);
 	static void resume();
-	static bool save(Player& P1, int level);
+	static bool save(Player& P1, std::string level);
 	static bool load(Player& P1);
+	std::string mapTheme;
 };
 
 #endif

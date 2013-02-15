@@ -52,7 +52,7 @@
 #define DEFAULT_F_NAME "Ashley"
 #define DEFAULT_M_NAME "Fabi"	// in memories
 
-#define DEFAULT_LEVEL 1
+#define DEFAULT_LEVEL "map1"
 #define DEFAULT_POSX WIDTH/2
 #define DEFAULT_POSY HEIGHT/2
 
