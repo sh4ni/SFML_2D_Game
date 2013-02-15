@@ -15,7 +15,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->pLvl-1));
 
 	sf::String tex;
-	if(pGender == 'F'){
+	if(pGender == 'F'){         // spielertextur abhängig vom gewählten helden.
 		#ifdef DEBUGINFO
 			tex.insert(0,PATH"include/texture/player/player_female.png");
 		#else
@@ -40,9 +40,8 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame){
 	}
 	#endif
 
-	//texture.setSmooth(true);
 	sprite.setTexture(texture);
-	sprite.setOrigin(16.f,32.f);
+	sprite.setOrigin(TILESIZE/2,TILESIZE);
 	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
 	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
 }
@@ -77,7 +76,7 @@ void Player::Update(float ElapsedTime){
 
 	};
 
-	bool cp[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+	bool cp[12] = {0,0,0,0,0,0,0,0,0,0,0,0};    // alle kollisionspunkte sind erstmal false
 
 	for( int i=0; i<9; i++){
 		if(tx+(i%3) >= 0 && ty+i/3 >= 0 && tx+(i%3) < MapSize.x && ty+i/3 < MapSize.y && ColMap[tx+(i%3)][ty+i/3] != NULL){
@@ -85,12 +84,11 @@ void Player::Update(float ElapsedTime){
 				if( ColMap[tx+(i%3)][ty+i/3]->contains(CollisionPoint[p][0],CollisionPoint[p][1]) ){
 					cp[p] = 1;
 				}
-			}
+			}       // setze alle kollisionspunkte auf 1, welche eine kollision mit der welt haben.
 		}
 	}
 
 	for( int i=0; i<12; i++){	// Punktabfrage sollte jetzt passen. Fall zu untersuchen: 0 !4 !8 und dann gegen die ecke laufen...
-		//std::cout << cp[i];
 		if( ((cp[0] && cp[4]) || (cp[1] && cp[5])) && (!cp[8] || !cp[9]) ){ // Bei Normaler Auslastung
 			blockUp = true;
 		}
@@ -135,11 +133,37 @@ void Player::Update(float ElapsedTime){
 			std::cout << "KOLLISION ÜBERALL" << std::endl;	// teleport an sicheren ort
 		}
 	}
-    
+            
 	bool walking = false;
+    if( sf::Joystick::isConnected(controller) ){    // analoge axen des controllers nur nutzen, falls auch einer angeschlossen ist
+        if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp ){
+            y += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
+            blockDown = false;
+            sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+            walking = true;
+        }
+        if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE) && !blockDown ){
+            y += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
+            blockUp = false;
+            sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
+            walking = true;
+        }
+        if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE) && !blockLeft ){
+            x += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
+            blockRight = false;
+            sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+            walking = true;
+        }
+        if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE) && !blockRight ){
+            x += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
+            blockLeft = false;
+            sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+            walking = true;
+        }
+    }                       // hier nochmal die tastenabfragen. siehe menu.cpp ganz unten für tastenbelegung
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
          sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
-         sf::Joystick::isButtonPressed(0,11) )
+         sf::Joystick::isButtonPressed(controller,11) )
        && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
        && !blockUp ){
 		y -= (Speed*ElapsedTime);
@@ -149,7 +173,7 @@ void Player::Update(float ElapsedTime){
 	}    
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
          sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
-         sf::Joystick::isButtonPressed(0,12))
+         sf::Joystick::isButtonPressed(controller,12))
        && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
        && !blockDown ){
 		y += (Speed*ElapsedTime);
@@ -159,7 +183,7 @@ void Player::Update(float ElapsedTime){
 	}
 	if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
           sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
-          sf::Joystick::isButtonPressed(0,13))
+          sf::Joystick::isButtonPressed(controller,13))
         && !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         && !blockLeft ){
 		x -= (Speed*ElapsedTime);
@@ -169,7 +193,7 @@ void Player::Update(float ElapsedTime){
 	}
 	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
          sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
-         sf::Joystick::isButtonPressed(0,14))
+         sf::Joystick::isButtonPressed(controller,14))
        && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
        && !blockRight ){
 		x += Speed*ElapsedTime;
@@ -178,14 +202,16 @@ void Player::Update(float ElapsedTime){
 		walking = true;
 	}
 
-	if( walking ){
+	if( walking ){      // nur animieren wenn spieler läuft
 		if( (Animation/(int)((1/Speed)*ElapsedTime*ANIMATIONSPEED)) >= 4) Animation = 0;
 		Animation++;
 	}
 	else {
-		sprite.setTextureRect(sf::IntRect(0,sprite.getTextureRect().top,TILESIZE,TILESIZE*2));
+		sprite.setTextureRect(sf::IntRect(0,sprite.getTextureRect().top,TILESIZE,TILESIZE*2));  // spieler "steht", wenn er sich nicht bewegt.
+        this->playerHeal(ElapsedTime*((float)this->pHealthMax/100)*IDLEHEAL);     // Heilt den Player wenn er sich nicht bewegt.
 	}
-
+    
+    // falls das spiel lagt, hier korrekturen für die kollisionsabfrage.
 	if( blockUp ){
 		if( (TILESIZE-((int)y-(((int)y/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
 			y= (float)(((int)y/TILESIZE)*TILESIZE+TILESIZE-1);

@@ -27,7 +27,9 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	//std::ostringstream FileName;
 	//FileName << PATH"include/map/map" << LevelId << ".txt";   Funktioniert NUR in Visual Studio! Nicht standard C++
     char* FileName;
-    FileName = new char[sizeof(PATH) +25];
+    if( !(FileName = new char[sizeof(PATH) +25]) ){
+        throw "Error: Could not allocate space for 'FileName'";
+    }
 	sprintf(FileName,PATH"include/map/map%d.txt",LevelId);
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
@@ -35,14 +37,22 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	if( openfile.is_open() ){
 		openfile >> MapSizeX >> MapSizeY;
 
-		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.
+		if(!(TileMap = new TilePart*[MapSizeX])){
+            throw "Error: Could not allocate space for 'TilePart*'";
+        }                                           // Map Speicher Dynamisch reservieren.
 		for ( int i = 0 ; i < MapSizeX ; i++ ){		// Es ist nicht gew‰hrleistet ob der Speicher an einem St¸ck hintereinander ist.
-			TileMap[i] = new TilePart[MapSizeY];
+			if(!(TileMap[i] = new TilePart[MapSizeY])){
+                throw "Error: Could not allocate space for 'TilePart'";
+            }
 		}
 
-		CollisionMap = new sf::IntRect**[MapSizeX];
+		if(!(CollisionMap = new sf::IntRect**[MapSizeX])){
+            throw "Error: Could not allocate space for 'IntRect**'";
+        }
 		for ( int i = 0 ; i < MapSizeX ; i++ ){
-			CollisionMap[i] = new sf::IntRect*[MapSizeY];
+			if(!(CollisionMap[i] = new sf::IntRect*[MapSizeY])){
+                throw "Error: Could not allocate space for 'IntRect*'";
+            }
 		}
 
 
@@ -50,10 +60,12 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 			openfile >> TileType;
 			sf::IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
-			subRect.top=TileType/10*TILESIZE;
-			subRect.left=TileType%10*TILESIZE;
+			subRect.top=TileType/10*TILESIZE;   // zeile
+			subRect.left=TileType%10*TILESIZE;  // spalte
 			
-			TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect);
+			if(!(TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect))){
+                throw "Error: Could not allocate space for 'Sprite'";
+            }
 			switch( TileType ){
 			case 0:
 			case 1:
@@ -69,7 +81,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 			case 12:
 			case 13:
 			case 14:
-			case 15:
+			case 15:        // alle blöcke OHNE kollision!
 			case 16:
 			case 17:
 			case 19:
@@ -82,10 +94,12 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 			case 28:
 			case 29:
 			case 30:
-				CollisionMap[LoadCounterX][LoadCounterY]=NULL;
+				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  // keine kollision
 					break;
-			default:
-				CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
+			default:        // defaultwert: alle anderen blöcke kriegen eine kollision!
+                    if(!(CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE))){
+                        throw "Error: Could not allocate space for 'IntRect'";
+                    }
 				break;
 
 			}
@@ -122,7 +136,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	int CamX;
 	int CamY;
 	
-	sf::Texture ifaceImage;
+	sf::Texture ifaceImage;         // lade interface entsprechend des gewählten heldens.
 	if( P1.getGender() == 'F' ){
 		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
 			throw "Error: include/interface/interface-female.png not found.";
@@ -138,18 +152,18 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	iface.setPosition(WIDTH/2,HEIGHT);
 
 	sf::RectangleShape HPBar;
-	HPBar.setFillColor(sf::Color(0x99,0x33,0x33));
+	HPBar.setFillColor(sf::Color(0x99,0x33,0x33));  // farbe des hp balkens
 	HPBar.setPosition(WIDTH/2-55,HEIGHT-61);
 	HPBar.setSize(sf::Vector2f(180.f,28.f));
 
 	sf::RectangleShape EXPBar;
-	EXPBar.setFillColor(sf::Color(0x00,0xCC,0x33));
+	EXPBar.setFillColor(sf::Color(0x00,0xCC,0x33)); // farbe des exp balkens
 	EXPBar.setPosition(WIDTH/2-55,HEIGHT-30);
 	EXPBar.setSize(sf::Vector2f(180.f,28.f));
 
 	Schrift DisplayHPText(WIDTH/2-53,HEIGHT-58,"HP",18,0);
 	Schrift DisplayEXPText(WIDTH/2-53,HEIGHT-27,"EXP",18,0);
-	Schrift DisplayHP(WIDTH/2+122,HEIGHT-58,"Error",18,0);
+	Schrift DisplayHP(WIDTH/2+122,HEIGHT-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
 	Schrift DisplayEXP(WIDTH/2+123,HEIGHT-27,"Error",18,0);
 	Schrift DisplayLevel(WIDTH/2-128,HEIGHT-76,"Err",18,0);
 
@@ -157,7 +171,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 	Schrift DisplayKoord(0,20,"X: Error Y: Error",20);
 	Schrift DisplaySpeed(0,40,"Speed: Error",20);
 
-	while(true)
+	while( 1+3+3==7 )
 	{
 		ElapsedTime = (float)clock.restart().asMilliseconds();
 
@@ -224,39 +238,43 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		sf::Event levelLoop;
 
 		while(renderWindow.pollEvent(levelLoop)){
-			if(levelLoop.type == sf::Event::KeyPressed){
-				if(levelLoop.key.code == sf::Keyboard::Escape){
+			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
+				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
 					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId);
 					if(quitGame)
 						return;
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
-					if(Screen.saveToFile("screenshots\\screenshot-"__DATE__"-.png")){
+					if(Screen.saveToFile("screenshots/screenshot-"__DATE__"-.png")){
 						#ifdef DEBUGINFO
 							std::cout << " Screenshot gespeichert.. " << std::endl;	
 						#endif
 					}
 				}
-				else if(levelLoop.key.code == sf::Keyboard::E){
-					// player speed up
-					P1.increaseSpeed(0.1f);
-				}
-				else if(levelLoop.key.code == sf::Keyboard::Q){
-					// player speed down
-					P1.decreaseSpeed(0.1f);
-				}
-			}else if(levelLoop.type == sf::Event::LostFocus){
+                #ifdef DEBUGINFO
+				else if(levelLoop.key.code == sf::Keyboard::E){         // ein paar debug keys
+					P1.increaseSpeed(0.1f);                             // E = schneller laufen
+				}                                                       // Q = langsamer laufen
+				else if(levelLoop.key.code == sf::Keyboard::Q){         // 1 = 10 erfahrung kriegen
+					P1.decreaseSpeed(0.1f);                             // 2 = 10 level 10 schaden kriegen
+				}                                                       // ...
+                else if(levelLoop.key.code == sf::Keyboard::Num1){
+                    P1.playerExp(10, P1.getLvl());
+                }
+                else if(levelLoop.key.code == sf::Keyboard::Num2){
+                    P1.playerDamage(10.f, 10);
+                }
+                #endif
+			}
+            else if(levelLoop.type == sf::Event::LostFocus){
 				#ifdef DEBUGINFO
 					std::cout << " Outside the window!.. " << std::endl;	
 				#endif
 					pause(renderWindow,viewCamera,levelLoop,P1,LevelId);
-			}else if(levelLoop.type == sf::Event::Closed){
+			}
+            else if(levelLoop.type == sf::Event::Closed){
 				return;
-			}else if(levelLoop.type== sf::Event::JoystickButtonPressed){
-				#ifdef DEBUGINFO
-					std::cout << " Controller pressed.. " << std::endl;	
-				#endif
 			}
 		}
 
@@ -264,6 +282,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		
 		renderWindow.draw(iface);
 
+        // balken für hp und exp werden hier angepasst.
 		HPBar.setSize(sf::Vector2f((float)P1.getHealth()/(float)P1.getHealthMax()*180.f,28.f));
 		EXPBar.setSize(sf::Vector2f((float)P1.getExp()/(float)P1.getExpMax()*180.f,28.f));
 
@@ -289,15 +308,15 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		PlayerLvlText << std::fixed << P1.getLvl();
 		DisplayLevel.Update(PlayerLvlText.str());
 
-		DisplayHPText.Render(renderWindow);
-		DisplayEXPText.Render(renderWindow);
-		DisplayHP.Render(renderWindow);
-		DisplayEXP.Render(renderWindow);
-		DisplayLevel.Render(renderWindow);
+		DisplayHPText.Render(renderWindow);     // text "HP" auf dem balken
+		DisplayEXPText.Render(renderWindow);    // text "EXP" auf dem balken
+		DisplayHP.Render(renderWindow);         // hp Anzeige
+		DisplayEXP.Render(renderWindow);        // exp Anzeige
+		DisplayLevel.Render(renderWindow);      // level Anzeige
 
-		DisplayFPS.Render(renderWindow);	// FPS Anzeige
-		DisplayKoord.Render(renderWindow);	// Spielerkoordinaten Anzeige
-		DisplaySpeed.Render(renderWindow);	// Geschwindigkeit des Players
+		DisplayFPS.Render(renderWindow);        // FPS Anzeige
+		DisplayKoord.Render(renderWindow);      // Spielerkoordinaten Anzeige
+		DisplaySpeed.Render(renderWindow);      // Geschwindigkeit des Players
 
 		renderWindow.display();
 	}
@@ -391,9 +410,9 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 		std::cout << "Paused.." << std::endl;	
 	#endif
 
-	int CenterX = (int)viewCamera.getCenter().x;
-	int CenterY = (int)viewCamera.getCenter().y;
-
+	int CenterX = (int)viewCamera.getCenter().x;    // pausemenü muss hier gegengerechnet werden,
+	int CenterY = (int)viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
+                                                    // nicht übereinstimmen!
 	// Hintergrund Box
 	sf::RectangleShape Background(sf::Vector2f(WIDTH, HEIGHT));
     Background.setFillColor(sf::Color(0, 0, 0,100));
@@ -405,7 +424,7 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 
 	// Logo im Pausemen¸
 	sf::Texture LogoImage;
-	if(!LogoImage.loadFromFile(PATH"include/interface/splashscreen.png")){
+	if(!LogoImage.loadFromFile(PATH"include/interface/splashscreen.png")){  // selbes bild wie im intro
 		throw "Error: include/interface/splashscreen.png not found.";
 	}
 	sf::Sprite Logo(LogoImage);
@@ -428,13 +447,13 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 	renderWindow.display();
 	
 	while(renderWindow.waitEvent(levelLoop)){
-		if(levelLoop.type == sf::Event::KeyPressed){
-			if (levelLoop.key.code == sf::Keyboard::Escape){
+		if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed ){
+			if (levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
 				#ifdef DEBUGINFO
 					std::cout << "Continue Playing.." << std::endl;
 				#endif
 					return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
-			}else if(levelLoop.key.code == sf::Keyboard::Space){
+			}else if(levelLoop.key.code == sf::Keyboard::Space || levelLoop.joystickButton.button == 9 ){
 				#ifdef DEBUGINFO
 					std::cout << "Quit Game!" << std::endl;
 				#endif

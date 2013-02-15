@@ -3,13 +3,13 @@
 
 #define DEBUGINFO 
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 1024
+#define HEIGHT 768
 
 #define FPS 60U
 
 // Used in intro and menues
-#define VERSION "0.26 Alpha"
+#define VERSION "0.29 Alpha"
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
@@ -31,7 +31,9 @@
 // used in player.cpp
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
-#define ANIMATIONSPEED 2.8f	// Mehr = langsamere Animation
+#define ANIMATIONSPEED 2.8f         // Mehr = langsamere Animation
+#define CONTROLLERTOLERANCE 22.f    // Analogstick nie komplett in der 0 possition
+#define IDLEHEAL 0.0008f            // Um welchen faktor der Spieler geheilt wird, wenn er sich nicht bewegt.
 
 #define BASEHEALTH 100
 #define HEALTHPERLEVEL 10

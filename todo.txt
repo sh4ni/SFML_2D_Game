@@ -1,5 +1,5 @@
 ToDo
-- get/set methoden für hp (schaden); exp (levelup usw.)
+- gameover screen
 - passive Monster, aggresive Monster / Freundliche NPCs
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
@@ -8,9 +8,10 @@ ToDo
 - Dialogboxen im Spiel bei Unterhaltungen
 
 Improvements
+- laufanimation bei nicht ganz durchgedrückten gamepad
+- beim md5 hash noch einen weiteren wert mit prüfen
+- exp formel nochmal anschauen
 + laufanimation zu langsam bei schlechten fps // sollte gefixt sein, bitte testen
-- Startmenü ändern mit bewegten hintergrund (kimiko)
 
 Nice to Have
 - Spielernamen selbst wählen
-- XBOX Controller Support

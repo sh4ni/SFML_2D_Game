@@ -15,7 +15,8 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
 
 	// Men¸ und Hintergrund
 	spriteMenu.setTexture(imageMenu);
-	spriteBackground.setTexture(imageBackground);
+	spriteBackground.setTexture(imageBackground);       // ich brauch das bild 2 mal, da es sich beim durchscrollen
+	spriteBackgroundRepeat.setTexture(imageBackground); // wiederholen muss!
 
 	spriteMenu.setOrigin((float)imageMenu.getSize().x/2.f,(float)imageMenu.getSize().y/2.f);
 	spriteMenu.setPosition((float)WIDTH/2.f,(float)HEIGHT/2.f);
@@ -27,22 +28,33 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
 
     sf::Texture imageGenderButton;
     sf::Texture imageButton;
-    if(!imageButton.loadFromFile(PATH"include/interface/button.png")){
+    if(!imageButton.loadFromFile(PATH"include/interface/button.png")){  // standard button brauch ich in jedem menü
         throw "Error: include/interface/button.png not found.";
     }
-    if( gendermenu ){
-        if(!imageGenderButton.loadFromFile(PATH"include/interface/genderbutton.png")){
+    if( gendermenu ){           // ab hier das heldenauswahlmenü
+        if(!imageGenderButton.loadFromFile(PATH"include/interface/genderbutton.png")){  // genderbutton nur im gendermenp
             throw "Error: include/interface/genderbutton.png not found.";
         }
-        buttons = 3;    // Wieviel buttons im geschlechtsauswahlscreen? achtung! die ersten 2 buttons sind speziell!
-        button = new MenuItem[buttons];
-        
+        buttons = 3;                        // Wieviel buttons im geschlechtsauswahlscreen?
+        if(!(button = new MenuItem[buttons])){
+            throw "Error: Could not allocate space for 'MenuItem'"; // achtung! die ersten 2 buttons sind speziell!
+        }                                                           // also auf sone ganz spezielle art und weise...
+                                                                    // naja... sie sind eben ganz besonders!
         button[0].text.setString("Select your hero");
-        button[0].text.setPosition(WIDTH/2,HEIGHT/2-120);
-        button[0].text.setFont(font);
+        button[0].text.setPosition(WIDTH/2,HEIGHT/2-120);   // na wenn meine ersten beiden buttons eh keinen text haben...
+        button[0].text.setFont(font);                       // dann kann ich ihre texte ja für was anderes nehmen ^^
         button[0].text.setCharacterSize(40U);
         button[0].text.setColor(sf::Color(0U,0U,0U));
         button[0].text.setOrigin(button[0].text.getGlobalBounds().width/2+1,0);
+        
+        if(!newgame){               // warnung nur anzeigen, wenns einen alten spielstand zum überschreiben gibt.
+            button[1].text.setString("Warning: This will overwrite your old savegame!");
+            button[1].text.setPosition(WIDTH/2,HEIGHT/2+130);
+            button[1].text.setFont(font);
+            button[1].text.setCharacterSize(20U);
+            button[1].text.setColor(sf::Color(200U,0U,0U));
+            button[1].text.setOrigin(button[1].text.getGlobalBounds().width/2+1,0);
+        }
         
         for( int i=0; i<buttons; i++){
             if( i<2 ){
@@ -73,7 +85,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
                     button[i].image.setTextureRect(sf::IntRect(0,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
                     button[i].action = Male;
                     break;
-                case 2:
+                case 2:         // ab hier können mehr standard buttons eingefügt werden!
                     button[i].text.setString("Back");
                     button[i].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
                     button[i].action = Menue;
@@ -83,9 +95,11 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
             _menuItems.push_back(button[i]);
         }
     }
-    else {
-        buttons = 4;	// Wieviele Buttons brauchen wir? Ja richtig! 5 verdammt noch mal!
-        button = new MenuItem[buttons];
+    else {              // ab hier das hauptmenü!
+        buttons = 4;	// Wieviele Buttons brauchen wir? Ja richtig! 4 verdammt noch mal!
+        if(!(button = new MenuItem[buttons])){
+            throw "Error: Could not allocate space for 'MenuItem'";
+        }
         
         for( int i=0; i<buttons; i++){
             button[i].rect.left = WIDTH/2-BUTTONWIDTH/2;
@@ -118,7 +132,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
                     button[i].text.setString("Options");
                     break;
                 case 3:
-                    button[i].text.setString("Exit");
+                    button[i].text.setString("Exit");       // neue buttons können ohne probleme eingefügt werden!
                     button[i].action = Exit;
                     button[i].active = true;
                     break;
@@ -131,6 +145,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
         }        
     }
 
+    // version des spiels im menü
 	Version.setPosition((float)WIDTH-5.f,(float)HEIGHT-5.f);
 	Version.setString(VERSION);
 	Version.setCharacterSize(16U);
@@ -143,8 +158,9 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
 	return GetMenuResponse(window,gendermenu);
 }
 
-void MainMenu::Update(sf::RenderWindow& window){
-	window.draw(spriteBackground);
+void MainMenu::Update(sf::RenderWindow& window){    // methode zum neu zeichnen des menüs,
+	window.draw(spriteBackground);                  // da mittlerweile der hintergrund animiert ist
+    window.draw(spriteBackgroundRepeat);            // und auch die buttons sich ändern
 	window.draw(spriteMenu);
 	for( int i=0; i<this->buttons; i++ ){
 		window.draw(button[i].image);
@@ -160,11 +176,11 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 
 	for ( it = _menuItems.begin(); it != _menuItems.end(); it++){
 		sf::IntRect menuItemRect = (*it).rect;
-		if( menuItemRect.contains(x,y) ){
-			return (*it).action;
+		if( menuItemRect.contains(x,y) ){   // wenn man einen button klickt...
+			return (*it).action;            // ...geb seine hinterlegte funktion zurück!
 		}
 	}
-	return Nothing;
+	return Nothing;     // für die, die keine buttons treffen und daneben klicken :>
 }
 
 /*MainMenu::MenuResult MainMenu::HandleKeyboard(int code){
@@ -173,19 +189,23 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 
 MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool gendermenu){
 	sf::Event menuEvent;
+    int animation = 0;      // laufvariable für das durchlaufende hintergrundbild
 	int selected = 0;
 	int *active;
-	active = new int[buttons];
+	if(!(active = new int[buttons])){
+        throw "Error: Could not allocate space for 'int'";
+    }
 	int activeButtons = 0;
-	for( int i=0; i<buttons; i++){
-		if( button[i].active ){
-			active[activeButtons++] = i;
+	for( int i=0; i<buttons; i++){          // array, das alle aktiven buttons beinhaltet,
+		if( button[i].active ){             // damit bei der tastatureingabe die inaktiven
+			active[activeButtons++] = i;    // buttons übersprungen werden.
 		}
 	}
 	while(true){
+        Update(window);
 		while(window.pollEvent(menuEvent)){
             if( gendermenu ){
-                switch(active[selected]){
+                switch(active[selected]){   // aktiver button wird anders dargestellt.
                     case 0:
                         button[active[selected]].image.setTextureRect(sf::IntRect(GENDERBUTTON,0,GENDERBUTTON,GENDERBUTTON));
                         break;
@@ -200,29 +220,42 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
             else {
                 button[active[selected]].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT,BUTTONWIDTH,BUTTONHEIGHT));                
             }
-			Update(window);
-			if(menuEvent.type == sf::Event::MouseButtonPressed){
+			if(menuEvent.type == sf::Event::MouseButtonPressed){    // menü mit maus steuern
 				#ifdef DEBUGINFO
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
 				return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
 			}
+/*           _                            _
+        _.-'`4`-._                    _,-'5`'-._
+     ,-'          `-.,____________,.-'    .-.   `-.
+    /   .---.             ___            ( 3 )     \
+   /  ,' ,-. `.     __   / 10\   __   .-. `-` .-.   \
+  /   | | 6 | |    (_8) | / \ | (9_) ( 2 )   ( 1 )   \
+ /    `. `-' ,'    __    \___/        `-` ,-. `-`     \
+ |      `---`   ,-`  `-.       .---.     ( 0 )        |
+ |             / -'11`- \    ,'  .  `.    `-`         |     Xbox 360 Controller Tastenbelegung
+ |            | 13    14 |   | - 7 - |                |
+ !             \ -.12,- /    `.  '  ,'                |
+ |              `-.__,-'       `---`                  |
+ |                  ________________                  |
+ |             _,-'`                ``-._             |
+ |          ,-'                          `-.          |
+  \       ,'                                `.       /
+   `.__,-'                                    `-.__*/
 			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed ){
-                if(menuEvent.key.code == sf::Keyboard::Return || (menuEvent.type == sf::Event::JoystickButtonPressed && menuEvent.joystickButton.button == 0) ){
+                if(menuEvent.key.code == sf::Keyboard::Return || (menuEvent.type == sf::Event::JoystickButtonPressed && menuEvent.joystickButton.button == 0) || menuEvent.joystickButton.button == 8 ){
 					return button[active[selected]].action;
 				}
-                else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == 1 ){
+                else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == 1 || menuEvent.joystickButton.button == 9 ){
                     if(gendermenu){
                         return Menue;
-                    }
-                    else {
-                        return Exit;
                     }
                 }
                 else if(menuEvent.key.code == sf::Keyboard::Up || menuEvent.key.code == sf::Keyboard::Left || menuEvent.joystickButton.button == 11 || menuEvent.joystickButton.button == 13 ){
 					if( selected > 0 ){
                         if( gendermenu ){
-                            switch(active[selected]){
+                            switch(active[selected]){   // damit die alten buttons wieder normal dargestellt werden.
                                 case 0:
                                     button[active[selected]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));
                                     break;
@@ -266,5 +299,9 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 				return Exit;
 			}
 		}
+        spriteBackground.setPosition(-animation,0);         // hintergrundbild läuft durch
+        spriteBackgroundRepeat.setPosition(-animation+spriteBackground.getGlobalBounds().width,0);
+        if( animation > spriteBackground.getGlobalBounds().width ) animation = 0;   // zurücksetzen wenn bildbreite erreicht wurde.
+        animation++;            // LAUF FORREST! LAUF!
 	}
 }

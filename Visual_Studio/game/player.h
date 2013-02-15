@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <math.h>
 #include "defines.h"
 #include "savegame.h"
 
@@ -74,7 +75,39 @@ public:
 		this->MapSize.x = xMax;
 		this->MapSize.y = yMax;
 	}
+    void playerDamage( float damage, int level ){
+        int levelDif = level-this->pLvl;
+        damage += (float)(levelDif*(level/10));
+        if ( damage <= 0.f ){
+            damage = 1.f;
+        }
+        this->pHealth -= damage;
+        if( this->pHealth < 0 ){
+            this->pHealth = 0;
+        }
+    }
+    void playerHeal( float heal ){
+        this->pHealth += heal;
+        if( this->pHealth > (float)this->pHealthMax ){
+            this->pHealth = (float)this->pHealthMax;
+        }
+    }
+    void playerExp( int exp, int level ){
+        int levelDif = level-this->pLvl;
+        exp += levelDif*(level/2);
+        this->pExp += exp;
+        if( this->pExp > this->pExpMax ){       // Hier levelup!
+            #ifdef DEBUGINFO
+                std::cout << "LEVEL UP!" << std::endl;
+            #endif
+            this->pExp -= this->pExpMax;
+            this->pLvl++;
+            this->pHealthMax = BASEHEALTH-HEALTHPERLEVEL+this->pLvl*HEALTHPERLEVEL;
+            this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->pLvl-1));
+        }
+    }
 private:
+    int controller = 0;
 	float Speed;
 	sf::Texture texture;
 	sf::Sprite sprite;
@@ -83,8 +116,7 @@ private:
 	float x;
 	float y;
 	unsigned char Animation;
-
-	int pHealth;
+	float pHealth;
 	int pHealthMax;
 	int pLvl;
 	int pExp;

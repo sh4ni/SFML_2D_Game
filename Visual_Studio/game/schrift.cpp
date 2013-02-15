@@ -4,6 +4,8 @@
 bool Schrift::FontLoaded = false;
 sf::Font Schrift::font;
 
+// statische variablen, somit wird der font nur einmal geladen, egal wie oft die Schrift klasse
+// benutzt wird.
 
 Schrift::Schrift(int X, int Y, sf::String myText, int size, sf::Uint8 color){
 	

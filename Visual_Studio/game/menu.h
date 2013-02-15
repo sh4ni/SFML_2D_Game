@@ -28,6 +28,7 @@ private:
 	MenuItem* button;
 	sf::Sprite spriteMenu;
 	sf::Sprite spriteBackground;
+	sf::Sprite spriteBackgroundRepeat;
 	sf::Text Version;
 };
 

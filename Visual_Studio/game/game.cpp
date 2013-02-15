@@ -234,7 +234,7 @@ void Game::ShowMenu(bool newgame){
         case MainMenu::NewGameGender:
             _gameState = ShowingGenderMenu;
         default:
-            break;
+            break;  // was soll passieren wenn man daneben klickt? - RICHTIG! NICHTS VERDAMMT!
 	}
 }
 
@@ -254,8 +254,9 @@ const char Game::ShowMenuGender(){
             _gameState = ShowingMenu;
             break;
         default:
-            break;
+            break;  // und hier auch nix...
     }
+    return 'F';
 }
 
 // static member variables need to be instantiated outside of the class
