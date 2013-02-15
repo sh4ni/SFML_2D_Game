@@ -118,21 +118,25 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 		#ifdef DEBUGINFO
 			std::cout << "Map successfully loaded." << std::endl;
 		#endif
-		std::ifstream closefile(FileName);
+		std::ifstream closefile(FileName.c_str());
 	}
 	else {
-		throw "Error: Mapfile not found.";
+		throw "Error: " + FileName + " not found.";
 	}
 
 	FileName = PATH"include/texture/world/" + mapTheme + ".png";
-	if( !LevelTexture.loadFromFile(FileName.c_str()) ){		// Lade Texturedatei
-		throw "Error: include/texture/world/" + mapTheme + " not loaded!";
+
+	if( !LevelTexture.loadFromFile(FileName.c_str())){		// Lade Texturedatei
+		throw "Error: " + FileName + " not found.";
 	}
 	
 	sf::Clock clock;
 
 	Player P1(CollisionMap,currentSavegame);
 	P1.setMapSize( MapSizeX, MapSizeY );
+
+	//Player P2(CollisionMap,currentSavegame,1);        // 2 Spieler Koop Test
+	//P2.setMapSize( MapSizeX, MapSizeY );              // Funktioniert ohne probleme!
 
 	float LastTime = 1.f;
 	float ElapsedTime;
@@ -240,6 +244,9 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 		P1.Render(renderWindow);
 		P1.Update(ElapsedTime);
 		
+		//P2.Render(renderWindow);      // 2 Spieler test... siehe weiter oben
+		//P2.Update(ElapsedTime);
+
 		sf::Event levelLoop;
 
 		while(renderWindow.pollEvent(levelLoop)){

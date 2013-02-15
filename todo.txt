@@ -11,6 +11,7 @@ Improvements
 - laufanimation bei nicht ganz durchgedrückten gamepad
 - beim md5 hash noch einen weiteren wert mit prüfen
 - exp formel nochmal anschauen
+- abstürze unter osx. // stürzt es unter windows auch hin und wieder ab?
 + laufanimation zu langsam bei schlechten fps // sollte gefixt sein, bitte testen
 
 Nice to Have
