@@ -1,113 +1,26 @@
 #include "game.h"
 
 
-void defaultSavegame(Savegame& mySavegame, const char pGender = 'M'){
-	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
-	// wird eine neuer erstellt mit vordefinierten defaultwerte
-	
-	std::cout << "No savegame detected! Default savegame will be loaded..\a\n";
-	
-	std::ofstream defaultsavegame;
-	defaultsavegame.open(PATH SAVEGAME, std::ios::trunc & std::ios::binary);
-	if(defaultsavegame.is_open()){
-
-		// Health
-		defaultsavegame << DEFAULT_HEALTH << std::endl;
-		mySavegame.pHealth = DEFAULT_HEALTH;
-
-		// Level
-		defaultsavegame << DEFAULT_LVL << std::endl;
-		mySavegame.pLvl = DEFAULT_LVL;
-
-			// Exp
-		defaultsavegame << DEFAULT_EXP << std::endl;
-		mySavegame.pExp = DEFAULT_EXP;
-
-		std::string pName;
-		if(pGender == 'M')
-			pName = DEFAULT_M_NAME;
-		else
-			pName = DEFAULT_F_NAME;
-
-		// Gender
-		defaultsavegame << pGender << std::endl;
-		mySavegame.pGender = pGender;
-
-		// Name
-		defaultsavegame << pName << std::endl;
-		mySavegame.pName = pName;
-
-		////////////////////////////////////////////////////
-
-		// Map
-		defaultsavegame << DEFAULT_LEVEL << std::endl;
-		mySavegame.mLevelId = DEFAULT_LEVEL;
-
-		// Pos X auf Map
-		defaultsavegame << DEFAULT_POSX << std::endl;
-		mySavegame.mPosX = DEFAULT_POSX;
-
-		// Pos Y auf Map
-		defaultsavegame << DEFAULT_POSY << std::endl;
-		mySavegame.mPosY = DEFAULT_POSY;
-
-		std::stringstream ss;
-		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
-		std::string checksum = md5(ss.str());
-		//std::string checksum = md5(ss.str()+mySavegame.mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
-
-		#ifdef DEBUGINFO
-			std::cout << "Savegame Checksum -> " << checksum << std::endl;
-		#endif
-
-		defaultsavegame << checksum;	
-		mySavegame.checksum = checksum;
-
-		defaultsavegame.close();
-	}
-}
 
 void Game::Init(void)
 {
 	// Do it!
 	Savegame mySavegame;
+	ConfigFile myConfigFile;
+	
+	
+	myConfigFile.loadConfigFile(myConfigFile);
 
-	std::ifstream loadgame;
-	loadgame.open(PATH SAVEGAME, std::ios::binary);
-	if(loadgame.is_open()){
-		std::cout << "Savegame detected! Loading..\n";
-		loadgame >> mySavegame.pHealth;
-		loadgame >> mySavegame.pLvl;
-		loadgame >> mySavegame.pExp;
-		loadgame >> mySavegame.pGender;
-		loadgame >> mySavegame.pName;
 
-		loadgame >> mySavegame.mLevelId;
-		loadgame >> mySavegame.mPosX;
-		loadgame >> mySavegame.mPosY;
-		
-		loadgame >> mySavegame.checksum;
-		
-		std::stringstream ss;
-		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
-		std::string s = md5(ss.str());
-		
-		if(mySavegame.checksum.compare(s) == 0 && CHECKSAVE == 1)
-			std::cout << "Savegame okay...!\n";
-		else
-			//defaultSavegame(mySavegame,'M',true);
-			Game::Start(mySavegame, true);
+	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
+	if(!system("mkdir screenshots"))
+		throw "Failed to create the screenshot folder!";
 
-		#ifdef DEBUGINFO
-			std::cout << "Savegame successfully loaded.." << std::endl;
-		#endif
-		loadgame.close();
-
-		Game::Start(mySavegame);	// Da ein Spielstand vorhanden ist Defaultmäßig der zweite Paramter false
-	}else{
-		defaultSavegame(mySavegame,false);
-	}
-	Game::Start(mySavegame, true);
+	if(mySavegame.loadSavegame(mySavegame))
+		Game::Start(mySavegame);
+	else
+		Game::Start(mySavegame,true);
+	
 }
 
 void Game::Start(Savegame& currentSavegame, bool newgame)
@@ -179,7 +92,7 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
             gender = ShowMenuGender();
-			defaultSavegame(currentSavegame,gender);
+			currentSavegame.saveSavegame(currentSavegame,gender);
 		break;
 		case Game::Playing:
 			// Hier wird die Map geladen

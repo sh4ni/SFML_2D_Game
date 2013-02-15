@@ -8,7 +8,7 @@
 #include "player.h"
 #include "savegame.h"
 #include <vector>  
-#include <direct.h>	// to create a folder with mkdir
+
 
 
 class TilePart{
@@ -26,10 +26,10 @@ public:
 	static sf::RenderWindow& GetWindow();
 	const static sf::Event& GetInput();
 private:
-	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId);
+	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, Savegame& currentSavegame);
 	static void resume();
-	static bool save(Player& P1, std::string level);
-	static bool load(Player& P1);
+	static void save(Player& P1, std::string level, Savegame& currentSavegame);
+	static void load(Player& P1, Savegame& currentSavegame);
 	std::string mapTheme;
 };
 

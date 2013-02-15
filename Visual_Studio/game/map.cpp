@@ -243,7 +243,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 
 		// Rendern des Spielers
 		P1.Render(renderWindow);
-		P1.Update(ElapsedTime);
+		P1.Update(ElapsedTime,currentSavegame);
 		
 		//P2.Render(renderWindow);      // 2 Spieler test... siehe weiter oben
 		//P2.Update(ElapsedTime);
@@ -254,13 +254,12 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
 					P1.setBlockControl(true);
-					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId);
+					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId,currentSavegame);
 					if(quitGame)
 						return;
 					P1.setBlockControl(false);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
-					mkdir("screenshots");
 					sf::Image Screen = renderWindow.capture();
 					if(Screen.saveToFile("screenshots/screenshot-"__DATE__"-.png")){
 						#ifdef DEBUGINFO
@@ -294,7 +293,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 					std::cout << " Outside the window!.. " << std::endl;	
 				#endif
 					P1.setBlockControl(true);
-					pause(renderWindow,viewCamera,levelLoop,P1,LevelId);
+					pause(renderWindow,viewCamera,levelLoop,P1,LevelId,currentSavegame);
 			}
             else if(levelLoop.type == sf::Event::Closed){
 				return;
@@ -347,8 +346,11 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 	}
 }
 
-bool Map::load(Player& P1)
+void Map::load(Player& P1, Savegame& currentSavegame)
 {
+	currentSavegame.loadSavegame(currentSavegame);
+	P1.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
+	/*
 	std::cout << "loading savegame..";
 	std::ifstream loadgame;
 	loadgame.open(SAVEGAME, std::ios::binary);
@@ -379,12 +381,25 @@ bool Map::load(Player& P1)
 		std::cout << "An error occurred during loading the saved game.." << std::endl;
 		return false;
 	}
-
+	
 	return true;
+	*/
 }
 
-bool Map::save(Player& P1, std::string LevelId)
+
+void Map::save(Player& P1, std::string LevelId, Savegame& currentSavegame)
 {
+	currentSavegame.pHealth = P1.getHealth();
+	currentSavegame.pLvl = P1.getLvl();
+	currentSavegame.pExp = P1.getExp();
+	currentSavegame.pGender = P1.getGender();
+	currentSavegame.pName = P1.getName();
+	currentSavegame.mLevelId = LevelId;
+	currentSavegame.mPosX = P1.getPosX();
+	currentSavegame.mPosY = P1.getPosY();
+
+	currentSavegame.saveSavegame(currentSavegame,P1.getGender(),false);
+/*
 	std::cout << "saving..\n";
 	std::ofstream savegame;
 	savegame.open(SAVEGAME, std::ios::trunc | std::ios::binary);
@@ -423,11 +438,11 @@ bool Map::save(Player& P1, std::string LevelId)
 	}
 	
 	return true;
+	*/
 }
 
-bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId){
+bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, Savegame& currentSavegame){
 	
-	//Map::load(P1);
 	#ifdef DEBUGINFO
 		std::cout << "Paused.." << std::endl;	
 	#endif
@@ -481,9 +496,11 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 				#endif
 					return true; // gebe true zurueck damit das spiel anschließend beendet wird
 			}else if(levelLoop.key.code == sf::Keyboard::F6){
-				Map::save(P1, LevelId);
+				Map::save(P1, LevelId, currentSavegame);
 			}else if(levelLoop.key.code == sf::Keyboard::F9){
-				Map::load(P1);
+				Map::load(P1,currentSavegame);
+			}else if(levelLoop.type == sf::Event::Closed){
+				return true;
 			}
 		}
 	}

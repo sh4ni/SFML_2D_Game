@@ -49,10 +49,19 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame, int contr
 	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
 }
 
-void Player::Update(float ElapsedTime){
+void Player::Update(float ElapsedTime, Savegame& currentSavegame){
 
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;
+
+	//currentSavegame.pHealth = this->pHealth;
+	//currentSavegame.pLvl = this->pLvl;
+	//currentSavegame.pExp = this->pExp;
+	//currentSavegame.pGender = this->pGender;
+	//currentSavegame.pName = this->pName;
+	////currentSavegame.mLevelId = this->
+	//currentSavegame.mPosX = this->x;
+	//currentSavegame.mPosY = this->y;
 	
 	int tx = ((int)x/TILESIZE)-1;
 	int ty = ((int)y/TILESIZE)-1;

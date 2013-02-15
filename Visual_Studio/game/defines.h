@@ -41,6 +41,11 @@
 #define BASEEXP 50
 #define EXPMULTIPLICATOR 1.15f
 
+#define SETTINGS "settings.txt"
+#define DEFAULT_WIDTH 1024
+#define DEFAULT_HEIGHT 768
+#define DEFAULT_SCREENSHOTFOLDER "screenshots"
+
 #define SAVEGAME "save.txt"
 #define CHECKSAVE 1
 #define CHECKSUM 1337

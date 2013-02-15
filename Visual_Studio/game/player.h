@@ -11,7 +11,7 @@
 
 class Player{
 public:
-	void Update		(float ElapsedTime);
+	void Update		(float ElapsedTime, Savegame& currentSavegame);
 	void Render		(sf::RenderWindow &Window){
 		Window.draw(sprite);
 	}
