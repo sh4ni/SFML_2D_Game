@@ -4,7 +4,10 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
 	
-	std::cout << "No savegame detected! Default savegame will be loaded..\a\n";
+	if(default)
+		std::cout << "No savegame detected! Default savegame will be loaded..\a\n";
+	else
+		std::cout << "Savegame will be loaded!" << std::endl;
 	
 	std::ofstream defaultsavegame;
 	defaultsavegame.open(PATH SAVEGAME, std::ios::trunc & std::ios::binary);
@@ -58,7 +61,7 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 			#ifdef DEBUGINFO
 				std::cout << "Savegame Checksum -> " << checksum << std::endl;
 			#endif
-
+				
 			defaultsavegame << checksum;	
 			mySavegame.checksum = checksum;
 			
@@ -103,23 +106,21 @@ bool Savegame::loadSavegame(Savegame& mySavegame){
 		std::stringstream ss;
 		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
 		std::string s = md5(ss.str());
-		
-		if(mySavegame.checksum.compare(s) == 0)
-			std::cout << "Savegame okay...!\n";
-		else
-			return false;
-
-		#ifdef DEBUGINFO
-			std::cout << "Savegame successfully loaded.." << std::endl;
-		#endif
-
 		loadgame.close();
+
+		if(mySavegame.checksum.compare(s) == 0){
+			std::cout << "Savegame okay...!\n";
+			return true;
+		}else{
+			std::cout << "Savegame corrupt...!\n";
+			saveSavegame(mySavegame);
+			return false;
+		}
 		
-		return true;
 	}else{
 		saveSavegame(mySavegame);
 	}
-	return false;
+	return true;
 }
 
 void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool default){
