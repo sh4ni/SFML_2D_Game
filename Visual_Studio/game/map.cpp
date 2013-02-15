@@ -243,7 +243,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 
 		// Rendern des Spielers
 		P1.Render(renderWindow);
-		P1.Update(ElapsedTime,currentSavegame);
+		P1.Update(ElapsedTime);
 		
 		//P2.Render(renderWindow);      // 2 Spieler test... siehe weiter oben
 		//P2.Update(ElapsedTime);
