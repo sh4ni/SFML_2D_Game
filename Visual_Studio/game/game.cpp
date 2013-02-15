@@ -114,7 +114,8 @@ void Game::Start(Savegame& currentSavegame, bool newgame)
 	if(_gameState != Uninitialized) return;
 	
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
-	_mainWindow.create(sf::VideoMode(WIDTH, HEIGHT), WINDOWTITLE, sf::Style::Titlebar);
+	sf::VideoMode bpp = sf::VideoMode::getDesktopMode();
+	_mainWindow.create(sf::VideoMode(WIDTH, HEIGHT, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Close);
 
 	// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
 	//_mainWindow.setMouseCursorVisible(false);
@@ -254,9 +255,10 @@ const char Game::ShowMenuGender(){
             _gameState = ShowingMenu;
             break;
         default:
+			return 'M';
             break;  // und hier auch nix...
     }
-    return 'F';
+    return 'M';	// hier wird er nie hin kommen..
 }
 
 // static member variables need to be instantiated outside of the class

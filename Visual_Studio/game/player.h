@@ -86,10 +86,10 @@ public:
             this->pHealth = 0;
         }
     }
-    void playerHeal( float heal ){
+    void playerHeal( int heal ){
         this->pHealth += heal;
-        if( this->pHealth > (float)this->pHealthMax ){
-            this->pHealth = (float)this->pHealthMax;
+        if( this->pHealth > this->pHealthMax ){
+            this->pHealth = this->pHealthMax;
         }
     }
     void playerExp( int exp, int level ){
@@ -107,7 +107,7 @@ public:
         }
     }
 private:
-    int controller = 0;
+    const static int controller = 0;
 	float Speed;
 	sf::Texture texture;
 	sf::Sprite sprite;
@@ -116,14 +116,13 @@ private:
 	float x;
 	float y;
 	unsigned char Animation;
-	float pHealth;
+	int pHealth;
 	int pHealthMax;
 	int pLvl;
 	int pExp;
 	int pExpMax;	// Exp needed Until Levelup
 	char pGender;	// M - Male | F - Female
 	std::string pName; 
-
 };
 
 #endif

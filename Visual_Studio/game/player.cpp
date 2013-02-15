@@ -208,7 +208,7 @@ void Player::Update(float ElapsedTime){
 	}
 	else {
 		sprite.setTextureRect(sf::IntRect(0,sprite.getTextureRect().top,TILESIZE,TILESIZE*2));  // spieler "steht", wenn er sich nicht bewegt.
-        this->playerHeal(ElapsedTime*((float)this->pHealthMax/100)*IDLEHEAL);     // Heilt den Player wenn er sich nicht bewegt.
+        this->playerHeal(ElapsedTime*(this->pHealthMax/100)*IDLEHEAL);     // Heilt den Player wenn er sich nicht bewegt.
 	}
     
     // falls das spiel lagt, hier korrekturen für die kollisionsabfrage.
