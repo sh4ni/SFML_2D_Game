@@ -161,8 +161,14 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
 }
 
 void MainMenu::Update(sf::RenderWindow& window){    // methode zum neu zeichnen des menüs,
-	window.draw(spriteBackground);                  // da mittlerweile der hintergrund animiert ist
-    window.draw(spriteBackgroundRepeat);            // und auch die buttons sich ändern
+
+    spriteBackground.setPosition(-animation,0);         // hintergrundbild läuft durch
+    spriteBackgroundRepeat.setPosition(-animation+spriteBackground.getGlobalBounds().width,0);
+    if( animation > spriteBackground.getGlobalBounds().width ) animation = 0;   // zurücksetzen wenn bildbreite erreicht wurde.
+    animation++;            // LAUF FORREST! LAUF!
+
+	window.draw(spriteBackgroundRepeat);            // da mittlerweile der hintergrund animiert ist
+    window.draw(spriteBackground);                  // und auch die buttons sich ändern
 	window.draw(spriteMenu);
 	for( int i=0; i<this->buttons; i++ ){
 		window.draw(button[i].image);
@@ -303,10 +309,6 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 				return Exit;
 			}
 		}
-        spriteBackground.setPosition(-animation,0);         // hintergrundbild läuft durch
-        spriteBackgroundRepeat.setPosition(-animation+spriteBackground.getGlobalBounds().width,0);
-        if( animation > spriteBackground.getGlobalBounds().width ) animation = 0;   // zurücksetzen wenn bildbreite erreicht wurde.
-        animation++;            // LAUF FORREST! LAUF!
 		Update(window);
 	}
 }
