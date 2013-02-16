@@ -9,7 +9,7 @@
 #define FPS 60U
 
 // Used in intro and menues
-#define VERSION "0.29 Alpha"
+#define VERSION "0.30 Alpha"
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
@@ -33,7 +33,7 @@
 #define COLLISIONTOLERANCE 4
 #define ANIMATIONSPEED 2.8f         // Mehr = langsamere Animation
 #define CONTROLLERTOLERANCE 22.f    // Analogstick nie komplett in der 0 possition
-#define IDLEHEAL 85					// Alle mach das am Schluss
+#define IDLEHEAL 85					// 
 #define COOLDOWN 200
 
 #define BASEHEALTH 100

@@ -5,7 +5,7 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
 	
 	if(default)
-		std::cout << "No savegame detected! Default savegame will be loaded..\a\n";
+		std::cout << "Default savegame will be loaded..\a\n";
 	else
 		std::cout << "Savegame will be loaded!" << std::endl;
 	
@@ -56,7 +56,7 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 			std::stringstream ss;
 			ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
 			std::string checksum = md5(ss.str());
-			//std::string checksum = md5(ss.str()+mySavegame.mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
+			// Änderung noch in Final!
 
 			#ifdef DEBUGINFO
 				std::cout << "Savegame Checksum -> " << checksum << std::endl;
@@ -78,7 +78,7 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 			std::stringstream ss;
 			ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
 			std::string checksum = md5(ss.str());
-			//std::string checksum = md5(ss.str()+mySavegame.mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
+			// Änderung noch in Final!
 
 			defaultsavegame << checksum << std::endl;
 		}
@@ -106,13 +106,14 @@ bool Savegame::loadSavegame(Savegame& mySavegame){
 		std::stringstream ss;
 		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
 		std::string s = md5(ss.str());
+		//std::string checksum = md5(ss.str()+mySavegame.mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
 		loadgame.close();
 
 		if(mySavegame.checksum.compare(s) == 0){
 			std::cout << "Savegame okay...!\n";
 			return true;
 		}else{
-			std::cout << "Savegame corrupt...!\n";
+			std::cout << "Savegame corrupt...!\a\n";
 			saveSavegame(mySavegame);
 			return false;
 		}
@@ -164,7 +165,7 @@ void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
 				subline >> myConfigFile.screenfolder;		
 		}
 		#ifdef DEBUGINFO
-			std::cout << "Config successfully loaded.";
+			std::cout << "Config successfully loaded.\n";
 		#endif
 	}else{
 		saveConfigFile(myConfigFile,true);

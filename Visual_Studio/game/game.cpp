@@ -1,38 +1,34 @@
 #include "game.h"
 
-
-
 void Game::Init(void)
 {
 	// Do it!
 	Savegame mySavegame;
 	ConfigFile myConfigFile;
 	
-	
 	myConfigFile.loadConfigFile(myConfigFile);
-
 
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
 
 	if(mySavegame.loadSavegame(mySavegame)){
-		Game::Start(mySavegame);
+		Game::Start(mySavegame,myConfigFile);
 	}else{
-		Game::Start(mySavegame,true);
+		Game::Start(mySavegame,myConfigFile,true);
 	}
 		
 	
 }
 
-void Game::Start(Savegame& currentSavegame, bool newgame)
+void Game::Start(Savegame& currentSavegame, ConfigFile& currentConfigFile, bool newgame)
 {
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
 	sf::VideoMode bpp = sf::VideoMode::getDesktopMode();
-	_mainWindow.create(sf::VideoMode(WIDTH, HEIGHT, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Close);
+	_mainWindow.create(sf::VideoMode(currentConfigFile.width, currentConfigFile.height, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Close);
 
 	// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
 	//_mainWindow.setMouseCursorVisible(false);
@@ -93,7 +89,6 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 			#ifdef DEBUGINFO
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
-				
             gender = ShowMenuGender();
 			std::cout << gender ;
 			if(gender == 'M' || gender == 'F')	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
@@ -146,12 +141,6 @@ void Game::ShowMenu(bool newgame){
 			#endif
 				_gameState = Playing;
 			break;
-		/*case MainMenu::NewGame:
-			#ifdef DEBUGINFO
-				std::cout << "Menu -> NewGame Button pressed " << std::endl;	
-			#endif
-			_gameState = NewGame;
-			break;*/
         case MainMenu::NewGameGender:
             _gameState = ShowingGenderMenu;
         default:
@@ -173,12 +162,12 @@ const char Game::ShowMenuGender(){
 			break;
         case MainMenu::Menue:
             _gameState = ShowingMenu;
-			return 'X';
+			return 'X';			// Gebe X Zurück damit nicht gespeichert wird, wenn man nicht direkt möchte (new game)
             break;
 		default:
             break; 
     }
-    return 'F';
+    return 'M';
 }
 
 // static member variables need to be instantiated outside of the class
