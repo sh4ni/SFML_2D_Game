@@ -16,10 +16,12 @@ void Game::Init(void)
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
 
-	if(mySavegame.loadSavegame(mySavegame))
+	if(mySavegame.loadSavegame(mySavegame)){
 		Game::Start(mySavegame);
-	else
+	}else{
 		Game::Start(mySavegame,true);
+	}
+		
 	
 }
 
@@ -91,9 +93,11 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 			#ifdef DEBUGINFO
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
+				
             gender = ShowMenuGender();
-			if(!gender)	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
-				currentSavegame.saveSavegame(currentSavegame,gender);
+			std::cout << gender ;
+			if(gender == 'M' || gender == 'F')	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
+				currentSavegame.saveSavegame(currentSavegame,gender,true);
 		break;
 		case Game::Playing:
 			// Hier wird die Map geladen
@@ -169,6 +173,7 @@ const char Game::ShowMenuGender(){
 			break;
         case MainMenu::Menue:
             _gameState = ShowingMenu;
+			return 'X';
             break;
 		default:
             break; 

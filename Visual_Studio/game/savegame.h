@@ -40,7 +40,7 @@ public:
 
 	std::string checksum;
 
-	void saveSavegame(Savegame& mySavegame, const char pGender = 'M', bool default=true);
+	void saveSavegame(Savegame& mySavegame, const char pGender = 'M', bool default=false);
 	bool loadSavegame(Savegame& mySavegame);
 };
 
