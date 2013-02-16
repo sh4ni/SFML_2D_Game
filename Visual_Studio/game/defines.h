@@ -48,7 +48,7 @@
 
 #define SAVEGAME "save.txt"
 #define CHECKSAVE 1
-#define CHECKSUM 1337
+#define CHECKSUM 4815162342
 
 #define DEFAULT_HEALTH 100
 #define DEFAULT_LVL 1

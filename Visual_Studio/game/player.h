@@ -84,6 +84,7 @@ public:
         this->pHealth -= damage;
         if( this->pHealth < 0 ){
             this->pHealth = 0;
+			std::cout << "Player will be die!" << std::endl;
         }
     }
     void playerHeal( int heal ){
@@ -109,7 +110,9 @@ public:
     }
 	void setBlockControl(bool block=false){
 		this->blockControl = block;
-		std::cout << "block " << block << std::endl;
+		#ifdef DEBUGINFO
+			std::cout << "block " << block << std::endl;
+		#endif
 	}
 private:
     int controller;

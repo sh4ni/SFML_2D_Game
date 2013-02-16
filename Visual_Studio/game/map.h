@@ -20,6 +20,7 @@ private:
 
 class Map{
 public:
+	void NextLevel(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera, Savegame& currentSavegame);
 	void Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera, Savegame& currentSavegame);
 	void InitMap(std::string FileName);
 	sf::IntRect getRect(int x, int y);

@@ -7,6 +7,11 @@
 	return CollisionMap[x][y];
 }*/
 
+void Map::NextLevel(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera, Savegame& currentSavegame){
+	std::cout << " hallo welt " << std::endl;
+	
+}
+
 void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera, Savegame& currentSavegame){
 	//renderWindow.setMouseCursorVisible(false);
 	#ifdef DEBUGINFO
@@ -132,7 +137,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 	}
 	
 	sf::Clock clock;
-
+	
 	Player P1(CollisionMap,currentSavegame);
 	P1.setMapSize( MapSizeX, MapSizeY );
 
@@ -257,6 +262,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId,currentSavegame);
 					if(quitGame)
 						return;
+					clock.restart();	// damit läuft der spieler nicht weiter wenn in der pause eine taste gedrückt gehalten wurde
 					P1.setBlockControl(false);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
@@ -285,6 +291,10 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
                 }
 				else if(levelLoop.key.code == sf::Keyboard::Num9){
                     P1.setBlockControl(false);
+                }
+				else if(levelLoop.key.code == sf::Keyboard::N){
+                    Map map;
+					map.NextLevel(renderWindow, "map2", viewCamera, currentSavegame);
                 }
                 #endif
 			}
