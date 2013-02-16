@@ -18,7 +18,7 @@ public:
 	int height;
 	std::string screenfolder;
 
-	void saveConfigFile(ConfigFile& myConfigFile, bool default=false);
+	void saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig=false);
 	void loadConfigFile(ConfigFile& myConfigFile);
 };
 
@@ -40,7 +40,7 @@ public:
 
 	std::string checksum;
 
-	void saveSavegame(Savegame& mySavegame, const char pGender = 'M', bool default=false);
+	void saveSavegame(Savegame& mySavegame, const char pGender = 'M', bool defaultConfig=false);
 	bool loadSavegame(Savegame& mySavegame);
 };
 

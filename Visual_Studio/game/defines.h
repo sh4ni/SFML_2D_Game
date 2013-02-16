@@ -18,7 +18,11 @@
 #endif
 
 // path du /include folder
-#define PATH ""
+#ifdef SFML_SYSTEM_MACOS
+    #define PATH "game.app/Contents/Resources/"
+#else
+    #define PATH ""
+#endif
 
 // used in menues
 #define BUTTONWIDTH 704

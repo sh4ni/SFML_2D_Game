@@ -1,10 +1,10 @@
 #include "savegame.h"
 
-void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool default){
+void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defaultConfig){
 	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
 	
-	if(default)
+	if(defaultConfig)
 		std::cout << "Default savegame will be loaded..\a\n";
 	else
 		std::cout << "Savegame will be loaded!" << std::endl;
@@ -12,7 +12,7 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 	std::ofstream defaultsavegame;
 	defaultsavegame.open(PATH SAVEGAME, std::ios::trunc & std::ios::binary);
 	if(defaultsavegame.is_open()){
-		if(default){
+		if(defaultConfig){
 			// Health
 			defaultsavegame << DEFAULT_HEALTH << std::endl;
 			mySavegame.pHealth = DEFAULT_HEALTH;
@@ -124,11 +124,11 @@ bool Savegame::loadSavegame(Savegame& mySavegame){
 	return true;
 }
 
-void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool default){
+void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 	std::ofstream configFile;
 	configFile.open(PATH SETTINGS, std::ios::trunc);
 	if(configFile.is_open()){
-		if(default){
+		if(defaultConfig){
 			#ifdef DEBUGINFO
 				std::cout << "Default Config will be created.";
 			#endif
