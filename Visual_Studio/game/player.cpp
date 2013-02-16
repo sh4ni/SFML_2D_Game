@@ -33,6 +33,7 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame, int contr
 
 	Speed = PLAYERSPEED;
 	HealTickRate = 0;
+	Animation = 0;
 
 	if(!texture.loadFromFile(tex)){
 		throw "Error: Playertexture not found.";

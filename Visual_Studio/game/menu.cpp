@@ -227,28 +227,28 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 				if(HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y) != Nothing) // wenn kein button gedrückt wurde, mache nichts
 					return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
 			}
-/*           _                            _
-        _.-'`4`-._                    _,-'5`'-._
-     ,-'          `-.,____________,.-'    .-.   `-.
-    /   .---.             ___            ( 3 )     \
-   /  ,' ,-. `.     __   / 10\   __   .-. `-` .-.   \
-  /   | | 6 | |    (_8) | / \ | (9_) ( 2 )   ( 1 )   \
- /    `. `-' ,'    __    \___/        `-` ,-. `-`     \
- |      `---`   ,-`  `-.       .---.     ( 0 )        |
- |             / -'11`- \    ,'  .  `.    `-`         |     Xbox 360 Controller Tastenbelegung
- |            | 13    14 |   | - 7 - |                |
- !             \ -.12,- /    `.  '  ,'                |
- |              `-.__,-'       `---`                  |
- |                  ________________                  |
- |             _,-'`                ``-._             |
- |          ,-'                          `-.          |
-  \       ,'                                `.       /
-   `.__,-'                                    `-.__*/
+/*           _                            _										            _                            _
+        _.-'`4`-._                    _,-'5`'-._								       _.-'`4`-._                    _,-'5`'-._
+     ,-'          `-.,____________,.-'    .-.   `-.								    ,-'          `-.,____________,.-'    .-.   `-.
+    /   .---.             ___            ( 3 )     \							   /   .---.             ___            ( 3 )     \
+   /  ,' ,-. `.     __   / 10\   __   .-. `-` .-.   \							  /  ,' ,-. `.     __   / X \   __   .-. `-` .-.   \
+  /   | | 6 | |    (_8) | / \ | (9_) ( 2 )   ( 1 )   \							 /   | | 8 | |    (_6) | / \ | (7_) ( 2 )   ( 1 )   \
+ /    `. `-' ,'    __    \___/        `-` ,-. `-`     \							/    `. `-' ,'    __    \___/        `-` ,-. `-`     \
+ |      `---`   ,-`  `-.       .---.     ( 0 )        |		Tastenbelegung		|      `---`   ,-`  `-.       .---.     ( 0 )        |
+ |             / -'11`- \    ,'  .  `.    `-`         |   Xbox 360 Controller	|             / -'  `- \    ,'  .  `.    `-`         | DPad = Axen
+ |            | 13    14 |   | - 7 - |                |		<-- MacOSX			|            |          |   | - 9 - |                |	PovX
+ !             \ -.12,- /    `.  '  ,'                |		   Windows	-->		!             \ -.  ,- /    `.  '  ,'                |	PovY
+ |              `-.__,-'       `---`                  |							|              `-.__,-'       `---`                  |
+ |                  ________________                  |							|                  ________________                  |
+ |             _,-'`                ``-._             |							|             _,-'`                ``-._             |
+ |          ,-'                          `-.          |							|          ,-'                          `-.          |
+  \       ,'                                `.       /							 \       ,'                                `.       /
+   `.__,-'                                    `-.__.´							  `.__,-'                                    `-.__*/
 			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed ){
                 if(menuEvent.key.code == sf::Keyboard::Return || (menuEvent.type == sf::Event::JoystickButtonPressed && menuEvent.joystickButton.button == 0) || menuEvent.joystickButton.button == 8 ){
 					return button[active[selected]].action;
 				}
-                else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == 1 || menuEvent.joystickButton.button == 9 ){
+				else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == 1 || menuEvent.joystickButton.button == 9 ){
                     if(gendermenu){
                         return Menue;
                     }
