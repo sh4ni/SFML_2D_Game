@@ -259,10 +259,9 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
 					P1.setBlockControl(true);
-					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId,currentSavegame);
+					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId,currentSavegame, clock);
 					if(quitGame)
 						return;
-					clock.restart();	// damit läuft der spieler nicht weiter wenn in der pause eine taste gedrückt gehalten wurde
 					P1.setBlockControl(false);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
@@ -303,7 +302,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 					std::cout << " Outside the window!.. " << std::endl;	
 				#endif
 					P1.setBlockControl(true);
-					pause(renderWindow,viewCamera,levelLoop,P1,LevelId,currentSavegame);
+					pause(renderWindow,viewCamera,levelLoop,P1,LevelId,currentSavegame, clock);
 			}
             else if(levelLoop.type == sf::Event::Closed){
 				return;
@@ -451,7 +450,7 @@ void Map::save(Player& P1, std::string LevelId, Savegame& currentSavegame)
 	*/
 }
 
-bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, Savegame& currentSavegame){
+bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, Savegame& currentSavegame, sf::Clock& clock){
 	
 	#ifdef DEBUGINFO
 		std::cout << "Paused.." << std::endl;	
@@ -494,6 +493,7 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 	renderWindow.display();
 	
 	while(renderWindow.waitEvent(levelLoop)){
+		clock.restart();	// damit läuft der spieler nicht weiter wenn in der pause eine taste gedrückt gehalten wurde
 		if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed ){
 			if (levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
 				#ifdef DEBUGINFO

@@ -27,7 +27,7 @@ public:
 	static sf::RenderWindow& GetWindow();
 	const static sf::Event& GetInput();
 private:
-	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, Savegame& currentSavegame);
+	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, Savegame& currentSavegame, sf::Clock& clock);
 	static void resume();
 	static void save(Player& P1, std::string level, Savegame& currentSavegame);
 	static void load(Player& P1, Savegame& currentSavegame);
