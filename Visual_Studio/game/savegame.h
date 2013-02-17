@@ -18,6 +18,18 @@ public:
 	int height;
 	std::string screenfolder;
 
+	// Controller Setting
+	unsigned controller_A;
+	unsigned controller_B;
+	unsigned controller_X;
+	unsigned controller_Y;
+	unsigned controller_LB;
+	unsigned controller_RB;
+	unsigned controller_BACK;
+	unsigned controller_START;
+	unsigned controller_LAXIS;
+	unsigned controller_RAXIS;
+
 	void saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig=false);
 	void loadConfigFile(ConfigFile& myConfigFile);
 };

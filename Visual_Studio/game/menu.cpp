@@ -4,7 +4,7 @@
 
 int MainMenu::animation = 0;
 
-MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool gendermenu){
+MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, ConfigFile& currentConfigFile, bool newgame, bool gendermenu){
 	//Load menu image from file
 	sf::Texture imageMenu;
 	sf::Texture imageBackground;
@@ -157,7 +157,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
 
 	Update(window);
 
-	return GetMenuResponse(window,gendermenu);
+	return GetMenuResponse(window,currentConfigFile,gendermenu);
 }
 
 void MainMenu::Update(sf::RenderWindow& window){    // methode zum neu zeichnen des menŸs,
@@ -187,14 +187,11 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 			return (*it).action;            // ...geb seine hinterlegte funktion zurŸck!
 		}
 	}
-	return Nothing;     // fŸr die, die keine buttons treffen und daneben klicken :>
+	return Nothing;     // für die, die keine buttons treffen und daneben klicken :>
 }
 
-/*MainMenu::MenuResult MainMenu::HandleKeyboard(int code){
-	return Nothing;
-}*/
 
-MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool gendermenu){
+MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, ConfigFile& currentConfigFile, bool gendermenu){
 	sf::Event menuEvent;
     
 	int selected = 0;
@@ -205,10 +202,10 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 	int activeButtons = 0;
 	for( int i=0; i<buttons; i++){          // array, das alle aktiven buttons beinhaltet,
 		if( button[i].active ){             // damit bei der tastatureingabe die inaktiven
-			active[activeButtons++] = i;    // buttons Ÿbersprungen werden.
+			active[activeButtons++] = i;    // buttons übersprungen werden.
 		}
 	}
-	while(true){
+	while(4+8+15+16+23+42==108){	// LOST
 		while(window.pollEvent(menuEvent)){
             if( gendermenu ){
                 switch(active[selected]){   // aktiver button wird anders dargestellt.
@@ -226,7 +223,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
             else {
                 button[active[selected]].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT,BUTTONWIDTH,BUTTONHEIGHT));                
             }
-			if(menuEvent.type == sf::Event::MouseButtonPressed){    // menŸ mit maus steuern
+			if(menuEvent.type == sf::Event::MouseButtonPressed){    // menü mit maus steuern
 				#ifdef DEBUGINFO
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
@@ -253,8 +250,8 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed ){
                 if(menuEvent.key.code == sf::Keyboard::Return || (menuEvent.type == sf::Event::JoystickButtonPressed && menuEvent.joystickButton.button == 0) || menuEvent.joystickButton.button == 8 ){
 					return button[active[selected]].action;
-				}
-				else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == 1 || menuEvent.joystickButton.button == 9 ){
+				}														
+				else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == currentConfigFile.controller_B || menuEvent.joystickButton.button == 6 ){
                     if(gendermenu){
                         return Menue;
                     }

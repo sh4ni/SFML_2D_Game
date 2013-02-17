@@ -6,6 +6,7 @@ void Game::Init(void)
 	Savegame mySavegame;
 	ConfigFile myConfigFile;
 	
+	// Lade die Einstellungen des Spiels.. 
 	myConfigFile.loadConfigFile(myConfigFile);
 
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
@@ -17,8 +18,6 @@ void Game::Init(void)
 	}else{
 		Game::Start(mySavegame,myConfigFile,true);
 	}
-		
-	
 }
 
 void Game::Start(Savegame& currentSavegame, ConfigFile& currentConfigFile, bool newgame)
@@ -48,7 +47,7 @@ void Game::Start(Savegame& currentSavegame, ConfigFile& currentConfigFile, bool 
 	
 	// Solange das Spiel nicht beendet wird, führe GameLoop aus
 	while(!IsExiting()){
-		GameLoop(currentSavegame, newgame);
+		GameLoop(currentSavegame, currentConfigFile, newgame);
 	}
 
 	// Wenn der GameLoop beendet wurde, schließe das Fenster
@@ -67,7 +66,7 @@ bool Game::IsExiting()
 	// Möglichkeit das Spiel zu Speichern
 }
 
-void Game::GameLoop(Savegame& currentSavegame, bool newgame)
+void Game::GameLoop(Savegame& currentSavegame, ConfigFile& currentConfigFile, bool newgame)
 {
 	sf::View viewCamera  = _mainWindow.getView();
 	char gender;
@@ -83,13 +82,13 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 			#ifdef DEBUGINFO
 				std::cout << "Show the Menu" << std::endl;
 			#endif
-			ShowMenu(newgame);
+			ShowMenu(currentConfigFile, newgame);
             break;
         case Game::ShowingGenderMenu:
 			#ifdef DEBUGINFO
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
-            gender = ShowMenuGender();
+            gender = ShowMenuGender(currentConfigFile);
 			std::cout << gender ;
 			if(gender == 'M' || gender == 'F')	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
 				currentSavegame.saveSavegame(currentSavegame,gender,true);
@@ -119,14 +118,14 @@ void Game::ShowMap(sf::View viewCamera, Savegame& currentSavegame){
 
 void Game::ShowIntro(){
 	Intro intro;
-	_gameState = Game::ShowingMenu;
 	intro.Show(_mainWindow);
+	_gameState = Game::ShowingMenu;
 }
 
 
-void Game::ShowMenu(bool newgame){
+void Game::ShowMenu(ConfigFile& currentConfigFile, bool newgame){
 	MainMenu mainMenu;
-	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
+	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, currentConfigFile, newgame);
 	switch(result)
 	{
 		case MainMenu::Exit:
@@ -148,9 +147,9 @@ void Game::ShowMenu(bool newgame){
 	}
 }
 
-const char Game::ShowMenuGender(){
+const char Game::ShowMenuGender(ConfigFile& currentConfigFile){
     MainMenu genderMenu;
-    MainMenu::MenuResult result = genderMenu.Show(_mainWindow, false, true);
+    MainMenu::MenuResult result = genderMenu.Show(_mainWindow, currentConfigFile, false, true);
     switch (result) {
         case MainMenu::Female:
             _gameState = NewGame;

@@ -45,7 +45,12 @@
 #define BASEEXP 50
 #define EXPMULTIPLICATOR 1.15f
 
-#define SETTINGS "settings.txt"
+#ifdef SFML_SYSTEM_MACOS
+	#define SETTINGS "settings_mac.txt"
+#else
+	#define SETTINGS "settings_win.txt"
+#endif
+
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
 #define DEFAULT_SCREENSHOTFOLDER "screenshots"
@@ -64,5 +69,19 @@
 #define DEFAULT_LEVEL "map1"
 #define DEFAULT_POSX WIDTH/2
 #define DEFAULT_POSY HEIGHT/2
+
+
+
+// nicht löschen
+#define DEFAULT_WIN_A 0
+#define DEFAULT_WIN_B 1
+#define DEFAULT_WIN_X 2
+#define DEFAULT_WIN_Y 3
+#define DEFAULT_WIN_LB 4
+#define DEFAULT_WIN_RB 5
+#define DEFAULT_WIN_BACK 6
+#define DEFAULT_WIN_START 7
+#define DEFAULT_WIN_LAXIS 8
+#define DEFAULT_WIN_RAXIS 9
 
 #endif

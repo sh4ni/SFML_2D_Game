@@ -358,6 +358,13 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 void Map::load(Player& P1, Savegame& currentSavegame)
 {
 	currentSavegame.loadSavegame(currentSavegame);
+
+	P1.setHealth(currentSavegame.pHealth);
+	P1.setLvl(currentSavegame.pLvl);
+	P1.setExp(currentSavegame.pExp);
+
+	// hier fehlt noch EXP Max und Health Max
+
 	P1.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
 	/*
 	std::cout << "loading savegame..";

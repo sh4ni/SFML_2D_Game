@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "schrift.h"
+#include "savegame.h"
 #include <list>
 
 class MainMenu{
@@ -16,12 +17,11 @@ public:
 			MenuResult action;
 			bool active;
 		};
-	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, bool gendermenu = false);
+	MenuResult Show(sf::RenderWindow& renderWindow, ConfigFile& currentConfigFile, bool newgame = false, bool gendermenu = false);
 
 private:
-	MenuResult GetMenuResponse(sf::RenderWindow& window, bool gendermenu = false);
+	MenuResult GetMenuResponse(sf::RenderWindow& window, ConfigFile& currentConfigFile, bool gendermenu = false);
 	MenuResult HandleClick(int x, int y);
-	//MenuResult HandleKeyboard(int result);
 	std::list<MenuItem> _menuItems;
 	void Update(sf::RenderWindow &Window);
 	int buttons;
