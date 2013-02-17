@@ -132,7 +132,7 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			#ifdef DEBUGINFO
 				std::cout << "Default Config will be created.\n";
 			#endif
-				configFile << "### SCREEN SETTINGS ###" << std::endl;
+			configFile << "### SCREEN SETTINGS ###" << std::endl;
 			configFile << "WIDTH = " << DEFAULT_WIDTH << std::endl;
 			myConfigFile.width = DEFAULT_WIDTH;
 
@@ -143,6 +143,11 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			myConfigFile.screendirectory = DEFAULT_SCREENSHOTDIR;
 			
 			configFile << "\n### Controller Settings ###" << std::endl;
+			#ifdef SFML_SYSTEM_MACOS
+				configFile << "MAC Settings" << std::endl;
+			#else
+				configFile << "Win Settings" << std::endl;
+			#endif
 
 			configFile << "A_BUTTON = " << DEFAULT_WIN_A << std::endl;
 			myConfigFile.controller_A = DEFAULT_WIN_A;

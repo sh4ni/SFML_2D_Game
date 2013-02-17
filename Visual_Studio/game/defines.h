@@ -75,10 +75,10 @@
 	#define DEFAULT_WIN_Y 3
 	#define DEFAULT_WIN_LB 4
 	#define DEFAULT_WIN_RB 5
-	#define DEFAULT_WIN_BACK 6
-	#define DEFAULT_WIN_START 7
-	#define DEFAULT_WIN_LS 8
-	#define DEFAULT_WIN_RS 9
+	#define DEFAULT_WIN_BACK 8
+	#define DEFAULT_WIN_START 9
+	#define DEFAULT_WIN_LS 6
+	#define DEFAULT_WIN_RS 7
 #else
 	#define DEFAULT_WIN_A 0
 	#define DEFAULT_WIN_B 1
