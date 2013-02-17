@@ -50,7 +50,7 @@
 
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
-#define DEFAULT_SCREENSHOTFOLDER "screenshots"
+#define DEFAULT_SCREENSHOTDIR "screenshots"
 
 #define SAVEGAME "save.txt"
 #define CHECKSAVE 1

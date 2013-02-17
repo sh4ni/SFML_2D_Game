@@ -132,14 +132,17 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			#ifdef DEBUGINFO
 				std::cout << "Default Config will be created.\n";
 			#endif
+				configFile << "### SCREEN SETTINGS ###" << std::endl;
 			configFile << "WIDTH = " << DEFAULT_WIDTH << std::endl;
 			myConfigFile.width = DEFAULT_WIDTH;
 
 			configFile << "HEIGHT = " << DEFAULT_HEIGHT << std::endl;
 			myConfigFile.height = DEFAULT_HEIGHT;
 
-			//configFile << "SCREENFOLDER = " << DEFAULT_SCREENSHOTFOLDER << std::endl;
-			//myConfigFile.screenfolder = DEFAULT_SCREENSHOTFOLDER;
+			configFile << "SCREENDIR = " << DEFAULT_SCREENSHOTDIR << std::endl;
+			myConfigFile.screendirectory = DEFAULT_SCREENSHOTDIR;
+			
+			configFile << "\n### Controller Settings ###" << std::endl;
 
 			configFile << "A_BUTTON = " << DEFAULT_WIN_A << std::endl;
 			myConfigFile.controller_A = DEFAULT_WIN_A;
@@ -171,6 +174,8 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			configFile << "RS_BUTTON = " << DEFAULT_WIN_RS << std::endl;
 			myConfigFile.controller_RS = DEFAULT_WIN_RS;
 
+			configFile << "### End of Configfile ###" << std::endl;
+
 		}else{
 			#ifdef DEBUGINFO
 				std::cout << "Config saved.";
@@ -189,62 +194,60 @@ void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
 	std::string line;
 	configFile.open(PATH SETTINGS);
 	if(configFile.is_open()){
-		while(getline(configFile,line)){
-			/*
-				Idee: wenn der Wert nicht gefundn wurde, dann DEFAULT Wert!
-			*/ 
-			std::istringstream subline(line.substr(line.find("=") + 1));
-			if(line.find("WIDTH") != -1)
-				subline >> myConfigFile.width;
-
-			else if(line.find("HEIGHT") != -1)
-				subline >> myConfigFile.height;
-
-			//else if(line.find("SCREENFOLDER") != -1)
-			//	subline >> myConfigFile.screenfolder;	
-
-			else if(line.find("A_BUTTON") != -1)
-				subline >> myConfigFile.controller_A;
-
-			else if(line.find("B_BUTTON") != -1)
-				subline >> myConfigFile.controller_B;
-
-			else if(line.find("X_BUTTON") != -1)
-				subline >> myConfigFile.controller_X;
-
-			else if(line.find("Y_BUTTON") != -1)
-				subline >> myConfigFile.controller_Y;
-
-			else if(line.find("DRECK") != -1)
-				subline >> myConfigFile.controller_LB;
-
-			else if(line.find("HALLO") != -1)
-				subline >> myConfigFile.controller_RB;
-
-			else if(line.find("BACK_BUTTON") != -1)
-				subline >> myConfigFile.controller_BACK;
-
-			else if(line.find("START_BUTTON") != -1)
-				subline >> myConfigFile.controller_START;
-
-			else if(line.find("LS_BUTTON") != -1)
-				subline >> myConfigFile.controller_LS;
-
-			else if(line.find("RS_BUTTON") != -1)
-				subline >> myConfigFile.controller_RS;
-			
+		while(configFile >> line){
+			if(line == "WIDTH"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.width;
+			}else if(line == "HEIGHT"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.height;
+			}else if(line == "SCREENDIR"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.screendirectory;
+			}else if(line == "A_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_A;
+			}else if(line == "B_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_B;
+			}else if(line == "X_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_X;
+			}else if(line == "Y_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_Y;
+			}else if(line == "LB_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_LB;
+			}else if(line == "RB_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_RB;
+			}else if(line == "BACK_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_BACK;
+			}else if(line == "START_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_START;
+			}else if(line == "LS_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_LS;
+			}else if(line == "RS_BUTTON"){
+				configFile.ignore(3);
+				configFile >> myConfigFile.controller_RS;
+			}
 		}
+		
 		#ifdef DEBUGINFO
 			std::cout << "CONFIG - Values" << std::endl;
 			std::cout << "WIDTH " << myConfigFile.width << std::endl;
 			std::cout << "HEIGHT " << myConfigFile.height << std::endl;
-			//std::cout << "SCREEN " << myConfigFile.screenfolder << std::endl;
+			std::cout << "SCREENDIR " << myConfigFile.screendirectory << std::endl;
 			std::cout << "A " << myConfigFile.controller_A << std::endl;
 			std::cout << "B " << myConfigFile.controller_B << std::endl;
 			std::cout << "X " << myConfigFile.controller_X << std::endl;
 			std::cout << "Y " << myConfigFile.controller_Y << std::endl;
 			std::cout << "LB " << myConfigFile.controller_LB << std::endl;
-			std::cout << "RB " << myConfigFile.controller_LB << std::endl;
+			std::cout << "RB " << myConfigFile.controller_RB << std::endl;
 			std::cout << "BACK " << myConfigFile.controller_BACK << std::endl;
 			std::cout << "START " << myConfigFile.controller_START << std::endl;
 			std::cout << "LAXIS " << myConfigFile.controller_LS << std::endl;

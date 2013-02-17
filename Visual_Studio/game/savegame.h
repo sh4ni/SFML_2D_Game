@@ -16,7 +16,7 @@ public:
 	};
 	int width;
 	int height;
-	//std::string screenfolder;
+	std::string screendirectory;
 
 	// Controller Setting
 	unsigned controller_A;
