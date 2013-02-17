@@ -138,8 +138,8 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			configFile << "HEIGHT = " << DEFAULT_HEIGHT << std::endl;
 			myConfigFile.height = DEFAULT_HEIGHT;
 
-			configFile << "SCREENFOLDER = " << DEFAULT_SCREENSHOTFOLDER << std::endl;
-			myConfigFile.screenfolder = DEFAULT_SCREENSHOTFOLDER;
+			//configFile << "SCREENFOLDER = " << DEFAULT_SCREENSHOTFOLDER << std::endl;
+			//myConfigFile.screenfolder = DEFAULT_SCREENSHOTFOLDER;
 
 			configFile << "A_BUTTON = " << DEFAULT_WIN_A << std::endl;
 			myConfigFile.controller_A = DEFAULT_WIN_A;
@@ -165,11 +165,11 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			configFile << "START_BUTTON = " << DEFAULT_WIN_START << std::endl;
 			myConfigFile.controller_START = DEFAULT_WIN_START;
 
-			configFile << "LAXIS_BUTTON = " << DEFAULT_WIN_LAXIS << std::endl;
-			myConfigFile.controller_LAXIS = DEFAULT_WIN_LAXIS;
+			configFile << "LS_BUTTON = " << DEFAULT_WIN_LS << std::endl;
+			myConfigFile.controller_LS = DEFAULT_WIN_LS;
 
-			configFile << "RAXIS_BUTTON = " << DEFAULT_WIN_RAXIS << std::endl;
-			myConfigFile.controller_RAXIS = DEFAULT_WIN_RAXIS;
+			configFile << "RS_BUTTON = " << DEFAULT_WIN_RS << std::endl;
+			myConfigFile.controller_RS = DEFAULT_WIN_RS;
 
 		}else{
 			#ifdef DEBUGINFO
@@ -177,7 +177,7 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			#endif
 			configFile << "WIDTH = " << myConfigFile.width << std::endl;
 			configFile << "HEIGHT = " << myConfigFile.height << std::endl;
-			configFile << "SCREENFOLDER = " << myConfigFile.screenfolder << std::endl;
+			//configFile << "SCREENFOLDER = " << myConfigFile.screenfolder << std::endl;
 			// Controller Settings
 		}
 	}
@@ -190,6 +190,9 @@ void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
 	configFile.open(PATH SETTINGS);
 	if(configFile.is_open()){
 		while(getline(configFile,line)){
+			/*
+				Idee: wenn der Wert nicht gefundn wurde, dann DEFAULT Wert!
+			*/ 
 			std::istringstream subline(line.substr(line.find("=") + 1));
 			if(line.find("WIDTH") != -1)
 				subline >> myConfigFile.width;
@@ -197,8 +200,8 @@ void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
 			else if(line.find("HEIGHT") != -1)
 				subline >> myConfigFile.height;
 
-			else if(line.find("SCREENFOLDER") != -1)
-				subline >> myConfigFile.screenfolder;	
+			//else if(line.find("SCREENFOLDER") != -1)
+			//	subline >> myConfigFile.screenfolder;	
 
 			else if(line.find("A_BUTTON") != -1)
 				subline >> myConfigFile.controller_A;
@@ -212,10 +215,10 @@ void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
 			else if(line.find("Y_BUTTON") != -1)
 				subline >> myConfigFile.controller_Y;
 
-			else if(line.find("LB_BUTTON") != -1)
+			else if(line.find("DRECK") != -1)
 				subline >> myConfigFile.controller_LB;
 
-			else if(line.find("RB_BUTTON") != -1)
+			else if(line.find("HALLO") != -1)
 				subline >> myConfigFile.controller_RB;
 
 			else if(line.find("BACK_BUTTON") != -1)
@@ -224,18 +227,18 @@ void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
 			else if(line.find("START_BUTTON") != -1)
 				subline >> myConfigFile.controller_START;
 
-			else if(line.find("LAXIS_BUTTON") != -1)
-				subline >> myConfigFile.controller_LAXIS;
+			else if(line.find("LS_BUTTON") != -1)
+				subline >> myConfigFile.controller_LS;
 
-			else if(line.find("RAXIS_BUTTON") != -1)
-				subline >> myConfigFile.controller_RAXIS;
+			else if(line.find("RS_BUTTON") != -1)
+				subline >> myConfigFile.controller_RS;
 			
 		}
 		#ifdef DEBUGINFO
 			std::cout << "CONFIG - Values" << std::endl;
 			std::cout << "WIDTH " << myConfigFile.width << std::endl;
 			std::cout << "HEIGHT " << myConfigFile.height << std::endl;
-			std::cout << "SCREEN " << myConfigFile.screenfolder << std::endl;
+			//std::cout << "SCREEN " << myConfigFile.screenfolder << std::endl;
 			std::cout << "A " << myConfigFile.controller_A << std::endl;
 			std::cout << "B " << myConfigFile.controller_B << std::endl;
 			std::cout << "X " << myConfigFile.controller_X << std::endl;
@@ -244,8 +247,8 @@ void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
 			std::cout << "RB " << myConfigFile.controller_LB << std::endl;
 			std::cout << "BACK " << myConfigFile.controller_BACK << std::endl;
 			std::cout << "START " << myConfigFile.controller_START << std::endl;
-			std::cout << "LAXIS " << myConfigFile.controller_LAXIS << std::endl;
-			std::cout << "RAXIS " << myConfigFile.controller_RAXIS << std::endl;
+			std::cout << "LAXIS " << myConfigFile.controller_LS << std::endl;
+			std::cout << "RAXIS " << myConfigFile.controller_RS << std::endl;
 			std::cout << "CONFIG - END " << std::endl;
 		
 			std::cout << "Config successfully loaded.\n";

@@ -16,7 +16,7 @@ public:
 	};
 	int width;
 	int height;
-	std::string screenfolder;
+	//std::string screenfolder;
 
 	// Controller Setting
 	unsigned controller_A;
@@ -27,8 +27,8 @@ public:
 	unsigned controller_RB;
 	unsigned controller_BACK;
 	unsigned controller_START;
-	unsigned controller_LAXIS;
-	unsigned controller_RAXIS;
+	unsigned controller_LS;
+	unsigned controller_RS;
 
 	void saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig=false);
 	void loadConfigFile(ConfigFile& myConfigFile);
