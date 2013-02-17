@@ -143,41 +143,41 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			myConfigFile.screendirectory = DEFAULT_SCREENSHOTDIR;
 			
 			configFile << "\n### Controller Settings ###" << std::endl;
-			#ifdef SFML_SYSTEM_MACOS
-				configFile << "MAC Settings" << std::endl;
-			#else
+			#ifdef SFML_SYSTEM_WINDOWS
 				configFile << "Win Settings" << std::endl;
+			#else
+				configFile << "Other OS Settings" << std::endl;
 			#endif
 
-			configFile << "A_BUTTON = " << DEFAULT_WIN_A << std::endl;
-			myConfigFile.controller_A = DEFAULT_WIN_A;
+			configFile << "A_BUTTON = " << DEFAULT_A << std::endl;
+			myConfigFile.controller_A = DEFAULT_A;
 
-			configFile << "B_BUTTON = " << DEFAULT_WIN_B << std::endl;
-			myConfigFile.controller_B = DEFAULT_WIN_B;
+			configFile << "B_BUTTON = " << DEFAULT_B << std::endl;
+			myConfigFile.controller_B = DEFAULT_B;
 
-			configFile << "X_BUTTON = " << DEFAULT_WIN_X << std::endl;
-			myConfigFile.controller_X = DEFAULT_WIN_X;
+			configFile << "X_BUTTON = " << DEFAULT_X << std::endl;
+			myConfigFile.controller_X = DEFAULT_X;
 
-			configFile << "Y_BUTTON = " << DEFAULT_WIN_Y << std::endl;
-			myConfigFile.controller_Y = DEFAULT_WIN_Y;
+			configFile << "Y_BUTTON = " << DEFAULT_Y << std::endl;
+			myConfigFile.controller_Y = DEFAULT_Y;
 
-			configFile << "LB_BUTTON = " << DEFAULT_WIN_LB << std::endl;
-			myConfigFile.controller_LB = DEFAULT_WIN_LB;
+			configFile << "LB_BUTTON = " << DEFAULT_LB << std::endl;
+			myConfigFile.controller_LB = DEFAULT_LB;
 
-			configFile << "RB_BUTTON = " << DEFAULT_WIN_RB << std::endl;
-			myConfigFile.controller_RB = DEFAULT_WIN_RB;
+			configFile << "RB_BUTTON = " << DEFAULT_RB << std::endl;
+			myConfigFile.controller_RB = DEFAULT_RB;
 
-			configFile << "BACK_BUTTON = " << DEFAULT_WIN_BACK << std::endl;
-			myConfigFile.controller_BACK = DEFAULT_WIN_BACK;
+			configFile << "BACK_BUTTON = " << DEFAULT_BACK << std::endl;
+			myConfigFile.controller_BACK = DEFAULT_BACK;
 
-			configFile << "START_BUTTON = " << DEFAULT_WIN_START << std::endl;
-			myConfigFile.controller_START = DEFAULT_WIN_START;
+			configFile << "START_BUTTON = " << DEFAULT_START << std::endl;
+			myConfigFile.controller_START = DEFAULT_START;
 
-			configFile << "LS_BUTTON = " << DEFAULT_WIN_LS << std::endl;
-			myConfigFile.controller_LS = DEFAULT_WIN_LS;
+			configFile << "LS_BUTTON = " << DEFAULT_LS << std::endl;
+			myConfigFile.controller_LS = DEFAULT_LS;
 
-			configFile << "RS_BUTTON = " << DEFAULT_WIN_RS << std::endl;
-			myConfigFile.controller_RS = DEFAULT_WIN_RS;
+			configFile << "RS_BUTTON = " << DEFAULT_RS << std::endl;
+			myConfigFile.controller_RS = DEFAULT_RS;
 
 			configFile << "### End of Configfile ###" << std::endl;
 

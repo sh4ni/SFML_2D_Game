@@ -68,27 +68,27 @@
 
 // nicht löschen
 #ifdef SFML_SYSTEM_WINDOWS
-	#define DEFAULT_WIN_A 0
-	#define DEFAULT_WIN_B 1
-	#define DEFAULT_WIN_X 2
-	#define DEFAULT_WIN_Y 3
-	#define DEFAULT_WIN_LB 4
-	#define DEFAULT_WIN_RB 5
-	#define DEFAULT_WIN_BACK 6
-	#define DEFAULT_WIN_START 7
-	#define DEFAULT_WIN_LS 8
-	#define DEFAULT_WIN_RS 9
+	#define DEFAULT_A 0
+	#define DEFAULT_B 1
+	#define DEFAULT_X 2
+	#define DEFAULT_Y 3
+	#define DEFAULT_LB 4
+	#define DEFAULT_RB 5
+	#define DEFAULT_BACK 6
+	#define DEFAULT_START 7
+	#define DEFAULT_LS 8
+	#define DEFAULT_RS 9
 #else
-	#define DEFAULT_WIN_A 0
-	#define DEFAULT_WIN_B 1
-	#define DEFAULT_WIN_X 2
-	#define DEFAULT_WIN_Y 3
-	#define DEFAULT_WIN_LB 4
-	#define DEFAULT_WIN_RB 5
-	#define DEFAULT_WIN_BACK 8
-	#define DEFAULT_WIN_START 9
-	#define DEFAULT_WIN_LS 6
-	#define DEFAULT_WIN_RS 7
+	#define DEFAULT_A 0
+	#define DEFAULT_B 1
+	#define DEFAULT_X 2
+	#define DEFAULT_Y 3
+	#define DEFAULT_LB 4
+	#define DEFAULT_RB 5
+	#define DEFAULT_BACK 8
+	#define DEFAULT_START 9
+	#define DEFAULT_LS 6
+	#define DEFAULT_RS 7
 #endif
 
 #endif
