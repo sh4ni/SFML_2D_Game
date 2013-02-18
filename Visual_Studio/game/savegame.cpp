@@ -212,6 +212,8 @@ void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
 			}else if(line == "A_BUTTON"){
 				configFile.ignore(3);
 				configFile >> myConfigFile.controller_A;
+				//if(!myConfigFile.controller_A > 0U && !myConfigFile.controller_A <31U)
+					//throw "Error in ConfigFile!";
 			}else if(line == "B_BUTTON"){
 				configFile.ignore(3);
 				configFile >> myConfigFile.controller_B;
