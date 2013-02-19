@@ -29,6 +29,9 @@ public:
 	void setLvl(int Lvl);
 	int getLvl(void);
 
+
+	void setColMap(sf::IntRect*** ColMap);
+
 	//void setBlockControl(bool block=false);
 
 

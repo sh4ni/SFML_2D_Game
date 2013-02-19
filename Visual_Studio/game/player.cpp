@@ -1,9 +1,9 @@
 ﻿#include <math.h>
 #include "player.h"
 
-Player::Player(sf::IntRect*** CollisionMap, int controller){
+Player::Player(int controller){
 	
-	this->ColMap = CollisionMap;
+	//this->ColMap = CollisionMap;
 
 	this->Health = Savegame::currentSaveGame->pHealth;
 	this->Lvl = Savegame::currentSaveGame->pLvl;
@@ -213,7 +213,6 @@ void Player::Update(float ElapsedTime){
 		if( (Animation/(int)((1/Speed)*ElapsedTime*ANIMATIONSPEED)) >= 4) Animation = 0;
 		Animation++;
 		HealTickRate = -COOLDOWN + IDLEHEAL;	// Cool Down Phase, erst danach werden die HP regeneriert
-
 	}
 	else {
 		sprite.setTextureRect(sf::IntRect(0,sprite.getTextureRect().top,TILESIZE,TILESIZE*2));  // spieler "steht", wenn er sich nicht bewegt.

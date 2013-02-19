@@ -62,6 +62,11 @@ void Character::setLvl(int Lvl){
 int Character::getLvl(void){
 	return this->Lvl;
 }
+
+void Character::setColMap(sf::IntRect*** ColMap){
+	this->ColMap = ColMap;
+};
+
 /*
 void Character::setBlockControl(bool block){
 	this->blockControl = block;

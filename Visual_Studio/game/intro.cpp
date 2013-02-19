@@ -1,6 +1,7 @@
 #include "intro.h"
 #include "defines.h"
 #include "schrift.h"
+#include "savegame.h"
 
 void Intro::Show(sf::RenderWindow& renderWindow)
 {
@@ -12,7 +13,7 @@ void Intro::Show(sf::RenderWindow& renderWindow)
 	sf::Sprite sprite(image);
 
 	sprite.setOrigin((float)image.getSize().x/2,(float)image.getSize().y/2);    // mittelpunkt des logos in die mitte
-	sprite.setPosition((float)WIDTH/2.f,(float)HEIGHT/2.f);                     // mitte des bildschirms
+	sprite.setPosition((float)ConfigFile::currentConfigFile->width/2.f,(float)HEIGHT/2.f);                     // mitte des bildschirms
 
 	renderWindow.clear(sf::Color(50,50,50));    // Hintergrundfarbe im Intro
 	renderWindow.draw(sprite);                  // journey logo

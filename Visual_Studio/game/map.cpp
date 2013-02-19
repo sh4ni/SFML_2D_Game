@@ -6,6 +6,8 @@
 	y /= TILESIZE;
 	return CollisionMap[x][y];
 }*/
+sf::Texture Map::LevelTexture;
+
 
 Map::Map(){
 	std::cout << "konstruktor MAP!" << std::endl;
@@ -14,39 +16,28 @@ Map::Map(){
 		std::cout << "Load Map : " << Savegame::currentSaveGame->mLevelId << std::endl;
 	#endif
 
-}
-Map::~Map(){
-	std::cout << "dekonstruktor MAP!" << std::endl;
-}
-int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
+	
 	
 	//renderWindow.setMouseCursorVisible(false);
 	
 	// Hier wird die Textur für die Map geladen.
-	static sf::Texture LevelTexture;
-
-	int MapSizeX = 0U;
-	int MapSizeY = 0U;
-	int LoadCounterX = 0;
-	int LoadCounterY = 0;
-	int TileType;
-	TilePart** TileMap = 0;
-	sf::IntRect*** CollisionMap = 0;
 	
-	//std::ostringstream FileName;
-	//FileName << PATH"include/map/map" << LevelId << ".txt";   Funktioniert NUR in Visual Studio! Nicht standard C++
-    /*char* FileName;
-    if( !(FileName = new char[sizeof(PATH) +50]) ){
-        throw "Error: Could not allocate space for 'FileName'";
-    }
-	sprintf(FileName,PATH"include/map/map%d.txt",LevelId);*/
 
-	std::string FileName = PATH"include/map/" + Savegame::currentSaveGame->mLevelId + ".txt";
+	this->MapSizeX = 0U;
+	this->MapSizeY = 0U;
+	this->LoadCounterX = 0;
+	this->LoadCounterY = 0;
+	this->TileType;
+	this->TileMap = 0;
+	this->CollisionMap = 0;
+	
+
+	this->FileName = PATH"include/map/" + Savegame::currentSaveGame->mLevelId + ".txt";
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName.c_str());
 	if( openfile.is_open() ){
-		openfile >> MapSizeX >> MapSizeY >> this->mapTheme;
+		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme;
 		
 		if(!(TileMap = new TilePart*[MapSizeX])){
             throw "Error: Could not allocate space for 'TilePart*'";
@@ -141,22 +132,15 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 		throw "Error: " + FileName + " not found.";
 	}
 	
-	sf::Clock clock;
-	
-	Player P1(CollisionMap);
-	P1.setMapSize( MapSizeX, MapSizeY );
+	this->P1.setColMap(CollisionMap);
+	this->P1.setMapSize( MapSizeX, MapSizeY );
 
 	//Player P2(CollisionMap,currentSavegame,1);        // 2 Spieler Koop Test
 	//P2.setMapSize( MapSizeX, MapSizeY );              // Funktioniert ohne probleme!
 
-	float LastTime = 1.f;
-	float ElapsedTime;
-	float Frames;
-
-	int CamX;
-	int CamY;
+	this->LastTime = 1.f;
 	
-	sf::Texture ifaceImage;         // lade interface entsprechend des gewŠhlten heldens.
+	
 	if( P1.getGender() == 'F' ){
 		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
 			throw "Error: include/interface/interface-female.png not found.";
@@ -167,32 +151,39 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 			throw "Error: include/interface/interface-male.png not found.";
 		}
 	}
-	sf::Sprite iface(ifaceImage);
+
+	iface.setTexture(ifaceImage);
 	iface.setOrigin((float)ifaceImage.getSize().x/2.f,(float)ifaceImage.getSize().y);
-	iface.setPosition(WIDTH/2,HEIGHT);
+	iface.setPosition(ConfigFile::currentConfigFile->width/2,ConfigFile::currentConfigFile->height);
 
-	sf::RectangleShape HPBar;
 	HPBar.setFillColor(sf::Color(0x99,0x33,0x33));  // farbe des hp balkens
-	HPBar.setPosition(WIDTH/2-55,HEIGHT-61);
+	HPBar.setPosition(ConfigFile::currentConfigFile->width/2-55,ConfigFile::currentConfigFile->height-61);
 	HPBar.setSize(sf::Vector2f(180.f,28.f));
-
-	sf::RectangleShape EXPBar;
+	
 	EXPBar.setFillColor(sf::Color(0x00,0xCC,0x33)); // farbe des exp balkens
-	EXPBar.setPosition(WIDTH/2-55,HEIGHT-30);
+	EXPBar.setPosition(ConfigFile::currentConfigFile->width/2-55,ConfigFile::currentConfigFile->height-30);
 	EXPBar.setSize(sf::Vector2f(180.f,28.f));
 
-	Schrift DisplayHPText(WIDTH/2-53,HEIGHT-58,"HP",18,0);
-	Schrift DisplayEXPText(WIDTH/2-53,HEIGHT-27,"EXP",18,0);
-	Schrift DisplayHP(WIDTH/2+122,HEIGHT-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
-	Schrift DisplayEXP(WIDTH/2+123,HEIGHT-27,"Error",18,0);
-	Schrift DisplayLevel(WIDTH/2-128,HEIGHT-76,"Err",18,0);
+	DisplayHPText.Init(ConfigFile::currentConfigFile->width/2-53,ConfigFile::currentConfigFile->height-58,"HP",18,0);
+	DisplayEXPText.Init(ConfigFile::currentConfigFile->width/2-53,ConfigFile::currentConfigFile->height-27,"EXP",18,0);
+	DisplayHP.Init(ConfigFile::currentConfigFile->width/2+122,ConfigFile::currentConfigFile->height-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
+	DisplayEXP.Init(ConfigFile::currentConfigFile->width/2+123,ConfigFile::currentConfigFile->height-27,"Error",18,0);
+	DisplayLevel.Init(ConfigFile::currentConfigFile->width/2-128,ConfigFile::currentConfigFile->height-76,"Err",18,0);
+	DisplayFPS.Init(0,0,"FPS: Error",20);
+	DisplayKoord.Init(0,20,"X: Error Y: Error",20);
+	DisplaySpeed.Init(0,40,"Speed: Error",20);
 
-	Schrift DisplayFPS(0,0,"FPS: Error",20);
-	Schrift DisplayKoord(0,20,"X: Error Y: Error",20);
-	Schrift DisplaySpeed(0,40,"Speed: Error",20);
-	
+}
+Map::~Map(){
+	std::cout << "dekonstruktor MAP!" << std::endl;
+}
+
+int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
 	while( 1+3+3==7 )
 	{
+		if(P1.getHealth() <= 0){
+			return 500;
+		}
 		ElapsedTime = (float)clock.restart().asMilliseconds();
 
 		Frames = 1.f /( ElapsedTime / 1000 );
@@ -221,15 +212,15 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 		DisplaySpeed.Update(PlayerSpeedText.str());
 
 		// ...geht aber nicht übers Kartenende hinaus
-		if ( MapSizeX*TILESIZE < WIDTH ){
+		if ( MapSizeX*TILESIZE < ConfigFile::currentConfigFile->width ){
 			CamX = MapSizeX*TILESIZE/2;
 			renderWindow.clear();
 		}
-		else if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
-		else if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = MapSizeX * TILESIZE - WIDTH/2;
-		if ( MapSizeY*TILESIZE < HEIGHT ) CamY = MapSizeY*TILESIZE/2;
-		else if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
-		else if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
+		else if ( CamX < ConfigFile::currentConfigFile->width/2 ) CamX = ConfigFile::currentConfigFile->width/2;
+		else if ( CamX > MapSizeX * TILESIZE - ConfigFile::currentConfigFile->width/2 ) CamX = MapSizeX * TILESIZE - ConfigFile::currentConfigFile->width/2;
+		if ( MapSizeY*TILESIZE < ConfigFile::currentConfigFile->height ) CamY = MapSizeY*TILESIZE/2;
+		else if ( CamY < ConfigFile::currentConfigFile->height/2 ) CamY = ConfigFile::currentConfigFile->height/2;
+		else if ( CamY > MapSizeY * TILESIZE - ConfigFile::currentConfigFile->height/2 ) CamY = MapSizeY * TILESIZE - ConfigFile::currentConfigFile->height/2;
 		renderWindow.setView(viewCamera);
 		viewCamera.setCenter((float)CamX,(float)CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
 
@@ -237,12 +228,12 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 		// Orientierung an der Kamera, damit nur sichtbare Sprites neu gezeichnet werden.
 
 		{// Klammer, wegen sichtbarkeit der variablen.
-			int y = ((int)CamY-(HEIGHT/2))/TILESIZE;
+			int y = ((int)CamY-(ConfigFile::currentConfigFile->height/2))/TILESIZE;
 			if( y<0 ) y=0;
-			while( (y < ((int)CamY+(HEIGHT/2)+TILESIZE-1)/TILESIZE)&&(y<MapSizeY) ){
-				int x = ((int)CamX-(WIDTH/2))/TILESIZE;
+			while( (y < ((int)CamY+(ConfigFile::currentConfigFile->height/2)+TILESIZE-1)/TILESIZE)&&(y<MapSizeY) ){
+				int x = ((int)CamX-(ConfigFile::currentConfigFile->width/2))/TILESIZE;
 				if( x<0 ) x=0;
-				while( (x < ((int)CamX+(WIDTH/2)+TILESIZE-1)/TILESIZE)&&(x<MapSizeX) ){
+				while( (x < ((int)CamX+(ConfigFile::currentConfigFile->width/2)+TILESIZE-1)/TILESIZE)&&(x<MapSizeX) ){
 					TileMap[x][y].TexturePart->setPosition( (float)(x * TILESIZE), (float)(y * TILESIZE) );
 					renderWindow.draw(*TileMap[x][y].TexturePart);
 					x++;
@@ -487,9 +478,9 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 	int CenterY = (int)viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
                                                     // nicht Ÿbereinstimmen!
 	// Hintergrund Box
-	sf::RectangleShape Background(sf::Vector2f(WIDTH, HEIGHT));
+	sf::RectangleShape Background(sf::Vector2f(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height));
     Background.setFillColor(sf::Color(0, 0, 0,100));
-	Background.setPosition((float)CenterX-(float)WIDTH/2.f,(float)CenterY-(float)HEIGHT/2.f);
+	Background.setPosition((float)CenterX-(float)ConfigFile::currentConfigFile->width/2.f,(float)CenterY-(float)ConfigFile::currentConfigFile->height/2.f);
 
 	// Pause Schriftzug
 	Schrift Pause(CenterX,CenterY-100,"Paused",50);

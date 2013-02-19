@@ -21,7 +21,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
 	spriteBackgroundRepeat.setTexture(imageBackground); // wiederholen muss!
 
 	spriteMenu.setOrigin((float)imageMenu.getSize().x/2.f,(float)imageMenu.getSize().y/2.f);
-	spriteMenu.setPosition((float)WIDTH/2.f,(float)HEIGHT/2.f);
+	spriteMenu.setPosition((float)ConfigFile::currentConfigFile->width/2.f,(float)ConfigFile::currentConfigFile->height/2.f);
 	
 	sf::Font font;
 	if(!font.loadFromFile(PATH"include/fonts/arial.ttf")){
@@ -43,7 +43,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
         }                                                           // also auf sone ganz spezielle art und weise...
                                                                     // naja... sie sind eben ganz besonders!
         button[0].text.setString("Select your hero");
-        button[0].text.setPosition(WIDTH/2,HEIGHT/2-120);   // na wenn meine ersten beiden buttons eh keinen text haben...
+        button[0].text.setPosition(ConfigFile::currentConfigFile->width/2,ConfigFile::currentConfigFile->height/2-120);   // na wenn meine ersten beiden buttons eh keinen text haben...
         button[0].text.setFont(font);                       // dann kann ich ihre texte ja fŸr was anderes nehmen ^^
         button[0].text.setCharacterSize(40U);
         button[0].text.setColor(sf::Color(0U,0U,0U));
@@ -51,7 +51,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
         
         if(!newgame){               // warnung nur anzeigen, wenns einen alten spielstand zum Ÿberschreiben gibt.
             button[1].text.setString("Warning: This will overwrite your old savegame!");
-            button[1].text.setPosition(WIDTH/2,HEIGHT/2+130);
+            button[1].text.setPosition(ConfigFile::currentConfigFile->width/2,ConfigFile::currentConfigFile->height/2+130);
             button[1].text.setFont(font);
             button[1].text.setCharacterSize(20U);
             button[1].text.setColor(sf::Color(200U,0U,0U));
@@ -60,15 +60,15 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
         
         for( int i=0; i<buttons; i++){
             if( i<2 ){
-                button[i].rect.left = WIDTH/2-GENDERBUTTON/2+(i?100:-100);
-                button[i].rect.top = HEIGHT/2-25;
+                button[i].rect.left = ConfigFile::currentConfigFile->width/2-GENDERBUTTON/2+(i?100:-100);
+                button[i].rect.top = ConfigFile::currentConfigFile->height/2-25;
                 button[i].rect.width = GENDERBUTTON;
                 button[i].rect.height = GENDERBUTTON;
                 button[i].image.setTexture(imageGenderButton);
             }
             else {
-                button[i].rect.left = WIDTH/2-BUTTONWIDTH/2;
-                button[i].rect.top = HEIGHT/2-160+(i+2)*BUTTONHEIGHT*3/2;
+                button[i].rect.left = ConfigFile::currentConfigFile->width/2-BUTTONWIDTH/2;
+                button[i].rect.top = ConfigFile::currentConfigFile->height/2-160+(i+2)*BUTTONHEIGHT*3/2;
                 button[i].rect.width = BUTTONWIDTH;
                 button[i].rect.height = BUTTONHEIGHT;
                 button[i].image.setTexture(imageButton);
@@ -104,8 +104,8 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
         }
         
         for( int i=0; i<buttons; i++){
-            button[i].rect.left = WIDTH/2-BUTTONWIDTH/2;
-            button[i].rect.top = HEIGHT/2-160+((i<3)?i:i+1)*BUTTONHEIGHT*3/2;   // ((i<3)?i:i+1) = nach den 1. 3 buttons ein button abstand
+            button[i].rect.left = ConfigFile::currentConfigFile->width/2-BUTTONWIDTH/2;
+            button[i].rect.top = ConfigFile::currentConfigFile->height/2-160+((i<3)?i:i+1)*BUTTONHEIGHT*3/2;   // ((i<3)?i:i+1) = nach den 1. 3 buttons ein button abstand
             button[i].rect.width = BUTTONWIDTH;
             button[i].rect.height = BUTTONHEIGHT;
             button[i].image.setTexture(imageButton);
@@ -148,7 +148,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
     }
 
     // version des spiels im menŸ
-	Version.setPosition((float)WIDTH-5.f,(float)HEIGHT-5.f);
+	Version.setPosition((float)ConfigFile::currentConfigFile->width-5.f,(float)ConfigFile::currentConfigFile->height-5.f);
 	Version.setString(VERSION);
 	Version.setCharacterSize(16U);
 	Version.setFont(font);
@@ -258,7 +258,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 					return button[active[selected]].action;
 				}														
 				else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == ConfigFile::currentConfigFile->controller_B || menuEvent.joystickButton.button == 6 ){
-                    if(gendermenu){
+                    if(gendermenu){							
                         return Menue;
                     }
                 }
