@@ -20,6 +20,8 @@ public:
 	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, bool gendermenu = false);
 
 private:
+    enum MenuButton{ NoButton, Up, Down, Enter, Back };
+    MenuButton GetMenuButton(void);
 	MenuResult GetMenuResponse(sf::RenderWindow& window, bool gendermenu = false);
 	MenuResult HandleClick(int x, int y);
 	std::list<MenuItem> _menuItems;

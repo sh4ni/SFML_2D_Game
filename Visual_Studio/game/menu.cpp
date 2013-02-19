@@ -190,6 +190,12 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 	return Nothing;     // für die, die keine buttons treffen und daneben klicken :>
 }
 
+MainMenu::MenuButton MainMenu::GetMenuButton(void){
+    
+    // insert random code here
+    
+    return NoButton;
+}
 
 MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool gendermenu){
 	sf::Event menuEvent;
