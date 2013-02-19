@@ -13,7 +13,7 @@
 class Player : public Character{
 public:
 	
-	Player (sf::IntRect*** CollisionMap, int controller=0);
+	Player(int controller=0);
 
 	void Update	(float ElapsedTime);
 	void Render	(sf::RenderWindow &Window){
@@ -46,7 +46,8 @@ public:
 		this->MapSize.y = yMax;
 	}
     void playerDamage( int damage, int level ){
-        int levelDif = level-this->Lvl;
+        HealTickRate = -COOLDOWN + IDLEHEAL;
+		int levelDif = level-this->Lvl;
         damage += (levelDif*(level/10));
         if ( damage <= 0 ){
             damage = 1;

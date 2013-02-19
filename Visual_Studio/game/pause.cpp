@@ -6,9 +6,9 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 	int CenterY = (int)viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
                                                     // nicht Ÿbereinstimmen!
 	// Hintergrund Box
-	sf::RectangleShape Background(sf::Vector2f(WIDTH, HEIGHT));
+	sf::RectangleShape Background(sf::Vector2f(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height));
     Background.setFillColor(sf::Color(0, 0, 0,100));
-	Background.setPosition((float)CenterX-(float)WIDTH/2.f,(float)CenterY-(float)HEIGHT/2.f);
+	Background.setPosition((float)CenterX-(float)ConfigFile::currentConfigFile->width/2.f,(float)CenterY-(float)ConfigFile::currentConfigFile->height/2.f);
 
 	// Pause Schriftzug
 	Schrift Pause(CenterX,CenterY-100,"Paused",50);
