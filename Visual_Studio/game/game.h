@@ -15,15 +15,17 @@
 class Game{
 public:
 	static void Init();
-	static void Start(Savegame& currentSave, ConfigFile& currentConfigFile, bool newgame = false);
+	static void Start(bool newgame = false);
+	/*static Savegame currentSaveGame;
+	static ConfigFile currentConfigFile;*/
 	
 private:
 	enum GameState { Uninitialized, Initialized, ShowingIntro, Paused, ShowingMenu, Playing, NewGame, Options, Exiting, ShowingGenderMenu };
 	static void ShowIntro();
-	static void ShowMenu(ConfigFile& currentConfigFile, bool newgame = false);
-    static const char ShowMenuGender(ConfigFile& currentConfigFile);
-	static void GameLoop(Savegame& currentSave, ConfigFile& currentConfigFile, bool newgame = false);
-	static void ShowMap(sf::View viewCamera, Savegame& currentSave);
+	static void ShowMenu(bool newgame = false);
+    static const char ShowMenuGender();
+	static void GameLoop(bool newgame = false);
+	static void ShowMap(sf::View viewCamera);
 	static bool IsExiting();
 	static GameState _gameState;
 	static sf::RenderWindow _mainWindow;

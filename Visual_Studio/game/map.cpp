@@ -7,15 +7,16 @@
 	return CollisionMap[x][y];
 }*/
 
-void Map::NextLevel(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera, Savegame& currentSavegame){
+void Map::NextLevel(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
 	std::cout << " hallo welt " << std::endl;
 	
 }
 
-void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera, Savegame& currentSavegame){
+int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
+	Savegame::currentSaveGame;
 	//renderWindow.setMouseCursorVisible(false);
 	#ifdef DEBUGINFO
-		std::cout << "Load Map : " << currentSavegame.mLevelId << std::endl;
+		std::cout << "Load Map : " << Savegame::currentSaveGame->mLevelId << std::endl;
 	#endif
 	// Hier wird die Textur für die Map geladen.
 	static sf::Texture LevelTexture;
@@ -36,7 +37,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
     }
 	sprintf(FileName,PATH"include/map/map%d.txt",LevelId);*/
 
-	std::string FileName = PATH"include/map/" + currentSavegame.mLevelId + ".txt";
+	std::string FileName = PATH"include/map/" + Savegame::currentSaveGame->mLevelId + ".txt";
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName.c_str());
@@ -138,7 +139,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 	
 	sf::Clock clock;
 	
-	Player P1(CollisionMap,currentSavegame);
+	Player P1(CollisionMap);
 	P1.setMapSize( MapSizeX, MapSizeY );
 
 	//Player P2(CollisionMap,currentSavegame,1);        // 2 Spieler Koop Test
@@ -259,9 +260,9 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
 					P1.setBlockControl(true);
-					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId,currentSavegame, clock);
+					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId, clock);
 					if(quitGame)
-						return;
+						return 5;
 					P1.setBlockControl(false);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
@@ -293,7 +294,7 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
                 }
 				else if(levelLoop.key.code == sf::Keyboard::N){
                     Map map;
-					map.NextLevel(renderWindow, "map2", viewCamera, currentSavegame);
+					map.NextLevel(renderWindow, "map2", viewCamera);
                 }
                 #endif
 			}
@@ -302,10 +303,10 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 					std::cout << " Outside the window!.. " << std::endl;	
 				#endif
 					P1.setBlockControl(true);
-					pause(renderWindow,viewCamera,levelLoop,P1,LevelId,currentSavegame, clock);
+					pause(renderWindow,viewCamera,levelLoop,P1,LevelId, clock);
 			}
             else if(levelLoop.type == sf::Event::Closed){
-				return;
+				return 5;
 			}
 			
 		}
@@ -352,20 +353,23 @@ void Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View vie
 		DisplaySpeed.Render(renderWindow);      // Geschwindigkeit des Players
 
 		renderWindow.display();
+		
 	}
+	return 10;
 }
 
-void Map::load(Player& P1, Savegame& currentSavegame)
+void Map::load(Player& P1)
 {
-	currentSavegame.loadSavegame(currentSavegame);
+	Savegame::currentSaveGame;
+	//currentSaveGame.loadSavegame(currentSavegame);
 
-	P1.setHealth(currentSavegame.pHealth);
-	P1.setLvl(currentSavegame.pLvl);
-	P1.setExp(currentSavegame.pExp);
+	P1.setHealth(Savegame::currentSaveGame->pHealth);
+	P1.setLvl(Savegame::currentSaveGame->pLvl);
+	P1.setExp(Savegame::currentSaveGame->pExp);
 
 	// hier fehlt noch EXP Max und Health Max
 
-	P1.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
+	P1.setPosition(Savegame::currentSaveGame->mPosX, Savegame::currentSaveGame->mPosY);
 	/*
 	std::cout << "loading savegame..";
 	std::ifstream loadgame;
@@ -403,18 +407,18 @@ void Map::load(Player& P1, Savegame& currentSavegame)
 }
 
 
-void Map::save(Player& P1, std::string LevelId, Savegame& currentSavegame)
+void Map::save(Player& P1, std::string LevelId)
 {
-	currentSavegame.pHealth = P1.getHealth();
-	currentSavegame.pLvl = P1.getLvl();
-	currentSavegame.pExp = P1.getExp();
-	currentSavegame.pGender = P1.getGender();
-	currentSavegame.pName = P1.getName();
-	currentSavegame.mLevelId = LevelId;
-	currentSavegame.mPosX = P1.getPosX();
-	currentSavegame.mPosY = P1.getPosY();
+	Savegame::currentSaveGame->pHealth = P1.getHealth();
+	Savegame::currentSaveGame->pLvl = P1.getLvl();
+	Savegame::currentSaveGame->pExp = P1.getExp();
+	Savegame::currentSaveGame->pGender = P1.getGender();
+	Savegame::currentSaveGame->pName = P1.getName();
+	Savegame::currentSaveGame->mLevelId = LevelId;
+	Savegame::currentSaveGame->mPosX = P1.getPosX();
+	Savegame::currentSaveGame->mPosY = P1.getPosY();
 
-	currentSavegame.saveSavegame(currentSavegame,P1.getGender(),false);
+	Savegame::currentSaveGame->saveSavegame(P1.getGender(),false);
 /*
 	std::cout << "saving..\n";
 	std::ofstream savegame;
@@ -457,8 +461,10 @@ void Map::save(Player& P1, std::string LevelId, Savegame& currentSavegame)
 	*/
 }
 
-bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, Savegame& currentSavegame, sf::Clock& clock){
+bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, sf::Clock& clock){
 	
+	Map::save(P1, LevelId);
+
 	#ifdef DEBUGINFO
 		std::cout << "Paused.." << std::endl;	
 	#endif
@@ -513,9 +519,9 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 				#endif
 					return true; // gebe true zurueck damit das spiel anschließend beendet wird
 			}else if(levelLoop.key.code == sf::Keyboard::F6){
-				Map::save(P1, LevelId, currentSavegame);
+				Map::save(P1, LevelId);
 			}else if(levelLoop.key.code == sf::Keyboard::F9){
-				Map::load(P1,currentSavegame);
+				Map::load(P1);
 			}else if(levelLoop.type == sf::Event::Closed){
 				return true;
 			}

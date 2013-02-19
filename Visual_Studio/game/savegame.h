@@ -10,6 +10,7 @@
 
 class ConfigFile{
 public:
+	static ConfigFile * currentConfigFile;
 	ConfigFile(){
 	};
 	~ConfigFile(){
@@ -30,12 +31,13 @@ public:
 	unsigned controller_LS;
 	unsigned controller_RS;
 
-	void saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig=false);
-	void loadConfigFile(ConfigFile& myConfigFile);
+	void saveConfigFile(bool defaultConfig=false);
+	void loadConfigFile();
 };
 
 class Savegame{
 public:
+	static Savegame * currentSaveGame;
 	Savegame(){
 	}
 	~Savegame(){
@@ -52,8 +54,8 @@ public:
 
 	std::string checksum;
 
-	void saveSavegame(Savegame& mySavegame, const char pGender = 'M', bool defaultConfig=false);
-	bool loadSavegame(Savegame& mySavegame);
+	void saveSavegame(const char pGender = 'M', bool defaultConfig=false);
+	bool loadSavegame();
 };
 
 #endif

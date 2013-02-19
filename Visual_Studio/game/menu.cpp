@@ -4,7 +4,7 @@
 
 int MainMenu::animation = 0;
 
-MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, ConfigFile& currentConfigFile, bool newgame, bool gendermenu){
+MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool gendermenu){
 	//Load menu image from file
 	sf::Texture imageMenu;
 	sf::Texture imageBackground;
@@ -157,7 +157,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, ConfigFile& curren
 
 	Update(window);
 
-	return GetMenuResponse(window,currentConfigFile,gendermenu);
+	return GetMenuResponse(window,gendermenu);
 }
 
 void MainMenu::Update(sf::RenderWindow& window){    // methode zum neu zeichnen des menŸs,
@@ -191,7 +191,7 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 }
 
 
-MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, ConfigFile& currentConfigFile, bool gendermenu){
+MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool gendermenu){
 	sf::Event menuEvent;
     
 	int selected = 0;
@@ -251,7 +251,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, ConfigF
                 if(menuEvent.key.code == sf::Keyboard::Return || (menuEvent.type == sf::Event::JoystickButtonPressed && menuEvent.joystickButton.button == 0) || menuEvent.joystickButton.button == 8 ){
 					return button[active[selected]].action;
 				}														
-				else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == currentConfigFile.controller_B || menuEvent.joystickButton.button == 6 ){
+				else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == ConfigFile::currentConfigFile->controller_B || menuEvent.joystickButton.button == 6 ){
                     if(gendermenu){
                         return Menue;
                     }

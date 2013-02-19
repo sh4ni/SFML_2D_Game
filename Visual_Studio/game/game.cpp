@@ -1,33 +1,35 @@
 #include "game.h"
-
+	
 void Game::Init(void)
 {
 	// Do it!
-	Savegame mySavegame;
-	ConfigFile myConfigFile;
-	
+	Savegame::currentSaveGame = new Savegame;
+	ConfigFile::currentConfigFile = new ConfigFile;
+
 	// Lade die Einstellungen des Spiels.. 
-	myConfigFile.loadConfigFile(myConfigFile);
+	ConfigFile::currentConfigFile->loadConfigFile();
+	
+	//currentConfigFileloadConfigFile(currentConfigFile);
 
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
 
-	if(mySavegame.loadSavegame(mySavegame)){
-		Game::Start(mySavegame,myConfigFile);
+	if(Savegame::currentSaveGame->loadSavegame()){
+		Game::Start();
 	}else{
-		Game::Start(mySavegame,myConfigFile,true);
+		Game::Start(true);
 	}
 }
 
-void Game::Start(Savegame& currentSavegame, ConfigFile& currentConfigFile, bool newgame)
+void Game::Start(bool newgame)
 {
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
 	sf::VideoMode bpp = sf::VideoMode::getDesktopMode();
-	_mainWindow.create(sf::VideoMode(currentConfigFile.width, currentConfigFile.height, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Close);
+	_mainWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Close);
 
 	// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
 	//_mainWindow.setMouseCursorVisible(false);
@@ -47,7 +49,7 @@ void Game::Start(Savegame& currentSavegame, ConfigFile& currentConfigFile, bool 
 	
 	// Solange das Spiel nicht beendet wird, führe GameLoop aus
 	while(!IsExiting()){
-		GameLoop(currentSavegame, currentConfigFile, newgame);
+		GameLoop(newgame);
 	}
 
 	// Wenn der GameLoop beendet wurde, schließe das Fenster
@@ -66,7 +68,7 @@ bool Game::IsExiting()
 	// Möglichkeit das Spiel zu Speichern
 }
 
-void Game::GameLoop(Savegame& currentSavegame, ConfigFile& currentConfigFile, bool newgame)
+void Game::GameLoop(bool newgame)
 {
 	sf::View viewCamera  = _mainWindow.getView();
 	char gender;
@@ -82,38 +84,49 @@ void Game::GameLoop(Savegame& currentSavegame, ConfigFile& currentConfigFile, bo
 			#ifdef DEBUGINFO
 				std::cout << "Show the Menu" << std::endl;
 			#endif
-			ShowMenu(currentConfigFile, newgame);
+			ShowMenu(newgame);
             break;
         case Game::ShowingGenderMenu:
 			#ifdef DEBUGINFO
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
-            gender = ShowMenuGender(currentConfigFile);
+            gender = ShowMenuGender();
 			std::cout << gender ;
 			if(gender == 'M' || gender == 'F')	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
-				currentSavegame.saveSavegame(currentSavegame,gender,true);
+				Savegame::currentSaveGame->saveSavegame(gender,true);
 		break;
 		case Game::Playing:
 			// Hier wird die Map geladen
 			#ifdef DEBUGINFO
 				std::cout << "Show the Map / Level" << std::endl;
 			#endif
-			ShowMap(viewCamera,currentSavegame);				
+			ShowMap(viewCamera);				
             break;
 		case Game::NewGame:
-			ShowMap(viewCamera,currentSavegame);
+			ShowMap(viewCamera);
 			break;
         default:
             break;
 	}
 }
-void Game::ShowMap(sf::View viewCamera, Savegame& currentSavegame){
-	Map map;
-	map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
+void Game::ShowMap(sf::View viewCamera){
+	static Map map;
+
+	
+
+	int test = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
+	if(test == 5)
+		/*_gameState = ShowingMenu;*/
+		map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
+	/*else if(test == 10)
+		_gameState = Exiting;
+	else
+		map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
+		*/
 	#ifdef DEBUGINFO
-		std::cout << "_gameState = Exiting!" << std::endl;
+		//std::cout << "_gameState = Exiting!" << std::endl;
 	#endif
-	_gameState = Exiting;
+	
 }
 
 void Game::ShowIntro(){
@@ -123,9 +136,9 @@ void Game::ShowIntro(){
 }
 
 
-void Game::ShowMenu(ConfigFile& currentConfigFile, bool newgame){
+void Game::ShowMenu(bool newgame){
 	MainMenu mainMenu;
-	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, currentConfigFile, newgame);
+	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
 	switch(result)
 	{
 		case MainMenu::Exit:
@@ -147,9 +160,9 @@ void Game::ShowMenu(ConfigFile& currentConfigFile, bool newgame){
 	}
 }
 
-const char Game::ShowMenuGender(ConfigFile& currentConfigFile){
+const char Game::ShowMenuGender(){
     MainMenu genderMenu;
-    MainMenu::MenuResult result = genderMenu.Show(_mainWindow, currentConfigFile, false, true);
+    MainMenu::MenuResult result = genderMenu.Show(_mainWindow, false, true);
     switch (result) {
         case MainMenu::Female:
             _gameState = NewGame;

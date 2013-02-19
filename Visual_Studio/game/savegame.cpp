@@ -1,9 +1,13 @@
 #include "savegame.h"
 
-void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defaultConfig){
+Savegame * Savegame::currentSaveGame;
+ConfigFile * ConfigFile::currentConfigFile;
+
+void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
-	
+	Savegame::currentSaveGame;
+
 	if(defaultConfig)
 		std::cout << "Default savegame will be loaded..\a\n";
 	else
@@ -15,15 +19,15 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 		if(defaultConfig){
 			// Health
 			defaultsavegame << DEFAULT_HEALTH << std::endl;
-			mySavegame.pHealth = DEFAULT_HEALTH;
+			Savegame::currentSaveGame->pHealth = DEFAULT_HEALTH;
 
 			// Level
 			defaultsavegame << DEFAULT_LVL << std::endl;
-			mySavegame.pLvl = DEFAULT_LVL;
+			Savegame::currentSaveGame->pLvl = DEFAULT_LVL;
 
 				// Exp
 			defaultsavegame << DEFAULT_EXP << std::endl;
-			mySavegame.pExp = DEFAULT_EXP;
+			Savegame::currentSaveGame->pExp = DEFAULT_EXP;
 
 			std::string pName;
 			if(pGender == 'M')
@@ -33,28 +37,28 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 
 			// Gender
 			defaultsavegame << pGender << std::endl;
-			mySavegame.pGender = pGender;
+			Savegame::currentSaveGame->pGender = pGender;
 
 			// Name
 			defaultsavegame << pName << std::endl;
-			mySavegame.pName = pName;
+			Savegame::currentSaveGame->pName = pName;
 
 			////////////////////////////////////////////////////
 
 			// Map
 			defaultsavegame << DEFAULT_LEVEL << std::endl;
-			mySavegame.mLevelId = DEFAULT_LEVEL;
+			Savegame::currentSaveGame->mLevelId = DEFAULT_LEVEL;
 
 			// Pos X auf Map
 			defaultsavegame << DEFAULT_POSX << std::endl;
-			mySavegame.mPosX = DEFAULT_POSX;
+			Savegame::currentSaveGame->mPosX = DEFAULT_POSX;
 
 			// Pos Y auf Map
 			defaultsavegame << DEFAULT_POSY << std::endl;
-			mySavegame.mPosY = DEFAULT_POSY;
+			Savegame::currentSaveGame->mPosY = DEFAULT_POSY;
 
 			std::stringstream ss;
-			ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
+			ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
 			std::string checksum = md5(ss.str());
 			// Änderung noch in Final!
 
@@ -63,20 +67,20 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 			#endif
 				
 			defaultsavegame << checksum;	
-			mySavegame.checksum = checksum;
+			Savegame::currentSaveGame->checksum = checksum;
 			
 		}else{
-			defaultsavegame << mySavegame.pHealth << std::endl;
-			defaultsavegame << mySavegame.pLvl << std::endl;
-			defaultsavegame << mySavegame.pExp << std::endl;
-			defaultsavegame << mySavegame.pGender << std::endl;
-			defaultsavegame << mySavegame.pName << std::endl;
-			defaultsavegame << mySavegame.mLevelId << std::endl;
-			defaultsavegame << mySavegame.mPosX << std::endl;
-			defaultsavegame << mySavegame.mPosY << std::endl;
+			defaultsavegame << Savegame::currentSaveGame->pHealth << std::endl;
+			defaultsavegame << Savegame::currentSaveGame->pLvl << std::endl;
+			defaultsavegame << Savegame::currentSaveGame->pExp << std::endl;
+			defaultsavegame << Savegame::currentSaveGame->pGender << std::endl;
+			defaultsavegame << Savegame::currentSaveGame->pName << std::endl;
+			defaultsavegame << Savegame::currentSaveGame->mLevelId << std::endl;
+			defaultsavegame << Savegame::currentSaveGame->mPosX << std::endl;
+			defaultsavegame << Savegame::currentSaveGame->mPosY << std::endl;
 
 			std::stringstream ss;
-			ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
+			ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
 			std::string checksum = md5(ss.str());
 			// Änderung noch in Final!
 
@@ -86,45 +90,46 @@ void Savegame::saveSavegame(Savegame& mySavegame, const char pGender, bool defau
 	}
 }
 
-bool Savegame::loadSavegame(Savegame& mySavegame){
+bool Savegame::loadSavegame(){
+	Savegame::currentSaveGame;
 	std::ifstream loadgame;
 	loadgame.open(PATH SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
 		std::cout << "Savegame detected! Loading..\n";
-		loadgame >> mySavegame.pHealth;
-		loadgame >> mySavegame.pLvl;
-		loadgame >> mySavegame.pExp;
-		loadgame >> mySavegame.pGender;
-		loadgame >> mySavegame.pName;
+		loadgame >> Savegame::currentSaveGame->pHealth;
+		loadgame >> Savegame::currentSaveGame->pLvl;
+		loadgame >> Savegame::currentSaveGame->pExp;
+		loadgame >> Savegame::currentSaveGame->pGender;
+		loadgame >> Savegame::currentSaveGame->pName;
 
-		loadgame >> mySavegame.mLevelId;
-		loadgame >> mySavegame.mPosX;
-		loadgame >> mySavegame.mPosY;
+		loadgame >> Savegame::currentSaveGame->mLevelId;
+		loadgame >> Savegame::currentSaveGame->mPosX;
+		loadgame >> Savegame::currentSaveGame->mPosY;
 		
-		loadgame >> mySavegame.checksum;
+		loadgame >> Savegame::currentSaveGame->checksum;
 		
 		std::stringstream ss;
-		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + CHECKSUM);
+		ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
 		std::string s = md5(ss.str());
 		//std::string checksum = md5(ss.str()+mySavegame.mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
 		loadgame.close();
 
-		if(mySavegame.checksum.compare(s) == 0){
+		if(Savegame::currentSaveGame->checksum.compare(s) == 0){
 			std::cout << "Savegame okay...!\n";
 			return true;
 		}else{
 			std::cout << "Savegame corrupt...!\a\n";
-			saveSavegame(mySavegame);
+			saveSavegame();
 			return false;
 		}
 		
 	}else{
-		saveSavegame(mySavegame);
+		saveSavegame();
 	}
 	return true;
 }
 
-void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
+void ConfigFile::saveConfigFile(bool defaultConfig){
 	std::ofstream configFile;
 	configFile.open(PATH SETTINGS, std::ios::trunc);
 	if(configFile.is_open()){
@@ -134,13 +139,13 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			#endif
 			configFile << "### SCREEN SETTINGS ###" << std::endl;
 			configFile << "WIDTH = " << DEFAULT_WIDTH << std::endl;
-			myConfigFile.width = DEFAULT_WIDTH;
+			ConfigFile::currentConfigFile->width = DEFAULT_WIDTH;
 
 			configFile << "HEIGHT = " << DEFAULT_HEIGHT << std::endl;
-			myConfigFile.height = DEFAULT_HEIGHT;
+			ConfigFile::currentConfigFile->height = DEFAULT_HEIGHT;
 
 			configFile << "SCREENDIR = " << DEFAULT_SCREENSHOTDIR << std::endl;
-			myConfigFile.screendirectory = DEFAULT_SCREENSHOTDIR;
+			ConfigFile::currentConfigFile->screendirectory = DEFAULT_SCREENSHOTDIR;
 			
 			configFile << "\n### Controller Settings ###" << std::endl;
 			#ifdef SFML_SYSTEM_WINDOWS
@@ -150,34 +155,34 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			#endif
 
 			configFile << "A_BUTTON = " << DEFAULT_A << std::endl;
-			myConfigFile.controller_A = DEFAULT_A;
+			ConfigFile::currentConfigFile->controller_A = DEFAULT_A;
 
 			configFile << "B_BUTTON = " << DEFAULT_B << std::endl;
-			myConfigFile.controller_B = DEFAULT_B;
+			ConfigFile::currentConfigFile->controller_B = DEFAULT_B;
 
 			configFile << "X_BUTTON = " << DEFAULT_X << std::endl;
-			myConfigFile.controller_X = DEFAULT_X;
+			ConfigFile::currentConfigFile->controller_X = DEFAULT_X;
 
 			configFile << "Y_BUTTON = " << DEFAULT_Y << std::endl;
-			myConfigFile.controller_Y = DEFAULT_Y;
+			ConfigFile::currentConfigFile->controller_Y = DEFAULT_Y;
 
 			configFile << "LB_BUTTON = " << DEFAULT_LB << std::endl;
-			myConfigFile.controller_LB = DEFAULT_LB;
+			ConfigFile::currentConfigFile->controller_LB = DEFAULT_LB;
 
 			configFile << "RB_BUTTON = " << DEFAULT_RB << std::endl;
-			myConfigFile.controller_RB = DEFAULT_RB;
+			ConfigFile::currentConfigFile->controller_RB = DEFAULT_RB;
 
 			configFile << "BACK_BUTTON = " << DEFAULT_BACK << std::endl;
-			myConfigFile.controller_BACK = DEFAULT_BACK;
+			ConfigFile::currentConfigFile->controller_BACK = DEFAULT_BACK;
 
 			configFile << "START_BUTTON = " << DEFAULT_START << std::endl;
-			myConfigFile.controller_START = DEFAULT_START;
+			ConfigFile::currentConfigFile->controller_START = DEFAULT_START;
 
 			configFile << "LS_BUTTON = " << DEFAULT_LS << std::endl;
-			myConfigFile.controller_LS = DEFAULT_LS;
+			ConfigFile::currentConfigFile->controller_LS = DEFAULT_LS;
 
 			configFile << "RS_BUTTON = " << DEFAULT_RS << std::endl;
-			myConfigFile.controller_RS = DEFAULT_RS;
+			ConfigFile::currentConfigFile->controller_RS = DEFAULT_RS;
 
 			configFile << "### End of Configfile ###" << std::endl;
 
@@ -185,8 +190,8 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 			#ifdef DEBUGINFO
 				std::cout << "Config saved.";
 			#endif
-			configFile << "WIDTH = " << myConfigFile.width << std::endl;
-			configFile << "HEIGHT = " << myConfigFile.height << std::endl;
+			configFile << "WIDTH = " << ConfigFile::currentConfigFile->width << std::endl;
+			configFile << "HEIGHT = " << ConfigFile::currentConfigFile->height << std::endl;
 			//configFile << "SCREENFOLDER = " << myConfigFile.screenfolder << std::endl;
 			// Controller Settings
 		}
@@ -194,7 +199,8 @@ void ConfigFile::saveConfigFile(ConfigFile& myConfigFile, bool defaultConfig){
 	configFile.close();
 }
 
-void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
+void ConfigFile::loadConfigFile(){
+	ConfigFile::currentConfigFile;
 	std::ifstream configFile;
 	std::string line;
 	configFile.open(PATH SETTINGS);
@@ -202,69 +208,69 @@ void ConfigFile::loadConfigFile(ConfigFile& myConfigFile){
 		while(configFile >> line){
 			if(line == "WIDTH"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.width;
+				configFile >> ConfigFile::currentConfigFile->width;
 			}else if(line == "HEIGHT"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.height;
+				configFile >> ConfigFile::currentConfigFile->height;
 			}else if(line == "SCREENDIR"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.screendirectory;
+				configFile >> ConfigFile::currentConfigFile->screendirectory;
 			}else if(line == "A_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_A;
+				configFile >> ConfigFile::currentConfigFile->controller_A;
 				//if(!myConfigFile.controller_A > 0U && !myConfigFile.controller_A <31U)
 					//throw "Error in ConfigFile!";
 			}else if(line == "B_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_B;
+				configFile >> ConfigFile::currentConfigFile->controller_B;
 			}else if(line == "X_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_X;
+				configFile >> ConfigFile::currentConfigFile->controller_X;
 			}else if(line == "Y_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_Y;
+				configFile >> ConfigFile::currentConfigFile->controller_Y;
 			}else if(line == "LB_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_LB;
+				configFile >> ConfigFile::currentConfigFile->controller_LB;
 			}else if(line == "RB_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_RB;
+				configFile >> ConfigFile::currentConfigFile->controller_RB;
 			}else if(line == "BACK_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_BACK;
+				configFile >> ConfigFile::currentConfigFile->controller_BACK;
 			}else if(line == "START_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_START;
+				configFile >> ConfigFile::currentConfigFile->controller_START;
 			}else if(line == "LS_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_LS;
+				configFile >> ConfigFile::currentConfigFile->controller_LS;
 			}else if(line == "RS_BUTTON"){
 				configFile.ignore(3);
-				configFile >> myConfigFile.controller_RS;
+				configFile >> ConfigFile::currentConfigFile->controller_RS;
 			}
 		}
 		
 		#ifdef DEBUGINFO
 			std::cout << "CONFIG - Values" << std::endl;
-			std::cout << "WIDTH " << myConfigFile.width << std::endl;
-			std::cout << "HEIGHT " << myConfigFile.height << std::endl;
-			std::cout << "SCREENDIR " << myConfigFile.screendirectory << std::endl;
-			std::cout << "A " << myConfigFile.controller_A << std::endl;
-			std::cout << "B " << myConfigFile.controller_B << std::endl;
-			std::cout << "X " << myConfigFile.controller_X << std::endl;
-			std::cout << "Y " << myConfigFile.controller_Y << std::endl;
-			std::cout << "LB " << myConfigFile.controller_LB << std::endl;
-			std::cout << "RB " << myConfigFile.controller_RB << std::endl;
-			std::cout << "BACK " << myConfigFile.controller_BACK << std::endl;
-			std::cout << "START " << myConfigFile.controller_START << std::endl;
-			std::cout << "LAXIS " << myConfigFile.controller_LS << std::endl;
-			std::cout << "RAXIS " << myConfigFile.controller_RS << std::endl;
+			std::cout << "WIDTH " << ConfigFile::currentConfigFile->width << std::endl;
+			std::cout << "HEIGHT " << ConfigFile::currentConfigFile->height << std::endl;
+			std::cout << "SCREENDIR " << ConfigFile::currentConfigFile->screendirectory << std::endl;
+			std::cout << "A " << ConfigFile::currentConfigFile->controller_A << std::endl;
+			std::cout << "B " << ConfigFile::currentConfigFile->controller_B << std::endl;
+			std::cout << "X " << ConfigFile::currentConfigFile->controller_X << std::endl;
+			std::cout << "Y " << ConfigFile::currentConfigFile->controller_Y << std::endl;
+			std::cout << "LB " << ConfigFile::currentConfigFile->controller_LB << std::endl;
+			std::cout << "RB " << ConfigFile::currentConfigFile->controller_RB << std::endl;
+			std::cout << "BACK " << ConfigFile::currentConfigFile->controller_BACK << std::endl;
+			std::cout << "START " << ConfigFile::currentConfigFile->controller_START << std::endl;
+			std::cout << "LAXIS " << ConfigFile::currentConfigFile->controller_LS << std::endl;
+			std::cout << "RAXIS " << ConfigFile::currentConfigFile->controller_RS << std::endl;
 			std::cout << "CONFIG - END " << std::endl;
 		
 			std::cout << "Config successfully loaded.\n";
 		#endif
 	}else{
-		saveConfigFile(myConfigFile,true);
+		saveConfigFile(true);
 	}
 	configFile.close();
 }

@@ -1,14 +1,15 @@
 ﻿#include <math.h>
 #include "player.h"
 
-Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame, int controller){
+Player::Player(sf::IntRect*** CollisionMap, int controller){
+	
 	this->ColMap = CollisionMap;
 
-	this->pHealth = currentSavegame.pHealth;
-	this->pLvl = currentSavegame.pLvl;
-	this->pExp = currentSavegame.pExp;
-	this->pGender = currentSavegame.pGender;
-	this->pName = currentSavegame.pName;
+	this->pHealth = Savegame::currentSaveGame->pHealth;
+	this->pLvl = Savegame::currentSaveGame->pLvl;
+	this->pExp = Savegame::currentSaveGame->pExp;
+	this->pGender = Savegame::currentSaveGame->pGender;
+	this->pName = Savegame::currentSaveGame->pName;
 
 	this->pHealthMax = BASEHEALTH-HEALTHPERLEVEL+this->pLvl*HEALTHPERLEVEL;
 	this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->pLvl-1));
@@ -47,11 +48,11 @@ Player::Player(sf::IntRect*** CollisionMap, Savegame& currentSavegame, int contr
 	sprite.setTexture(texture);
 	sprite.setOrigin(TILESIZE/2,TILESIZE);
 	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
-	sprite.setPosition(currentSavegame.mPosX,currentSavegame.mPosY);
+	sprite.setPosition(Savegame::currentSaveGame->mPosX, Savegame::currentSaveGame->mPosY);
 }
 
 void Player::Update(float ElapsedTime){
-
+	
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;
 

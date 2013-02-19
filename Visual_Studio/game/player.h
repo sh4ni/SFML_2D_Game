@@ -15,7 +15,7 @@ public:
 	void Render		(sf::RenderWindow &Window){
 		Window.draw(sprite);
 	}
-	Player			(sf::IntRect*** CollisionMap, Savegame& currentSavegame, int controller=0);
+	Player			(sf::IntRect*** CollisionMap, int controller=0);
 	float			getPosX(void){
 		return this->x;
 	}
@@ -97,7 +97,7 @@ public:
         int levelDif = level-this->pLvl;
         exp += levelDif*(level/2);
         this->pExp += exp;
-        if( this->pExp > this->pExpMax ){       // Hier levelup!
+        if( this->pExp >= this->pExpMax ){       // Hier levelup!
             #ifdef DEBUGINFO
                 std::cout << "LEVEL UP!" << std::endl;
             #endif
