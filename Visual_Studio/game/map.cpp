@@ -27,7 +27,6 @@ Map::Map(){
 	this->MapSizeY = 0U;
 	this->LoadCounterX = 0;
 	this->LoadCounterY = 0;
-	this->TileType;
 	this->TileMap = 0;
 	this->CollisionMap = 0;
 	
@@ -176,6 +175,21 @@ Map::Map(){
 }
 Map::~Map(){
 	std::cout << "dekonstruktor MAP!" << std::endl;
+    
+    // Lšsche TileMap wieder...
+    for( int x=0; x<MapSizeX; x++){
+        for( int y=0; y<MapSizeY; y++){
+            delete TileMap[x][y].TexturePart;   // Lšschen der TileMap - Textureausschnitte
+            if( CollisionMap[x][y] != NULL ){
+                delete CollisionMap[x][y];      // Lšschen der CollisionMap - Rechtecke
+            }
+        }
+        delete TileMap[x];                      // Lšschen der TileMap - Objekte
+        delete CollisionMap[x];                 // Lšschen der CollisionMap - Pointer
+    }
+    delete TileMap;                             // Lšschen der TileMap - Pointer
+    delete CollisionMap;                        // Lšschen der CollisionMap - Pointer auf Pointer
+
 }
 
 int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){

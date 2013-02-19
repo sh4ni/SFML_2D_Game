@@ -198,7 +198,7 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 }
 
 void ConfigFile::loadConfigFile(){
-	ConfigFile::currentConfigFile;
+	//ConfigFile::currentConfigFile;      // @f: xcode bringt mir hier ne warnung, dass das überflüssig sei.
 	std::ifstream configFile;
 	std::string line;
 	configFile.open(PATH SETTINGS);
