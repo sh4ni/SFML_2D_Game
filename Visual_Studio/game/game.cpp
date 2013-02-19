@@ -120,7 +120,7 @@ void Game::GamePaused(sf::View viewCamera){
 }
 void Game::ShowMap(sf::View viewCamera){
 	static Map map;
-
+	
 	int newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 	if(newGameState == 5)
 		_gameState = Paused;
@@ -128,6 +128,8 @@ void Game::ShowMap(sf::View viewCamera){
 		_gameState = Exiting;
 	else if(newGameState == 500){
 		_gameState = ShowingMenu;
+	}else if(newGameState == 1500){
+		map.Show(_mainWindow, "map2", viewCamera);
 	}
 		//map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
 		//*/

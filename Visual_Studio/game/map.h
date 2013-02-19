@@ -5,9 +5,13 @@
 #include <sstream>
 
 #include "game.h"
+
 #include "player.h"
 #include "savegame.h"
 #include <vector>  
+
+
+#include "monster.h"
 
 
 class TilePart{
@@ -19,7 +23,8 @@ private:
 
 class Map{
 public:
-	void NextLevel(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
+	Map();
+	~Map();
 	int Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
 	void InitMap(std::string FileName);
 	sf::IntRect getRect(int x, int y);

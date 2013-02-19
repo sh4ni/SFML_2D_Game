@@ -5,14 +5,14 @@ Player::Player(sf::IntRect*** CollisionMap, int controller){
 	
 	this->ColMap = CollisionMap;
 
-	this->pHealth = Savegame::currentSaveGame->pHealth;
-	this->pLvl = Savegame::currentSaveGame->pLvl;
+	this->Health = Savegame::currentSaveGame->pHealth;
+	this->Lvl = Savegame::currentSaveGame->pLvl;
 	this->pExp = Savegame::currentSaveGame->pExp;
 	this->pGender = Savegame::currentSaveGame->pGender;
-	this->pName = Savegame::currentSaveGame->pName;
+	this->Name = Savegame::currentSaveGame->pName;
 
-	this->pHealthMax = BASEHEALTH-HEALTHPERLEVEL+this->pLvl*HEALTHPERLEVEL;
-	this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->pLvl-1));
+	this->pHealthMax = BASEHEALTH-HEALTHPERLEVEL+this->Lvl*HEALTHPERLEVEL;
+	this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->Lvl-1));
 
 	this->controller = controller;
 	this->blockControl = false;
@@ -53,11 +53,11 @@ Player::Player(sf::IntRect*** CollisionMap, int controller){
 
 void Player::Update(float ElapsedTime){
 
-	this->x = sprite.getPosition().x;
-	this->y = sprite.getPosition().y;
+	this->PosX = sprite.getPosition().x;
+	this->PosY = sprite.getPosition().y;
 
-	int tx = ((int)x/TILESIZE)-1;
-	int ty = ((int)y/TILESIZE)-1;
+	int tx = ((int)PosX/TILESIZE)-1;
+	int ty = ((int)PosY/TILESIZE)-1;
 
 	bool blockUp = false;
 	bool blockDown = false;
@@ -66,18 +66,18 @@ void Player::Update(float ElapsedTime){
 
 	// 12 Kollisionspunkte
 	int CollisionPoint[12][2] = {
-		{(int)x-TILESIZE/2, (int)y},									//  0: Links Oben						+--- Player ----+
-		{(int)x+TILESIZE/2-1, (int)y},									//  1: Rechts Oben						|				|
-		{(int)x-TILESIZE/2, (int)y+TILESIZE-1},							//  2: Links Unten						|				|
-		{(int)x+TILESIZE/2-1, (int)y+TILESIZE-1},						//  3: Rechts Unten						|				| keine Kollisionsabfrage im oberen bereich.
-		{(int)x-TILESIZE/2+COLLISIONTOLERANCE, (int)y},					//  4: Links Oben Hilfspunkt Oben		|				|
-		{(int)x+TILESIZE/2-1-COLLISIONTOLERANCE, (int)y},				//  5: Rechts Oben Hilfspunkt Oben		|				|
-		{(int)x-TILESIZE/2+COLLISIONTOLERANCE, (int)y+TILESIZE-1},		//  6: Links Unten Hilfspunkt Unten		| 00 04   05 01 |
-		{(int)x+TILESIZE/2-1-COLLISIONTOLERANCE, (int)y+TILESIZE-1},	//  7: Rechts Unten Hilfspunkt Unten	| 08         09 |
-		{(int)x-TILESIZE/2, (int)y+COLLISIONTOLERANCE},					//  8: Links Oben Hilfspunkt Links		|				|
-		{(int)x+TILESIZE/2-1, (int)y+COLLISIONTOLERANCE},				//  9: Rechts Oben Hilfspunkt Rechts	| 10         11 |
-		{(int)x-TILESIZE/2, (int)y+TILESIZE-1-COLLISIONTOLERANCE},		// 10: Links Unten Hilfspunkt Links		| 02 06   07 03 |
-		{(int)x+TILESIZE/2-1, (int)y+TILESIZE-1-COLLISIONTOLERANCE},	// 11: Rechts Unten Hilfspunkt Rechts	+---------------+
+		{(int)PosX-TILESIZE/2, (int)PosY},									//  0: Links Oben						+--- Player ----+
+		{(int)PosX+TILESIZE/2-1, (int)PosY},									//  1: Rechts Oben						|				|
+		{(int)PosX-TILESIZE/2, (int)PosY+TILESIZE-1},							//  2: Links Unten						|				|
+		{(int)PosX+TILESIZE/2-1, (int)PosY+TILESIZE-1},						//  3: Rechts Unten						|				| keine Kollisionsabfrage im oberen bereich.
+		{(int)PosX-TILESIZE/2+COLLISIONTOLERANCE, (int)PosY},					//  4: Links Oben Hilfspunkt Oben		|				|
+		{(int)PosX+TILESIZE/2-1-COLLISIONTOLERANCE, (int)PosY},				//  5: Rechts Oben Hilfspunkt Oben		|				|
+		{(int)PosX-TILESIZE/2+COLLISIONTOLERANCE, (int)PosY+TILESIZE-1},		//  6: Links Unten Hilfspunkt Unten		| 00 04   05 01 |
+		{(int)PosX+TILESIZE/2-1-COLLISIONTOLERANCE, (int)PosY+TILESIZE-1},	//  7: Rechts Unten Hilfspunkt Unten	| 08         09 |
+		{(int)PosX-TILESIZE/2, (int)PosY+COLLISIONTOLERANCE},					//  8: Links Oben Hilfspunkt Links		|				|
+		{(int)PosX+TILESIZE/2-1, (int)PosY+COLLISIONTOLERANCE},				//  9: Rechts Oben Hilfspunkt Rechts	| 10         11 |
+		{(int)PosX-TILESIZE/2, (int)PosY+TILESIZE-1-COLLISIONTOLERANCE},		// 10: Links Unten Hilfspunkt Links		| 02 06   07 03 |
+		{(int)PosX+TILESIZE/2-1, (int)PosY+TILESIZE-1-COLLISIONTOLERANCE},	// 11: Rechts Unten Hilfspunkt Rechts	+---------------+
 
 	};
 
@@ -143,25 +143,25 @@ void Player::Update(float ElapsedTime){
 	if(!blockControl){
 		if( sf::Joystick::isConnected(controller) ){    // analoge axen des controllers nur nutzen, falls auch einer angeschlossen ist
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp ){
-				y += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
+				PosY += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
 				blockDown = false;
 				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE) && !blockDown ){
-				y += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
+				PosY += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
 				blockUp = false;
 				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE) && !blockLeft ){
-				x += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
+				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
 				blockRight = false;
 				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE) && !blockRight ){
-				x += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
+				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
 				blockLeft = false;
 				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 				walking = true;
@@ -172,7 +172,7 @@ void Player::Update(float ElapsedTime){
 			 sf::Joystick::isButtonPressed(controller,11) )
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		   && !blockUp ){
-			y -= (Speed*ElapsedTime);
+			PosY -= (Speed*ElapsedTime);
 			blockDown = false;
 			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 			walking = true;
@@ -182,7 +182,7 @@ void Player::Update(float ElapsedTime){
 			 sf::Joystick::isButtonPressed(controller,12))
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		   && !blockDown ){
-			y += (Speed*ElapsedTime);
+			PosY += (Speed*ElapsedTime);
 			blockUp = false;
 			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
 			walking = true;
@@ -192,7 +192,7 @@ void Player::Update(float ElapsedTime){
 			  sf::Joystick::isButtonPressed(controller,13))
 			&& !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			&& !blockLeft ){
-			x -= (Speed*ElapsedTime);
+			PosX -= (Speed*ElapsedTime);
 			blockRight = false;
 			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 			walking = true;
@@ -202,7 +202,7 @@ void Player::Update(float ElapsedTime){
 			 sf::Joystick::isButtonPressed(controller,14))
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		   && !blockRight ){
-			x += Speed*ElapsedTime;
+			PosX += Speed*ElapsedTime;
 			blockLeft = false;
 			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 			walking = true;
@@ -227,37 +227,37 @@ void Player::Update(float ElapsedTime){
     
     // falls das spiel lagt, hier korrekturen für die kollisionsabfrage.
 	if( blockUp ){
-		if( (TILESIZE-((int)y-(((int)y/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
-			y= (float)(((int)y/TILESIZE)*TILESIZE+TILESIZE-1);
+		if( (TILESIZE-((int)PosY-(((int)PosY/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
+			PosY= (float)(((int)PosY/TILESIZE)*TILESIZE+TILESIZE-1);
 			#ifdef DEBUGINFO
-				std::cout << "Kolliskorrektur: OBEN - " << y << std::endl;
+				std::cout << "Kolliskorrektur: OBEN - " << PosY << std::endl;
 			#endif
 		}
 	}
 	if( blockDown ){
-		if( (((int)y+TILESIZE)-((((int)y+TILESIZE)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
-			y= (float)((((int)y+TILESIZE)/TILESIZE)*TILESIZE-TILESIZE+1);
+		if( (((int)PosY+TILESIZE)-((((int)PosY+TILESIZE)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
+			PosY= (float)((((int)PosY+TILESIZE)/TILESIZE)*TILESIZE-TILESIZE+1);
 			#ifdef DEBUGINFO
-				std::cout << "Kolliskorrektur: UNTEN - " << y << std::endl;
+				std::cout << "Kolliskorrektur: UNTEN - " << PosY << std::endl;
 			#endif
 		}
 	}
 	if( blockLeft ){
-		if( (TILESIZE-(((int)x-TILESIZE/2)-((((int)x-TILESIZE/2)/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
-			x= (float)((((int)x-TILESIZE/2)/TILESIZE)*TILESIZE+TILESIZE*3/2-1);
+		if( (TILESIZE-(((int)PosX-TILESIZE/2)-((((int)PosX-TILESIZE/2)/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
+			PosX= (float)((((int)PosX-TILESIZE/2)/TILESIZE)*TILESIZE+TILESIZE*3/2-1);
 			#ifdef DEBUGINFO
-				std::cout << "Kolliskorrektur: LINKS - " << x << std::endl;
+				std::cout << "Kolliskorrektur: LINKS - " << PosX << std::endl;
 			#endif
 		}
 	}
 	if( blockRight ){
-		if( (((int)x+TILESIZE/2)-((((int)x+TILESIZE/2)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
-			x= (float)((((int)x+TILESIZE/2)/TILESIZE)*TILESIZE-TILESIZE/2+1);
+		if( (((int)PosX+TILESIZE/2)-((((int)PosX+TILESIZE/2)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
+			PosX= (float)((((int)PosX+TILESIZE/2)/TILESIZE)*TILESIZE-TILESIZE/2+1);
 			#ifdef DEBUGINFO
-				std::cout << "Kolliskorrektur: RECHTS - " << x << std::endl;
+				std::cout << "Kolliskorrektur: RECHTS - " << PosX << std::endl;
 			#endif
 		}
 	}
 
-	sprite.setPosition(x,y);
+	sprite.setPosition(PosX,PosY);
 }

@@ -7,20 +7,24 @@
 	return CollisionMap[x][y];
 }*/
 
-void Map::NextLevel(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
-	std::cout << " hallo welt " << std::endl;
-	
-}
+Map::Map(){
+	std::cout << "konstruktor MAP!" << std::endl;
 
-int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
-	
-	//renderWindow.setMouseCursorVisible(false);
 	#ifdef DEBUGINFO
 		std::cout << "Load Map : " << Savegame::currentSaveGame->mLevelId << std::endl;
 	#endif
+
+}
+Map::~Map(){
+	std::cout << "dekonstruktor MAP!" << std::endl;
+}
+int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
+	
+	//renderWindow.setMouseCursorVisible(false);
+	
 	// Hier wird die Textur für die Map geladen.
 	static sf::Texture LevelTexture;
-	
+
 	int MapSizeX = 0U;
 	int MapSizeY = 0U;
 	int LoadCounterX = 0;
@@ -186,7 +190,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 	Schrift DisplayFPS(0,0,"FPS: Error",20);
 	Schrift DisplayKoord(0,20,"X: Error Y: Error",20);
 	Schrift DisplaySpeed(0,40,"Speed: Error",20);
-
+	
 	while( 1+3+3==7 )
 	{
 		ElapsedTime = (float)clock.restart().asMilliseconds();
@@ -301,6 +305,9 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
                 }
 				else if(levelLoop.key.code == sf::Keyboard::F9){
 					Map::load(P1);
+				}
+				else if(levelLoop.key.code == sf::Keyboard::N){
+					return 1500;
 				}
                 #endif
 			}
