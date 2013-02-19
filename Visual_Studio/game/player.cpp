@@ -145,7 +145,7 @@ void Player::Update(float ElapsedTime){
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp ){
 				PosY += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
 				blockDown = false;
-				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE) && !blockDown ){
@@ -157,13 +157,13 @@ void Player::Update(float ElapsedTime){
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE) && !blockLeft ){
 				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
 				blockRight = false;
-				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE) && !blockRight ){
 				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
 				blockLeft = false;
-				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 		}                       // hier nochmal die tastenabfragen. siehe menu.cpp ganz unten für tastenbelegung
@@ -174,7 +174,7 @@ void Player::Update(float ElapsedTime){
 		   && !blockUp ){
 			PosY -= (Speed*ElapsedTime);
 			blockDown = false;
-			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 			walking = true;
 		}    
 		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
@@ -194,7 +194,7 @@ void Player::Update(float ElapsedTime){
 			&& !blockLeft ){
 			PosX -= (Speed*ElapsedTime);
 			blockRight = false;
-			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 			walking = true;
 		}
 		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
@@ -204,7 +204,7 @@ void Player::Update(float ElapsedTime){
 		   && !blockRight ){
 			PosX += Speed*ElapsedTime;
 			blockLeft = false;
-			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 			walking = true;
 		}
 	}
