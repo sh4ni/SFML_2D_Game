@@ -1,18 +1,31 @@
 ToDo
-- gameover screen
+! dekonstruktor für menü (k)
+! dekonstruktor für savegame (f)
+- return funktion für tastendrücke im menü (k)
+- axen controller im menü (k)
+- health cd reset als methode
 - passive Monster, aggresive Monster / Freundliche NPCs
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
+- grafikeffekte: regen (k)
+. buttons über die, die maus schwebt werden aktiv (k)
+- gameover screen
 - Map Editor
 - Dialoge/Story
 - Dialogboxen im Spiel bei Unterhaltungen
 
 Improvements
-- laufanimation bei nicht ganz durchgedrückten gamepad
-- beim md5 hash noch einen weiteren wert mit prüfen
 - exp formel nochmal anschauen
-- abstürze unter osx. // stürzt es unter windows auch hin und wieder ab?
-+ laufanimation zu langsam bei schlechten fps // sollte gefixt sein, bitte testen
+- hp formel anpassen
+. laufanimation bei nicht ganz durchgedrückten gamepad (k)
+. schlechte fps: prüfen ob laufanimation passt
+. schlechte fps: hp formel anpassen
 
 Nice to Have
-- Spielernamen selbst wählen
+. Lokaler Koop-Modus mit 2 Gamepads
+. Spielernamen selbst wählen
+
+Legende
+! Wichtig
+- Normal
+. Unwichtig
