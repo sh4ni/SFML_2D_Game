@@ -13,7 +13,7 @@ void Map::NextLevel(sf::RenderWindow& renderWindow, std::string LevelId, sf::Vie
 }
 
 int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
-	Savegame::currentSaveGame;
+	
 	//renderWindow.setMouseCursorVisible(false);
 	#ifdef DEBUGINFO
 		std::cout << "Load Map : " << Savegame::currentSaveGame->mLevelId << std::endl;
@@ -259,11 +259,15 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
+					/*
 					P1.setBlockControl(true);
 					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId, clock);
 					if(quitGame)
 						return 5;
 					P1.setBlockControl(false);
+					*/
+					Map::save(P1,LevelId);
+					return 5;
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
@@ -292,21 +296,24 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 				else if(levelLoop.key.code == sf::Keyboard::Num9){
                     P1.setBlockControl(false);
                 }
-				else if(levelLoop.key.code == sf::Keyboard::N){
-                    Map map;
-					map.NextLevel(renderWindow, "map2", viewCamera);
+				else if(levelLoop.key.code == sf::Keyboard::F6){
+                    Map::save(P1,LevelId);
                 }
+				else if(levelLoop.key.code == sf::Keyboard::F9){
+					Map::load(P1);
+				}
                 #endif
 			}
             else if(levelLoop.type == sf::Event::LostFocus){
 				#ifdef DEBUGINFO
 					std::cout << " Outside the window!.. " << std::endl;	
 				#endif
-					P1.setBlockControl(true);
-					pause(renderWindow,viewCamera,levelLoop,P1,LevelId, clock);
+					return 5;
+					//P1.setBlockControl(true);
+					//pause(renderWindow,viewCamera,levelLoop,P1,LevelId, clock);
 			}
             else if(levelLoop.type == sf::Event::Closed){
-				return 5;
+				return 0;
 			}
 			
 		}
@@ -360,7 +367,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 
 void Map::load(Player& P1)
 {
-	Savegame::currentSaveGame;
+	
 	//currentSaveGame.loadSavegame(currentSavegame);
 
 	P1.setHealth(Savegame::currentSaveGame->pHealth);

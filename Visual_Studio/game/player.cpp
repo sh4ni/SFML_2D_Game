@@ -52,7 +52,7 @@ Player::Player(sf::IntRect*** CollisionMap, int controller){
 }
 
 void Player::Update(float ElapsedTime){
-	
+
 	this->x = sprite.getPosition().x;
 	this->y = sprite.getPosition().y;
 

@@ -10,6 +10,7 @@
 #include "menu.h"
 #include "map.h"
 #include "savegame.h"
+#include "pause.h"
 
 
 class Game{
@@ -22,6 +23,7 @@ public:
 private:
 	enum GameState { Uninitialized, Initialized, ShowingIntro, Paused, ShowingMenu, Playing, NewGame, Options, Exiting, ShowingGenderMenu };
 	static void ShowIntro();
+	static void GamePaused(sf::View viewCamera);
 	static void ShowMenu(bool newgame = false);
     static const char ShowMenuGender();
 	static void GameLoop(bool newgame = false);

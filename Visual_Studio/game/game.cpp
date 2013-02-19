@@ -9,8 +9,6 @@ void Game::Init(void)
 	// Lade die Einstellungen des Spiels.. 
 	ConfigFile::currentConfigFile->loadConfigFile();
 	
-	//currentConfigFileloadConfigFile(currentConfigFile);
-
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
@@ -105,27 +103,35 @@ void Game::GameLoop(bool newgame)
 		case Game::NewGame:
 			ShowMap(viewCamera);
 			break;
+		case Game::Paused:
+			GamePaused(viewCamera);
+			break;
         default:
             break;
 	}
 }
+void Game::GamePaused(sf::View viewCamera){
+	Pause PauseMenu;
+	bool quitGame = PauseMenu.Show(_mainWindow, viewCamera);
+	if(quitGame)
+		_gameState = Exiting;
+	else
+		_gameState = Playing;
+}
 void Game::ShowMap(sf::View viewCamera){
 	static Map map;
 
-	
-
-	int test = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
-	if(test == 5)
-		/*_gameState = ShowingMenu;*/
-		map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
-	/*else if(test == 10)
+	int newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
+	if(newGameState == 5)
+		_gameState = Paused;
+	else if(newGameState == 0)
 		_gameState = Exiting;
-	else
-		map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
-		*/
-	#ifdef DEBUGINFO
-		//std::cout << "_gameState = Exiting!" << std::endl;
-	#endif
+	else if(newGameState == 500){
+		_gameState = ShowingMenu;
+	}
+		//map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
+		//*/
+	
 	
 }
 
@@ -154,6 +160,9 @@ void Game::ShowMenu(bool newgame){
 				_gameState = Playing;
 			break;
         case MainMenu::NewGameGender:
+			#ifdef DEBUGINFO
+				std::cout << "Menu -> New Game Button pressed " << std::endl;	
+			#endif
             _gameState = ShowingGenderMenu;
         default:
             break;  // was soll passieren wenn man daneben klickt? - RICHTIG! NICHTS VERDAMMT!

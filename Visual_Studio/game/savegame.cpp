@@ -6,12 +6,11 @@ ConfigFile * ConfigFile::currentConfigFile;
 void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
-	Savegame::currentSaveGame;
-
+	
 	if(defaultConfig)
 		std::cout << "Default savegame will be loaded..\a\n";
 	else
-		std::cout << "Savegame will be loaded!" << std::endl;
+		std::cout << "Savegame will be saved!" << std::endl;
 	
 	std::ofstream defaultsavegame;
 	defaultsavegame.open(PATH SAVEGAME, std::ios::trunc & std::ios::binary);
@@ -91,7 +90,6 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 }
 
 bool Savegame::loadSavegame(){
-	Savegame::currentSaveGame;
 	std::ifstream loadgame;
 	loadgame.open(PATH SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
