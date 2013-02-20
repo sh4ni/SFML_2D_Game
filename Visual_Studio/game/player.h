@@ -72,14 +72,14 @@ public:
         exp += levelDif*(level/2);
         this->pExp += exp;
         if( this->pExp >= this->pExpMax ){       // Hier levelup!
-            #ifdef DEBUGINFO
-                std::cout << "LEVEL UP!" << std::endl;
-            #endif
             this->pExp -= this->pExpMax;
             this->Lvl++;
-            this->pHealthMax = BASEHEALTH-HEALTHPERLEVEL+this->Lvl*HEALTHPERLEVEL;
+            this->pHealthMax = (int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
+            this->pExpMax = (int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
 			this->Health = this->pHealthMax;
-            this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->Lvl-1));
+            #ifdef DEBUGINFO
+                std::cout << "LEVEL UP: " << this->Lvl << std::endl;
+            #endif
         }
     }
 	void setBlockControl(bool block=false){

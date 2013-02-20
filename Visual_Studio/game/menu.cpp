@@ -234,7 +234,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
     MenuButton CheckAxis = NoButton;
     bool blockAxis = false;
 	int selected = 0;
-	int *active;
+	int *active = 0;
 	if(!(active = new int[buttons])){
         throw "Error: Could not allocate space for 'int'";
     }
@@ -274,7 +274,6 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
                 blockAxis = false;
             }
         }
-        std::cout << CheckAxis << std::endl;
 		while(window.pollEvent(menuEvent)){
             if( gendermenu ){
                 switch(active[selected]){   // aktiver button wird anders dargestellt.
@@ -297,7 +296,6 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
 				if(HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y) != Nothing) // wenn kein button gedrückt wurde, mache nichts
-                    delete active;
 					return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
 			}
 /*           _                            _										            _                            _
@@ -319,12 +317,10 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
    `.__,-'                                    `-.__.«							  `.__,-'                                    `-.__*/
 			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed || !CheckAxis==NoButton ){
                 if(GetMenuButton(menuEvent) == Enter){
-                    delete active;
 					return button[active[selected]].action;
 				}														
 				else if(GetMenuButton(menuEvent) == Back){
                     if(gendermenu){
-                        delete active;
                         return Menue;
                     }
                     else {
@@ -380,7 +376,6 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 				#endif
 			}
 			else if(menuEvent.type == sf::Event::Closed){
-                delete active;
 				return Exit;
 			}
 		}

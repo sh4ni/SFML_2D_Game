@@ -11,8 +11,8 @@ Player::Player(int controller){
 	this->pGender = Savegame::currentSaveGame->pGender;
 	this->Name = Savegame::currentSaveGame->pName;
 
-	this->pHealthMax = BASEHEALTH-HEALTHPERLEVEL+this->Lvl*HEALTHPERLEVEL;
-	this->pExpMax = BASEEXP*(int)pow(EXPMULTIPLICATOR,(this->Lvl-1));
+	this->pHealthMax = (int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
+	this->pExpMax = (int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
 
 	this->controller = controller;
 	this->blockControl = false;

@@ -41,9 +41,9 @@
 #define IDLEHEAL 85					// 
 #define COOLDOWN 200
 
-#define BASEHEALTH 100
-#define HEALTHPERLEVEL 10
-#define BASEEXP 50
+#define BASEHEALTH 100.f
+#define HEALTHMULTIPLICATOR 1.1f
+#define BASEEXP 50.f
 #define EXPMULTIPLICATOR 1.15f
 
 #define SETTINGS "settings.cfg"

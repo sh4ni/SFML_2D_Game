@@ -18,6 +18,9 @@ public:
 			bool active;
 		};
 	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, bool gendermenu = false);
+    ~MainMenu(void){
+        
+    }
 
 private:
     enum MenuButton{ NoButton, Up, Down, Enter, Back };
@@ -26,8 +29,8 @@ private:
 	MenuResult HandleClick(int x, int y);
 	std::list<MenuItem> _menuItems;
 	void Update(sf::RenderWindow &Window);
-	int buttons;
-	MenuItem* button;
+	int buttons = 0;
+	MenuItem* button = 0;
 	sf::Sprite spriteMenu;
 	sf::Sprite spriteBackground;
 	sf::Sprite spriteBackgroundRepeat;
