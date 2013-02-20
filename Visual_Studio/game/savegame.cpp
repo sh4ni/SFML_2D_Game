@@ -69,7 +69,7 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			Savegame::currentSaveGame->checksum = checksum;
 			
 		}else{
-			/*
+			
 			defaultsavegame << Map::currentMap->getPlayer()->getHealth() << std::endl;
 			defaultsavegame << Map::currentMap->getPlayer()->getLvl() << std::endl;
 			defaultsavegame << Map::currentMap->getPlayer()->getExp() << std::endl;
@@ -78,7 +78,7 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			defaultsavegame << Savegame::currentSaveGame->mLevelId << std::endl;
 			defaultsavegame << Map::currentMap->getPlayer()->getPosX() << std::endl;
 			defaultsavegame << Map::currentMap->getPlayer()->getPosY() << std::endl;
-			*/
+			
 			std::stringstream ss;
 			ss << (Map::currentMap->getPlayer()->getHealth() - Map::currentMap->getPlayer()->getLvl() + Map::currentMap->getPlayer()->getExp() + Map::currentMap->getPlayer()->getGender() + (int)Map::currentMap->getPlayer()->getPosX() + (int)Map::currentMap->getPlayer()->getPosY() + CHECKSUM);
 			std::string checksum = md5(ss.str());
