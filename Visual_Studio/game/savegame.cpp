@@ -94,30 +94,58 @@ void Savegame::loadIt(){
 	Map::currentMap->getPlayer()->setHealth(152);
 }
 
-bool Savegame::loadSavegame(){
+bool Savegame::loadSavegame(bool init){
 	std::ifstream loadgame;
 	loadgame.open(PATH SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
-		std::cout << "Savegame detected! Loading..\n";
-		loadgame >> Savegame::currentSaveGame->pHealth;
-		//Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->pHealth);
-		loadgame >> Savegame::currentSaveGame->pLvl;
-		loadgame >> Savegame::currentSaveGame->pExp;
-		loadgame >> Savegame::currentSaveGame->pGender;
-		loadgame >> Savegame::currentSaveGame->pName;
+		if(init){
+			std::cout << "Savegame detected! Loading..\n";
+			loadgame >> Savegame::currentSaveGame->pHealth;
+			//Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->pHealth);
+			loadgame >> Savegame::currentSaveGame->pLvl;
+			loadgame >> Savegame::currentSaveGame->pExp;
+			loadgame >> Savegame::currentSaveGame->pGender;
+			loadgame >> Savegame::currentSaveGame->pName;
 
-		loadgame >> Savegame::currentSaveGame->mLevelId;
-		loadgame >> Savegame::currentSaveGame->mPosX;
-		loadgame >> Savegame::currentSaveGame->mPosY;
+			loadgame >> Savegame::currentSaveGame->mLevelId;
+			loadgame >> Savegame::currentSaveGame->mPosX;
+			loadgame >> Savegame::currentSaveGame->mPosY;
 		
-		loadgame >> Savegame::currentSaveGame->checksum;
+			loadgame >> Savegame::currentSaveGame->checksum;
+			
+			loadgame.close();
+			
+		}else{
+			loadgame >> Savegame::currentSaveGame->pHealth;
+			loadgame >> Savegame::currentSaveGame->pLvl;
+			loadgame >> Savegame::currentSaveGame->pExp;
+			loadgame >> Savegame::currentSaveGame->pGender;
+			loadgame >> Savegame::currentSaveGame->pName;
+
+			loadgame >> Savegame::currentSaveGame->mLevelId;
+			loadgame >> Savegame::currentSaveGame->mPosX;
+			loadgame >> Savegame::currentSaveGame->mPosY;
 		
+			loadgame >> Savegame::currentSaveGame->checksum;
+
+			std::cout << "spielstand geladen" << Savegame::currentSaveGame->pHealth << std::endl;
+			Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->pHealth);
+			Map::currentMap->getPlayer()->setLvl(Savegame::currentSaveGame->pLvl);
+			Map::currentMap->getPlayer()->setExp(Savegame::currentSaveGame->pExp);
+			Map::currentMap->getPlayer()->setGender(Savegame::currentSaveGame->pGender);
+			Map::currentMap->getPlayer()->setName(Savegame::currentSaveGame->pName);
+			//Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->mLevelId);
+			Map::currentMap->getPlayer()->setPosition(Savegame::currentSaveGame->mPosX,Savegame::currentSaveGame->mPosY);
+			//Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->mPosY);
+			loadgame.close();
+		}
+		
+
+		// bitte prüfen @filip
 		std::stringstream ss;
-		ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
-		std::string s = md5(ss.str());
-		//std::string checksum = md5(ss.str()+mySavegame.mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
-		loadgame.close();
-
+			ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
+			std::string s = md5(ss.str());
+			//std::string checksum = md5(ss.str()+mySavegame.mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
 		if(Savegame::currentSaveGame->checksum.compare(s) == 0){
 			std::cout << "Savegame okay...!\n";
 			return true;

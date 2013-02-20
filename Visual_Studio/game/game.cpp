@@ -13,7 +13,7 @@ void Game::Init(void)
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
 
-	if(Savegame::currentSaveGame->loadSavegame()){
+	if(Savegame::currentSaveGame->loadSavegame(true)){
 		Game::Start();
 	}else{
 		Game::Start(true);

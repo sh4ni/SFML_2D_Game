@@ -38,9 +38,9 @@ public:
 	const static sf::Event& GetInput();*/
 private:
 //	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, sf::Clock& clock);
-	static void resume();
+	//static void resume();
 	
-	static void save(Player& P1, std::string level);
+	//static void save(Player& P1, std::string level);
 	static void load(Player& P1);
 
 	std::string mapTheme;

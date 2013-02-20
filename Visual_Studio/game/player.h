@@ -34,6 +34,9 @@ public:
 	char getGender(void){
 		return this->pGender;
 	}
+	void setGender(char pGender){
+		this->pGender = pGender;
+	};
 	int getHealthMax(void){
 		return this->pHealthMax;
 	}
