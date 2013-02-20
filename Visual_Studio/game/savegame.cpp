@@ -153,7 +153,7 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 			ConfigFile::currentConfigFile->screendirectory = DEFAULT_SCREENSHOTDIR;
 			
 			configFile << "\n### Controller Settings ###" << std::endl;
-			#ifdef SFML_SYSTEM_WINDOWS
+			#ifdef SYS_WINDOWS
 				configFile << "Win Settings" << std::endl;
 			#else
 				configFile << "Other OS Settings" << std::endl;

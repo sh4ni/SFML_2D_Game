@@ -29,8 +29,8 @@ private:
 	MenuResult HandleClick(int x, int y);
 	std::list<MenuItem> _menuItems;
 	void Update(sf::RenderWindow &Window);
-	int buttons = 0;
-	MenuItem* button = 0;
+	int buttons;
+	MenuItem* button;
 	sf::Sprite spriteMenu;
 	sf::Sprite spriteBackground;
 	sf::Sprite spriteBackgroundRepeat;

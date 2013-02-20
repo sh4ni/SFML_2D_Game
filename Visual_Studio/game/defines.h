@@ -1,6 +1,12 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
+#if defined(_WIN32) || defined(__WIN32__)
+	#define SYS_WINDOWS
+#elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh)
+    #define SYS_MACOS
+#endif
+
 #define DEBUGINFO 
 
 #define WIDTH 1024
@@ -18,7 +24,7 @@
 #endif
 
 // path du /include folder
-#ifdef SFML_SYSTEM_MACOS
+#ifdef SYS_MACOS
     #define PATH "game.app/Contents/Resources/"
 #else
     #define PATH ""
@@ -68,7 +74,7 @@
 #define DEFAULT_POSY HEIGHT/2
 
 // nicht löschen
-#ifdef SFML_SYSTEM_WINDOWS
+#ifdef SYS_WINDOWS
 	#define DEFAULT_A 0
 	#define DEFAULT_B 1
 	#define DEFAULT_X 2

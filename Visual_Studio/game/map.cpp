@@ -37,22 +37,14 @@ Map::Map(){
 	if( openfile.is_open() ){
 		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme;
 		
-		if(!(TileMap = new TilePart*[MapSizeX])){
-            throw "Error: Could not allocate space for 'TilePart*'";
-        }                                           // Map Speicher Dynamisch reservieren.
+		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.
 		for ( int i = 0 ; i < MapSizeX ; i++ ){		// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
-			if(!(TileMap[i] = new TilePart[MapSizeY])){
-                throw "Error: Could not allocate space for 'TilePart'";
-            }
+			TileMap[i] = new TilePart[MapSizeY];
 		}
 
-		if(!(CollisionMap = new sf::IntRect**[MapSizeX])){
-            throw "Error: Could not allocate space for 'IntRect**'";
-        }
+		CollisionMap = new sf::IntRect**[MapSizeX];
 		for ( int i = 0 ; i < MapSizeX ; i++ ){
-			if(!(CollisionMap[i] = new sf::IntRect*[MapSizeY])){
-                throw "Error: Could not allocate space for 'IntRect*'";
-            }
+			CollisionMap[i] = new sf::IntRect*[MapSizeY];
 		}
 
 
@@ -63,9 +55,7 @@ Map::Map(){
 			subRect.top=TileType/10*TILESIZE;   // zeile
 			subRect.left=TileType%10*TILESIZE;  // spalte
 			
-			if(!(TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect))){
-                throw "Error: Could not allocate space for 'Sprite'";
-            }
+			TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect);
 			switch( TileType ){
 			case 0:
 			case 1:
@@ -97,9 +87,7 @@ Map::Map(){
 				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  // keine kollision
 					break;
 			default:        // defaultwert: alle anderen blšcke kriegen eine kollision!
-                    if(!(CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE))){
-                        throw "Error: Could not allocate space for 'IntRect'";
-                    }
+                    CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
 				break;
 
 			}
@@ -183,10 +171,11 @@ Map::~Map(){
                 delete CollisionMap[x][y];      // Lšschen der CollisionMap - Rechtecke
             }
         }
-        delete TileMap[x];                      // Lšschen der TileMap - Objekte
-        delete CollisionMap[x];                 // Lšschen der CollisionMap - Pointer
+		//delete TileMap[x];                      // Lšschen der TileMap - Objekte
+		//delete CollisionMap[x];                 // Lšschen der CollisionMap - Pointer
     }
-    delete TileMap;                             // Lšschen der TileMap - Pointer
+	
+	delete TileMap;                             // Lšschen der TileMap - Pointer
     delete CollisionMap;                        // Lšschen der CollisionMap - Pointer auf Pointer
 
 }

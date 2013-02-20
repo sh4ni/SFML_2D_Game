@@ -216,7 +216,7 @@ MainMenu::MenuButton MainMenu::GetMenuButton(sf::Event menuEvent){
         else if(menuEvent.joystickButton.button == ConfigFile::currentConfigFile->controller_B || menuEvent.joystickButton.button == ConfigFile::currentConfigFile->controller_BACK){
             return Back;
         }
-#ifdef SFML_SYSTEM_MACOS
+#ifdef SYS_MACOS
         else if(menuEvent.joystickButton.button == 11 || menuEvent.joystickButton.button == 13){
             return Up;
         }
