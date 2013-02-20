@@ -12,10 +12,8 @@
 class ConfigFile{
 public:
 	static ConfigFile * currentConfigFile;
-	ConfigFile(){
-	};
-	~ConfigFile(){
-	};
+	ConfigFile();
+	~ConfigFile();
 	int width;
 	int height;
 	std::string screendirectory;
@@ -39,10 +37,8 @@ public:
 class Savegame{
 public:
 	static Savegame * currentSaveGame;
-	Savegame(){
-	}
-	~Savegame(){
-	}
+	Savegame();
+	~Savegame();
 	int pHealth;
 	int pLvl;
 	int pExp;
@@ -57,7 +53,7 @@ public:
 
 	void saveSavegame(const char pGender = 'M', bool defaultConfig=false);
 	bool loadSavegame(bool init=false);
-	static void loadIt();
+	
 };
 
 #endif

@@ -59,6 +59,10 @@ bool Game::IsExiting()
 {
 	// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zurück, ansonsten ein False
 	if(_gameState == Game::Exiting){
+		
+		delete Savegame::currentSaveGame;
+		delete ConfigFile::currentConfigFile;
+		
 		return true;
 	}else{ 
 		return false;

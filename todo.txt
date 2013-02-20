@@ -1,12 +1,13 @@
 ToDo
 ! dekonstruktor für menü (k)
 ! dekonstruktor für savegame (f)
+! Konstruktor von Map braucht die Level ID als übergabe Parameter (f)
 - passive Monster, aggresive Monster / Freundliche NPCs
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
 - grafikeffekte: regen (k)
 . buttons über die, die maus schwebt werden aktiv (k)
-- gameover screen
+- gameover screen (f)
 - Map Editor
 - Dialoge/Story
 - Dialogboxen im Spiel bei Unterhaltungen

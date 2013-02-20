@@ -20,7 +20,7 @@ void Intro::Show(sf::RenderWindow& renderWindow)
 	renderWindow.display();
 
 	sf::Event currentEvent;
-	while(true)
+	for(;;)	// dann gibts keine warnung mehr im vs 2010 auf warning lv 4 :P
 	{
 		while(renderWindow.pollEvent(currentEvent))
 		{

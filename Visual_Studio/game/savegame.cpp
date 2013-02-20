@@ -3,6 +3,17 @@
 Savegame * Savegame::currentSaveGame;
 ConfigFile * ConfigFile::currentConfigFile;
 
+Savegame::Savegame(){
+#ifdef DEBUGINFO
+	std::cout << "konstruktor Savegame." << std::endl;
+#endif
+}
+Savegame::~Savegame(){
+#ifdef DEBUGINFO
+	std::cout << "dekonstruktor Savegame." << std::endl;
+#endif
+}
+
 void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
@@ -90,9 +101,7 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 	}
 }
 
-void Savegame::loadIt(){
-	Map::currentMap->getPlayer()->setHealth(152);
-}
+
 
 bool Savegame::loadSavegame(bool init){
 	std::ifstream loadgame;
@@ -161,6 +170,18 @@ bool Savegame::loadSavegame(bool init){
 	}*/
 	return false;
 }
+
+
+ConfigFile::ConfigFile(){
+#ifdef DEBUGINFO
+	std::cout << "konstruktor ConfigFile." << std::endl;
+#endif
+};
+ConfigFile::~ConfigFile(){
+#ifdef DEBUGINFO
+	std::cout << "dekonstruktor ConfigFile." << std::endl;
+#endif
+};
 
 void ConfigFile::saveConfigFile(bool defaultConfig){
 	std::ofstream configFile;
