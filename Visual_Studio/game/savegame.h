@@ -7,6 +7,7 @@
 #include <string>
 #include "defines.h"
 #include "md5.h"
+#include "map.h"
 
 class ConfigFile{
 public:
@@ -56,6 +57,7 @@ public:
 
 	void saveSavegame(const char pGender = 'M', bool defaultConfig=false);
 	bool loadSavegame();
+	static void loadIt();
 };
 
 #endif

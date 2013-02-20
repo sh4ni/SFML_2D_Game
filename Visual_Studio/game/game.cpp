@@ -120,7 +120,8 @@ void Game::GamePaused(sf::View viewCamera){
 }
 void Game::ShowMap(sf::View viewCamera){
 	static Map map;
-	
+	Map::currentMap = &map;
+
 	int newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 	if(newGameState == 5)
 		_gameState = Paused;

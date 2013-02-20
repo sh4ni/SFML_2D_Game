@@ -52,12 +52,12 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 					std::cout << "Quit Game!" << std::endl;
 				#endif
 					return true; // gebe true zurueck damit das spiel anschließend beendet wird
-			}else if(pauseLoop.key.code == sf::Keyboard::F6){
+			}else if(pauseLoop.key.code == sf::Keyboard::Num6){
 				//Map::save(P1, LevelId);
 				Savegame::currentSaveGame->saveSavegame();
-			}else if(pauseLoop.key.code == sf::Keyboard::F9){
+			}else if(pauseLoop.key.code == sf::Keyboard::Num7){
 				Savegame::currentSaveGame->loadSavegame();
-				//Map::load(P1);
+//				Map::load(Map::currentMap->getPlayer());
 			}else if(pauseLoop.type == sf::Event::Closed){
 				//return true;
 			}
