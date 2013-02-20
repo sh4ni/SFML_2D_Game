@@ -69,17 +69,18 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			Savegame::currentSaveGame->checksum = checksum;
 			
 		}else{
-			defaultsavegame << Savegame::currentSaveGame->pHealth << std::endl;
-			defaultsavegame << Savegame::currentSaveGame->pLvl << std::endl;
-			defaultsavegame << Savegame::currentSaveGame->pExp << std::endl;
-			defaultsavegame << Savegame::currentSaveGame->pGender << std::endl;
-			defaultsavegame << Savegame::currentSaveGame->pName << std::endl;
+			/*
+			defaultsavegame << Map::currentMap->getPlayer()->getHealth() << std::endl;
+			defaultsavegame << Map::currentMap->getPlayer()->getLvl() << std::endl;
+			defaultsavegame << Map::currentMap->getPlayer()->getExp() << std::endl;
+			defaultsavegame << Map::currentMap->getPlayer()->getGender() << std::endl;
+			defaultsavegame << Map::currentMap->getPlayer()->getName() << std::endl;
 			defaultsavegame << Savegame::currentSaveGame->mLevelId << std::endl;
-			defaultsavegame << Savegame::currentSaveGame->mPosX << std::endl;
-			defaultsavegame << Savegame::currentSaveGame->mPosY << std::endl;
-
+			defaultsavegame << Map::currentMap->getPlayer()->getPosX() << std::endl;
+			defaultsavegame << Map::currentMap->getPlayer()->getPosY() << std::endl;
+			*/
 			std::stringstream ss;
-			ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
+			ss << (Map::currentMap->getPlayer()->getHealth() - Map::currentMap->getPlayer()->getLvl() + Map::currentMap->getPlayer()->getExp() + Map::currentMap->getPlayer()->getGender() + (int)Map::currentMap->getPlayer()->getPosX() + (int)Map::currentMap->getPlayer()->getPosY() + CHECKSUM);
 			std::string checksum = md5(ss.str());
 			// Änderung noch in Final!
 
@@ -89,12 +90,17 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 	}
 }
 
+void Savegame::loadIt(){
+	Map::currentMap->getPlayer()->setHealth(152);
+}
+
 bool Savegame::loadSavegame(){
 	std::ifstream loadgame;
 	loadgame.open(PATH SAVEGAME, std::ios::binary);
 	if(loadgame.is_open()){
 		std::cout << "Savegame detected! Loading..\n";
 		loadgame >> Savegame::currentSaveGame->pHealth;
+		//Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->pHealth);
 		loadgame >> Savegame::currentSaveGame->pLvl;
 		loadgame >> Savegame::currentSaveGame->pExp;
 		loadgame >> Savegame::currentSaveGame->pGender;
@@ -121,10 +127,11 @@ bool Savegame::loadSavegame(){
 			return false;
 		}
 		
-	}else{
-		saveSavegame();
-	}
-	return true;
+	}/*else{
+		std::cout << "no savegame detected.." << std::endl;
+		saveSavegame('M',true);
+	}*/
+	return false;
 }
 
 void ConfigFile::saveConfigFile(bool defaultConfig){
@@ -198,7 +205,7 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 }
 
 void ConfigFile::loadConfigFile(){
-	//ConfigFile::currentConfigFile;      // @f: xcode bringt mir hier ne warnung, dass das ŸberflŸssig sei.
+	
 	std::ifstream configFile;
 	std::string line;
 	configFile.open(PATH SETTINGS);

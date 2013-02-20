@@ -4,15 +4,18 @@
 
 #include <sstream>
 
-#include "game.h"
+//#include "game.h"
 
 #include "player.h"
 #include "savegame.h"
-#include <vector>  
+#include "schrift.h"
+#include <vector>
 
 
 #include "monster.h"
 
+
+//class Player;
 
 class TilePart{
 public:
@@ -26,16 +29,20 @@ public:
 	Map();
 	~Map();
 	
+	static Map * currentMap;
+
 	int Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
 	
 	sf::IntRect getRect(int x, int y);
 	/*static sf::RenderWindow& GetWindow();
 	const static sf::Event& GetInput();*/
 private:
-	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, sf::Clock& clock);
+//	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, sf::Clock& clock);
 	static void resume();
+	
 	static void save(Player& P1, std::string level);
 	static void load(Player& P1);
+
 	std::string mapTheme;
 
 	////////////// das ist toll / danner 
@@ -79,6 +86,11 @@ private:
 	Schrift DisplayKoord;
 	Schrift DisplaySpeed;
 
+public:
+	
+	Player* getPlayer(void){
+		return &P1;
+	}
 };
 
 #endif

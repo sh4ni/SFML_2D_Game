@@ -1,13 +1,12 @@
 #include "map.h"
 
-
 /*IntRect Map::getRect(int x, int y){
 	x /= TILESIZE;
 	y /= TILESIZE;
 	return CollisionMap[x][y];
 }*/
 sf::Texture Map::LevelTexture;
-
+Map * Map::currentMap;
 
 Map::Map(){
 	std::cout << "konstruktor MAP!" << std::endl;
@@ -275,7 +274,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 						return 5;
 					P1.setBlockControl(false);
 					*/
-					Map::save(P1,LevelId);
+					//Map::save(P1,LevelId);
 					return 5;
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
@@ -305,10 +304,11 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 				else if(levelLoop.key.code == sf::Keyboard::Num9){
                     P1.setBlockControl(false);
                 }
-				else if(levelLoop.key.code == sf::Keyboard::F6){
-                    Map::save(P1,LevelId);
+				else if(levelLoop.key.code == sf::Keyboard::Num6){
+                    //Map::save(P1,LevelId);
+					Savegame::currentSaveGame->saveSavegame();
                 }
-				else if(levelLoop.key.code == sf::Keyboard::F9){
+				else if(levelLoop.key.code == sf::Keyboard::Num7){
 					Map::load(P1);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::N){
@@ -479,7 +479,7 @@ void Map::save(Player& P1, std::string LevelId)
 	return true;
 	*/
 }
-
+/*
 bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, sf::Clock& clock){
 	
 	Map::save(P1, LevelId);
@@ -548,3 +548,4 @@ bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event l
 	}
 	return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
 }
+*/

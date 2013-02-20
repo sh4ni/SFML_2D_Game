@@ -6,7 +6,6 @@
 #include <string>
 #include <math.h>
 #include "defines.h"
-#include "savegame.h"
 #include "character.h"
 
 
