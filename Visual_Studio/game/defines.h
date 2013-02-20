@@ -28,6 +28,7 @@
 #define BUTTONWIDTH 704
 #define BUTTONHEIGHT 64
 #define GENDERBUTTON 128
+#define CONTROLLERAXISMENUE 75.f
 
 // used in map.cpp and player.cpp
 #define TILESIZE 32
@@ -85,8 +86,8 @@
 	#define DEFAULT_Y 3
 	#define DEFAULT_LB 4
 	#define DEFAULT_RB 5
-	#define DEFAULT_BACK 8
-	#define DEFAULT_START 9
+	#define DEFAULT_BACK 9
+	#define DEFAULT_START 8
 	#define DEFAULT_LS 6
 	#define DEFAULT_RS 7
 #endif

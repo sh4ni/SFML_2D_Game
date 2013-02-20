@@ -45,8 +45,11 @@ public:
 		this->MapSize.x = xMax;
 		this->MapSize.y = yMax;
 	}
+    void ResetCooldown(void){
+        this->HealTickRate = -COOLDOWN + IDLEHEAL;
+    }
     void playerDamage( int damage, int level ){
-        HealTickRate = -COOLDOWN + IDLEHEAL;
+        ResetCooldown();
 		int levelDif = level-this->Lvl;
         damage += (levelDif*(level/10));
         if ( damage <= 0 ){

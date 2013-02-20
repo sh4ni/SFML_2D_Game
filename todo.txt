@@ -1,9 +1,6 @@
 ToDo
 ! dekonstruktor für menü (k)
 ! dekonstruktor für savegame (f)
-- return funktion für tastendrücke im menü (k)
-- axen controller im menü (k)
-- health cd reset als methode
 - passive Monster, aggresive Monster / Freundliche NPCs
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
@@ -17,6 +14,7 @@ ToDo
 Improvements
 - exp formel nochmal anschauen
 - hp formel anpassen
+. axen im menü prüfen und verbessern (k)
 . laufanimation bei nicht ganz durchgedrückten gamepad (k)
 . schlechte fps: prüfen ob laufanimation passt
 . schlechte fps: hp formel anpassen

@@ -190,16 +190,49 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 	return Nothing;     // für die, die keine buttons treffen und daneben klicken :>
 }
 
-MainMenu::MenuButton MainMenu::GetMenuButton(void){
+MainMenu::MenuButton MainMenu::GetMenuButton(sf::Event menuEvent){
     
-    // insert random code here
+    // Tastatur
+    if (menuEvent.type == sf::Event::KeyPressed){
+        if(menuEvent.key.code == sf::Keyboard::Return){
+            return Enter;
+        }
+        else if(menuEvent.key.code == sf::Keyboard::Escape){
+            return Back;
+        }
+        else if(menuEvent.key.code == sf::Keyboard::Up || menuEvent.key.code == sf::Keyboard::Left){
+            return Up;
+        }
+        else if(menuEvent.key.code == sf::Keyboard::Down || menuEvent.key.code == sf::Keyboard::Right){
+            return Down;
+        }
+    }
     
+    // Gamepad
+    else if (menuEvent.type == sf::Event::JoystickButtonPressed){
+        if(menuEvent.joystickButton.button == ConfigFile::currentConfigFile->controller_A || menuEvent.joystickButton.button == ConfigFile::currentConfigFile->controller_START){
+            return Enter;
+        }
+        else if(menuEvent.joystickButton.button == ConfigFile::currentConfigFile->controller_B || menuEvent.joystickButton.button == ConfigFile::currentConfigFile->controller_BACK){
+            return Back;
+        }
+#ifdef SFML_SYSTEM_MACOS
+        else if(menuEvent.joystickButton.button == 11 || menuEvent.joystickButton.button == 13){
+            return Up;
+        }
+        else if(menuEvent.joystickButton.button == 12 || menuEvent.joystickButton.button == 14){
+            return Down;
+        }
+#endif
+    }
+
     return NoButton;
 }
 
 MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool gendermenu){
 	sf::Event menuEvent;
-    
+    MenuButton CheckAxis = NoButton;
+    bool blockAxis = false;
 	int selected = 0;
 	int *active;
 	if(!(active = new int[buttons])){
@@ -212,6 +245,36 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 		}
 	}
 	while(4+8+15+16+23+42==108){	// LOST
+        if( sf::Joystick::isConnected(0) ){
+            if(!blockAxis){
+                if( (sf::Joystick::getAxisPosition(0,sf::Joystick::Y) < -CONTROLLERAXISMENUE) ||
+                   (sf::Joystick::getAxisPosition(0,sf::Joystick::X) < -CONTROLLERAXISMENUE) ||
+                   (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) < -CONTROLLERAXISMENUE) ||
+                   (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) < -CONTROLLERAXISMENUE) ){
+                    CheckAxis = Up;
+                    blockAxis = true;
+                }
+                else if( (sf::Joystick::getAxisPosition(0,sf::Joystick::Y) > CONTROLLERAXISMENUE) ||
+                        (sf::Joystick::getAxisPosition(0,sf::Joystick::X) > CONTROLLERAXISMENUE) ||
+                        (sf::Joystick::getAxisPosition(0,sf::Joystick::PovY) > CONTROLLERAXISMENUE) ||
+                        (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) > CONTROLLERAXISMENUE) ){
+                    CheckAxis = Down;
+                    blockAxis = true;
+                }
+            }
+            else if ( (sf::Joystick::getAxisPosition(0,sf::Joystick::Y) > -CONTROLLERAXISMENUE-CONTROLLERAXISMENUE/2) ||
+                     (sf::Joystick::getAxisPosition(0,sf::Joystick::X) > -CONTROLLERAXISMENUE-CONTROLLERAXISMENUE/2) ||
+                     (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) > -CONTROLLERAXISMENUE-CONTROLLERAXISMENUE/2) ||
+                     (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) > -CONTROLLERAXISMENUE-CONTROLLERAXISMENUE/2) ||
+                     (sf::Joystick::getAxisPosition(0,sf::Joystick::Y) < CONTROLLERAXISMENUE-CONTROLLERAXISMENUE/2) ||
+                     (sf::Joystick::getAxisPosition(0,sf::Joystick::X) < CONTROLLERAXISMENUE-CONTROLLERAXISMENUE/2) ||
+                     (sf::Joystick::getAxisPosition(0,sf::Joystick::PovY) < CONTROLLERAXISMENUE-CONTROLLERAXISMENUE/2) ||
+                     (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) < CONTROLLERAXISMENUE-CONTROLLERAXISMENUE/2)) {
+                CheckAxis = NoButton;
+                blockAxis = false;
+            }
+        }
+        std::cout << CheckAxis << std::endl;
 		while(window.pollEvent(menuEvent)){
             if( gendermenu ){
                 switch(active[selected]){   // aktiver button wird anders dargestellt.
@@ -234,6 +297,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
 				if(HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y) != Nothing) // wenn kein button gedrückt wurde, mache nichts
+                    delete active;
 					return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
 			}
 /*           _                            _										            _                            _
@@ -241,7 +305,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
      ,-'          `-.,____________,.-'    .-.   `-.								    ,-'          `-.,____________,.-'    .-.   `-.
     /   .---.             ___            ( 3 )     \							   /   .---.             ___            ( 3 )     \
    /  ,' ,-. `.     __   / 10\   __   .-. `-` .-.   \							  /  ,' ,-. `.     __   / X \   __   .-. `-` .-.   \
-  /   | | 6 | |    (_8) | / \ | (9_) ( 2 )   ( 1 )   \							 /   | | 8 | |    (_6) | / \ | (7_) ( 2 )   ( 1 )   \
+  /   | | 6 | |    (_9) | / \ | (8_) ( 2 )   ( 1 )   \							 /   | | 8 | |    (_6) | / \ | (7_) ( 2 )   ( 1 )   \
  /    `. `-' ,'    __    \___/        `-` ,-. `-`     \							/    `. `-' ,'    __    \___/        `-` ,-. `-`     \
  |      `---`   ,-`  `-.       .---.     ( 0 )        |		Tastenbelegung		|      `---`   ,-`  `-.       .---.     ( 0 )        |
  |             / -'11`- \    ,'  .  `.    `-`         |   Xbox 360 Controller	|             / -'  `- \    ,'  .  `.    `-`         | DPad = Axen
@@ -252,17 +316,23 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
  |             _,-'`                ``-._             |							|             _,-'`                ``-._             |
  |          ,-'                          `-.          |							|          ,-'                          `-.          |
   \       ,'                                `.       /							 \       ,'                                `.       /
-   `.__,-'                                    `-.__.´							  `.__,-'                                    `-.__*/
-			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed ){
-                if(menuEvent.key.code == sf::Keyboard::Return || (menuEvent.type == sf::Event::JoystickButtonPressed && menuEvent.joystickButton.button == 0) || menuEvent.joystickButton.button == 8 ){
+   `.__,-'                                    `-.__.«							  `.__,-'                                    `-.__*/
+			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed || !CheckAxis==NoButton ){
+                if(GetMenuButton(menuEvent) == Enter){
+                    delete active;
 					return button[active[selected]].action;
 				}														
-				else if(menuEvent.key.code == sf::Keyboard::Escape || menuEvent.joystickButton.button == ConfigFile::currentConfigFile->controller_B || menuEvent.joystickButton.button == 6 ){
-                    if(gendermenu){							
+				else if(GetMenuButton(menuEvent) == Back){
+                    if(gendermenu){
+                        delete active;
                         return Menue;
                     }
+                    else {
+                        button[active[selected]].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
+                        selected = activeButtons-1;
+                    }
                 }
-                else if(menuEvent.key.code == sf::Keyboard::Up || menuEvent.key.code == sf::Keyboard::Left || menuEvent.joystickButton.button == 11 || menuEvent.joystickButton.button == 13 ){
+                else if( (GetMenuButton(menuEvent) == Up) || (CheckAxis == Up) ){
 					if( selected > 0 ){
                         if( gendermenu ){
                             switch(active[selected]){   // damit die alten buttons wieder normal dargestellt werden.
@@ -283,7 +353,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 						selected--;
 					}
 				}
-				else if(menuEvent.key.code == sf::Keyboard::Down || menuEvent.key.code == sf::Keyboard::Right || menuEvent.joystickButton.button == 12 || menuEvent.joystickButton.button == 14 ){
+				else if( (GetMenuButton(menuEvent) == Down) || (CheckAxis == Down) ){
 					if( selected < activeButtons-1 ){
                         if( gendermenu ){
                             switch(active[selected]){
@@ -304,11 +374,13 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 						selected++;
 					}
 				}
+                CheckAxis = NoButton;
 				#ifdef DEBUGINFO
 					std::cout << "button " << menuEvent.joystickButton.button << " pressed." << std::endl;
 				#endif
 			}
 			else if(menuEvent.type == sf::Event::Closed){
+                delete active;
 				return Exit;
 			}
 		}
