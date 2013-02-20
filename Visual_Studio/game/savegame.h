@@ -56,7 +56,7 @@ public:
 	std::string checksum;
 
 	void saveSavegame(const char pGender = 'M', bool defaultConfig=false);
-	bool loadSavegame();
+	bool loadSavegame(bool init=false);
 	static void loadIt();
 };
 

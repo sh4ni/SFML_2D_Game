@@ -309,6 +309,8 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 					Savegame::currentSaveGame->saveSavegame();
                 }
 				else if(levelLoop.key.code == sf::Keyboard::Num7){
+					//Map::load(P1);
+					Savegame::currentSaveGame->loadSavegame();
 					Map::load(P1);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::N){
@@ -425,7 +427,7 @@ void Map::load(Player& P1)
 	*/
 }
 
-
+/*
 void Map::save(Player& P1, std::string LevelId)
 {
 	Savegame::currentSaveGame->pHealth = P1.getHealth();
@@ -477,7 +479,7 @@ void Map::save(Player& P1, std::string LevelId)
 	}
 	
 	return true;
-	*/
+	
 }
 /*
 bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, sf::Clock& clock){

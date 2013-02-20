@@ -57,6 +57,7 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 				Savegame::currentSaveGame->saveSavegame();
 			}else if(pauseLoop.key.code == sf::Keyboard::Num7){
 				Savegame::currentSaveGame->loadSavegame();
+				
 //				Map::load(Map::currentMap->getPlayer());
 			}else if(pauseLoop.type == sf::Event::Closed){
 				//return true;
