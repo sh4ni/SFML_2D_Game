@@ -21,7 +21,7 @@ public:
 
 private:
     enum MenuButton{ NoButton, Up, Down, Enter, Back };
-    MenuButton GetMenuButton(void);
+    MenuButton GetMenuButton(sf::Event menuEvent);
 	MenuResult GetMenuResponse(sf::RenderWindow& window, bool gendermenu = false);
 	MenuResult HandleClick(int x, int y);
 	std::list<MenuItem> _menuItems;
