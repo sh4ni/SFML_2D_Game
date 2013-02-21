@@ -194,7 +194,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 	while( 1+3+3==7 )
 	{
 		if(P1.getHealth() <= 0){
-			return 500;
+			return 4815162342;
 		}
 		ElapsedTime = (float)clock.restart().asMilliseconds();
 

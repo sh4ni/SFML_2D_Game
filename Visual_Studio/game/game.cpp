@@ -123,9 +123,12 @@ void Game::GamePaused(sf::View viewCamera){
 	else
 		_gameState = Playing;
 }
+
 void Game::ShowMap(sf::View viewCamera){
 	static Map map;
 	Map::currentMap = &map;
+	static Map map2;
+	Map::currentMap = &map2;
 
 	int newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 	if(newGameState == 5)
@@ -136,9 +139,9 @@ void Game::ShowMap(sf::View viewCamera){
 		_gameState = ShowingMenu;
 	}else if(newGameState == 4815162342){
 		std::cout << "hallo du da!" << std::endl;
+		system("pause");
 		Savegame::currentSaveGame->mLevelId = "map2";
-		static Map map2;
-		Map::currentMap = &map2;
+		
 		
 		system("pause");
 		std::cout << Savegame::currentSaveGame->mLevelId << std::endl;
@@ -164,6 +167,7 @@ void Game::ShowIntro(){
 void Game::ShowMenu(bool newgame){
 	MainMenu mainMenu;
 	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
+	Savegame::currentSaveGame->loadSavegame();
 	switch(result)
 	{
 		case MainMenu::Exit:
