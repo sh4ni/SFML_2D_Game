@@ -58,6 +58,9 @@ private:
 	int CamX;
 	int CamY;
 
+	int TileX;
+	int TileY;
+
 	sf::Texture ifaceImage;         // lade interface entsprechend des gewählten heldens.
 	sf::Sprite iface;
 

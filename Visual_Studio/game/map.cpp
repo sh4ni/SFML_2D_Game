@@ -193,8 +193,8 @@ Map::~Map(){
 }
 
 int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
-	while( 1+3+3==7 )
-	{
+	while( 1+3+3==7 ){
+
 		if(P1.getHealth() <= 0){
 			return 500;
 		}
@@ -215,10 +215,23 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 
 		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell für die Koordinatenanzeige
 		// und ruf aus performancegründen die getPos methode nicht 2 mal auf.
+		TileX = CamX/TILESIZE;
+		TileY = (CamY+TILESIZE/2)/TILESIZE;
+
+		if( TileX < 0 ) TileX = 0;
+		else if( TileX > MapSizeX ) MapSizeX;
+		if( TileY < 0 ) TileY = 0;
+		else if( TileY > MapSizeY ) MapSizeY;
+
 		std::ostringstream PlayerKoordText;
 		PlayerKoordText.precision(0);
-		PlayerKoordText << std::fixed << "X: " << CamX << " Y: " << CamY;
+		PlayerKoordText << std::fixed << "X: " << CamX << " Y: " << CamY << " TX: " << TileX << " TY: " << TileY;
 		DisplayKoord.Update(PlayerKoordText.str());
+
+		// und nochmal ^^
+		if( TileMap[TileX][TileY].Teleport ){
+			std::cout << "Lade Map: '" << TileMap[TileX][TileY].Teleport->Map << "' X: " << TileMap[TileX][TileY].Teleport->xDest << " Y: " << TileMap[TileX][TileY].Teleport->yDest << std::endl;
+		}
 
 		std::ostringstream PlayerSpeedText;
 		PlayerSpeedText.precision(1);
