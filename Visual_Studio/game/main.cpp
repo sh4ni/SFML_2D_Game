@@ -17,9 +17,11 @@ int main(void){
 			int * myfail = new int[10000000];
 			std::cout << "alloziiere speicher!" << std::endl;
 		}*/
+		
 	}
 	catch(const char * str){
 		std::cout << str << std::endl;
+		system("pause");
 	}
 	catch(bad_alloc& err){
 		std::cout << err.what() << std::endl;
@@ -28,6 +30,7 @@ int main(void){
 	
 	catch(...){
 		std::cout << "error" << std::endl;
+		system("pause");
 	}
 	return 0;
 }

@@ -11,10 +11,13 @@ Map * Map::currentMap;
 Map::Map(){
 	std::cout << "konstruktor MAP!" << std::endl;
 
+	
+}
+void Map::Init(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera){
+	
 	#ifdef DEBUGINFO
-		std::cout << "Load Map : " << Savegame::currentSaveGame->mLevelId << std::endl;
+		std::cout << "Load Map : " << LevelId << std::endl;
 	#endif
-
 	//renderWindow.setMouseCursorVisible(false);
 	
 	// Hier wird die Textur für die Map geladen.
@@ -28,8 +31,8 @@ Map::Map(){
 	this->CollisionMap = 0;
 	this->MapLevelMin = 1;
 	this->MapLevelMax = 1;
-
-	this->FileName = PATH"include/map/" + Savegame::currentSaveGame->mLevelId + ".txt";
+	std::cout << " wuerde map nummero " << LevelId << " laden..\n";
+	this->FileName = PATH"include/map/" + LevelId + ".txt";
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName.c_str());
@@ -190,11 +193,11 @@ Map::~Map(){
 
 }
 
-int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
+MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
 	while( 1+3+3==7 ){
 
 		if(P1.getHealth() <= 0){
-			return 4815162342;
+			return MapEvent(MapEvent::dead);
 		}
 		ElapsedTime = (float)clock.restart().asMilliseconds();
 
@@ -217,9 +220,9 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 		TileY = (CamY+TILESIZE/2)/TILESIZE;
 
 		if( TileX < 0 ) TileX = 0;
-		else if( TileX > MapSizeX ) MapSizeX;
+		else if( TileX >= MapSizeX ) MapSizeX;
 		if( TileY < 0 ) TileY = 0;
-		else if( TileY > MapSizeY ) MapSizeY;
+		else if( TileY >= MapSizeY ) MapSizeY;
 
 		std::ostringstream PlayerKoordText;
 		PlayerKoordText.precision(0);
@@ -279,7 +282,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
-					return 5;
+					return MapEvent(MapEvent::pause);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
@@ -315,7 +318,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 					Savegame::currentSaveGame->loadSavegame();
 				}
 				else if(levelLoop.key.code == sf::Keyboard::N){
-					return 4815162342;
+					return MapEvent(MapEvent::mapchange,"map2",500,500);
 				}
                 #endif
 			}
@@ -323,10 +326,10 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 				#ifdef DEBUGINFO
 					std::cout << " Outside the window!.. Game will be paused" << std::endl;	
 				#endif
-					return 5;
+					return MapEvent(MapEvent::pause);
 			}
             else if(levelLoop.type == sf::Event::Closed){
-				return 0;
+				return MapEvent(MapEvent::exiting);
 			}
 			
 		}
@@ -375,7 +378,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 		renderWindow.display();
 		
 	}
-	return 10;
+	return MapEvent(MapEvent::nothing);
 }
 /*
 void Map::load(Player& P1)

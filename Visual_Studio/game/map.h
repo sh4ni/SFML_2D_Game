@@ -28,6 +28,28 @@ public:
 	tp* Teleport;
 };
 
+class MapEvent{
+private:
+	//
+public:
+	enum reason{ nothing, dead, mapchange, exiting, pause };
+
+	MapEvent(MapEvent::reason theReason, std::string newMapId = "", int newMapPosX = 0, int newMapPosY = 0 ){
+		this->theReason = theReason;
+		this->newMapId = newMapId;
+		this->newMapPosX = newMapPosX;
+		this->newMapPosY = newMapPosY;
+	};
+	~MapEvent(){
+	};
+
+	
+	MapEvent::reason theReason;
+	std::string newMapId;
+	int newMapPosX;
+	int newMapPosY;
+};
+
 class Map{
 
 private:
@@ -83,7 +105,9 @@ public:
 	
 	static Map * currentMap;
 
-	int Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
+	void Init(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
+
+	MapEvent Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
 	
 	sf::IntRect getRect(int x, int y);
 	

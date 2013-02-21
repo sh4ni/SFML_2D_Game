@@ -1,5 +1,5 @@
 #include "game.h"
-	
+
 void Game::Init(void)
 {
 	// Do it!
@@ -122,37 +122,36 @@ void Game::GamePaused(sf::View viewCamera){
 		_gameState = Exiting;
 	else
 		_gameState = Playing;
+
+	// hier kann ich zurück ins menü!
 }
 
 void Game::ShowMap(sf::View viewCamera){
 	static Map map;
 	Map::currentMap = &map;
-	static Map map2;
-	Map::currentMap = &map2;
+	
 
-	int newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
-	if(newGameState == 5)
+	map.Init(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
+	MapEvent newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
+
+	
+	
+	if(newGameState.theReason == MapEvent::pause)
 		_gameState = Paused;
-	else if(newGameState == 0)
+	else if(newGameState.theReason == MapEvent::exiting)
 		_gameState = Exiting;
-	else if(newGameState == 500){
+	else if(newGameState.theReason == MapEvent::dead){
+	//	Savegame::currentSaveGame->loadSavegame();
 		_gameState = ShowingMenu;
-	}else if(newGameState == 4815162342){
-		std::cout << "hallo du da!" << std::endl;
-		system("pause");
-		Savegame::currentSaveGame->mLevelId = "map2";
+	}else if(newGameState.theReason == MapEvent::mapchange){
+		Map::currentMap->getPlayer()->setLevelId(newGameState.newMapId);
+		Map::currentMap->getPlayer()->setPosition(newGameState.newMapPosX,newGameState.newMapPosY);
+		
+		std::cout << "PlayerLevelId" << Map::currentMap->getPlayer()->getLevelId() << std::endl;
+		Savegame::currentSaveGame->saveSavegame();
 		
 		
-		system("pause");
-		std::cout << Savegame::currentSaveGame->mLevelId << std::endl;
-		map2.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
-		_gameState = Playing;
-
-		
-		//map.Show(_mainWindow, "map2", viewCamera);
 	}
-		//map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
-		//*/
 	
 	
 }
@@ -167,7 +166,7 @@ void Game::ShowIntro(){
 void Game::ShowMenu(bool newgame){
 	MainMenu mainMenu;
 	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
-	Savegame::currentSaveGame->loadSavegame();
+	//Savegame::currentSaveGame->loadSavegame();
 	switch(result)
 	{
 		case MainMenu::Exit:

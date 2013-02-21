@@ -80,7 +80,10 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			Savegame::currentSaveGame->checksum = checksum;
 			
 		}else{
-			
+			Savegame::currentSaveGame->mLevelId = Map::currentMap->getPlayer()->getLevelId();
+			Savegame::currentSaveGame->mPosX = Map::currentMap->getPlayer()->getPosX();
+			Savegame::currentSaveGame->mPosY = Map::currentMap->getPlayer()->getPosY();
+
 			defaultsavegame << Map::currentMap->getPlayer()->getHealth() << std::endl;
 			defaultsavegame << Map::currentMap->getPlayer()->getLvl() << std::endl;
 			defaultsavegame << Map::currentMap->getPlayer()->getExp() << std::endl;
