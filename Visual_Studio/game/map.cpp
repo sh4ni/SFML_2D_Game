@@ -220,9 +220,9 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		TileY = (CamY+TILESIZE/2)/TILESIZE;
 
 		if( TileX < 0 ) TileX = 0;
-		else if( TileX >= MapSizeX ) MapSizeX;
+		else if( TileX >= MapSizeX ) TileX = MapSizeX-1;
 		if( TileY < 0 ) TileY = 0;
-		else if( TileY >= MapSizeY ) MapSizeY;
+		else if( TileY >= MapSizeY ) TileY = MapSizeY-1;
 
 		std::ostringstream PlayerKoordText;
 		PlayerKoordText.precision(0);
@@ -231,7 +231,10 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 
 		// und nochmal ^^
 		if( TileMap[TileX][TileY].Teleport ){
-			std::cout << "Lade Map: '" << TileMap[TileX][TileY].Teleport->Map << "' X: " << TileMap[TileX][TileY].Teleport->xDest << " Y: " << TileMap[TileX][TileY].Teleport->yDest << std::endl;
+			#ifdef DEBUGINFO
+				std::cout << "Lade Map: '" << TileMap[TileX][TileY].Teleport->Map << "' X: " << TileMap[TileX][TileY].Teleport->xDest << " Y: " << TileMap[TileX][TileY].Teleport->yDest << std::endl;
+			#endif
+			return MapEvent(MapEvent::mapchange,TileMap[TileX][TileY].Teleport->Map,TileMap[TileX][TileY].Teleport->xDest,TileMap[TileX][TileY].Teleport->yDest);
 		}
 
 		std::ostringstream PlayerSpeedText;
@@ -297,13 +300,13 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 					P1.increaseSpeed(0.1f);                             // E = schneller laufen
 				}                                                       // Q = langsamer laufen
 				else if(levelLoop.key.code == sf::Keyboard::Q){         // 1 = 10 erfahrung kriegen
-					P1.decreaseSpeed(0.1f);                             // 2 = 10 level 10 schaden kriegen
+					P1.decreaseSpeed(0.1f);                             // 2 = 20 level 10 schaden kriegen
 				}                                                       // ...
                 else if(levelLoop.key.code == sf::Keyboard::Num1){
                     P1.playerExp(10, P1.getLvl());
                 }
                 else if(levelLoop.key.code == sf::Keyboard::Num2){
-                    P1.playerDamage(10, 10);
+                    P1.playerDamage(20, 10);
                 }
 				else if(levelLoop.key.code == sf::Keyboard::Num0){
                     P1.setBlockControl(true);
@@ -318,7 +321,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 					Savegame::currentSaveGame->loadSavegame();
 				}
 				else if(levelLoop.key.code == sf::Keyboard::N){
-					return MapEvent(MapEvent::mapchange,"map2",500,500);
+					return MapEvent(MapEvent::mapchange,"map2",20,20);
 				}
                 #endif
 			}

@@ -37,8 +37,8 @@ public:
 	MapEvent(MapEvent::reason theReason, std::string newMapId = "", int newMapPosX = 0, int newMapPosY = 0 ){
 		this->theReason = theReason;
 		this->newMapId = newMapId;
-		this->newMapPosX = newMapPosX;
-		this->newMapPosY = newMapPosY;
+		this->newMapPosX = newMapPosX*TILESIZE;
+		this->newMapPosY = newMapPosY*TILESIZE;
 	};
 	~MapEvent(){
 	};
