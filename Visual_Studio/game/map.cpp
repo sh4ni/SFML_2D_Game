@@ -20,20 +20,21 @@ Map::Map(){
 	// Hier wird die Textur für die Map geladen.
 	
 
-	this->MapSizeX = 0U;
-	this->MapSizeY = 0U;
-	this->LoadCounterX = 0;
-	this->LoadCounterY = 0;
+	this->MapSizeX = 0;
+	this->MapSizeY = 0;
+	int LoadCounterX = 0;
+	int LoadCounterY = 0;
 	this->TileMap = 0;
 	this->CollisionMap = 0;
-	
+	this->MapLevelMin = 1;
+	this->MapLevelMax = 1;
 
 	this->FileName = PATH"include/map/" + Savegame::currentSaveGame->mLevelId + ".txt";
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName.c_str());
 	if( openfile.is_open() ){
-		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme;
+		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme >> this->MapLevelMin >> this->MapLevelMax;
 		
 		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.
 		for ( int i = 0 ; i < MapSizeX ; i++ ){		// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
@@ -46,13 +47,15 @@ Map::Map(){
 		}
 
 
-		while( !openfile.eof() ){
+		while( LoadCounterY < MapSizeY ){
 			openfile >> TileType;
 			sf::IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
 			subRect.top=TileType/10*TILESIZE;   // zeile
 			subRect.left=TileType%10*TILESIZE;  // spalte
 			
+			TileMap[LoadCounterX][LoadCounterY].EnemyId = 0;
+			TileMap[LoadCounterX][LoadCounterY].Teleport = 0;
 			TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect);
 			switch( TileType ){
 			case 0:
@@ -89,18 +92,27 @@ Map::Map(){
 				break;
 
 			}
-			/*if(TileType >10  ){
-				CollisionMap[LoadCounterX][LoadCounterY]=new IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
-			}else{
-				CollisionMap[LoadCounterX][LoadCounterY]=NULL;
-			}*/
-			//CollisionMap[LoadCounterX][LoadCounterY] = IntRect(0,0,32,32) ;
 			LoadCounterX++;
 			if( LoadCounterX >= MapSizeX ){
 				LoadCounterX = 0;
 				LoadCounterY++;
 			}
 		}
+		while( !openfile.eof() ){
+			int idTemp, xTemp, yTemp;
+			openfile >> idTemp >> xTemp >> yTemp;
+			if( idTemp == 0 ){
+				openfile >> TileMap[xTemp][yTemp].EnemyId;
+				std::cout << "ENEMY: " << TileMap[xTemp][yTemp].EnemyId << std::endl;
+			}
+			else if( idTemp == 1){
+				TileMap[xTemp][yTemp].Teleport = new tp;
+				openfile >> TileMap[xTemp][yTemp].Teleport->Map >> TileMap[xTemp][yTemp].Teleport->xDest >> TileMap[xTemp][yTemp].Teleport->yDest;
+				std::cout << "TELEPORTER: " << TileMap[xTemp][yTemp].Teleport->Map << " " << TileMap[xTemp][yTemp].Teleport->xDest << " " << TileMap[xTemp][yTemp].Teleport->yDest << std::endl;
+			}
+		}
+
+
 		#ifdef DEBUGINFO
 			std::cout << "Map successfully loaded." << std::endl;
 		#endif

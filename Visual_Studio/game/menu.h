@@ -16,7 +16,7 @@ public:
 			sf::Text text;
 			MenuResult action;
 			bool active;
-		};
+	};
 	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, bool gendermenu = false);
     ~MainMenu(void){
         
