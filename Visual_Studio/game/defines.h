@@ -7,15 +7,14 @@
     #define SYS_MACOS
 #endif
 
-#define DEBUGINFO 
-
-#define WIDTH 1024
-#define HEIGHT 768
+//#define WIDTH 1024	wird nicht mehr gebraucht
+//#define HEIGHT 768
 
 #define FPS 60U
 
-// Used in intro and menues
-#define VERSION "0.35 Alpha"
+#define DEBUGINFO				// Für Debug infos im code
+
+#define VERSION "0.35 Alpha"	// intro und menü
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
@@ -71,8 +70,8 @@
 #define DEFAULT_M_NAME "Fabi"	// in memories
 
 #define DEFAULT_LEVEL "map1"
-#define DEFAULT_POSX WIDTH/2
-#define DEFAULT_POSY HEIGHT/2
+#define DEFAULT_POSX 512
+#define DEFAULT_POSY 384
 
 // nicht löschen
 #ifdef SYS_WINDOWS

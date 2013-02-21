@@ -1,26 +1,12 @@
 #include "map.h"
 
-/*IntRect Map::getRect(int x, int y){
-	x /= TILESIZE;
-	y /= TILESIZE;
-	return CollisionMap[x][y];
-}*/
 sf::Texture Map::LevelTexture;
 Map * Map::currentMap;
 
 Map::Map(){
 	std::cout << "konstruktor MAP!" << std::endl;
-
-	
 }
-void Map::destory(){
-	// free ram
-	if(TileMap != NULL)
-		delete TileMap;
-	if(CollisionMap != NULL)
-		delete CollisionMap;
 
-}
 void Map::init(std::string LevelId){
 	
 	#ifdef DEBUGINFO
@@ -28,9 +14,6 @@ void Map::init(std::string LevelId){
 	#endif
 	//renderWindow.setMouseCursorVisible(false);
 	
-	// Hier wird die Textur für die Map geladen.
-	
-
 	this->MapSizeX = 0;
 	this->MapSizeY = 0;
 	int LoadCounterX = 0;
@@ -181,24 +164,31 @@ void Map::init(std::string LevelId){
 	DisplaySpeed.Init(0,40,"Speed: Error",20);
 
 }
-Map::~Map(){
-	std::cout << "dekonstruktor MAP!" << std::endl;
-    
+
+void Map::destory(){
     // Lšsche TileMap wieder...
     for( int x=0; x<MapSizeX; x++){
         for( int y=0; y<MapSizeY; y++){
             delete TileMap[x][y].TexturePart;   // Lšschen der TileMap - Textureausschnitte
-            if( CollisionMap[x][y] != NULL ){
+			if( TileMap[x][y].Teleport ){
+				delete TileMap[x][y].Teleport;	// Lšschen der TileMap - Teleporter
+            }
+            if( CollisionMap[x][y] ){
                 delete CollisionMap[x][y];      // Lšschen der CollisionMap - Rechtecke
             }
         }
-		//delete TileMap[x];                      // Lšschen der TileMap - Objekte
-		//delete CollisionMap[x];                 // Lšschen der CollisionMap - Pointer
+		delete TileMap[x];                      // Lšschen der TileMap - Objekte
+		delete CollisionMap[x];                 // Lšschen der CollisionMap - Pointer
     }
 	
 	delete TileMap;                             // Lšschen der TileMap - Pointer
     delete CollisionMap;                        // Lšschen der CollisionMap - Pointer auf Pointer
+	std::cout << "deleted map..." << std::endl;
+}
 
+Map::~Map(){
+	std::cout << "dekonstruktor MAP!" << std::endl;
+    destory();
 }
 
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
