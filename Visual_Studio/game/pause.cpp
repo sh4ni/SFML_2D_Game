@@ -1,5 +1,14 @@
 #include "pause.h"
 
+/*
+Wenn die Pause gestartet wird,
+färbt sich der Bildschirm dunkel transparent.
+Der Spieler kann hier durch Eingaben das Spiel a) Speichern b) Laden c) Beenden
+Die Pause gibt einen Wert zurück. Dieser Rückgabewert entscheidet ob das Spiel schlussendlich
+beendet wird oder fortgesetzt wird.
+
+*/
+
 bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 	
 	int CenterX = (int)viewCamera.getCenter().x;    // pausemenŸ muss hier gegengerechnet werden,
@@ -40,32 +49,26 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 
 	sf::Event pauseLoop;
 	while(renderWindow.waitEvent(pauseLoop)){
-		
+	
 		Map::currentMap->currentMap->getClock()->restart();	// damit der Player nicht während der Pause weiter laufen kann
 
 		if(pauseLoop.type == sf::Event::KeyPressed || pauseLoop.type == sf::Event::JoystickButtonPressed ){
-			if (pauseLoop.key.code == sf::Keyboard::Escape || pauseLoop.joystickButton.button == 8 ){
+			if (pauseLoop.key.code == sf::Keyboard::Escape || pauseLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
 				#ifdef DEBUGINFO
 					std::cout << "Continue Playing.." << std::endl;
 				#endif
 					return false;
-					//return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
-			}else if(pauseLoop.key.code == sf::Keyboard::Space || pauseLoop.joystickButton.button == 9 ){
+			}else if(pauseLoop.key.code == sf::Keyboard::Space || pauseLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_BACK || pauseLoop.type == sf::Event::Closed){
 				#ifdef DEBUGINFO
 					std::cout << "Quit Game!" << std::endl;
 				#endif
 					return true; // gebe true zurueck damit das spiel anschließend beendet wird
-			}else if(pauseLoop.key.code == sf::Keyboard::Num6){
-				//Map::save(P1, LevelId);
+			}else if(pauseLoop.key.code == sf::Keyboard::F6){
 				Savegame::currentSaveGame->saveSavegame();
-			}else if(pauseLoop.key.code == sf::Keyboard::Num7){
+			}else if(pauseLoop.key.code == sf::Keyboard::F7){
 				Savegame::currentSaveGame->loadSavegame();
-				
-//				Map::load(Map::currentMap->getPlayer());
-			}else if(pauseLoop.type == sf::Event::Closed){
-				//return true;
 			}
 		}
 	}
-	return false;
+	return false;	// das Spiel geht weiter
 }

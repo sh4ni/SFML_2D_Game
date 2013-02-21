@@ -10,12 +10,9 @@
 #include "savegame.h"
 #include "schrift.h"
 #include <vector>
-
-
 #include "monster.h"
 
 
-//class Player;
 
 class TilePart{
 public:
@@ -27,15 +24,9 @@ private:
 class Map{
 
 private:
-//	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, sf::Clock& clock);
-	//static void resume();
-	
-	//static void save(Player& P1, std::string level);
-	//static void load(Player& P1);
 
 	std::string mapTheme;
 
-	////////////// das ist toll / danner 
 
 	static sf::Texture LevelTexture;
 
@@ -85,8 +76,6 @@ public:
 	int Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
 	
 	sf::IntRect getRect(int x, int y);
-	/*static sf::RenderWindow& GetWindow();
-	const static sf::Event& GetInput();*/
 	
 	Player* getPlayer(void){
 		return &P1;

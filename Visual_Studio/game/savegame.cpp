@@ -160,11 +160,7 @@ bool Savegame::loadSavegame(bool init){
 			saveSavegame();
 			return false;
 		}
-		
-	}/*else{
-		std::cout << "no savegame detected.." << std::endl;
-		saveSavegame('M',true);
-	}*/
+	}
 	return false;
 }
 
@@ -269,8 +265,6 @@ void ConfigFile::loadConfigFile(){
 			}else if(line == "A_BUTTON"){
 				configFile.ignore(3);
 				configFile >> ConfigFile::currentConfigFile->controller_A;
-				//if(!myConfigFile.controller_A > 0U && !myConfigFile.controller_A <31U)
-					//throw "Error in ConfigFile!";
 			}else if(line == "B_BUTTON"){
 				configFile.ignore(3);
 				configFile >> ConfigFile::currentConfigFile->controller_B;
@@ -317,7 +311,6 @@ void ConfigFile::loadConfigFile(){
 			std::cout << "LAXIS " << ConfigFile::currentConfigFile->controller_LS << std::endl;
 			std::cout << "RAXIS " << ConfigFile::currentConfigFile->controller_RS << std::endl;
 			std::cout << "CONFIG - END " << std::endl;
-		
 			std::cout << "Config successfully loaded.\n";
 		#endif
 	}else{
