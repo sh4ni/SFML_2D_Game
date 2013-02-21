@@ -300,7 +300,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 				else if(levelLoop.key.code == sf::Keyboard::Num7){
 					//Map::load(P1);
 					Savegame::currentSaveGame->loadSavegame();
-					Map::load(P1);
+					//Map::load(P1);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::N){
 					return 1500;
@@ -367,7 +367,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 	}
 	return 10;
 }
-
+/*
 void Map::load(Player& P1)
 {
 	
@@ -413,8 +413,8 @@ void Map::load(Player& P1)
 	}
 	
 	return true;
-	*/
-}
+	
+}*/
 
 /*
 void Map::save(Player& P1, std::string LevelId)

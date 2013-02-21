@@ -25,23 +25,13 @@ private:
 };
 
 class Map{
-public:
-	Map();
-	~Map();
-	
-	static Map * currentMap;
 
-	int Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
-	
-	sf::IntRect getRect(int x, int y);
-	/*static sf::RenderWindow& GetWindow();
-	const static sf::Event& GetInput();*/
 private:
 //	static bool pause(sf::RenderWindow& window, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, sf::Clock& clock);
 	//static void resume();
 	
 	//static void save(Player& P1, std::string level);
-	static void load(Player& P1);
+	//static void load(Player& P1);
 
 	std::string mapTheme;
 
@@ -87,9 +77,23 @@ private:
 	Schrift DisplaySpeed;
 
 public:
+	Map();
+	~Map();
+	
+	static Map * currentMap;
+
+	int Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
+	
+	sf::IntRect getRect(int x, int y);
+	/*static sf::RenderWindow& GetWindow();
+	const static sf::Event& GetInput();*/
 	
 	Player* getPlayer(void){
 		return &P1;
+	}
+
+	sf::Clock* getClock(void){
+		return &clock;
 	}
 };
 

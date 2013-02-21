@@ -68,18 +68,18 @@ void Player::Update(float ElapsedTime){
 
 	// 12 Kollisionspunkte
 	int CollisionPoint[12][2] = {
-		{(int)PosX-TILESIZE/2, (int)PosY},									//  0: Links Oben						+--- Player ----+
+		{(int)PosX-TILESIZE/2, (int)PosY},										//  0: Links Oben						+--- Player ----+
 		{(int)PosX+TILESIZE/2-1, (int)PosY},									//  1: Rechts Oben						|				|
 		{(int)PosX-TILESIZE/2, (int)PosY+TILESIZE-1},							//  2: Links Unten						|				|
-		{(int)PosX+TILESIZE/2-1, (int)PosY+TILESIZE-1},						//  3: Rechts Unten						|				| keine Kollisionsabfrage im oberen bereich.
+		{(int)PosX+TILESIZE/2-1, (int)PosY+TILESIZE-1},							//  3: Rechts Unten						|				| keine Kollisionsabfrage im oberen bereich.
 		{(int)PosX-TILESIZE/2+COLLISIONTOLERANCE, (int)PosY},					//  4: Links Oben Hilfspunkt Oben		|				|
-		{(int)PosX+TILESIZE/2-1-COLLISIONTOLERANCE, (int)PosY},				//  5: Rechts Oben Hilfspunkt Oben		|				|
+		{(int)PosX+TILESIZE/2-1-COLLISIONTOLERANCE, (int)PosY},					//  5: Rechts Oben Hilfspunkt Oben		|				|
 		{(int)PosX-TILESIZE/2+COLLISIONTOLERANCE, (int)PosY+TILESIZE-1},		//  6: Links Unten Hilfspunkt Unten		| 00 04   05 01 |
-		{(int)PosX+TILESIZE/2-1-COLLISIONTOLERANCE, (int)PosY+TILESIZE-1},	//  7: Rechts Unten Hilfspunkt Unten	| 08         09 |
+		{(int)PosX+TILESIZE/2-1-COLLISIONTOLERANCE, (int)PosY+TILESIZE-1},		//  7: Rechts Unten Hilfspunkt Unten	| 08         09 |
 		{(int)PosX-TILESIZE/2, (int)PosY+COLLISIONTOLERANCE},					//  8: Links Oben Hilfspunkt Links		|				|
-		{(int)PosX+TILESIZE/2-1, (int)PosY+COLLISIONTOLERANCE},				//  9: Rechts Oben Hilfspunkt Rechts	| 10         11 |
+		{(int)PosX+TILESIZE/2-1, (int)PosY+COLLISIONTOLERANCE},					//  9: Rechts Oben Hilfspunkt Rechts	| 10         11 |
 		{(int)PosX-TILESIZE/2, (int)PosY+TILESIZE-1-COLLISIONTOLERANCE},		// 10: Links Unten Hilfspunkt Links		| 02 06   07 03 |
-		{(int)PosX+TILESIZE/2-1, (int)PosY+TILESIZE-1-COLLISIONTOLERANCE},	// 11: Rechts Unten Hilfspunkt Rechts	+---------------+
+		{(int)PosX+TILESIZE/2-1, (int)PosY+TILESIZE-1-COLLISIONTOLERANCE},		// 11: Rechts Unten Hilfspunkt Rechts	+---------------+
 
 	};
 

@@ -40,6 +40,9 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 
 	sf::Event pauseLoop;
 	while(renderWindow.waitEvent(pauseLoop)){
+		
+		Map::currentMap->currentMap->getClock()->restart();	// damit der Player nicht während der Pause weiter laufen kann
+
 		if(pauseLoop.type == sf::Event::KeyPressed || pauseLoop.type == sf::Event::JoystickButtonPressed ){
 			if (pauseLoop.key.code == sf::Keyboard::Escape || pauseLoop.joystickButton.button == 8 ){
 				#ifdef DEBUGINFO

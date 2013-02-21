@@ -115,11 +115,9 @@ bool Savegame::loadSavegame(bool init){
 			loadgame >> Savegame::currentSaveGame->pExp;
 			loadgame >> Savegame::currentSaveGame->pGender;
 			loadgame >> Savegame::currentSaveGame->pName;
-
 			loadgame >> Savegame::currentSaveGame->mLevelId;
 			loadgame >> Savegame::currentSaveGame->mPosX;
 			loadgame >> Savegame::currentSaveGame->mPosY;
-		
 			loadgame >> Savegame::currentSaveGame->checksum;
 			
 			loadgame.close();
@@ -130,7 +128,6 @@ bool Savegame::loadSavegame(bool init){
 			loadgame >> Savegame::currentSaveGame->pExp;
 			loadgame >> Savegame::currentSaveGame->pGender;
 			loadgame >> Savegame::currentSaveGame->pName;
-
 			loadgame >> Savegame::currentSaveGame->mLevelId;
 			loadgame >> Savegame::currentSaveGame->mPosX;
 			loadgame >> Savegame::currentSaveGame->mPosY;
