@@ -12,13 +12,20 @@
 #include <vector>
 #include "monster.h"
 
-
+class tp{
+	public:
+		std::string Map;
+		int xDest;
+		int yDest;
+};
 
 class TilePart{
-public:
-	sf::Sprite* TexturePart;
 private:
 	int TileType;
+public:
+	sf::Sprite* TexturePart;
+	int EnemyId;
+	tp* Teleport;
 };
 
 class Map{
@@ -32,8 +39,8 @@ private:
 
 	int MapSizeX;
 	int MapSizeY;
-	int LoadCounterX;
-	int LoadCounterY;
+	int MapLevelMin;
+	int MapLevelMax;
 	int TileType;
 	TilePart** TileMap;
 	sf::IntRect*** CollisionMap;
