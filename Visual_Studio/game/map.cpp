@@ -15,8 +15,6 @@ Map::Map(){
 		std::cout << "Load Map : " << Savegame::currentSaveGame->mLevelId << std::endl;
 	#endif
 
-	
-	
 	//renderWindow.setMouseCursorVisible(false);
 	
 	// Hier wird die Textur für die Map geladen.
@@ -255,15 +253,7 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
-				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
-					/*
-					P1.setBlockControl(true);
-					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId, clock);
-					if(quitGame)
-						return 5;
-					P1.setBlockControl(false);
-					*/
-					//Map::save(P1,LevelId);
+				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
 					return 5;
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
@@ -293,27 +283,22 @@ int Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View view
 				else if(levelLoop.key.code == sf::Keyboard::Num9){
                     P1.setBlockControl(false);
                 }
-				else if(levelLoop.key.code == sf::Keyboard::Num6){
-                    //Map::save(P1,LevelId);
+				else if(levelLoop.key.code == sf::Keyboard::F6){
 					Savegame::currentSaveGame->saveSavegame();
                 }
-				else if(levelLoop.key.code == sf::Keyboard::Num7){
-					//Map::load(P1);
+				else if(levelLoop.key.code == sf::Keyboard::F9){
 					Savegame::currentSaveGame->loadSavegame();
-					//Map::load(P1);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::N){
-					return 1500;
+					return 4815162342;
 				}
                 #endif
 			}
             else if(levelLoop.type == sf::Event::LostFocus){
 				#ifdef DEBUGINFO
-					std::cout << " Outside the window!.. " << std::endl;	
+					std::cout << " Outside the window!.. Game will be paused" << std::endl;	
 				#endif
 					return 5;
-					//P1.setBlockControl(true);
-					//pause(renderWindow,viewCamera,levelLoop,P1,LevelId, clock);
 			}
             else if(levelLoop.type == sf::Event::Closed){
 				return 0;

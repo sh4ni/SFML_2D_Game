@@ -10,7 +10,7 @@ beendet wird oder fortgesetzt wird.
 */
 
 bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
-	
+	//renderWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height, 32), WINDOWTITLE, sf::Style::Fullscreen);
 	int CenterX = (int)viewCamera.getCenter().x;    // pausemenü muss hier gegengerechnet werden,
 	int CenterY = (int)viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
                                                     // nicht übereinstimmen!

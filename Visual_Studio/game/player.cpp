@@ -12,7 +12,7 @@ Player::Player(int controller){
 	this->pExp = Savegame::currentSaveGame->pExp;
 	this->pGender = Savegame::currentSaveGame->pGender;
 	this->Name = Savegame::currentSaveGame->pName;
-
+	this->LevelId = Savegame::currentSaveGame->mLevelId;
 	this->pHealthMax = (int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
 	this->pExpMax = (int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
 
@@ -203,8 +203,8 @@ void Player::Update(float ElapsedTime){
 			 sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
 			 sf::Joystick::isButtonPressed(controller,14))
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		   && !blockRight ){
-			PosX += Speed*ElapsedTime;
+   		   && !blockRight ){
+	        		PosX += Speed*ElapsedTime;
 			blockLeft = false;
 			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 			walking = true;
