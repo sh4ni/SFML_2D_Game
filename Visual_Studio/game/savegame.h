@@ -16,7 +16,8 @@ public:
 	~ConfigFile();
 	int width;
 	int height;
-	std::string screendirectory;
+	std::string winmode;
+	std::string sound;
 
 	// Controller Setting
 	unsigned controller_A;

@@ -56,7 +56,8 @@
 
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
-#define DEFAULT_SCREENSHOTDIR "screenshots"
+#define DEFAULT_WINMODE "window"
+#define DEFAULT_SOUND "true"
 
 #define SAVEGAME "save.txt"
 #define CHECKSAVE 1

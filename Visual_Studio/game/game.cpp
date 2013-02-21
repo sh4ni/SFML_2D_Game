@@ -105,6 +105,9 @@ void Game::GameLoop(bool newgame)
 			#endif
 			ShowMap(viewCamera);				
             break;
+		case Game::Continue:
+			ShowMap(viewCamera,true);
+			break;
 		case Game::NewGame:
 			ShowMap(viewCamera);
 			break;
@@ -121,22 +124,24 @@ void Game::GamePaused(sf::View viewCamera){
 	if(quitGame)
 		_gameState = Exiting;
 	else
-		_gameState = Playing;
+		_gameState = Continue;
 
 	// hier kann ich irgendwann zurück ins menü!
 }
 
-void Game::ShowMap(sf::View viewCamera){
+void Game::ShowMap(sf::View viewCamera, bool continueGame){
 	static Map map;
 	Map::currentMap = &map;
 
-	map.init(Savegame::currentSaveGame->mLevelId);
+	if(!continueGame)
+		map.init(Savegame::currentSaveGame->mLevelId);
+
 	MapEvent newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 
 	
 	if(newGameState.theReason == MapEvent::pause){
 		_gameState = Paused;
-		map.destory();
+		
 	}
 	else if(newGameState.theReason == MapEvent::exiting)
 		_gameState = Exiting;

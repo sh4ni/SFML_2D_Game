@@ -177,8 +177,11 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 			configFile << "HEIGHT = " << DEFAULT_HEIGHT << std::endl;
 			ConfigFile::currentConfigFile->height = DEFAULT_HEIGHT;
 
-			configFile << "SCREENDIR = " << DEFAULT_SCREENSHOTDIR << std::endl;
-			ConfigFile::currentConfigFile->screendirectory = DEFAULT_SCREENSHOTDIR;
+			configFile << "WINMODE = " << DEFAULT_WINMODE << std::endl;
+			ConfigFile::currentConfigFile->winmode = DEFAULT_WINMODE;
+
+			configFile << "SOUND = " << DEFAULT_SOUND << std::endl;
+			ConfigFile::currentConfigFile->sound = DEFAULT_WINMODE;
 			
 			configFile << "\n### Controller Settings ###" << std::endl;
 			#ifdef SYS_WINDOWS
@@ -225,8 +228,10 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 			#endif
 			configFile << "WIDTH = " << ConfigFile::currentConfigFile->width << std::endl;
 			configFile << "HEIGHT = " << ConfigFile::currentConfigFile->height << std::endl;
-			//configFile << "SCREENFOLDER = " << myConfigFile.screenfolder << std::endl;
-			// Controller Settings
+			configFile << "WINMODE = " << ConfigFile::currentConfigFile->winmode << std::endl;
+			configFile << "SOUND = " << ConfigFile::currentConfigFile->sound << std::endl;
+			
+			// Controller Settings fehlen noch!
 		}
 	}
 	configFile.close();
@@ -245,9 +250,12 @@ void ConfigFile::loadConfigFile(){
 			}else if(line == "HEIGHT"){
 				configFile.ignore(3);
 				configFile >> ConfigFile::currentConfigFile->height;
-			}else if(line == "SCREENDIR"){
+			}else if(line == "WINMODE"){
 				configFile.ignore(3);
-				configFile >> ConfigFile::currentConfigFile->screendirectory;
+				configFile >> ConfigFile::currentConfigFile->winmode;
+			}else if(line == "SOUND"){
+				configFile.ignore(3);
+				configFile >> ConfigFile::currentConfigFile->sound;
 			}else if(line == "A_BUTTON"){
 				configFile.ignore(3);
 				configFile >> ConfigFile::currentConfigFile->controller_A;
@@ -285,7 +293,8 @@ void ConfigFile::loadConfigFile(){
 			std::cout << "CONFIG - Values" << std::endl;
 			std::cout << "WIDTH " << ConfigFile::currentConfigFile->width << std::endl;
 			std::cout << "HEIGHT " << ConfigFile::currentConfigFile->height << std::endl;
-			std::cout << "SCREENDIR " << ConfigFile::currentConfigFile->screendirectory << std::endl;
+			std::cout << "WINMODE " << ConfigFile::currentConfigFile->winmode << std::endl;
+			std::cout << "SOUND " << ConfigFile::currentConfigFile->sound<< std::endl;
 			std::cout << "A " << ConfigFile::currentConfigFile->controller_A << std::endl;
 			std::cout << "B " << ConfigFile::currentConfigFile->controller_B << std::endl;
 			std::cout << "X " << ConfigFile::currentConfigFile->controller_X << std::endl;
