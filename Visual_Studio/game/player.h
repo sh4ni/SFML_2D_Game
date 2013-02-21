@@ -10,6 +10,17 @@
 
 
 class Player : public Character{
+private:
+    int controller;
+	bool blockControl;
+	
+	int HealTickRate;
+	int pHealthMax;
+	int pExp;
+	int pExpMax;	// Exp needed Until Levelup
+	char pGender;	// M - Male | F - Female
+	std::string LevelId;
+	
 public:
 	
 	Player(int controller=0);
@@ -19,7 +30,13 @@ public:
 		Window.draw(sprite);
 	}
 	
-	
+	std::string getLevelId(void){
+		return this->LevelId;
+	}
+
+	void setLevelId(std::string LevelId){
+		this->LevelId = LevelId;
+	}
 	
 	int getHealth(void){
 		return this->Health;
@@ -90,30 +107,7 @@ public:
 			std::cout << "block " << block << std::endl;
 		#endif
 	}
-private:
-    int controller;
-	bool blockControl;
-	
-	/*
-	sf::Texture texture;
-	sf::Sprite sprite;
-	sf::IntRect*** ColMap;
-	sf::Vector2i MapSize;
-	*/
-	
-	int HealTickRate;
-	int pHealthMax;
-	int pExp;
-	int pExpMax;	// Exp needed Until Levelup
-	char pGender;	// M - Male | F - Female
-	
-	//std::string pName; 
-	//float PosX;
-	//float PosY;
-	//float Speed;
-	//int Animation;
-	//int Health;
-	//int Lvl;
+
 };
 
 #endif

@@ -27,6 +27,7 @@ void Game::Start(bool newgame)
 	
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
 	sf::VideoMode bpp = sf::VideoMode::getDesktopMode();
+	
 	_mainWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Close);
 
 	// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
@@ -133,8 +134,19 @@ void Game::ShowMap(sf::View viewCamera){
 		_gameState = Exiting;
 	else if(newGameState == 500){
 		_gameState = ShowingMenu;
-	}else if(newGameState == 1500){
-		map.Show(_mainWindow, "map2", viewCamera);
+	}else if(newGameState == 4815162342){
+		std::cout << "hallo du da!" << std::endl;
+		Savegame::currentSaveGame->mLevelId = "map2";
+		static Map map2;
+		Map::currentMap = &map2;
+		
+		system("pause");
+		std::cout << Savegame::currentSaveGame->mLevelId << std::endl;
+		map2.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
+		_gameState = Playing;
+
+		
+		//map.Show(_mainWindow, "map2", viewCamera);
 	}
 		//map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
 		//*/
