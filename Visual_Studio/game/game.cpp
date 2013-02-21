@@ -129,25 +129,21 @@ void Game::GamePaused(sf::View viewCamera){
 void Game::ShowMap(sf::View viewCamera){
 	static Map map;
 	Map::currentMap = &map;
-	
 
 	map.Init(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 	MapEvent newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 
-	
 	
 	if(newGameState.theReason == MapEvent::pause)
 		_gameState = Paused;
 	else if(newGameState.theReason == MapEvent::exiting)
 		_gameState = Exiting;
 	else if(newGameState.theReason == MapEvent::dead){
-	//	Savegame::currentSaveGame->loadSavegame();
+		Savegame::currentSaveGame->loadSavegame();
 		_gameState = ShowingMenu;
 	}else if(newGameState.theReason == MapEvent::mapchange){
 		Map::currentMap->getPlayer()->setLevelId(newGameState.newMapId);
 		Map::currentMap->getPlayer()->setPosition(newGameState.newMapPosX,newGameState.newMapPosY);
-		
-		std::cout << "PlayerLevelId" << Map::currentMap->getPlayer()->getLevelId() << std::endl;
 		Savegame::currentSaveGame->saveSavegame();
 		
 		

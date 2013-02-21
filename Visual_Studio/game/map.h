@@ -105,7 +105,8 @@ public:
 	
 	static Map * currentMap;
 
-	void Init(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
+	void init(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
+	void destory();
 
 	MapEvent Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
 	

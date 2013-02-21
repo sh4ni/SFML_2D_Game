@@ -1,7 +1,5 @@
 ToDo
 ! dekonstruktor für menü (k)
-! dekonstruktor für savegame (f)
-! Konstruktor von Map braucht die Level ID als übergabe Parameter (f)
 - passive Monster, aggresive Monster / Freundliche NPCs
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden
@@ -19,6 +17,7 @@ Improvements
 . laufanimation bei nicht ganz durchgedrückten gamepad (k)
 . schlechte fps: prüfen ob laufanimation passt
 . schlechte fps: hp formel anpassen
+. im savegame wird die ausrichtung des players gespeichert (f)
 
 Nice to Have
 . Lokaler Koop-Modus mit 2 Gamepads

@@ -13,7 +13,10 @@ Map::Map(){
 
 	
 }
-void Map::Init(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera){
+void Map::destory(){
+	// free ram
+}
+void Map::init(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera){
 	
 	#ifdef DEBUGINFO
 		std::cout << "Load Map : " << LevelId << std::endl;
