@@ -10,7 +10,7 @@ Savegame::Savegame(){
 }
 Savegame::~Savegame(){
 #ifdef DEBUGINFO
-	std::cout << "dekonstruktor Savegame." << std::endl;
+	std::cout << "destruktor Savegame." << std::endl;
 #endif
 }
 
@@ -120,6 +120,8 @@ bool Savegame::loadSavegame(bool init){
 		loadgame >> Savegame::currentSaveGame->mPosX;
 		loadgame >> Savegame::currentSaveGame->mPosY;
 		loadgame >> Savegame::currentSaveGame->checksum;
+		loadgame.close();
+
 		if(!init){
 			Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->pHealth);
 			Map::currentMap->getPlayer()->setLvl(Savegame::currentSaveGame->pLvl);
@@ -130,14 +132,12 @@ bool Savegame::loadSavegame(bool init){
 			Map::currentMap->getPlayer()->setPosition(Savegame::currentSaveGame->mPosX,Savegame::currentSaveGame->mPosY);
 		}
 
-		loadgame.close();
-
 		// bitte prüfen @filip
 		std::stringstream ss;
-			ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
-			std::string s = md5(ss.str());
-			
-			//std::string checksum = md5(ss.str()+Savegame::currentSaveGame->mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
+		ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
+		std::string s = md5(ss.str());
+		//std::string checksum = md5(ss.str()+Savegame::currentSaveGame->mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
+
 		if(Savegame::currentSaveGame->checksum.compare(s) == 0){
 			std::cout << "Savegame okay...!\n";
 			return true;
@@ -158,7 +158,7 @@ ConfigFile::ConfigFile(){
 };
 ConfigFile::~ConfigFile(){
 #ifdef DEBUGINFO
-	std::cout << "dekonstruktor ConfigFile." << std::endl;
+	std::cout << "destruktor ConfigFile." << std::endl;
 #endif
 };
 

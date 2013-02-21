@@ -1,5 +1,6 @@
-ToDo
+﻿ToDo
 ! dekonstruktor für menü (k)
+! wenn man die pause verlässt, soll die map nicht neu geladen werden
 - passive Monster, aggresive Monster / Freundliche NPCs
 - Monster aus Mapfiles laden
 - Mapübergänge / Maps laden

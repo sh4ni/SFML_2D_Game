@@ -15,8 +15,13 @@ Map::Map(){
 }
 void Map::destory(){
 	// free ram
+	if(TileMap != NULL)
+		delete TileMap;
+	if(CollisionMap != NULL)
+		delete CollisionMap;
+
 }
-void Map::init(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera){
+void Map::init(std::string LevelId){
 	
 	#ifdef DEBUGINFO
 		std::cout << "Load Map : " << LevelId << std::endl;

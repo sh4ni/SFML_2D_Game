@@ -42,7 +42,6 @@ public:
 	};
 	~MapEvent(){
 	};
-
 	
 	MapEvent::reason theReason;
 	std::string newMapId;
@@ -51,11 +50,8 @@ public:
 };
 
 class Map{
-
 private:
-
 	std::string mapTheme;
-
 
 	static sf::Texture LevelTexture;
 
@@ -105,7 +101,7 @@ public:
 	
 	static Map * currentMap;
 
-	void init(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);
+	void init(std::string LevelId);
 	void destory();
 
 	MapEvent Show(sf::RenderWindow& window, std::string LevelId, sf::View viewCamera);

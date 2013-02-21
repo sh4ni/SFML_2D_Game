@@ -123,19 +123,21 @@ void Game::GamePaused(sf::View viewCamera){
 	else
 		_gameState = Playing;
 
-	// hier kann ich zurück ins menü!
+	// hier kann ich irgendwann zurück ins menü!
 }
 
 void Game::ShowMap(sf::View viewCamera){
 	static Map map;
 	Map::currentMap = &map;
 
-	map.Init(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
+	map.init(Savegame::currentSaveGame->mLevelId);
 	MapEvent newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 
 	
-	if(newGameState.theReason == MapEvent::pause)
+	if(newGameState.theReason == MapEvent::pause){
 		_gameState = Paused;
+		map.destory();
+	}
 	else if(newGameState.theReason == MapEvent::exiting)
 		_gameState = Exiting;
 	else if(newGameState.theReason == MapEvent::dead){
@@ -146,6 +148,7 @@ void Game::ShowMap(sf::View viewCamera){
 		Map::currentMap->getPlayer()->setPosition(newGameState.newMapPosX,newGameState.newMapPosY);
 		Savegame::currentSaveGame->saveSavegame();
 		
+		map.destory();	// delete alte map bevor die neue geladen wird
 		
 	}
 	
@@ -162,7 +165,7 @@ void Game::ShowIntro(){
 void Game::ShowMenu(bool newgame){
 	MainMenu mainMenu;
 	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
-	//Savegame::currentSaveGame->loadSavegame();
+	
 	switch(result)
 	{
 		case MainMenu::Exit:
