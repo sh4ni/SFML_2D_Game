@@ -291,7 +291,34 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
             else {
                 button[active[selected]].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT,BUTTONWIDTH,BUTTONHEIGHT));                
             }
-			if(menuEvent.type == sf::Event::MouseButtonPressed){    // menü mit maus steuern
+			if(menuEvent.type == sf::Event::MouseMoved){
+				//std::cout << menuEvent.mouseMove.x << " " << menuEvent.mouseMove.y << std::endl;
+				for( int i=0; i<activeButtons; i++){
+					if( button[active[i]].rect.contains(menuEvent.mouseMove.x,menuEvent.mouseMove.y) ){
+						int selectedOld = selected;
+						selected = i;
+						if( selectedOld != selected ){
+							if(gendermenu){
+								switch(active[selectedOld]){		// evtl könnte man das hier besser lösen ... so oft wie ich die alten buttons neu render... evtl bei jedem "ändern" alles neu machen.
+									case 0:
+										button[active[selectedOld]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));
+										break;
+									case 1:
+										button[active[selectedOld]].image.setTextureRect(sf::IntRect(0,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
+										break;
+									case 2:
+										button[active[selectedOld]].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
+										break;
+								}
+							}
+							else {
+								button[active[selectedOld]].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
+							}
+						}
+					}
+				}
+			}
+			else if(menuEvent.type == sf::Event::MouseButtonPressed){    // menü mit maus steuern
 				#ifdef DEBUGINFO
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
@@ -314,7 +341,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
  |             _,-'`                ``-._             |							|             _,-'`                ``-._             |
  |          ,-'                          `-.          |							|          ,-'                          `-.          |
   \       ,'                                `.       /							 \       ,'                                `.       /
-   `.__,-'                                    `-.__.«							  `.__,-'                                    `-.__*/
+   `.__,-'                                    `-.__.`							  `.__,-'                                    `-.__*/
 			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed || !CheckAxis==NoButton ){
                 if(GetMenuButton(menuEvent) == Enter){
 					return button[active[selected]].action;

@@ -1,24 +1,24 @@
-﻿ToDo
+﻿ToDo vor Featurefreeze
 ! dekonstruktor für menü (k)
 ! wenn man die pause verlässt, soll die map nicht neu geladen werden
+- maploader umändern, damit er Tiled maps laden kann (k)
 - passive Monster, aggresive Monster / Freundliche NPCs
-- Monster aus Mapfiles laden
-- Mapübergänge / Maps laden
 - grafikeffekte: regen (k)
-. buttons über die, die maus schwebt werden aktiv (k)
 - gameover screen (f)
-- Map Editor
+
+ToDo nach Projektabgabe
+- Map Editor, falls maploader nicht geht
 - Dialoge/Story
 - Dialogboxen im Spiel bei Unterhaltungen
 
-Improvements
-- exp formel nochmal anschauen
-- hp formel anpassen
-. axen im menü prüfen und verbessern (k)
+Improvements und Bugfixes
+. konsolen textausgaben wenn DEBUGINFO nicht definiert ist
+. hintergrundbild im menü für hohe auflösungen anpassen (k)
+. controller-axen im menü verbessern (k)
+. im savegame wird die ausrichtung des players gespeichert (f)
 . laufanimation bei nicht ganz durchgedrückten gamepad (k)
 . schlechte fps: prüfen ob laufanimation passt
 . schlechte fps: hp formel anpassen
-. im savegame wird die ausrichtung des players gespeichert (f)
 
 Nice to Have
 . Lokaler Koop-Modus mit 2 Gamepads
