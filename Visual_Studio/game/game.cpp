@@ -99,9 +99,10 @@ void Game::GameLoop(bool newgame)
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
             gender = ShowMenuGender();
-			std::cout << gender ;
-			if(gender == 'M' || gender == 'F')	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
-				Savegame::currentSaveGame->saveSavegame(gender,true);
+			if(gender == 'M' || gender == 'F'){	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
+				Savegame::currentSaveGame->pGender = gender;	// speichere explizit hier das geschlecht, da die restlichen werte aus der defines geladen werden
+				Savegame::currentSaveGame->saveSavegame(true); // true -> erzeuge einen neuen spielstand
+			}
 		break;
 		case Game::Playing:
 			// Hier wird die Map geladen

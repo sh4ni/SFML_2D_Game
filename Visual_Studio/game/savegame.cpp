@@ -3,10 +3,25 @@
 Savegame * Savegame::currentSaveGame;
 ConfigFile * ConfigFile::currentConfigFile;
 
+// Prüfe ob eine Datei leer ist
 bool is_empty(std::ifstream& myFile)
 {
 	// wenn die datei leer ist gebe ein true zurück
     return myFile.peek() == std::ifstream::traits_type::eof();
+}
+
+// Bereche die Checksume des Spielstandes anhand eines MD5 Alogrihtmus
+std::string calc_checksum(){
+	std::stringstream ss;
+	ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
+	std::string checksum = md5(ss.str());
+	//@filip noch anpassen in final
+
+#ifdef DEBUGINFO
+	std::cout << "Savegame Checksum " << checksum << std::endl;
+#endif
+
+	return checksum;
 }
 
 Savegame::Savegame(){
@@ -20,11 +35,11 @@ Savegame::~Savegame(){
 #endif
 }
 
-void Savegame::saveSavegame(const char pGender, bool defaultConfig){
+void Savegame::saveSavegame(bool defaultSavegame){
 	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
 	
-	if(defaultConfig)
+	if(defaultSavegame)
 		std::cout << "Default savegame will be loaded..\a\n";
 	else
 		std::cout << "Savegame will be saved!" << std::endl;
@@ -32,7 +47,7 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 	std::ofstream defaultsavegame;
 	defaultsavegame.open(PATH SAVEGAME, std::ios::trunc & std::ios::binary);
 	if(defaultsavegame.is_open()){
-		if(defaultConfig){
+		if(defaultSavegame){
 			// Health
 			defaultsavegame << DEFAULT_HEALTH << std::endl;
 			Savegame::currentSaveGame->pHealth = DEFAULT_HEALTH;
@@ -41,19 +56,19 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			defaultsavegame << DEFAULT_LVL << std::endl;
 			Savegame::currentSaveGame->pLvl = DEFAULT_LVL;
 
-				// Exp
+			// Exp
 			defaultsavegame << DEFAULT_EXP << std::endl;
 			Savegame::currentSaveGame->pExp = DEFAULT_EXP;
+
+			// Gender
+			defaultsavegame << pGender << std::endl;
+			Savegame::currentSaveGame->pGender = pGender;
 
 			std::string pName;
 			if(pGender == 'M')
 				pName = DEFAULT_M_NAME;
 			else
 				pName = DEFAULT_F_NAME;
-
-			// Gender
-			defaultsavegame << pGender << std::endl;
-			Savegame::currentSaveGame->pGender = pGender;
 
 			// Name
 			defaultsavegame << pName << std::endl;
@@ -73,19 +88,15 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			defaultsavegame << DEFAULT_POSY << std::endl;
 			Savegame::currentSaveGame->mPosY = DEFAULT_POSY;
 
-			std::stringstream ss;
-			ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
-			std::string checksum = md5(ss.str());
-			// Änderung noch in Final!
+			///////////////////// CHECKSUM /////////////////////
 
-			#ifdef DEBUGINFO
-				std::cout << "Savegame Checksum -> " << checksum << std::endl;
-			#endif
+			std::string checksum = calc_checksum();
 				
 			defaultsavegame << checksum;	
 			Savegame::currentSaveGame->checksum = checksum;
 			
 		}else{
+			// beim mapwechsel muss die neue Position gesetzt werden
 			Savegame::currentSaveGame->mLevelId = Map::currentMap->getPlayer()->getLevelId();
 			Savegame::currentSaveGame->mPosX = Map::currentMap->getPlayer()->getPosX();
 			Savegame::currentSaveGame->mPosY = Map::currentMap->getPlayer()->getPosY();
@@ -99,12 +110,8 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			defaultsavegame << Map::currentMap->getPlayer()->getPosX() << std::endl;
 			defaultsavegame << Map::currentMap->getPlayer()->getPosY() << std::endl;
 			
-			std::stringstream ss;
-			ss << (Map::currentMap->getPlayer()->getHealth() - Map::currentMap->getPlayer()->getLvl() + Map::currentMap->getPlayer()->getExp() + Map::currentMap->getPlayer()->getGender() + (int)Map::currentMap->getPlayer()->getPosX() + (int)Map::currentMap->getPlayer()->getPosY() + CHECKSUM);
-			std::string checksum = md5(ss.str());
-			// Änderung noch in Final!
-
-			defaultsavegame << checksum << std::endl;
+			std::string checksum = calc_checksum();
+			defaultsavegame << checksum;
 		}
 		defaultsavegame.close();
 	}
@@ -144,13 +151,9 @@ bool Savegame::loadSavegame(bool init){
 			Map::currentMap->getPlayer()->setPosition(Savegame::currentSaveGame->mPosX,Savegame::currentSaveGame->mPosY);
 		}
 
-		// bitte prüfen @filip
-		std::stringstream ss;
-		ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
-		std::string s = md5(ss.str());
-		//std::string checksum = md5(ss.str()+Savegame::currentSaveGame->mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
+		std::string checksum = calc_checksum();
 
-		if(Savegame::currentSaveGame->checksum.compare(s) == 0){
+		if(Savegame::currentSaveGame->checksum.compare(checksum) == 0){
 			std::cout << "Savegame okay...!\n";
 			return true;
 		}else{
