@@ -180,6 +180,8 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 			configFile << "WINMODE = " << DEFAULT_WINMODE << std::endl;
 			ConfigFile::currentConfigFile->winmode = DEFAULT_WINMODE;
 
+			configFile << "\n### Sound Settings ###" << std::endl;
+
 			configFile << "SOUND = " << DEFAULT_SOUND << std::endl;
 			ConfigFile::currentConfigFile->sound = DEFAULT_WINMODE;
 			
@@ -226,10 +228,42 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 			#ifdef DEBUGINFO
 				std::cout << "Config saved.";
 			#endif
+			configFile << "### SCREEN SETTINGS ###" << std::endl;
 			configFile << "WIDTH = " << ConfigFile::currentConfigFile->width << std::endl;
 			configFile << "HEIGHT = " << ConfigFile::currentConfigFile->height << std::endl;
 			configFile << "WINMODE = " << ConfigFile::currentConfigFile->winmode << std::endl;
+			configFile << "\n### Sound Settings ###" << std::endl;
 			configFile << "SOUND = " << ConfigFile::currentConfigFile->sound << std::endl;
+			configFile << "\n### Controller Settings ###" << std::endl;
+
+			#ifdef SYS_WINDOWS
+				configFile << "Win Settings" << std::endl;
+			#else
+				configFile << "Other OS Settings" << std::endl;
+			#endif
+
+
+			configFile << "A_BUTTON = " << ConfigFile::currentConfigFile->controller_A << std::endl;
+			
+			configFile << "B_BUTTON = " << ConfigFile::currentConfigFile->controller_B << std::endl;
+			
+			configFile << "X_BUTTON = " << ConfigFile::currentConfigFile->controller_X << std::endl;
+			
+			configFile << "Y_BUTTON = " << ConfigFile::currentConfigFile->controller_Y << std::endl;
+
+			configFile << "LB_BUTTON = " << ConfigFile::currentConfigFile->controller_LB << std::endl;
+
+			configFile << "RB_BUTTON = " << ConfigFile::currentConfigFile->controller_RB << std::endl;
+
+			configFile << "BACK_BUTTON = " << ConfigFile::currentConfigFile->controller_BACK << std::endl;
+
+			configFile << "START_BUTTON = " << ConfigFile::currentConfigFile->controller_START << std::endl;
+
+			configFile << "LS_BUTTON = " << ConfigFile::currentConfigFile->controller_LS << std::endl;
+
+			configFile << "RS_BUTTON = " << ConfigFile::currentConfigFile->controller_RS << std::endl;
+
+			configFile << "### End of Configfile ###" << std::endl;
 			
 			// Controller Settings fehlen noch!
 		}

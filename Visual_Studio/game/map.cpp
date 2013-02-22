@@ -318,8 +318,18 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				else if(levelLoop.key.code == sf::Keyboard::F9){
 					Savegame::currentSaveGame->loadSavegame();
 				}
-				else if(levelLoop.key.code == sf::Keyboard::N){
-					return MapEvent(MapEvent::mapchange,"map2",20,20);
+				else if(levelLoop.key.code == sf::Keyboard::F){
+					if(ConfigFile::currentConfigFile->winmode == "window"){
+						renderWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height), WINDOWTITLE, sf::Style::Fullscreen);
+						renderWindow.setMouseCursorVisible(false);
+						ConfigFile::currentConfigFile->winmode = "fullscreen";
+						ConfigFile::currentConfigFile->saveConfigFile();
+					}else{
+						renderWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height), WINDOWTITLE, sf::Style::Close);
+						renderWindow.setMouseCursorVisible(true);
+						ConfigFile::currentConfigFile->winmode = "window";
+						ConfigFile::currentConfigFile->saveConfigFile();
+					}
 				}
                 #endif
 			}

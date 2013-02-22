@@ -18,7 +18,8 @@ void Intro::Show(sf::RenderWindow& renderWindow){
 	renderWindow.draw(sprite);                  // journey logo
 	renderWindow.display();
 
-	int timer = 0;
+	unsigned timer = 0U;
+	
 
 	sf::Event currentEvent;
 	for(;;){	// dann gibts keine warnung mehr im vs 2010 auf warning lv 4 :P
@@ -30,9 +31,10 @@ void Intro::Show(sf::RenderWindow& renderWindow){
 				return;
 			}
 		}
-		if( timer > 500000 ){
+		if( timer > 50000U ){
 			return;
 		}
+		//std::cout << timer << std::endl;
 		timer++;
 	}
 }

@@ -50,6 +50,9 @@ public:
 	float mPosX;
 	float mPosY;
 
+	char direction;
+	int process;	// 
+
 	std::string checksum;
 
 	void saveSavegame(const char pGender = 'M', bool defaultConfig=false);

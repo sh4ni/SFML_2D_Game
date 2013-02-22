@@ -28,10 +28,15 @@ void Game::Start(bool newgame)
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
 	sf::VideoMode bpp = sf::VideoMode::getDesktopMode();
 	
-	_mainWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Close);
-
-	// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
-	//_mainWindow.setMouseCursorVisible(false);
+	if(ConfigFile::currentConfigFile->winmode == "window")
+		_mainWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Close);
+	else{
+		_mainWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Fullscreen);
+		// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
+		_mainWindow.setMouseCursorVisible(false);
+	}
+	
+	
 
 	// Lade und setze das Fenstericon
 	sf::Image Icon;
