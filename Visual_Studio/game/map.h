@@ -34,7 +34,7 @@ private:
 public:
 	enum reason{ nothing, dead, mapchange, exiting, pause };
 
-	MapEvent(MapEvent::reason theReason, std::string newMapId = "", int newMapPosX = 0, int newMapPosY = 0 ){
+	MapEvent(MapEvent::reason theReason, std::string newMapId = "", float newMapPosX = 0, float newMapPosY = 0 ){
 		this->theReason = theReason;
 		this->newMapId = newMapId;
 		this->newMapPosX = newMapPosX*TILESIZE;
@@ -45,8 +45,8 @@ public:
 	
 	MapEvent::reason theReason;
 	std::string newMapId;
-	int newMapPosX;
-	int newMapPosY;
+	float newMapPosX;
+	float newMapPosY;
 };
 
 class Map{

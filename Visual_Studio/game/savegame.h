@@ -51,7 +51,7 @@ public:
 	float mPosY;
 
 	char direction;
-	int process;	// 
+	int chapter;	// 
 
 	std::string checksum;
 

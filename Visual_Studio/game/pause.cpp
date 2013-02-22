@@ -15,7 +15,9 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 	int CenterY = (int)viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
                                                     // nicht Ÿbereinstimmen!
 	// Hintergrund Box
-	sf::RectangleShape Background(sf::Vector2f(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height));
+	
+	
+	sf::RectangleShape Background(sf::Vector2f((float)ConfigFile::currentConfigFile->width, (float)ConfigFile::currentConfigFile->height));
     Background.setFillColor(sf::Color(0, 0, 0,100));
 	Background.setPosition((float)CenterX-(float)ConfigFile::currentConfigFile->width/2.f,(float)CenterY-(float)ConfigFile::currentConfigFile->height/2.f);
 

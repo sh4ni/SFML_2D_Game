@@ -1,12 +1,9 @@
 ﻿#include <math.h>
-
 #include "savegame.h"
 #include "player.h"
 
 Player::Player(int controller){
 	
-	//this->ColMap = CollisionMap;
-	//Savegame::loadIt();
 	this->Health = Savegame::currentSaveGame->pHealth;
 	this->Lvl = Savegame::currentSaveGame->pLvl;
 	this->pExp = Savegame::currentSaveGame->pExp;
@@ -259,6 +256,5 @@ void Player::Update(float ElapsedTime){
 			#endif
 		}
 	}
-
 	sprite.setPosition(PosX,PosY);
 }

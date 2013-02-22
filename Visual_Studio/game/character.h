@@ -4,6 +4,28 @@
 #include <SFML/Graphics.hpp>
 
 class Character{
+protected:
+    sf::Texture texture;
+	sf::Sprite sprite;
+	sf::IntRect*** ColMap;
+	sf::Vector2i MapSize;
+	int Animation;
+
+	float PosX;
+	float PosY;
+	float Speed;
+	
+	std::string Name; 
+
+	int Health;
+	int Lvl;
+
+
+	// not in use
+	int strenght;
+	int agility;
+	int vitality;
+
 public:
 	Character();
 	~Character();
@@ -29,27 +51,7 @@ public:
 	void setLvl(int Lvl);
 	int getLvl(void);
 
-
 	void setColMap(sf::IntRect*** ColMap);
-
-	//void setBlockControl(bool block=false);
-
-
-protected:
-    sf::Texture texture;
-	sf::Sprite sprite;
-	sf::IntRect*** ColMap;
-	sf::Vector2i MapSize;
-	int Animation;
-
-	float PosX;
-	float PosY;
-	float Speed;
-	
-	std::string Name; 
-
-	int Health;
-	int Lvl;
 };
 
 #endif

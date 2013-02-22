@@ -3,6 +3,12 @@
 Savegame * Savegame::currentSaveGame;
 ConfigFile * ConfigFile::currentConfigFile;
 
+bool is_empty(std::ifstream& myFile)
+{
+	// wenn die datei leer ist gebe ein true zurück
+    return myFile.peek() == std::ifstream::traits_type::eof();
+}
+
 Savegame::Savegame(){
 #ifdef DEBUGINFO
 	std::cout << "konstruktor Savegame." << std::endl;
@@ -105,11 +111,17 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 }
 
 
-
 bool Savegame::loadSavegame(bool init){
 	std::ifstream loadgame;
 	loadgame.open(PATH SAVEGAME, std::ios::binary);
-	if(loadgame.is_open()){
+	
+	if(!is_empty(loadgame) && loadgame.is_open()){
+
+		// gehe in die letzte position der datei
+		// wenn tellg keinen wert zurück gibt ist die datei leer und ein default save wird erstellt
+		// ansonsten springe zum beginn der datei und lese diese ein
+		
+
 		std::cout << "Savegame detected! Loading..\n";
 		loadgame >> Savegame::currentSaveGame->pHealth;
 		loadgame >> Savegame::currentSaveGame->pLvl;
@@ -173,25 +185,16 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 			configFile << "### SCREEN SETTINGS ###" << std::endl;
 			configFile << "WIDTH = " << DEFAULT_WIDTH << std::endl;
 			ConfigFile::currentConfigFile->width = DEFAULT_WIDTH;
-
 			configFile << "HEIGHT = " << DEFAULT_HEIGHT << std::endl;
 			ConfigFile::currentConfigFile->height = DEFAULT_HEIGHT;
-
 			configFile << "WINMODE = " << DEFAULT_WINMODE << std::endl;
 			ConfigFile::currentConfigFile->winmode = DEFAULT_WINMODE;
 
 			configFile << "\n### Sound Settings ###" << std::endl;
-
 			configFile << "SOUND = " << DEFAULT_SOUND << std::endl;
-			ConfigFile::currentConfigFile->sound = DEFAULT_WINMODE;
+			ConfigFile::currentConfigFile->sound = DEFAULT_SOUND;
 			
 			configFile << "\n### Controller Settings ###" << std::endl;
-			#ifdef SYS_WINDOWS
-				configFile << "Win Settings" << std::endl;
-			#else
-				configFile << "Other OS Settings" << std::endl;
-			#endif
-
 			configFile << "A_BUTTON = " << DEFAULT_A << std::endl;
 			ConfigFile::currentConfigFile->controller_A = DEFAULT_A;
 
@@ -223,60 +226,41 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 			ConfigFile::currentConfigFile->controller_RS = DEFAULT_RS;
 
 			configFile << "### End of Configfile ###" << std::endl;
-
 		}else{
-			#ifdef DEBUGINFO
-				std::cout << "Config saved.";
-			#endif
 			configFile << "### SCREEN SETTINGS ###" << std::endl;
 			configFile << "WIDTH = " << ConfigFile::currentConfigFile->width << std::endl;
 			configFile << "HEIGHT = " << ConfigFile::currentConfigFile->height << std::endl;
 			configFile << "WINMODE = " << ConfigFile::currentConfigFile->winmode << std::endl;
+		
 			configFile << "\n### Sound Settings ###" << std::endl;
 			configFile << "SOUND = " << ConfigFile::currentConfigFile->sound << std::endl;
+		
 			configFile << "\n### Controller Settings ###" << std::endl;
-
-			#ifdef SYS_WINDOWS
-				configFile << "Win Settings" << std::endl;
-			#else
-				configFile << "Other OS Settings" << std::endl;
-			#endif
-
-
 			configFile << "A_BUTTON = " << ConfigFile::currentConfigFile->controller_A << std::endl;
-			
 			configFile << "B_BUTTON = " << ConfigFile::currentConfigFile->controller_B << std::endl;
-			
 			configFile << "X_BUTTON = " << ConfigFile::currentConfigFile->controller_X << std::endl;
-			
 			configFile << "Y_BUTTON = " << ConfigFile::currentConfigFile->controller_Y << std::endl;
-
 			configFile << "LB_BUTTON = " << ConfigFile::currentConfigFile->controller_LB << std::endl;
-
 			configFile << "RB_BUTTON = " << ConfigFile::currentConfigFile->controller_RB << std::endl;
-
 			configFile << "BACK_BUTTON = " << ConfigFile::currentConfigFile->controller_BACK << std::endl;
-
 			configFile << "START_BUTTON = " << ConfigFile::currentConfigFile->controller_START << std::endl;
-
 			configFile << "LS_BUTTON = " << ConfigFile::currentConfigFile->controller_LS << std::endl;
-
 			configFile << "RS_BUTTON = " << ConfigFile::currentConfigFile->controller_RS << std::endl;
 
 			configFile << "### End of Configfile ###" << std::endl;
-			
-			// Controller Settings fehlen noch!
+			#ifdef DEBUGINFO
+				std::cout << "Running Config saved.";
+			#endif
 		}
 	}
 	configFile.close();
 }
 
 void ConfigFile::loadConfigFile(){
-	
 	std::ifstream configFile;
 	std::string line;
 	configFile.open(PATH SETTINGS);
-	if(configFile.is_open()){
+	if(!is_empty(configFile) && configFile.is_open()){
 		while(configFile >> line){
 			if(line == "WIDTH"){
 				configFile.ignore(3);
@@ -322,9 +306,9 @@ void ConfigFile::loadConfigFile(){
 				configFile >> ConfigFile::currentConfigFile->controller_RS;
 			}
 		}
-		
+		configFile.close();
 		#ifdef DEBUGINFO
-			std::cout << "CONFIG - Values" << std::endl;
+			std::cout << "CONFIG - Loaded Values" << std::endl;
 			std::cout << "WIDTH " << ConfigFile::currentConfigFile->width << std::endl;
 			std::cout << "HEIGHT " << ConfigFile::currentConfigFile->height << std::endl;
 			std::cout << "WINMODE " << ConfigFile::currentConfigFile->winmode << std::endl;
@@ -343,7 +327,6 @@ void ConfigFile::loadConfigFile(){
 			std::cout << "Config successfully loaded.\n";
 		#endif
 	}else{
-		saveConfigFile(true);
+		saveConfigFile(true); // speichere die default config
 	}
-	configFile.close();
 }
