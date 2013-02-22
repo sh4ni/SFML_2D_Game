@@ -158,8 +158,7 @@ bool Savegame::loadSavegame(bool init){
 			return true;
 		}else{
 			std::cout << "Savegame corrupt...!\a\n";
-			saveSavegame();
-			return false;
+			saveSavegame(true);
 		}
 	}
 	return false;

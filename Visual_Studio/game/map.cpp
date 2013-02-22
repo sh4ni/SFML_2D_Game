@@ -144,21 +144,21 @@ void Map::init(std::string LevelId){
 
 	iface.setTexture(ifaceImage);
 	iface.setOrigin((float)ifaceImage.getSize().x/2.f,(float)ifaceImage.getSize().y);
-	iface.setPosition(ConfigFile::currentConfigFile->width/2,ConfigFile::currentConfigFile->height);
+	iface.setPosition((float)ConfigFile::currentConfigFile->width/2,(float)ConfigFile::currentConfigFile->height);
 
 	HPBar.setFillColor(sf::Color(0x99,0x33,0x33));  // farbe des hp balkens
-	HPBar.setPosition(ConfigFile::currentConfigFile->width/2-55,ConfigFile::currentConfigFile->height-61);
+	HPBar.setPosition((float)ConfigFile::currentConfigFile->width/2-55,(float)ConfigFile::currentConfigFile->height-61);
 	HPBar.setSize(sf::Vector2f(180.f,28.f));
 	
 	EXPBar.setFillColor(sf::Color(0x00,0xCC,0x33)); // farbe des exp balkens
-	EXPBar.setPosition(ConfigFile::currentConfigFile->width/2-55,ConfigFile::currentConfigFile->height-30);
+	EXPBar.setPosition((float)ConfigFile::currentConfigFile->width/2-55,(float)ConfigFile::currentConfigFile->height-30);
 	EXPBar.setSize(sf::Vector2f(180.f,28.f));
 
-	DisplayHPText.Init(ConfigFile::currentConfigFile->width/2-53,ConfigFile::currentConfigFile->height-58,"HP",18,0);
-	DisplayEXPText.Init(ConfigFile::currentConfigFile->width/2-53,ConfigFile::currentConfigFile->height-27,"EXP",18,0);
-	DisplayHP.Init(ConfigFile::currentConfigFile->width/2+122,ConfigFile::currentConfigFile->height-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
-	DisplayEXP.Init(ConfigFile::currentConfigFile->width/2+123,ConfigFile::currentConfigFile->height-27,"Error",18,0);
-	DisplayLevel.Init(ConfigFile::currentConfigFile->width/2-128,ConfigFile::currentConfigFile->height-76,"Err",18,0);
+	DisplayHPText.Init((float)ConfigFile::currentConfigFile->width/2-53,(float)ConfigFile::currentConfigFile->height-58,"HP",18,0);
+	DisplayEXPText.Init((float)ConfigFile::currentConfigFile->width/2-53,(float)ConfigFile::currentConfigFile->height-27,"EXP",18,0);
+	DisplayHP.Init((float)ConfigFile::currentConfigFile->width/2+122,(float)ConfigFile::currentConfigFile->height-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
+	DisplayEXP.Init((float)ConfigFile::currentConfigFile->width/2+123,(float)ConfigFile::currentConfigFile->height-27,"Error",18,0);
+	DisplayLevel.Init((float)ConfigFile::currentConfigFile->width/2-128,(float)ConfigFile::currentConfigFile->height-76,"Err",18,0);
 	DisplayFPS.Init(0,0,"FPS: Error",20);
 	DisplayKoord.Init(0,20,"X: Error Y: Error",20);
 	DisplaySpeed.Init(0,40,"Speed: Error",20);
