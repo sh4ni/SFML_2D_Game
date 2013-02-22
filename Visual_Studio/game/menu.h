@@ -18,8 +18,17 @@ public:
 			bool active;
 	};
 	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, bool gendermenu = false);
+	MainMenu(){
+		button = NULL;
+	}
     ~MainMenu(void){
-        
+		#ifdef DEBUGINFO
+			std::cout << "destruktor menu" << std::endl;
+		#endif
+	
+        if(button != NULL){
+			delete [] button;
+		}	
     }
 
 private:

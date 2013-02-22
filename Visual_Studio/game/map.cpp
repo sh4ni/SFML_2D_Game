@@ -181,13 +181,13 @@ void Map::destory(){
 		delete CollisionMap[x];                 // Lšschen der CollisionMap - Pointer
     }
 	
-	delete TileMap;                             // Lšschen der TileMap - Pointer
-    delete CollisionMap;                        // Lšschen der CollisionMap - Pointer auf Pointer
+	delete [] TileMap;                             // Lšschen der TileMap - Pointer
+    delete [] CollisionMap;                        // Lšschen der CollisionMap - Pointer auf Pointer
 	std::cout << "deleted map..." << std::endl;
 }
 
 Map::~Map(){
-	std::cout << "dekonstruktor MAP!" << std::endl;
+	std::cout << "destruktor MAP!" << std::endl;
     destory();
 }
 
