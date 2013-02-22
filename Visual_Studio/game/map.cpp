@@ -22,7 +22,7 @@ void Map::init(std::string LevelId){
 	this->CollisionMap = 0;
 	this->MapLevelMin = 1;
 	this->MapLevelMax = 1;
-	std::cout << " wuerde map nummero " << LevelId << " laden..\n";
+	
 	this->FileName = PATH"include/map/" + LevelId + ".txt";
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.

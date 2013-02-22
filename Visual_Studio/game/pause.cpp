@@ -60,16 +60,18 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 					std::cout << "Continue Playing.." << std::endl;
 				#endif
 					return false;
-			}else if(pauseLoop.key.code == sf::Keyboard::Space || pauseLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_BACK || pauseLoop.type == sf::Event::Closed){
+			}else if(pauseLoop.key.code == sf::Keyboard::Space || pauseLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_BACK ){
 				#ifdef DEBUGINFO
 					std::cout << "Quit Game!" << std::endl;
 				#endif
 					return true; // gebe true zurueck damit das spiel anschließend beendet wird
 			}else if(pauseLoop.key.code == sf::Keyboard::F6){
 				Savegame::currentSaveGame->saveSavegame();
-			}else if(pauseLoop.key.code == sf::Keyboard::F7){
+			}else if(pauseLoop.key.code == sf::Keyboard::F9){
 				Savegame::currentSaveGame->loadSavegame();
 			}
+		}else if(pauseLoop.type == sf::Event::Closed){
+			return true;
 		}
 	}
 	return false;	// das Spiel geht weiter

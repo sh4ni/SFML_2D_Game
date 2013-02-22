@@ -40,7 +40,7 @@ Player::Player(int controller){
 	}
 	#ifdef DEBUGINFO
 	else {
-		std::cout << "Successfully loaded the texture!" << std::endl;
+		std::cout << "Successfully loaded the player texture!" << std::endl;
 	}
 	#endif
 

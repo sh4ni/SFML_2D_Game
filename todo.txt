@@ -1,4 +1,6 @@
 ﻿ToDo vor Featurefreeze
+! wenn man stirbt oder den spielstand lädt muss die MaxHP / MaxEXP neu berechnet werden
+! wenn man stirbt und new game auswählt ist der spielstand korrekt, das player model nicht (die playertextur wird nicht neu geladen bzw der ganze player exisistert ja schon)
 ! dekonstruktor für menü (k)
 - maploader umändern, damit er Tiled maps laden kann (k)
 - passive Monster, aggresive Monster / Freundliche NPCs

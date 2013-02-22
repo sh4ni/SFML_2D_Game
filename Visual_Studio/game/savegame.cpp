@@ -96,7 +96,13 @@ void Savegame::saveSavegame(bool defaultSavegame){
 			Savegame::currentSaveGame->checksum = checksum;
 			
 		}else{
-			// beim mapwechsel muss die neue Position gesetzt werden
+			// beim mapwechsel muss die neue Position gesetzt werden und alle werte aktualisiert werden vor dem speichern,
+			// da sonst das Savegame korrupt wird!
+			Savegame::currentSaveGame->pHealth = Map::currentMap->getPlayer()->getHealth();
+			Savegame::currentSaveGame->pLvl = Map::currentMap->getPlayer()->getLvl();
+			Savegame::currentSaveGame->pExp = Map::currentMap->getPlayer()->getExp();
+			Savegame::currentSaveGame->pGender = Map::currentMap->getPlayer()->getGender();
+			Savegame::currentSaveGame->pName = Map::currentMap->getPlayer()->getName();
 			Savegame::currentSaveGame->mLevelId = Map::currentMap->getPlayer()->getLevelId();
 			Savegame::currentSaveGame->mPosX = Map::currentMap->getPlayer()->getPosX();
 			Savegame::currentSaveGame->mPosY = Map::currentMap->getPlayer()->getPosY();
@@ -141,7 +147,7 @@ bool Savegame::loadSavegame(bool init){
 		loadgame >> Savegame::currentSaveGame->checksum;
 		loadgame.close();
 
-		if(!init){
+		if(!init){ // wenn das spiel NICHT aus dem Init Bereich der game.cpp geladen wurde
 			Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->pHealth);
 			Map::currentMap->getPlayer()->setLvl(Savegame::currentSaveGame->pLvl);
 			Map::currentMap->getPlayer()->setExp(Savegame::currentSaveGame->pExp);
@@ -158,7 +164,7 @@ bool Savegame::loadSavegame(bool init){
 			return true;
 		}else{
 			std::cout << "Savegame corrupt...!\a\n";
-			saveSavegame(true);
+			saveSavegame(true); // default savegame will be created
 		}
 	}
 	return false;
