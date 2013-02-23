@@ -24,7 +24,7 @@
 
 // path du /include folder
 #ifdef SYS_MACOS
-    #define PATH "game.app/Contents/Resources/"
+    #define PATH "/Users/Kimiko/Documents/Git/SFML_2D_Game/Visual_Studio/game/"
 #else
     #define PATH ""
 #endif

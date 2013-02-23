@@ -26,6 +26,7 @@ private:
 	static void GamePaused(sf::View viewCamera);
 	static void ShowMenu(bool newgame = false);
     static const char ShowMenuGender();
+    static void ShowMenuOptions();
 	static void GameLoop(bool newgame = false);
 	static void ShowMap(sf::View viewCamera, bool continueGame = false);
 	static bool IsExiting();

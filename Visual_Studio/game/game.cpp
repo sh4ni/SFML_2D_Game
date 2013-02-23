@@ -102,7 +102,13 @@ void Game::GameLoop(bool newgame)
 			std::cout << gender ;
 			if(gender == 'M' || gender == 'F')	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
 				Savegame::currentSaveGame->saveSavegame(gender,true);
-		break;
+            break;
+        case Game::Options:
+            #ifdef DEBUGINFO
+                std::cout << "Show the Options Menu" << std::endl;
+            #endif
+            ShowMenuOptions();
+            break;
 		case Game::Playing:
 			// Hier wird die Map geladen
 			#ifdef DEBUGINFO
@@ -112,7 +118,7 @@ void Game::GameLoop(bool newgame)
             break;
 		case Game::Continue:
 			ShowMap(viewCamera,true);
-			break;
+            break;
 		case Game::NewGame:
 			ShowMap(viewCamera);
 			break;
@@ -195,6 +201,12 @@ void Game::ShowMenu(bool newgame){
 				std::cout << "Menu -> New Game Button pressed " << std::endl;	
 			#endif
             _gameState = ShowingGenderMenu;
+            break;
+        case MainMenu::Options:
+            #ifdef DEBUGINFO
+                std::cout << "Menu -> Options Button pressed " << std::endl;
+            #endif
+            _gameState = Options;
         default:
             break;  // was soll passieren wenn man daneben klickt? - RICHTIG! NICHTS VERDAMMT!
 	}
@@ -202,7 +214,7 @@ void Game::ShowMenu(bool newgame){
 
 const char Game::ShowMenuGender(){
     MainMenu genderMenu;
-    MainMenu::MenuResult result = genderMenu.Show(_mainWindow, false, true);
+    MainMenu::MenuResult result = genderMenu.Show(_mainWindow, false, 'G');
     switch (result) {
         case MainMenu::Female:
             _gameState = NewGame;
@@ -220,6 +232,18 @@ const char Game::ShowMenuGender(){
             break; 
     }
     return 'M';
+}
+
+void Game::ShowMenuOptions(){
+    MainMenu optionsMenu;
+    MainMenu::MenuResult result = optionsMenu.Show(_mainWindow, false, 'O');
+    switch (result) {
+        case MainMenu::Menue:
+            _gameState = ShowingMenu;
+            break;
+		default:
+            break;
+    }
 }
 
 // static member variables need to be instantiated outside of the class

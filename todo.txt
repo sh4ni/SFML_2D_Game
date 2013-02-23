@@ -1,6 +1,5 @@
-﻿ToDo vor Featurefreeze
-! dekonstruktor für menü (k)
-! wenn man die pause verlässt, soll die map nicht neu geladen werden
+ToDo vor Featurefreeze
+! optionen menü, das funktioniert (k)
 - maploader umändern, damit er Tiled maps laden kann (k)
 - passive Monster, aggresive Monster / Freundliche NPCs
 - grafikeffekte: regen (k)

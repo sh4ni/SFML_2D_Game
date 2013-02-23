@@ -4,7 +4,7 @@
 
 int MainMenu::animation = 0;
 
-MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool gendermenu){
+MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char menuType){
 	//Load menu image from file
 	sf::Texture imageMenu;
 	sf::Texture imageBackground;
@@ -33,16 +33,16 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
     if(!imageButton.loadFromFile(PATH"include/interface/button.png")){  // standard button brauch ich in jedem menü
         throw "Error: include/interface/button.png not found.";
     }
-    if( gendermenu ){           // ab hier das heldenauswahlmenü
+    
+    // ========================= NEUES SPIEL =========================
+    if( menuType == 'G' ){           // ab hier das heldenauswahlmenü
         if(!imageGenderButton.loadFromFile(PATH"include/interface/genderbutton.png")){  // genderbutton nur im gendermenp
             throw "Error: include/interface/genderbutton.png not found.";
         }
-        buttons = 3;                        // Wieviel buttons im geschlechtsauswahlscreen?
-        if(!(button = new MenuItem[buttons])){
-            throw "Error: Could not allocate space for 'MenuItem'"; // achtung! die ersten 2 buttons sind speziell!
-        }                                                           // also auf sone ganz spezielle art und weise...
-                                                                    // naja... sie sind eben ganz besonders!
-        button[0].text.setString("Select your hero");
+        buttons = 3;                                    // Wieviel buttons im geschlechtsauswahlscreen?
+        button = new MenuItem[buttons];                 // achtung! die ersten 2 buttons sind speziell!
+                                                        // also auf sone ganz spezielle art und weise...
+        button[0].text.setString("Select your hero");   // naja... sie sind eben ganz besonders!
         button[0].text.setPosition(ConfigFile::currentConfigFile->width/2,ConfigFile::currentConfigFile->height/2-120);   // na wenn meine ersten beiden buttons eh keinen text haben...
         button[0].text.setFont(font);                       // dann kann ich ihre texte ja für was anderes nehmen ^^
         button[0].text.setCharacterSize(40U);
@@ -97,11 +97,48 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
             _menuItems.push_back(button[i]);
         }
     }
+    
+    // ========================= OPTIONEN =========================
+    else if( menuType == 'O' ){
+        buttons = 3;
+        button = new MenuItem[buttons];
+        for( int i=0; i<buttons; i++){
+            button[i].rect.left = ConfigFile::currentConfigFile->width/2-BUTTONWIDTH/2;
+            button[i].rect.top = ConfigFile::currentConfigFile->height/2-160+((i<2)?i:i+2)*BUTTONHEIGHT*3/2;
+            button[i].rect.width = BUTTONWIDTH;
+            button[i].rect.height = BUTTONHEIGHT;
+            button[i].image.setTexture(imageButton);
+            button[i].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
+            button[i].image.setPosition(button[i].rect.left,button[i].rect.top);
+            button[i].text.setPosition(button[i].rect.left+10.f,button[i].rect.top+7.f);
+            button[i].text.setFont(font);
+            button[i].text.setCharacterSize(40U);
+            button[i].text.setColor(sf::Color(255U,255U,255U));
+            
+            button[i].active = true;
+            switch(i){
+                case 0:
+                    button[i].text.setString("Fullscreen");
+                    button[i].action = Nothing;
+                    break;
+                case 1:
+                    button[i].text.setString("Sound");
+                    button[i].action = Nothing;
+                    break;
+                case 2:
+                    button[i].text.setString("Back");
+                    button[i].action = Menue;
+                    break;
+            }
+            _menuItems.push_back(button[i]);
+        }
+
+    }
+    
+    // ========================= HAUPTMENÜ =========================
     else {              // ab hier das hauptmenü!
         buttons = 4;	// Wieviele Buttons brauchen wir? Ja richtig! 4 verdammt noch mal!
-        if(!(button = new MenuItem[buttons])){
-            throw "Error: Could not allocate space for 'MenuItem'";
-        }
+        button = new MenuItem[buttons];
         
         for( int i=0; i<buttons; i++){
             button[i].rect.left = ConfigFile::currentConfigFile->width/2-BUTTONWIDTH/2;
@@ -132,6 +169,8 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
                     break;
                 case 2:
                     button[i].text.setString("Options");
+                    button[i].action = Options;
+                    button[i].active = true;
                     break;
                 case 3:
                     button[i].text.setString("Exit");       // neue buttons können ohne probleme eingefügt werden!
@@ -157,7 +196,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, bool
 
 	Update(window);
 
-	return GetMenuResponse(window,gendermenu);
+	return GetMenuResponse(window,menuType);
 }
 
 void MainMenu::Update(sf::RenderWindow& window){    // methode zum neu zeichnen des menüs,
@@ -229,7 +268,7 @@ MainMenu::MenuButton MainMenu::GetMenuButton(sf::Event menuEvent){
     return NoButton;
 }
 
-MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool gendermenu){
+MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, char menuType){
 	sf::Event menuEvent;
     MenuButton CheckAxis = NoButton;
     bool blockAxis = false;
@@ -275,7 +314,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
             }
         }
 		while(window.pollEvent(menuEvent)){
-            if( gendermenu ){
+            if( menuType == 'G' ){
                 switch(active[selected]){   // aktiver button wird anders dargestellt.
                     case 0:
                         button[active[selected]].image.setTextureRect(sf::IntRect(GENDERBUTTON,0,GENDERBUTTON,GENDERBUTTON));
@@ -298,7 +337,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 						int selectedOld = selected;
 						selected = i;
 						if( selectedOld != selected ){
-							if(gendermenu){
+							if(menuType == 'G'){
 								switch(active[selectedOld]){		// evtl kˆnnte man das hier besser lˆsen ... so oft wie ich die alten buttons neu render... evtl bei jedem "‰ndern" alles neu machen.
 									case 0:
 										button[active[selectedOld]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));
@@ -347,7 +386,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 					return button[active[selected]].action;
 				}														
 				else if(GetMenuButton(menuEvent) == Back){
-                    if(gendermenu){
+                    if(menuType != 'M'){
                         return Menue;
                     }
                     else {
@@ -357,7 +396,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
                 }
                 else if( (GetMenuButton(menuEvent) == Up) || (CheckAxis == Up) ){
 					if( selected > 0 ){
-                        if( gendermenu ){
+                        if( menuType == 'G' ){
                             switch(active[selected]){   // damit die alten buttons wieder normal dargestellt werden.
                                 case 0:
                                     button[active[selected]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));
@@ -378,7 +417,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, bool ge
 				}
 				else if( (GetMenuButton(menuEvent) == Down) || (CheckAxis == Down) ){
 					if( selected < activeButtons-1 ){
-                        if( gendermenu ){
+                        if( menuType == 'G' ){
                             switch(active[selected]){
                                 case 0:
                                     button[active[selected]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));

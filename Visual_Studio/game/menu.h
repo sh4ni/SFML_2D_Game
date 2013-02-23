@@ -17,7 +17,7 @@ public:
 			MenuResult action;
 			bool active;
 	};
-	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, bool gendermenu = false);
+	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, char menuType = 'M');
 	MainMenu(){
 		button = NULL;
 	}
@@ -34,7 +34,7 @@ public:
 private:
     enum MenuButton{ NoButton, Up, Down, Enter, Back };
     MenuButton GetMenuButton(sf::Event menuEvent);
-	MenuResult GetMenuResponse(sf::RenderWindow& window, bool gendermenu = false);
+	MenuResult GetMenuResponse(sf::RenderWindow& window, char menuType = 'M');
 	MenuResult HandleClick(int x, int y);
 	std::list<MenuItem> _menuItems;
 	void Update(sf::RenderWindow &Window);
