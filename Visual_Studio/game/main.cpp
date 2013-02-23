@@ -2,10 +2,8 @@
 #include <exception>
 using namespace std;
 
-class myexception: public exception
-{
-	virtual const char* what() const throw()
-	{
+class myexception: public exception{
+	virtual const char* what() const throw(){
 		return "the exception happened";
 	}
 } myex;

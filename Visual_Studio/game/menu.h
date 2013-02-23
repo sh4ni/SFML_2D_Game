@@ -29,7 +29,7 @@ public:
 	
         if(button != NULL){
 			delete [] button;
-		}	
+		}
     }
 
 private:

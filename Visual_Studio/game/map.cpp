@@ -167,8 +167,8 @@ void Map::destory(){
                 delete CollisionMap[x][y];      // Lšschen der CollisionMap - Rechtecke
             }
         }
-		delete TileMap[x];                      // Lšschen der TileMap - Objekte
-		delete CollisionMap[x];                 // Lšschen der CollisionMap - Pointer
+		delete [] TileMap[x];                      // Lšschen der TileMap - Objekte
+		delete [] CollisionMap[x];                 // Lšschen der CollisionMap - Pointer
     }
 	
 	delete [] TileMap;                             // Lšschen der TileMap - Pointer
