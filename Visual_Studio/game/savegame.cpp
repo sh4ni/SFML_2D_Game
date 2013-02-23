@@ -91,7 +91,6 @@ void Savegame::saveSavegame(bool defaultSavegame){
 			///////////////////// CHECKSUM /////////////////////
 
 			std::string checksum = calc_checksum();
-				
 			defaultsavegame << checksum;	
 			Savegame::currentSaveGame->checksum = checksum;
 			
