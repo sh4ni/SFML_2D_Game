@@ -31,6 +31,7 @@ void Intro::Show(sf::RenderWindow& renderWindow){
 	sf::Event currentEvent;
 	for(;;){	// dann gibts keine warnung mehr im vs 2010 auf warning lv 4 :P
 		while(renderWindow.pollEvent(currentEvent)){
+			
 			if(currentEvent.type == sf::Event::KeyPressed || currentEvent.type == sf::Event::MouseButtonPressed || currentEvent.type == sf::Event::JoystickButtonPressed ){
 				return;
 

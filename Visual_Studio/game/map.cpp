@@ -183,7 +183,7 @@ Map::~Map(){
 
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
 	while( 1+3+3==7 ){
-
+		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){
 			return MapEvent(MapEvent::dead);
 		}
