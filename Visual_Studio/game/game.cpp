@@ -76,8 +76,8 @@ bool Game::IsExiting()
 	// Möglichkeit das Spiel zu Speichern
 }
 
-void Game::GameLoop(bool newgame)
-{
+void Game::GameLoop(bool newgame){
+    
 	sf::View viewCamera = _mainWindow.getView();
 	char gender;
 
@@ -145,8 +145,11 @@ void Game::ShowMap(sf::View viewCamera, bool continueGame){
 	static Map map;
 	Map::currentMap = &map;
 
-	if(!continueGame)	// wenn das spiel nach dem sterben fortgesetzt wird (mit altem spielstand) muss die map nicht erneut initalisiert werden, da sie es schon ist
+	if(!continueGame){	// wenn das spiel nach dem sterben fortgesetzt wird (mit altem spielstand) muss die map nicht erneut initalisiert werden, da sie es schon ist
 		map.init(Savegame::currentSaveGame->mLevelId);
+        map.getPlayer()->Init();    // der player aber schon :D
+        map.initInterface();
+    }
 
 	MapEvent newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 
@@ -184,13 +187,13 @@ void Game::ShowMenu(bool newgame){
 			#ifdef DEBUGINFO
 				std::cout << "Menu -> Exit Button pressed" << std::endl;
 			#endif
-				_gameState = Exiting;
+            _gameState = Exiting;
 			break;
 		case MainMenu::Continue:
 			#ifdef DEBUGINFO
 				std::cout << "Menu -> Continue Button pressed " << std::endl;	
 			#endif
-				_gameState = Playing;
+            _gameState = Playing;
 			break;
         case MainMenu::NewGameGender:
 			#ifdef DEBUGINFO
@@ -236,6 +239,36 @@ void Game::ShowMenuOptions(){
     switch (result) {
         case MainMenu::Menue:
             _gameState = ShowingMenu;
+            break;
+        case MainMenu::Sound:
+            if(ConfigFile::currentConfigFile->sound == "false"){
+                ConfigFile::currentConfigFile->sound = "true";
+            }
+            else {
+                ConfigFile::currentConfigFile->sound = "false";
+            }
+            ConfigFile::currentConfigFile->saveConfigFile();
+            break;
+        case MainMenu::Fullscreen:
+            if(ConfigFile::currentConfigFile->winmode == "window"){
+                _mainWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height), WINDOWTITLE, sf::Style::Fullscreen);
+                //window.setMouseCursorVisible(false);
+                ConfigFile::currentConfigFile->winmode = "fullscreen";
+                ConfigFile::currentConfigFile->saveConfigFile();
+            }else{
+                _mainWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height), WINDOWTITLE, sf::Style::Close);
+                //window.setMouseCursorVisible(true);
+                ConfigFile::currentConfigFile->winmode = "window";
+                ConfigFile::currentConfigFile->saveConfigFile();
+            }
+            break;
+        case MainMenu::DefaultSettings:
+            if((ConfigFile::currentConfigFile->width != DEFAULT_WIDTH)||
+               (ConfigFile::currentConfigFile->height != DEFAULT_HEIGHT)||
+               (ConfigFile::currentConfigFile->winmode != DEFAULT_WINMODE)){
+                _mainWindow.create(sf::VideoMode(DEFAULT_WIDTH, DEFAULT_HEIGHT), WINDOWTITLE, sf::Style::Close);
+            }
+            ConfigFile::currentConfigFile->saveConfigFile(true);
             break;
 		default:
             break;

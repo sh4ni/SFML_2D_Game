@@ -24,7 +24,8 @@ private:
 public:
 	
 	Player(int controller=0);
-
+    
+    void Init (int controller=0);
 	void Update	(float ElapsedTime);
 	void Render	(sf::RenderWindow &Window){
 		Window.draw(sprite);

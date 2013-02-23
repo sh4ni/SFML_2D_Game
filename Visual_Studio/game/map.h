@@ -100,6 +100,19 @@ public:
 	~Map();
 	
 	static Map * currentMap;
+    
+    void initInterface(void){
+        if( P1.getGender() == 'F' ){
+            if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
+                throw "Error: include/interface/interface-female.png not found.";
+            }
+        }
+        else {
+            if(!ifaceImage.loadFromFile(PATH"include/interface/interface-male.png")){
+                throw "Error: include/interface/interface-male.png not found.";
+            }
+        }
+    }
 
 	void init(std::string LevelId);
 	void destory();

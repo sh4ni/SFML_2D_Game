@@ -3,6 +3,10 @@
 #include "player.h"
 
 Player::Player(int controller){
+    Init(controller);
+}
+
+void Player::Init(int controller){
 	
 	this->Health = Savegame::currentSaveGame->pHealth;
 	this->Lvl = Savegame::currentSaveGame->pLvl;

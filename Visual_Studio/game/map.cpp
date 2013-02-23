@@ -130,17 +130,7 @@ void Map::init(std::string LevelId){
 
 	this->LastTime = 1.f;
 	
-	
-	if( P1.getGender() == 'F' ){
-		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
-			throw "Error: include/interface/interface-female.png not found.";
-		}
-	}
-	else {
-		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-male.png")){
-			throw "Error: include/interface/interface-male.png not found.";
-		}
-	}
+	initInterface();
 
 	iface.setTexture(ifaceImage);
 	iface.setOrigin((float)ifaceImage.getSize().x/2.f,(float)ifaceImage.getSize().y);

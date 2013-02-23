@@ -33,6 +33,8 @@
 #define BUTTONWIDTH 704
 #define BUTTONHEIGHT 64
 #define GENDERBUTTON 128
+#define OPTIONWIDTH 100
+#define OPTIONHEIGHT 50
 #define CONTROLLERAXISMENUE 75.f
 
 // used in map.cpp and player.cpp

@@ -28,7 +28,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
         throw "Error: include/fonts/arial.ttf not found.";
 	}
 
-    sf::Texture imageGenderButton;
+    sf::Texture imageOtherButton;   // im neuen spiel, die spieler buttons. bei den optionen, der optionen button
     sf::Texture imageButton;
     if(!imageButton.loadFromFile(PATH"include/interface/button.png")){  // standard button brauch ich in jedem menŸ
         throw "Error: include/interface/button.png not found.";
@@ -36,7 +36,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
     
     // ========================= NEUES SPIEL =========================
     if( menuType == 'G' ){           // ab hier das heldenauswahlmenŸ
-        if(!imageGenderButton.loadFromFile(PATH"include/interface/genderbutton.png")){  // genderbutton nur im gendermenp
+        if(!imageOtherButton.loadFromFile(PATH"include/interface/genderbutton.png")){  // genderbutton nur im gendermenp
             throw "Error: include/interface/genderbutton.png not found.";
         }
         buttons = 3;                                    // Wieviel buttons im geschlechtsauswahlscreen?
@@ -64,7 +64,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
                 button[i].rect.top = ConfigFile::currentConfigFile->height/2-25;
                 button[i].rect.width = GENDERBUTTON;
                 button[i].rect.height = GENDERBUTTON;
-                button[i].image.setTexture(imageGenderButton);
+                button[i].image.setTexture(imageOtherButton);
             }
             else {
                 button[i].rect.left = ConfigFile::currentConfigFile->width/2-BUTTONWIDTH/2;
@@ -100,11 +100,14 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
     
     // ========================= OPTIONEN =========================
     else if( menuType == 'O' ){
-        buttons = 3;
+        if(!imageOtherButton.loadFromFile(PATH"include/interface/options.png")){  // optionen button
+            throw "Error: include/interface/options.png not found.";
+        }
+        buttons = 4;
         button = new MenuItem[buttons];
         for( int i=0; i<buttons; i++){
             button[i].rect.left = ConfigFile::currentConfigFile->width/2-BUTTONWIDTH/2;
-            button[i].rect.top = ConfigFile::currentConfigFile->height/2-160+((i<2)?i:i+2)*BUTTONHEIGHT*3/2;
+            button[i].rect.top = ConfigFile::currentConfigFile->height/2-160+((i<3)?i:i+1)*BUTTONHEIGHT*3/2;
             button[i].rect.width = BUTTONWIDTH;
             button[i].rect.height = BUTTONHEIGHT;
             button[i].image.setTexture(imageButton);
@@ -114,18 +117,38 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
             button[i].text.setFont(font);
             button[i].text.setCharacterSize(40U);
             button[i].text.setColor(sf::Color(255U,255U,255U));
-            
+            if(i<2){
+                button[i].image2.setTexture(imageOtherButton);
+                button[i].image2.setPosition(button[i].rect.left+BUTTONWIDTH-OPTIONWIDTH-7,button[i].rect.top+7);
+
+            }
             button[i].active = true;
             switch(i){
                 case 0:
                     button[i].text.setString("Fullscreen");
-                    button[i].action = Nothing;
+                    button[i].action = Fullscreen;
+                    if(ConfigFile::currentConfigFile->winmode == "window"){
+                        button[i].image2.setTextureRect(sf::IntRect(0,0,OPTIONWIDTH,OPTIONHEIGHT));
+                    }
+                    else {
+                        button[i].image2.setTextureRect(sf::IntRect(0,OPTIONHEIGHT,OPTIONWIDTH,OPTIONHEIGHT));
+                    }
                     break;
                 case 1:
                     button[i].text.setString("Sound");
-                    button[i].action = Nothing;
+                    button[i].action = Sound;
+                    if(ConfigFile::currentConfigFile->sound == "false"){
+                        button[i].image2.setTextureRect(sf::IntRect(0,0,OPTIONWIDTH,OPTIONHEIGHT));
+                    }
+                    else {
+                        button[i].image2.setTextureRect(sf::IntRect(0,OPTIONHEIGHT,OPTIONWIDTH,OPTIONHEIGHT));
+                    }
                     break;
                 case 2:
+                    button[i].text.setString("Load default settings");
+                    button[i].action = DefaultSettings;
+                    break;
+                case 3:
                     button[i].text.setString("Back");
                     button[i].action = Menue;
                     break;
@@ -212,6 +235,9 @@ void MainMenu::Update(sf::RenderWindow& window){    // methode zum neu zeichnen 
 	for( int i=0; i<this->buttons; i++ ){
 		window.draw(button[i].image);
 		window.draw(button[i].text);
+        if( button[i].image2.getPosition().x ){
+            window.draw(button[i].image2);
+        }
 	}
 	window.draw(Version);
 

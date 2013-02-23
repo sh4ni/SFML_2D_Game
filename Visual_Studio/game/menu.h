@@ -8,14 +8,15 @@
 
 class MainMenu{
 public:
-	enum MenuResult { Nothing, Exit, Continue, Options, NewGame, NewGameGender, Female, Male, Menue };
+	enum MenuResult { Nothing, Exit, Continue, Options, NewGame, NewGameGender, Female, Male, Menue, Sound, Fullscreen, DefaultSettings };
 	class MenuItem{
-		public:
-			sf::IntRect rect;
-			sf::Sprite image;
-			sf::Text text;
-			MenuResult action;
-			bool active;
+    public:
+        sf::IntRect rect;
+        sf::Sprite image;
+        sf::Text text;
+        MenuResult action;
+        bool active;
+        sf::Sprite image2;
 	};
 	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, char menuType = 'M');
 	MainMenu(){
