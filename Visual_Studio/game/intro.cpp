@@ -1,37 +1,43 @@
 #include "intro.h"
 #include "defines.h"
 #include "schrift.h"
+#include "savegame.h"
+#include <ctime>
 
-void Intro::Show(sf::RenderWindow& renderWindow)
-{
+void Intro::Show(sf::RenderWindow& renderWindow){
 	sf::Texture image;
 	if(!image.loadFromFile(PATH"include/interface/splashscreen.png")){
-		exit(1); // exeption werfen oder sonst was...
+        throw "Error: include/interface/splashscreen.png not found.";
 	}
+	
 
 	sf::Sprite sprite(image);
 
-	sprite.setOrigin((float)image.getSize().x/2,(float)image.getSize().y/2);
-	sprite.setPosition((float)WIDTH/2.f,(float)HEIGHT/2.f);
+	sprite.setOrigin((float)image.getSize().x/2,(float)image.getSize().y/2);    // mittelpunkt des logos in die mitte
+	sprite.setPosition((float)ConfigFile::currentConfigFile->width/2.f,(float)ConfigFile::currentConfigFile->height/2.f);                     // mitte des bildschirms
 
-	//Schrift Version(WIDTH-5,HEIGHT-5,VERSION,16);
-	//Version.printText.setOrigin(Version.printText.getGlobalBounds().width,Version.printText.getGlobalBounds().height);
-
-	renderWindow.clear(sf::Color(50,50,50)); // Hintergrundfarbe im Intro
-	renderWindow.draw(sprite);
-	//Version.Render(renderWindow);
+	renderWindow.clear(sf::Color(50,50,50));    // Hintergrundfarbe im Intro
+	renderWindow.draw(sprite);                  // journey logo
 	renderWindow.display();
 
+	clock_t begin = clock();
+
 	sf::Event currentEvent;
-	while(true)
-	{
-		while(renderWindow.pollEvent(currentEvent))
-		{
-			if(currentEvent.type == sf::Event::KeyPressed || currentEvent.type == sf::Event::MouseButtonPressed ){
+	for(;;){	// dann gibts keine warnung mehr im vs 2010 auf warning lv 4 :P
+		while(renderWindow.pollEvent(currentEvent)){
+			if(currentEvent.type == sf::Event::KeyPressed || currentEvent.type == sf::Event::MouseButtonPressed || currentEvent.type == sf::Event::JoystickButtonPressed ){
 				return;
-			}else if(currentEvent.type == sf::Event::Closed){
+
+			}
+			else if(currentEvent.type == sf::Event::Closed){
 				return;
 			}
+		}
+		clock_t end = clock();
+		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+		//std::cout << elapsed_secs << std::endl;
+		if( elapsed_secs > 5.f ){
+			return;
 		}
 	}
 }

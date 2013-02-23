@@ -1,133 +1,42 @@
 #include "game.h"
 
-void defaultSavegame(Savegame& mySavegame, bool corrput){
-	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
-	// wird eine neuer erstellt mit vordefinierten defaultwerte
-
-	#ifdef DEBUGINFO
-		if(corrput)
-			std::cout << "The savegame is corrupt! Default savegame will be loaded..\a\n";
-		else
-			std::cout << "No savegame detected! Default savegame will be loaded..\a\n";
-	#endif
-
-	std::ofstream defaultsavegame;
-	defaultsavegame.open(SAVEGAME, std::ios::trunc & std::ios::binary);
-	if(defaultsavegame.is_open()){
-
-		// Health
-		defaultsavegame << DEFAULT_HEALTH << std::endl;
-		mySavegame.pHealth = DEFAULT_HEALTH;
-
-		// Level
-		defaultsavegame << DEFAULT_LVL << std::endl;
-		mySavegame.pLvl = DEFAULT_LVL;
-
-			// Exp
-		defaultsavegame << DEFAULT_EXP << std::endl;
-		mySavegame.pExp = DEFAULT_EXP;
-
-		srand((unsigned int)time(NULL));
-		int tmp = (rand() % 2);
-		char pGender;
-		std::string pName;
-		if(tmp){
-			pGender = 'M';
-			pName = DEFAULT_M_NAME;
-		}else{
-			pGender = 'F';
-			pName = DEFAULT_F_NAME;
-		}
-
-		// Gender
-		defaultsavegame << pGender << std::endl;
-		mySavegame.pGender = pGender;
-
-		// Name
-		defaultsavegame << pName << std::endl;
-		mySavegame.pName = pName;
-
-		////////////////////////////////////////////////////
-
-		// Map
-		defaultsavegame << DEFAULT_LEVEL << std::endl;
-		mySavegame.mLevelId = DEFAULT_LEVEL;
-
-		// Pos X auf Map
-		defaultsavegame << DEFAULT_POSX << std::endl;
-		mySavegame.mPosX = DEFAULT_POSX;
-
-		// Pos Y auf Map
-		defaultsavegame << DEFAULT_POSY << std::endl;
-		mySavegame.mPosY = DEFAULT_POSY;
-
-		std::stringstream ss;
-		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + mySavegame.mLevelId + CHECKSUM);
-		std::string checksum = md5(ss.str());
-
-		#ifdef DEBUGINFO
-			std::cout << "Savegame Checksum -> " << checksum << std::endl;
-		#endif
-
-		defaultsavegame << checksum;	
-		mySavegame.checksum = checksum;
-
-		defaultsavegame.close();
-	}
-}
-
 void Game::Init(void)
 {
 	// Do it!
-	Savegame mySavegame;
+	Savegame::currentSaveGame = new Savegame;
+	ConfigFile::currentConfigFile = new ConfigFile;
 
-	std::ifstream loadgame;
-	loadgame.open(SAVEGAME, std::ios::binary);
-	if(loadgame.is_open()){
-		std::cout << "Savegame detected! Loading..\n";
-		loadgame >> mySavegame.pHealth;
-		loadgame >> mySavegame.pLvl;
-		loadgame >> mySavegame.pExp;
-		loadgame >> mySavegame.pGender;
-		loadgame >> mySavegame.pName;
+	// Lade die Einstellungen des Spiels.. 
+	ConfigFile::currentConfigFile->loadConfigFile();
+	
+	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
+	if(!system("mkdir screenshots"))
+		throw "Failed to create the screenshot folder!";
 
-		loadgame >> mySavegame.mLevelId;
-		loadgame >> mySavegame.mPosX;
-		loadgame >> mySavegame.mPosY;
-		
-		loadgame >> mySavegame.checksum;
-		
-		std::stringstream ss;
-		ss << (mySavegame.pHealth - mySavegame.pLvl + mySavegame.pExp + mySavegame.pGender + (int)mySavegame.mPosX + (int)mySavegame.mPosY + mySavegame.mLevelId + CHECKSUM);
-		std::string s = md5(ss.str());
-		
-		if(mySavegame.checksum.compare(s) == 0)
-			std::cout << "Savegame okay...!\n";
-		else
-			defaultSavegame(mySavegame,true);
-
-		#ifdef DEBUGINFO
-			std::cout << "Savegame successfully loaded.." << std::endl;
-		#endif
-		loadgame.close();
-
-		Game::Start(mySavegame);	// Da ein Spielstand vorhanden ist Defaultmäßig der zweite Paramter false
+	if(Savegame::currentSaveGame->loadSavegame(true)){
+		Game::Start();
 	}else{
-		defaultSavegame(mySavegame,false);
+		Game::Start(true);
 	}
-	Game::Start(mySavegame, true);
 }
 
-void Game::Start(Savegame& currentSavegame, bool newgame)
+void Game::Start(bool newgame)
 {
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	
 	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
-	_mainWindow.create(sf::VideoMode(WIDTH, HEIGHT), WINDOWTITLE, sf::Style::Titlebar);
-
-	// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
-	//_mainWindow.setMouseCursorVisible(false);
+	sf::VideoMode bpp = sf::VideoMode::getDesktopMode();
+	
+	if(ConfigFile::currentConfigFile->winmode == "window")
+		_mainWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Close);
+	else{
+		_mainWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height, bpp.bitsPerPixel), WINDOWTITLE, sf::Style::Fullscreen);
+		// Deaktiviert den Mauszeiger im Fenster - Klicken geht weiterhin..
+		_mainWindow.setMouseCursorVisible(false);
+	}
+	
+	
 
 	// Lade und setze das Fenstericon
 	sf::Image Icon;
@@ -144,7 +53,7 @@ void Game::Start(Savegame& currentSavegame, bool newgame)
 	
 	// Solange das Spiel nicht beendet wird, führe GameLoop aus
 	while(!IsExiting()){
-		GameLoop(currentSavegame, newgame);
+		GameLoop(newgame);
 	}
 
 	// Wenn der GameLoop beendet wurde, schließe das Fenster
@@ -156,6 +65,10 @@ bool Game::IsExiting()
 {
 	// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zurück, ansonsten ein False
 	if(_gameState == Game::Exiting){
+		
+		delete Savegame::currentSaveGame;
+		delete ConfigFile::currentConfigFile;
+		
 		return true;
 	}else{ 
 		return false;
@@ -163,9 +76,10 @@ bool Game::IsExiting()
 	// Möglichkeit das Spiel zu Speichern
 }
 
-void Game::GameLoop(Savegame& currentSavegame, bool newgame)
+void Game::GameLoop(bool newgame)
 {
-	sf::View viewCamera  = _mainWindow.getView();
+	sf::View viewCamera = _mainWindow.getView();
+	char gender;
 
 	switch(_gameState){
 		case Game::ShowingIntro:
@@ -181,41 +95,83 @@ void Game::GameLoop(Savegame& currentSavegame, bool newgame)
 			ShowMenu(newgame);
             break;
         case Game::ShowingGenderMenu:
-            ShowMenuGender();
+			#ifdef DEBUGINFO
+				std::cout << "Show the Gender Menu" << std::endl;
+			#endif			
+            gender = ShowMenuGender();
+			if(gender == 'M' || gender == 'F'){	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
+				Savegame::currentSaveGame->pGender = gender;	// speichere explizit hier das geschlecht, da die restlichen werte aus der defines geladen werden
+				Savegame::currentSaveGame->saveSavegame(true); // true -> erzeuge einen neuen spielstand
+			}
 		break;
 		case Game::Playing:
 			// Hier wird die Map geladen
 			#ifdef DEBUGINFO
 				std::cout << "Show the Map / Level" << std::endl;
 			#endif
-			ShowMap(viewCamera,currentSavegame);				
+			ShowMap(viewCamera);				
             break;
+		case Game::Continue:
+			ShowMap(viewCamera,true);
+			break;
 		case Game::NewGame:
-			defaultSavegame(currentSavegame,false);
-			ShowMap(viewCamera,currentSavegame);
+			ShowMap(viewCamera);
+			break;
+		case Game::Paused:
+			GamePaused(viewCamera);
+			break;
         default:
             break;
 	}
 }
-void Game::ShowMap(sf::View viewCamera, Savegame& currentSavegame){
-	Map map;
-	map.Show(_mainWindow, currentSavegame.mLevelId, viewCamera, currentSavegame);
-	#ifdef DEBUGINFO
-		std::cout << "_gameState = Exiting!" << std::endl;
-	#endif
-	_gameState = Exiting;
+void Game::GamePaused(sf::View viewCamera){
+	Pause PauseMenu;
+	bool quitGame = PauseMenu.Show(_mainWindow, viewCamera);
+	if(quitGame)
+		_gameState = Exiting;
+	else
+		_gameState = Continue;
+
+	// hier kann ich irgendwann zurück ins menü!
+}
+
+void Game::ShowMap(sf::View viewCamera, bool continueGame){
+	static Map map;
+	Map::currentMap = &map;
+
+	if(!continueGame)	// wenn das spiel nach dem sterben fortgesetzt wird (mit altem spielstand) muss die map nicht erneut initalisiert werden, da sie es schon ist
+		map.init(Savegame::currentSaveGame->mLevelId);
+
+	MapEvent newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
+
+	
+	if(newGameState.theReason == MapEvent::pause)
+		_gameState = Paused;
+	else if(newGameState.theReason == MapEvent::exiting)
+		_gameState = Exiting;
+	else if(newGameState.theReason == MapEvent::dead){
+		Savegame::currentSaveGame->loadSavegame();
+		
+		_gameState = ShowingMenu;
+	}else if(newGameState.theReason == MapEvent::mapchange){
+		Map::currentMap->getPlayer()->setLevelId(newGameState.newMapId);
+		Map::currentMap->getPlayer()->setPosition(newGameState.newMapPosX,newGameState.newMapPosY);
+		Savegame::currentSaveGame->saveSavegame();
+		
+		map.destory();	// delete alte map bevor die neue geladen wird
+	}
 }
 
 void Game::ShowIntro(){
 	Intro intro;
-	_gameState = Game::ShowingMenu;
 	intro.Show(_mainWindow);
+	_gameState = Game::ShowingMenu;
 }
-
 
 void Game::ShowMenu(bool newgame){
 	MainMenu mainMenu;
 	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
+	
 	switch(result)
 	{
 		case MainMenu::Exit:
@@ -230,31 +186,36 @@ void Game::ShowMenu(bool newgame){
 			#endif
 				_gameState = Playing;
 			break;
-		/*case MainMenu::NewGame:
-			#ifdef DEBUGINFO
-				std::cout << "Menu -> NewGame Button pressed " << std::endl;	
-			#endif
-			_gameState = NewGame;
-			break;*/
         case MainMenu::NewGameGender:
+			#ifdef DEBUGINFO
+				std::cout << "Menu -> New Game Button pressed " << std::endl;	
+			#endif
             _gameState = ShowingGenderMenu;
         default:
-            break;
+            break;  // was soll passieren wenn man daneben klickt? - RICHTIG! NICHTS VERDAMMT!
 	}
 }
 
-void Game::ShowMenuGender(){
+const char Game::ShowMenuGender(){
     MainMenu genderMenu;
     MainMenu::MenuResult result = genderMenu.Show(_mainWindow, false, true);
     switch (result) {
         case MainMenu::Female:
-            _gameState = NewGame;   // @f: weis grad nicht wie ich ab hier weiter machen soll...
-            break;                  //  vlt fŠllt dir was ein. ich wŸsst auch grad nicht wie ich
-        case MainMenu::Male:        // aufs savegame zugreifen kann. evtl das auch static machen?
-            _gameState = NewGame;   // meh...
-        default:
+            _gameState = NewGame;
+			return 'F';									
+            break;                 
+        case MainMenu::Male:        
+            _gameState = NewGame;   
+			return 'M';
+			break;
+        case MainMenu::Menue:
+            _gameState = ShowingMenu;
+			return 'X';			// Gebe X Zurück damit nicht gespeichert wird, wenn man nicht direkt möchte (new game)
             break;
+		default:
+            break; 
     }
+    return 'M';
 }
 
 // static member variables need to be instantiated outside of the class

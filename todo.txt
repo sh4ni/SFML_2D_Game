@@ -1,15 +1,31 @@
-ToDo
-- Monster
-- Monster aus Mapfiles laden
-- Mapübergänge / Maps laden
-- Map Editor
-- Select Gender afer start a new game
-- Dialoge/Story
+﻿ToDo vor Featurefreeze
+! wenn man stirbt oder den spielstand lädt muss die MaxHP / MaxEXP neu berechnet werden
+! wenn man stirbt und new game auswählt ist der spielstand korrekt, das player model nicht (die playertextur wird nicht neu geladen bzw der ganze player exisistert ja schon)
+! dekonstruktor für menü (k)
+- maploader umändern, damit er Tiled maps laden kann (k)
+- passive Monster, aggresive Monster / Freundliche NPCs
+- grafikeffekte: regen (k)
+- gameover screen (f)
 
-Improvements
-- laufanimation zu langsam bei schlechten fps (kimiko)
-- Startmenü ändern mit bewegten hintergrund (kimiko)
+ToDo nach Projektabgabe
+- Map Editor, falls maploader nicht geht
+- Dialoge/Story
+- Dialogboxen im Spiel bei Unterhaltungen
+
+Improvements und Bugfixes
+. konsolen textausgaben wenn DEBUGINFO nicht definiert ist
+. hintergrundbild im menü für hohe auflösungen anpassen (k)
+. controller-axen im menü verbessern (k)
+. im savegame wird die ausrichtung des players gespeichert (f)
+. laufanimation bei nicht ganz durchgedrückten gamepad (k)
+. schlechte fps: prüfen ob laufanimation passt
+. schlechte fps: hp formel anpassen
 
 Nice to Have
-- Spielernamen selbst wählen
-- XBOX Controller Support
+. Lokaler Koop-Modus mit 2 Gamepads
+. Spielernamen selbst wählen
+
+Legende
+! Wichtig
+- Normal
+. Unwichtig

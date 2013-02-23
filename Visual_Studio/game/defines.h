@@ -1,15 +1,20 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
-#define DEBUGINFO 
+#if defined(_WIN32) || defined(__WIN32__)
+	#define SYS_WINDOWS
+#elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh)
+    #define SYS_MACOS
+#endif
 
-#define WIDTH 1024
-#define HEIGHT 768
+//#define WIDTH 1024	wird nicht mehr gebraucht
+//#define HEIGHT 768
 
 #define FPS 60U
 
-// Used in intro and menues
-#define VERSION "0.26 Alpha"
+#define DEBUGINFO				// Für Debug infos im code
+
+#define VERSION "0.4.2 Alpha"	// intro und menü
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
@@ -18,12 +23,17 @@
 #endif
 
 // path du /include folder
-#define PATH ""
+#ifdef SYS_MACOS
+    #define PATH "game.app/Contents/Resources/"
+#else
+    #define PATH ""
+#endif
 
 // used in menues
 #define BUTTONWIDTH 704
 #define BUTTONHEIGHT 64
 #define GENDERBUTTON 128
+#define CONTROLLERAXISMENUE 75.f
 
 // used in map.cpp and player.cpp
 #define TILESIZE 32
@@ -31,16 +41,26 @@
 // used in player.cpp
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
-#define ANIMATIONSPEED 4.0f	// Mehr = langsamere Animation
+#define ANIMATIONSPEED 2.8f         // Mehr = langsamere Animation
+#define CONTROLLERTOLERANCE 22.f    // Analogstick nie komplett in der 0 possition
+#define IDLEHEAL 85					// 
+#define COOLDOWN 200
 
-#define BASEHEALTH 100
-#define HEALTHPERLEVEL 10
-#define BASEEXP 50
+#define BASEHEALTH 100.f
+#define HEALTHMULTIPLICATOR 1.1f
+#define BASEEXP 50.f
 #define EXPMULTIPLICATOR 1.15f
+
+#define SETTINGS "settings.cfg"
+
+#define DEFAULT_WIDTH 1024
+#define DEFAULT_HEIGHT 768
+#define DEFAULT_WINMODE "window"
+#define DEFAULT_SOUND "true"
 
 #define SAVEGAME "save.txt"
 #define CHECKSAVE 1
-#define CHECKSUM 1337
+#define CHECKSUM 4815162342
 
 #define DEFAULT_HEALTH 100
 #define DEFAULT_LVL 1
@@ -49,8 +69,33 @@
 #define DEFAULT_F_NAME "Ashley"
 #define DEFAULT_M_NAME "Fabi"	// in memories
 
-#define DEFAULT_LEVEL 1
-#define DEFAULT_POSX WIDTH/2
-#define DEFAULT_POSY HEIGHT/2
+#define DEFAULT_LEVEL "map1"
+#define DEFAULT_POSX 512
+#define DEFAULT_POSY 384
+
+// nicht löschen
+#ifdef SYS_WINDOWS
+	#define DEFAULT_A 0
+	#define DEFAULT_B 1
+	#define DEFAULT_X 2
+	#define DEFAULT_Y 3
+	#define DEFAULT_LB 4
+	#define DEFAULT_RB 5
+	#define DEFAULT_BACK 6
+	#define DEFAULT_START 7
+	#define DEFAULT_LS 8
+	#define DEFAULT_RS 9
+#else
+	#define DEFAULT_A 0
+	#define DEFAULT_B 1
+	#define DEFAULT_X 2
+	#define DEFAULT_Y 3
+	#define DEFAULT_LB 4
+	#define DEFAULT_RB 5
+	#define DEFAULT_BACK 9
+	#define DEFAULT_START 8
+	#define DEFAULT_LS 6
+	#define DEFAULT_RS 7
+#endif
 
 #endif

@@ -1,39 +1,35 @@
 #include "map.h"
 
-/*IntRect Map::getRect(int x, int y){
-	x /= TILESIZE;
-	y /= TILESIZE;
-	return CollisionMap[x][y];
-}*/
+sf::Texture Map::LevelTexture;
+Map * Map::currentMap;
 
-void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera, Savegame& currentSavegame){
-	renderWindow.setMouseCursorVisible(false);
+Map::Map(){
+	std::cout << "konstruktor MAP!" << std::endl;
+}
+
+void Map::init(std::string LevelId){
+	
 	#ifdef DEBUGINFO
-		std::cout << "Lade Map Nr: " << LevelId << "." << std::endl;
+		std::cout << "Load Map : " << LevelId << std::endl;
 	#endif
-	// Hier wird die Textur für die Map geladen.
-	static sf::Texture LevelTexture;
-	LevelTexture.loadFromFile(PATH"include/texture/world/overworld.png");		// Lade Texturedatei
-
-	int MapSizeX = 0U;
-	int MapSizeY = 0U;
+	//renderWindow.setMouseCursorVisible(false);
+	
+	this->MapSizeX = 0;
+	this->MapSizeY = 0;
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
-	int TileType;
-	TilePart** TileMap = 0;
-	sf::IntRect*** CollisionMap = 0;
+	this->TileMap = 0;
+	this->CollisionMap = 0;
+	this->MapLevelMin = 1;
+	this->MapLevelMax = 1;
 	
-	//std::ostringstream FileName;
-	//FileName << PATH"include/map/map" << LevelId << ".txt";   Funktioniert NUR in Visual Studio! Nicht standard C++
-    char* FileName;
-    FileName = new char[sizeof(PATH) +25];
-	sprintf(FileName,PATH"include/map/map%d.txt",LevelId);
+	this->FileName = PATH"include/map/" + LevelId + ".txt";
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
-	std::ifstream openfile(FileName/*.str()*/);
+	std::ifstream openfile(FileName.c_str());
 	if( openfile.is_open() ){
-		openfile >> MapSizeX >> MapSizeY;
-
+		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme >> this->MapLevelMin >> this->MapLevelMax;
+		
 		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.
 		for ( int i = 0 ; i < MapSizeX ; i++ ){		// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
 			TileMap[i] = new TilePart[MapSizeY];
@@ -45,13 +41,15 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		}
 
 
-		while( !openfile.eof() ){
+		while( LoadCounterY < MapSizeY ){
 			openfile >> TileType;
 			sf::IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
-			subRect.top=TileType/10*TILESIZE;
-			subRect.left=TileType%10*TILESIZE;
+			subRect.top=TileType/10*TILESIZE;   // zeile
+			subRect.left=TileType%10*TILESIZE;  // spalte
 			
+			TileMap[LoadCounterX][LoadCounterY].EnemyId = 0;
+			TileMap[LoadCounterX][LoadCounterY].Teleport = 0;
 			TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect);
 			switch( TileType ){
 			case 0:
@@ -68,7 +66,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 			case 12:
 			case 13:
 			case 14:
-			case 15:
+			case 15:        // alle blšcke OHNE kollision!
 			case 16:
 			case 17:
 			case 19:
@@ -81,83 +79,124 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 			case 28:
 			case 29:
 			case 30:
-				CollisionMap[LoadCounterX][LoadCounterY]=NULL;
+				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  // keine kollision
 					break;
-			default:
-				CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
+			default:        // defaultwert: alle anderen blšcke kriegen eine kollision!
+                    CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
 				break;
 
 			}
-			/*if(TileType >10  ){
-				CollisionMap[LoadCounterX][LoadCounterY]=new IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
-			}else{
-				CollisionMap[LoadCounterX][LoadCounterY]=NULL;
-			}*/
-			//CollisionMap[LoadCounterX][LoadCounterY] = IntRect(0,0,32,32) ;
 			LoadCounterX++;
 			if( LoadCounterX >= MapSizeX ){
 				LoadCounterX = 0;
 				LoadCounterY++;
 			}
 		}
-		#ifdef DEBUGINFOINFO
-			std::cout << "Map erfolgreich eingelesen." << std::endl;
+		while( !openfile.eof() ){
+			int idTemp, xTemp, yTemp;
+			openfile >> idTemp >> xTemp >> yTemp;
+			if( idTemp == 0 ){
+				openfile >> TileMap[xTemp][yTemp].EnemyId;
+				std::cout << "ENEMY: " << TileMap[xTemp][yTemp].EnemyId << std::endl;
+			}
+			else if( idTemp == 1){
+				TileMap[xTemp][yTemp].Teleport = new tp;
+				openfile >> TileMap[xTemp][yTemp].Teleport->Map >> TileMap[xTemp][yTemp].Teleport->xDest >> TileMap[xTemp][yTemp].Teleport->yDest;
+				std::cout << "TELEPORTER: " << TileMap[xTemp][yTemp].Teleport->Map << " " << TileMap[xTemp][yTemp].Teleport->xDest << " " << TileMap[xTemp][yTemp].Teleport->yDest << std::endl;
+			}
+		}
+
+
+		#ifdef DEBUGINFO
+			std::cout << "Map successfully loaded." << std::endl;
 		#endif
-		std::ifstream closefile(FileName/*.str()*/);
+		std::ifstream closefile(FileName.c_str());
 	}
 	else {
-		//throw("Map konnte nicht geoeffnet werden. Fehler: 01.1"); // 01.X = Texturenfehler allgemein 01.1 genau der hier
+		throw "Error: " + FileName + " not found.";
+	}
+
+	FileName = PATH"include/texture/world/" + mapTheme + ".png";
+
+	if( !LevelTexture.loadFromFile(FileName.c_str())){		// Lade Texturedatei
+		throw "Error: " + FileName + " not found.";
 	}
 	
-	sf::Clock clock;
+	this->P1.setColMap(CollisionMap);
+	this->P1.setMapSize( MapSizeX, MapSizeY );
 
-	Player P1(CollisionMap,currentSavegame);
-	P1.setMapSize( MapSizeX, MapSizeY );
+	//Player P2(CollisionMap,currentSavegame,1);        // 2 Spieler Koop Test
+	//P2.setMapSize( MapSizeX, MapSizeY );              // Funktioniert ohne probleme!
 
-	float LastTime = 1.f;
-	float ElapsedTime;
-	float Frames;
-
-	int CamX;
-	int CamY;
+	this->LastTime = 1.f;
 	
-	sf::Texture ifaceImage;
+	
 	if( P1.getGender() == 'F' ){
 		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
-			//fehlerbehebung
+			throw "Error: include/interface/interface-female.png not found.";
 		}
 	}
 	else {
 		if(!ifaceImage.loadFromFile(PATH"include/interface/interface-male.png")){
-			//fehlerbehebung
+			throw "Error: include/interface/interface-male.png not found.";
 		}
 	}
-	sf::Sprite iface(ifaceImage);
+
+	iface.setTexture(ifaceImage);
 	iface.setOrigin((float)ifaceImage.getSize().x/2.f,(float)ifaceImage.getSize().y);
-	iface.setPosition(WIDTH/2,HEIGHT);
+	iface.setPosition((float)ConfigFile::currentConfigFile->width/2,(float)ConfigFile::currentConfigFile->height);
 
-	sf::RectangleShape HPBar;
-	HPBar.setFillColor(sf::Color(0x99,0x33,0x33));
-	HPBar.setPosition(WIDTH/2-55,HEIGHT-61);
+	HPBar.setFillColor(sf::Color(0x99,0x33,0x33));  // farbe des hp balkens
+	HPBar.setPosition((float)ConfigFile::currentConfigFile->width/2-55,(float)ConfigFile::currentConfigFile->height-61);
 	HPBar.setSize(sf::Vector2f(180.f,28.f));
-
-	sf::RectangleShape EXPBar;
-	EXPBar.setFillColor(sf::Color(0x00,0xCC,0x33));
-	EXPBar.setPosition(WIDTH/2-55,HEIGHT-30);
+	
+	EXPBar.setFillColor(sf::Color(0x00,0xCC,0x33)); // farbe des exp balkens
+	EXPBar.setPosition((float)ConfigFile::currentConfigFile->width/2-55,(float)ConfigFile::currentConfigFile->height-30);
 	EXPBar.setSize(sf::Vector2f(180.f,28.f));
 
-	Schrift DisplayHPText(WIDTH/2-53,HEIGHT-58,"HP",18,0);
-	Schrift DisplayEXPText(WIDTH/2-53,HEIGHT-27,"EXP",18,0);
-	Schrift DisplayHP(WIDTH/2+122,HEIGHT-58,"Error",18,0);
-	Schrift DisplayEXP(WIDTH/2+123,HEIGHT-27,"Error",18,0);
-	Schrift DisplayLevel(WIDTH/2-128,HEIGHT-76,"Err",18,0);
+	DisplayHPText.Init((float)ConfigFile::currentConfigFile->width/2-53,(float)ConfigFile::currentConfigFile->height-58,"HP",18,0);
+	DisplayEXPText.Init((float)ConfigFile::currentConfigFile->width/2-53,(float)ConfigFile::currentConfigFile->height-27,"EXP",18,0);
+	DisplayHP.Init((float)ConfigFile::currentConfigFile->width/2+122,(float)ConfigFile::currentConfigFile->height-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
+	DisplayEXP.Init((float)ConfigFile::currentConfigFile->width/2+123,(float)ConfigFile::currentConfigFile->height-27,"Error",18,0);
+	DisplayLevel.Init((float)ConfigFile::currentConfigFile->width/2-128,(float)ConfigFile::currentConfigFile->height-76,"Err",18,0);
+	DisplayFPS.Init(0,0,"FPS: Error",20);
+	DisplayKoord.Init(0,20,"X: Error Y: Error",20);
+	DisplaySpeed.Init(0,40,"Speed: Error",20);
 
-	Schrift DisplayFPS(0,0,"FPS: Error",20);
-	Schrift DisplayKoord(0,20,"X: Error Y: Error",20);
-	Schrift DisplaySpeed(0,40,"Speed: Error",20);
+}
 
-	while(true)
-	{
+void Map::destory(){
+    // Lšsche TileMap wieder...
+    for( int x=0; x<MapSizeX; x++){
+        for( int y=0; y<MapSizeY; y++){
+            delete TileMap[x][y].TexturePart;   // Lšschen der TileMap - Textureausschnitte
+			if( TileMap[x][y].Teleport ){
+				delete TileMap[x][y].Teleport;	// Lšschen der TileMap - Teleporter
+            }
+            if( CollisionMap[x][y] ){
+                delete CollisionMap[x][y];      // Lšschen der CollisionMap - Rechtecke
+            }
+        }
+		delete TileMap[x];                      // Lšschen der TileMap - Objekte
+		delete CollisionMap[x];                 // Lšschen der CollisionMap - Pointer
+    }
+	
+	delete [] TileMap;                             // Lšschen der TileMap - Pointer
+    delete [] CollisionMap;                        // Lšschen der CollisionMap - Pointer auf Pointer
+	std::cout << "deleted map..." << std::endl;
+}
+
+Map::~Map(){
+	std::cout << "destruktor MAP!" << std::endl;
+    destory();
+}
+
+MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
+	while( 1+3+3==7 ){
+
+		if(P1.getHealth() <= 0){
+			return MapEvent(MapEvent::dead);
+		}
 		ElapsedTime = (float)clock.restart().asMilliseconds();
 
 		Frames = 1.f /( ElapsedTime / 1000 );
@@ -175,10 +214,26 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 
 		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell für die Koordinatenanzeige
 		// und ruf aus performancegründen die getPos methode nicht 2 mal auf.
+		TileX = CamX/TILESIZE;
+		TileY = (CamY+TILESIZE/2)/TILESIZE;
+
+		if( TileX < 0 ) TileX = 0;
+		else if( TileX >= MapSizeX ) TileX = MapSizeX-1;
+		if( TileY < 0 ) TileY = 0;
+		else if( TileY >= MapSizeY ) TileY = MapSizeY-1;
+
 		std::ostringstream PlayerKoordText;
 		PlayerKoordText.precision(0);
-		PlayerKoordText << std::fixed << "X: " << CamX << " Y: " << CamY;
+		PlayerKoordText << std::fixed << "X: " << CamX << " Y: " << CamY << " TX: " << TileX << " TY: " << TileY;
 		DisplayKoord.Update(PlayerKoordText.str());
+
+		// und nochmal ^^
+ 		if( TileMap[TileX][TileY].Teleport ){
+			#ifdef DEBUGINFO
+				std::cout << "Lade Map: '" << TileMap[TileX][TileY].Teleport->Map << "' X: " << TileMap[TileX][TileY].Teleport->xDest << " Y: " << TileMap[TileX][TileY].Teleport->yDest << std::endl;
+			#endif
+			return MapEvent(MapEvent::mapchange,TileMap[TileX][TileY].Teleport->Map,TileMap[TileX][TileY].Teleport->xDest,TileMap[TileX][TileY].Teleport->yDest);
+		}
 
 		std::ostringstream PlayerSpeedText;
 		PlayerSpeedText.precision(1);
@@ -186,15 +241,15 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		DisplaySpeed.Update(PlayerSpeedText.str());
 
 		// ...geht aber nicht übers Kartenende hinaus
-		if ( MapSizeX*TILESIZE < WIDTH ){
+		if ( MapSizeX*TILESIZE < ConfigFile::currentConfigFile->width ){
 			CamX = MapSizeX*TILESIZE/2;
 			renderWindow.clear();
 		}
-		else if ( CamX < WIDTH/2 ) CamX = WIDTH/2;
-		else if ( CamX > MapSizeX * TILESIZE - WIDTH/2 ) CamX = MapSizeX * TILESIZE - WIDTH/2;
-		if ( MapSizeY*TILESIZE < HEIGHT ) CamY = MapSizeY*TILESIZE/2;
-		else if ( CamY < HEIGHT/2 ) CamY = HEIGHT/2;
-		else if ( CamY > MapSizeY * TILESIZE - HEIGHT/2 ) CamY = MapSizeY * TILESIZE - HEIGHT/2;
+		else if ( CamX < ConfigFile::currentConfigFile->width/2 ) CamX = ConfigFile::currentConfigFile->width/2;
+		else if ( CamX > MapSizeX * TILESIZE - ConfigFile::currentConfigFile->width/2 ) CamX = MapSizeX * TILESIZE - ConfigFile::currentConfigFile->width/2;
+		if ( MapSizeY*TILESIZE < ConfigFile::currentConfigFile->height ) CamY = MapSizeY*TILESIZE/2;
+		else if ( CamY < ConfigFile::currentConfigFile->height/2 ) CamY = ConfigFile::currentConfigFile->height/2;
+		else if ( CamY > MapSizeY * TILESIZE - ConfigFile::currentConfigFile->height/2 ) CamY = MapSizeY * TILESIZE - ConfigFile::currentConfigFile->height/2;
 		renderWindow.setView(viewCamera);
 		viewCamera.setCenter((float)CamX,(float)CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
 
@@ -202,12 +257,12 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		// Orientierung an der Kamera, damit nur sichtbare Sprites neu gezeichnet werden.
 
 		{// Klammer, wegen sichtbarkeit der variablen.
-			int y = ((int)CamY-(HEIGHT/2))/TILESIZE;
+			int y = ((int)CamY-(ConfigFile::currentConfigFile->height/2))/TILESIZE;
 			if( y<0 ) y=0;
-			while( (y < ((int)CamY+(HEIGHT/2)+TILESIZE-1)/TILESIZE)&&(y<MapSizeY) ){
-				int x = ((int)CamX-(WIDTH/2))/TILESIZE;
+			while( (y < ((int)CamY+(ConfigFile::currentConfigFile->height/2)+TILESIZE-1)/TILESIZE)&&(y<MapSizeY) ){
+				int x = ((int)CamX-(ConfigFile::currentConfigFile->width/2))/TILESIZE;
 				if( x<0 ) x=0;
-				while( (x < ((int)CamX+(WIDTH/2)+TILESIZE-1)/TILESIZE)&&(x<MapSizeX) ){
+				while( (x < ((int)CamX+(ConfigFile::currentConfigFile->width/2)+TILESIZE-1)/TILESIZE)&&(x<MapSizeX) ){
 					TileMap[x][y].TexturePart->setPosition( (float)(x * TILESIZE), (float)(y * TILESIZE) );
 					renderWindow.draw(*TileMap[x][y].TexturePart);
 					x++;
@@ -218,48 +273,83 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 
 		// Rendern des Spielers
 		P1.Render(renderWindow);
-		P1.Update(renderWindow, ElapsedTime);
+		P1.Update(ElapsedTime);
 		
+		//P2.Render(renderWindow);      // 2 Spieler test... siehe weiter oben
+		//P2.Update(ElapsedTime);
+
 		sf::Event levelLoop;
+
 		while(renderWindow.pollEvent(levelLoop)){
-			if(levelLoop.type == sf::Event::KeyPressed){
-				if(levelLoop.key.code == sf::Keyboard::Escape){
-					bool quitGame = pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
-					if(quitGame)
-						return;
+			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
+				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
+					return MapEvent(MapEvent::pause);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
-					if(Screen.saveToFile("screenshots\\screenshot-"__DATE__"-.png")){
+					if(Screen.saveToFile("screenshots/screenshot-"__DATE__"-.png")){
 						#ifdef DEBUGINFO
 							std::cout << " Screenshot gespeichert.. " << std::endl;	
 						#endif
 					}
 				}
-				else if(levelLoop.key.code == sf::Keyboard::E){
-					// player speed up
-					P1.increaseSpeed(0.1f);
+                #ifdef DEBUGINFO
+				else if(levelLoop.key.code == sf::Keyboard::E){         // ein paar debug keys
+					P1.increaseSpeed(0.1f);                             // E = schneller laufen
+				}                                                       // Q = langsamer laufen
+				else if(levelLoop.key.code == sf::Keyboard::Q){         // 1 = 10 erfahrung kriegen
+					P1.decreaseSpeed(0.1f);                             // 2 = 20 level 10 schaden kriegen
+				}                                                       // ...
+                else if(levelLoop.key.code == sf::Keyboard::Num1){
+                    P1.playerExp(10, P1.getLvl());
+                }
+                else if(levelLoop.key.code == sf::Keyboard::Num2){
+                    P1.playerDamage(20, 10);
+                }
+				else if(levelLoop.key.code == sf::Keyboard::Num0){
+                    P1.setBlockControl(true);
+                }
+				else if(levelLoop.key.code == sf::Keyboard::Num9){
+                    P1.setBlockControl(false);
+                }
+				else if(levelLoop.key.code == sf::Keyboard::F6){
+					Savegame::currentSaveGame->saveSavegame();
+                }
+				else if(levelLoop.key.code == sf::Keyboard::F9){
+					Savegame::currentSaveGame->loadSavegame();
 				}
-				else if(levelLoop.key.code == sf::Keyboard::Q){
-					// player speed runter
-					P1.decreaseSpeed(0.1f);
+				else if(levelLoop.key.code == sf::Keyboard::F){
+					if(ConfigFile::currentConfigFile->winmode == "window"){
+						renderWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height), WINDOWTITLE, sf::Style::Fullscreen);
+						renderWindow.setMouseCursorVisible(false);
+						ConfigFile::currentConfigFile->winmode = "fullscreen";
+						ConfigFile::currentConfigFile->saveConfigFile();
+					}else{
+						renderWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height), WINDOWTITLE, sf::Style::Close);
+						renderWindow.setMouseCursorVisible(true);
+						ConfigFile::currentConfigFile->winmode = "window";
+						ConfigFile::currentConfigFile->saveConfigFile();
+					}
 				}
+                #endif
 			}
-			else if(levelLoop.type == sf::Event::LostFocus){
+            else if(levelLoop.type == sf::Event::LostFocus){
 				#ifdef DEBUGINFO
-					std::cout << " Ausserhalb Fenster!.. " << std::endl;	
+					std::cout << " Outside the window!.. Game will be paused" << std::endl;	
 				#endif
-					pause(renderWindow,viewCamera,levelLoop,P1,LevelId, currentSavegame);
+					return MapEvent(MapEvent::pause);
 			}
-			else if(levelLoop.type == sf::Event::Closed){
-				return;
+            else if(levelLoop.type == sf::Event::Closed){
+				return MapEvent(MapEvent::exiting);
 			}
+			
 		}
-
+		
 		renderWindow.setView(renderWindow.getDefaultView());	// Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
 		
 		renderWindow.draw(iface);
 
+        // balken fŸr hp und exp werden hier angepasst.
 		HPBar.setSize(sf::Vector2f((float)P1.getHealth()/(float)P1.getHealthMax()*180.f,28.f));
 		EXPBar.setSize(sf::Vector2f((float)P1.getExp()/(float)P1.getExpMax()*180.f,28.f));
 
@@ -268,7 +358,7 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 
 		DisplayHP.printText.setOrigin(DisplayHP.printText.getGlobalBounds().width,0);			// Text Rechtsbündig
 		DisplayEXP.printText.setOrigin(DisplayEXP.printText.getGlobalBounds().width,0);
-		DisplayLevel.printText.setOrigin(DisplayLevel.printText.getGlobalBounds().width/2+1,0);	// Text Zentrieren
+		DisplayLevel.printText.setOrigin(DisplayLevel.printText.getGlobalBounds().width/2,0);	// Text Zentrieren
 
 		std::ostringstream PlayerHealthText;
 		PlayerHealthText.precision(0);
@@ -285,162 +375,18 @@ void Map::Show(sf::RenderWindow& renderWindow, int LevelId, sf::View viewCamera,
 		PlayerLvlText << std::fixed << P1.getLvl();
 		DisplayLevel.Update(PlayerLvlText.str());
 
-		DisplayHPText.Render(renderWindow);
-		DisplayEXPText.Render(renderWindow);
-		DisplayHP.Render(renderWindow);
-		DisplayEXP.Render(renderWindow);
-		DisplayLevel.Render(renderWindow);
+		DisplayHPText.Render(renderWindow);     // text "HP" auf dem balken
+		DisplayEXPText.Render(renderWindow);    // text "EXP" auf dem balken
+		DisplayHP.Render(renderWindow);         // hp Anzeige
+		DisplayEXP.Render(renderWindow);        // exp Anzeige
+		DisplayLevel.Render(renderWindow);      // level Anzeige
 
-		DisplayFPS.Render(renderWindow);	// FPS Anzeige
-		DisplayKoord.Render(renderWindow);	// Spielerkoordinaten Anzeige
-		DisplaySpeed.Render(renderWindow);	// Geschwindigkeit des Players
+		DisplayFPS.Render(renderWindow);        // FPS Anzeige
+		DisplayKoord.Render(renderWindow);      // Spielerkoordinaten Anzeige
+		DisplaySpeed.Render(renderWindow);      // Geschwindigkeit des Players
 
 		renderWindow.display();
-	}
-}
-
-bool Map::load(Player& P1)
-{
-	std::cout << "loading savegame..";
-	std::ifstream loadgame;
-	loadgame.open(SAVEGAME, std::ios::binary);
-	if(loadgame.is_open()){
-
-		int tmp;
-		loadgame >> tmp;
-		P1.setHealth(tmp);
-		loadgame >> tmp;
-		P1.setLvl(tmp);
-		loadgame >> tmp;
-		P1.setExp(tmp);
 		
-		char tmper;
-		loadgame >> tmper; // gender
-		std::string temperer;
-		loadgame >> temperer; // name
-		loadgame >> tmp; // mapid
-		
-		float temp;
-		float temp2;
-		loadgame >> temp;
-		//P1.setPosX(temp);
-		loadgame >> temp2;
-		
-		P1.setPosition(temp,temp2);
-
-
-		loadgame.close();
-	}else{
-		std::cout << "An error occurred during loading the saved game.." << std::endl;
-		return false;
 	}
-
-	return true;
-}
-
-bool Map::save(Player& P1, int LevelId)
-{
-	std::cout << "saving..\n";
-	std::ofstream savegame;
-	savegame.open(SAVEGAME, std::ios::trunc | std::ios::binary);
-	if(savegame.is_open()){
-		// Health
-		savegame << P1.getHealth() << std::endl;
-		// Level
-		savegame << P1.getLvl() << std::endl;
-		// Exp
-		savegame << P1.getExp() << std::endl;
-		// Gender
-		savegame << P1.getGender() << std::endl;
-		// Name
-		savegame << P1.getName() << std::endl;
-
-		// Map
-		savegame << LevelId << std::endl;
-		// Pos X auf Map
-		savegame << P1.getPosX() << std::endl;
-		// Pos Y auf Map
-		savegame << P1.getPosY() << std::endl;
-
-		std::stringstream ss;
-		ss << (P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + (int)P1.getPosX() + (int)P1.getPosY() +LevelId + CHECKSUM);
-		std::string checksum = md5(ss.str());
-
-		savegame << checksum;
-		#ifdef DEBUGINFO
-			std::cout << "Savegame Checksum -> " << checksum << std::endl;
-		#endif
-
-		savegame.close();
-		std::cout << "saved..\n";
-	}else{
-		std::cout << "An error occurred during saving the game..\a\n";
-	}
-	
-	return true;
-}
-
-bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, int LevelId, Savegame& currentSavegame){
-	
-	//Map::load(P1);
-	#ifdef DEBUGINFO
-		std::cout << "Paused.." << std::endl;	
-	#endif
-
-	int CenterX = (int)viewCamera.getCenter().x;
-	int CenterY = (int)viewCamera.getCenter().y;
-
-	// Hintergrund Box
-	sf::RectangleShape Background(sf::Vector2f(WIDTH, HEIGHT));
-    Background.setFillColor(sf::Color(0, 0, 0,100));
-	Background.setPosition((float)CenterX-(float)WIDTH/2.f,(float)CenterY-(float)HEIGHT/2.f);
-
-	// Pause Schriftzug
-	Schrift Pause(CenterX,CenterY-100,"Paused",50);
-	Pause.printText.setOrigin(Pause.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
-
-	// Logo im Pausemenü
-	sf::Texture LogoImage;
-	if(!LogoImage.loadFromFile(PATH"include/interface/splashscreen.png")){
-		// Fehlerbehebung
-	}
-	sf::Sprite Logo(LogoImage);
-	Logo.setOrigin((float)LogoImage.getSize().x/2.f,0);
-	Logo.setPosition((float)CenterX,(float)CenterY-300.f);
-
-	// Hilfetext
-	Schrift HilfeTasten(CenterX-50,CenterY,"ESC:\nF6\nF9:\nSpace:",20);
-	Schrift HilfeText(CenterX+70,CenterY,"Continue\nSave\nLoad\nExit Game",20);
-	HilfeTasten.printText.setOrigin(HilfeTasten.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
-	HilfeText.printText.setOrigin(HilfeText.printText.getGlobalBounds().width/2.f+1.f,0);		// Textbox zentrieren
-
-	// LOS! ZEICHNE ES NIEDERER SKLAVE!
-	renderWindow.draw(Background);
-	renderWindow.draw(Logo);
-	Pause.Render(renderWindow);
-	HilfeTasten.Render(renderWindow);
-	HilfeText.Render(renderWindow);
-
-	renderWindow.display();
-	
-	while(renderWindow.waitEvent(levelLoop)){
-		if(levelLoop.type == sf::Event::KeyPressed){
-			if (levelLoop.key.code == sf::Keyboard::Escape){
-				#ifdef DEBUGINFO
-					std::cout << "Continue Playing.." << std::endl;
-				#endif
-					return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
-			}else if(levelLoop.key.code == sf::Keyboard::Space){
-				#ifdef DEBUGINFO
-					std::cout << "Quit Game!" << std::endl;
-				#endif
-					return true; // gebe true zurueck damit das spiel anschließend beendet wird
-			}else if(levelLoop.key.code == sf::Keyboard::F6){
-				Map::save(P1, LevelId);
-			}else if(levelLoop.key.code == sf::Keyboard::F9){
-				Map::load(P1);
-			}
-		}
-	}
-	return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
+	return MapEvent(MapEvent::nothing);
 }

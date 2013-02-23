@@ -4,56 +4,46 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <math.h>
 #include "defines.h"
-#include "savegame.h"
+#include "character.h"
 
 
-class Player{
+class Player : public Character{
+private:
+    int controller;
+	bool blockControl;
+	
+	int HealTickRate;
+	int pHealthMax;
+	int pExp;
+	int pExpMax;	// Exp needed Until Levelup
+	char pGender;	// M - Male | F - Female
+	std::string LevelId;
+	
 public:
-	void Update		(sf::RenderWindow &Window, float ElapsedTime);
-	void Render		(sf::RenderWindow &Window){
+	
+	Player(int controller=0);
+
+	void Update	(float ElapsedTime);
+	void Render	(sf::RenderWindow &Window){
 		Window.draw(sprite);
 	}
-	Player			(sf::IntRect*** CollisionMap, Savegame& currentSavegame);
-	float			getPosX(void){
-		return this->x;
+	
+	std::string getLevelId(void){
+		return this->LevelId;
 	}
-	float			getPosY(void){
-		return this->y;
+
+	void setLevelId(std::string LevelId){
+		this->LevelId = LevelId;
 	}
-	void			setPosition(float PosX, float PosY){
-		sprite.setPosition(PosX,PosY);
+	
+	int getHealth(void){
+		return this->Health;
 	}
-	float			getSpeed(void){
-		return this->Speed;
-	}
-	void			increaseSpeed(float speedValue){
-		if(this->Speed < 0.35f)
-			this->Speed += speedValue;
-	}
-	void			decreaseSpeed(float speedValue){
-		if(this->Speed <= 0.2f)
-			this->Speed = 0.1f;
-		else
-			this->Speed -= speedValue;
-	}
-	void setHealth(int pHealth){
-		this->pHealth = pHealth;
-	}
-	void setLvl(int pLvl){
-		this->pLvl = pLvl;
-	}
+	
 	void setExp(int pExp){
 		this->pExp = pExp;
-	}
-	void setName(std::string pName){
-		this->pName = pName;
-	}
-	int getHealth(void){
-		return this->pHealth;
-	}
-	int getLvl(void){
-		return this->pLvl;
 	}
 	int getExp(void){
 		return this->pExp;
@@ -61,9 +51,9 @@ public:
 	char getGender(void){
 		return this->pGender;
 	}
-	std::string getName(void){
-		return this->pName;
-	}
+	void setGender(char pGender){
+		this->pGender = pGender;
+	};
 	int getHealthMax(void){
 		return this->pHealthMax;
 	}
@@ -74,23 +64,49 @@ public:
 		this->MapSize.x = xMax;
 		this->MapSize.y = yMax;
 	}
-private:
-	float Speed;
-	sf::Texture texture;
-	sf::Sprite sprite;
-	sf::IntRect*** ColMap;
-	sf::Vector2i MapSize;
-	float x;
-	float y;
-	unsigned char Animation;
-
-	int pHealth;
-	int pHealthMax;
-	int pLvl;
-	int pExp;
-	int pExpMax;	// Exp needed Until Levelup
-	char pGender;	// M - Male | F - Female
-	std::string pName; 
+    void ResetCooldown(void){
+        this->HealTickRate = -COOLDOWN + IDLEHEAL;
+    }
+    void playerDamage( int damage, int level ){
+        ResetCooldown();
+		int levelDif = level-this->Lvl;
+        damage += (levelDif*(level/10));
+        if ( damage <= 0 ){
+            damage = 1;
+        }
+        this->Health -= damage;
+        if( this->Health < 0 ){
+            this->Health = 0;
+			std::cout << "Player will be die!" << std::endl;
+        }
+    }
+    void playerHeal( int heal ){
+        this->Health += heal;
+        if( this->Health > this->pHealthMax ){
+            this->Health = this->pHealthMax;
+        }
+    }
+    void playerExp( int exp, int level ){
+        int levelDif = level-this->Lvl;
+        exp += levelDif*(level/2);
+        this->pExp += exp;
+        if( this->pExp >= this->pExpMax ){       // Hier levelup!
+            this->pExp -= this->pExpMax;
+            this->Lvl++;
+            this->pHealthMax = (int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
+            this->pExpMax = (int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
+			this->Health = this->pHealthMax;
+            #ifdef DEBUGINFO
+                std::cout << "LEVEL UP: " << this->Lvl << std::endl;
+            #endif
+        }
+    }
+	void setBlockControl(bool block=false){
+		this->blockControl = block;
+		#ifdef DEBUGINFO
+			std::cout << "block " << block << std::endl;
+		#endif
+	}
 
 };
 
