@@ -3,6 +3,27 @@
 Savegame * Savegame::currentSaveGame;
 ConfigFile * ConfigFile::currentConfigFile;
 
+// Prüfe ob eine Datei leer ist
+bool is_empty(std::ifstream& myFile)
+{
+	// wenn die datei leer ist gebe ein true zurück
+    return myFile.peek() == std::ifstream::traits_type::eof();
+}
+
+// Bereche die Checksume des Spielstandes anhand eines MD5 Alogrihtmus
+std::string calc_checksum(){
+	std::stringstream ss;
+	ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
+	std::string checksum = md5(ss.str());
+	//@filip noch anpassen in final
+
+#ifdef DEBUGINFO
+	std::cout << "Savegame Checksum " << checksum << std::endl;
+#endif
+
+	return checksum;
+}
+
 Savegame::Savegame(){
 #ifdef DEBUGINFO
 	std::cout << "konstruktor Savegame." << std::endl;
@@ -14,11 +35,11 @@ Savegame::~Savegame(){
 #endif
 }
 
-void Savegame::saveSavegame(const char pGender, bool defaultConfig){
+void Savegame::saveSavegame(bool defaultSavegame){
 	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
 	// wird eine neuer erstellt mit vordefinierten defaultwerte
 	
-	if(defaultConfig)
+	if(defaultSavegame)
 		std::cout << "Default savegame will be loaded..\a\n";
 	else
 		std::cout << "Savegame will be saved!" << std::endl;
@@ -26,7 +47,7 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 	std::ofstream defaultsavegame;
 	defaultsavegame.open(PATH SAVEGAME, std::ios::trunc & std::ios::binary);
 	if(defaultsavegame.is_open()){
-		if(defaultConfig){
+		if(defaultSavegame){
 			// Health
 			defaultsavegame << DEFAULT_HEALTH << std::endl;
 			Savegame::currentSaveGame->pHealth = DEFAULT_HEALTH;
@@ -35,19 +56,19 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			defaultsavegame << DEFAULT_LVL << std::endl;
 			Savegame::currentSaveGame->pLvl = DEFAULT_LVL;
 
-				// Exp
+			// Exp
 			defaultsavegame << DEFAULT_EXP << std::endl;
 			Savegame::currentSaveGame->pExp = DEFAULT_EXP;
+
+			// Gender
+			defaultsavegame << pGender << std::endl;
+			Savegame::currentSaveGame->pGender = pGender;
 
 			std::string pName;
 			if(pGender == 'M')
 				pName = DEFAULT_M_NAME;
 			else
 				pName = DEFAULT_F_NAME;
-
-			// Gender
-			defaultsavegame << pGender << std::endl;
-			Savegame::currentSaveGame->pGender = pGender;
 
 			// Name
 			defaultsavegame << pName << std::endl;
@@ -67,19 +88,21 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			defaultsavegame << DEFAULT_POSY << std::endl;
 			Savegame::currentSaveGame->mPosY = DEFAULT_POSY;
 
-			std::stringstream ss;
-			ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
-			std::string checksum = md5(ss.str());
-			// Änderung noch in Final!
+			///////////////////// CHECKSUM /////////////////////
 
-			#ifdef DEBUGINFO
-				std::cout << "Savegame Checksum -> " << checksum << std::endl;
-			#endif
+			std::string checksum = calc_checksum();
 				
 			defaultsavegame << checksum;	
 			Savegame::currentSaveGame->checksum = checksum;
 			
 		}else{
+			// beim mapwechsel muss die neue Position gesetzt werden und alle werte aktualisiert werden vor dem speichern,
+			// da sonst das Savegame korrupt wird!
+			Savegame::currentSaveGame->pHealth = Map::currentMap->getPlayer()->getHealth();
+			Savegame::currentSaveGame->pLvl = Map::currentMap->getPlayer()->getLvl();
+			Savegame::currentSaveGame->pExp = Map::currentMap->getPlayer()->getExp();
+			Savegame::currentSaveGame->pGender = Map::currentMap->getPlayer()->getGender();
+			Savegame::currentSaveGame->pName = Map::currentMap->getPlayer()->getName();
 			Savegame::currentSaveGame->mLevelId = Map::currentMap->getPlayer()->getLevelId();
 			Savegame::currentSaveGame->mPosX = Map::currentMap->getPlayer()->getPosX();
 			Savegame::currentSaveGame->mPosY = Map::currentMap->getPlayer()->getPosY();
@@ -93,23 +116,25 @@ void Savegame::saveSavegame(const char pGender, bool defaultConfig){
 			defaultsavegame << Map::currentMap->getPlayer()->getPosX() << std::endl;
 			defaultsavegame << Map::currentMap->getPlayer()->getPosY() << std::endl;
 			
-			std::stringstream ss;
-			ss << (Map::currentMap->getPlayer()->getHealth() - Map::currentMap->getPlayer()->getLvl() + Map::currentMap->getPlayer()->getExp() + Map::currentMap->getPlayer()->getGender() + (int)Map::currentMap->getPlayer()->getPosX() + (int)Map::currentMap->getPlayer()->getPosY() + CHECKSUM);
-			std::string checksum = md5(ss.str());
-			// Änderung noch in Final!
-
-			defaultsavegame << checksum << std::endl;
+			std::string checksum = calc_checksum();
+			defaultsavegame << checksum;
 		}
 		defaultsavegame.close();
 	}
 }
 
 
-
 bool Savegame::loadSavegame(bool init){
 	std::ifstream loadgame;
 	loadgame.open(PATH SAVEGAME, std::ios::binary);
-	if(loadgame.is_open()){
+	
+	if(!is_empty(loadgame) && loadgame.is_open()){
+
+		// gehe in die letzte position der datei
+		// wenn tellg keinen wert zurück gibt ist die datei leer und ein default save wird erstellt
+		// ansonsten springe zum beginn der datei und lese diese ein
+		
+
 		std::cout << "Savegame detected! Loading..\n";
 		loadgame >> Savegame::currentSaveGame->pHealth;
 		loadgame >> Savegame::currentSaveGame->pLvl;
@@ -122,7 +147,7 @@ bool Savegame::loadSavegame(bool init){
 		loadgame >> Savegame::currentSaveGame->checksum;
 		loadgame.close();
 
-		if(!init){
+		if(!init){ // wenn das spiel NICHT aus dem Init Bereich der game.cpp geladen wurde
 			Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->pHealth);
 			Map::currentMap->getPlayer()->setLvl(Savegame::currentSaveGame->pLvl);
 			Map::currentMap->getPlayer()->setExp(Savegame::currentSaveGame->pExp);
@@ -132,19 +157,14 @@ bool Savegame::loadSavegame(bool init){
 			Map::currentMap->getPlayer()->setPosition(Savegame::currentSaveGame->mPosX,Savegame::currentSaveGame->mPosY);
 		}
 
-		// bitte prüfen @filip
-		std::stringstream ss;
-		ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
-		std::string s = md5(ss.str());
-		//std::string checksum = md5(ss.str()+Savegame::currentSaveGame->mLevelId+mySavegame.pName);	// Nicht aktivieren! Erst in Final!
+		std::string checksum = calc_checksum();
 
-		if(Savegame::currentSaveGame->checksum.compare(s) == 0){
+		if(Savegame::currentSaveGame->checksum.compare(checksum) == 0){
 			std::cout << "Savegame okay...!\n";
 			return true;
 		}else{
 			std::cout << "Savegame corrupt...!\a\n";
-			saveSavegame();
-			return false;
+			saveSavegame(true); // default savegame will be created
 		}
 	}
 	return false;
@@ -173,25 +193,16 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 			configFile << "### SCREEN SETTINGS ###" << std::endl;
 			configFile << "WIDTH = " << DEFAULT_WIDTH << std::endl;
 			ConfigFile::currentConfigFile->width = DEFAULT_WIDTH;
-
 			configFile << "HEIGHT = " << DEFAULT_HEIGHT << std::endl;
 			ConfigFile::currentConfigFile->height = DEFAULT_HEIGHT;
-
 			configFile << "WINMODE = " << DEFAULT_WINMODE << std::endl;
 			ConfigFile::currentConfigFile->winmode = DEFAULT_WINMODE;
 
 			configFile << "\n### Sound Settings ###" << std::endl;
-
 			configFile << "SOUND = " << DEFAULT_SOUND << std::endl;
-			ConfigFile::currentConfigFile->sound = DEFAULT_WINMODE;
+			ConfigFile::currentConfigFile->sound = DEFAULT_SOUND;
 			
 			configFile << "\n### Controller Settings ###" << std::endl;
-			#ifdef SYS_WINDOWS
-				configFile << "Win Settings" << std::endl;
-			#else
-				configFile << "Other OS Settings" << std::endl;
-			#endif
-
 			configFile << "A_BUTTON = " << DEFAULT_A << std::endl;
 			ConfigFile::currentConfigFile->controller_A = DEFAULT_A;
 
@@ -223,60 +234,41 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 			ConfigFile::currentConfigFile->controller_RS = DEFAULT_RS;
 
 			configFile << "### End of Configfile ###" << std::endl;
-
 		}else{
-			#ifdef DEBUGINFO
-				std::cout << "Config saved.";
-			#endif
 			configFile << "### SCREEN SETTINGS ###" << std::endl;
 			configFile << "WIDTH = " << ConfigFile::currentConfigFile->width << std::endl;
 			configFile << "HEIGHT = " << ConfigFile::currentConfigFile->height << std::endl;
 			configFile << "WINMODE = " << ConfigFile::currentConfigFile->winmode << std::endl;
+		
 			configFile << "\n### Sound Settings ###" << std::endl;
 			configFile << "SOUND = " << ConfigFile::currentConfigFile->sound << std::endl;
+		
 			configFile << "\n### Controller Settings ###" << std::endl;
-
-			#ifdef SYS_WINDOWS
-				configFile << "Win Settings" << std::endl;
-			#else
-				configFile << "Other OS Settings" << std::endl;
-			#endif
-
-
 			configFile << "A_BUTTON = " << ConfigFile::currentConfigFile->controller_A << std::endl;
-			
 			configFile << "B_BUTTON = " << ConfigFile::currentConfigFile->controller_B << std::endl;
-			
 			configFile << "X_BUTTON = " << ConfigFile::currentConfigFile->controller_X << std::endl;
-			
 			configFile << "Y_BUTTON = " << ConfigFile::currentConfigFile->controller_Y << std::endl;
-
 			configFile << "LB_BUTTON = " << ConfigFile::currentConfigFile->controller_LB << std::endl;
-
 			configFile << "RB_BUTTON = " << ConfigFile::currentConfigFile->controller_RB << std::endl;
-
 			configFile << "BACK_BUTTON = " << ConfigFile::currentConfigFile->controller_BACK << std::endl;
-
 			configFile << "START_BUTTON = " << ConfigFile::currentConfigFile->controller_START << std::endl;
-
 			configFile << "LS_BUTTON = " << ConfigFile::currentConfigFile->controller_LS << std::endl;
-
 			configFile << "RS_BUTTON = " << ConfigFile::currentConfigFile->controller_RS << std::endl;
 
 			configFile << "### End of Configfile ###" << std::endl;
-			
-			// Controller Settings fehlen noch!
+			#ifdef DEBUGINFO
+				std::cout << "Running Config saved.";
+			#endif
 		}
 	}
 	configFile.close();
 }
 
 void ConfigFile::loadConfigFile(){
-	
 	std::ifstream configFile;
 	std::string line;
 	configFile.open(PATH SETTINGS);
-	if(configFile.is_open()){
+	if(!is_empty(configFile) && configFile.is_open()){
 		while(configFile >> line){
 			if(line == "WIDTH"){
 				configFile.ignore(3);
@@ -322,9 +314,9 @@ void ConfigFile::loadConfigFile(){
 				configFile >> ConfigFile::currentConfigFile->controller_RS;
 			}
 		}
-		
+		configFile.close();
 		#ifdef DEBUGINFO
-			std::cout << "CONFIG - Values" << std::endl;
+			std::cout << "CONFIG - Loaded Values" << std::endl;
 			std::cout << "WIDTH " << ConfigFile::currentConfigFile->width << std::endl;
 			std::cout << "HEIGHT " << ConfigFile::currentConfigFile->height << std::endl;
 			std::cout << "WINMODE " << ConfigFile::currentConfigFile->winmode << std::endl;
@@ -343,7 +335,6 @@ void ConfigFile::loadConfigFile(){
 			std::cout << "Config successfully loaded.\n";
 		#endif
 	}else{
-		saveConfigFile(true);
+		saveConfigFile(true); // speichere die default config
 	}
-	configFile.close();
 }

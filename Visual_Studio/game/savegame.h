@@ -51,11 +51,11 @@ public:
 	float mPosY;
 
 	char direction;
-	int process;	// 
+	int chapter;	// 
 
 	std::string checksum;
 
-	void saveSavegame(const char pGender = 'M', bool defaultConfig=false);
+	void saveSavegame(bool defaultConfig=false);
 	bool loadSavegame(bool init=false);
 	
 };

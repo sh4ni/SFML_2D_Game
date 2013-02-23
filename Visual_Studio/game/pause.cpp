@@ -15,7 +15,9 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 	int CenterY = (int)viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
                                                     // nicht Ÿbereinstimmen!
 	// Hintergrund Box
-	sf::RectangleShape Background(sf::Vector2f(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height));
+	
+	
+	sf::RectangleShape Background(sf::Vector2f((float)ConfigFile::currentConfigFile->width, (float)ConfigFile::currentConfigFile->height));
     Background.setFillColor(sf::Color(0, 0, 0,100));
 	Background.setPosition((float)CenterX-(float)ConfigFile::currentConfigFile->width/2.f,(float)CenterY-(float)ConfigFile::currentConfigFile->height/2.f);
 
@@ -58,16 +60,18 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 					std::cout << "Continue Playing.." << std::endl;
 				#endif
 					return false;
-			}else if(pauseLoop.key.code == sf::Keyboard::Space || pauseLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_BACK || pauseLoop.type == sf::Event::Closed){
+			}else if(pauseLoop.key.code == sf::Keyboard::Space || pauseLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_BACK ){
 				#ifdef DEBUGINFO
 					std::cout << "Quit Game!" << std::endl;
 				#endif
 					return true; // gebe true zurueck damit das spiel anschließend beendet wird
 			}else if(pauseLoop.key.code == sf::Keyboard::F6){
 				Savegame::currentSaveGame->saveSavegame();
-			}else if(pauseLoop.key.code == sf::Keyboard::F7){
+			}else if(pauseLoop.key.code == sf::Keyboard::F9){
 				Savegame::currentSaveGame->loadSavegame();
 			}
+		}else if(pauseLoop.type == sf::Event::Closed){
+			return true;
 		}
 	}
 	return false;	// das Spiel geht weiter

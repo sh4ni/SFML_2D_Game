@@ -78,7 +78,7 @@ bool Game::IsExiting()
 
 void Game::GameLoop(bool newgame)
 {
-	sf::View viewCamera  = _mainWindow.getView();
+	sf::View viewCamera = _mainWindow.getView();
 	char gender;
 
 	switch(_gameState){
@@ -99,9 +99,10 @@ void Game::GameLoop(bool newgame)
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
             gender = ShowMenuGender();
-			std::cout << gender ;
-			if(gender == 'M' || gender == 'F')	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
-				Savegame::currentSaveGame->saveSavegame(gender,true);
+			if(gender == 'M' || gender == 'F'){	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
+				Savegame::currentSaveGame->pGender = gender;	// speichere explizit hier das geschlecht, da die restlichen werte aus der defines geladen werden
+				Savegame::currentSaveGame->saveSavegame(true); // true -> erzeuge einen neuen spielstand
+			}
             break;
         case Game::Options:
             #ifdef DEBUGINFO
@@ -144,20 +145,19 @@ void Game::ShowMap(sf::View viewCamera, bool continueGame){
 	static Map map;
 	Map::currentMap = &map;
 
-	if(!continueGame)
+	if(!continueGame)	// wenn das spiel nach dem sterben fortgesetzt wird (mit altem spielstand) muss die map nicht erneut initalisiert werden, da sie es schon ist
 		map.init(Savegame::currentSaveGame->mLevelId);
 
 	MapEvent newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 
 	
-	if(newGameState.theReason == MapEvent::pause){
+	if(newGameState.theReason == MapEvent::pause)
 		_gameState = Paused;
-		
-	}
 	else if(newGameState.theReason == MapEvent::exiting)
 		_gameState = Exiting;
 	else if(newGameState.theReason == MapEvent::dead){
 		Savegame::currentSaveGame->loadSavegame();
+		
 		_gameState = ShowingMenu;
 	}else if(newGameState.theReason == MapEvent::mapchange){
 		Map::currentMap->getPlayer()->setLevelId(newGameState.newMapId);
@@ -165,10 +165,7 @@ void Game::ShowMap(sf::View viewCamera, bool continueGame){
 		Savegame::currentSaveGame->saveSavegame();
 		
 		map.destory();	// delete alte map bevor die neue geladen wird
-		
 	}
-	
-	
 }
 
 void Game::ShowIntro(){
@@ -176,7 +173,6 @@ void Game::ShowIntro(){
 	intro.Show(_mainWindow);
 	_gameState = Game::ShowingMenu;
 }
-
 
 void Game::ShowMenu(bool newgame){
 	MainMenu mainMenu;

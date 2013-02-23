@@ -22,7 +22,7 @@ void Map::init(std::string LevelId){
 	this->CollisionMap = 0;
 	this->MapLevelMin = 1;
 	this->MapLevelMax = 1;
-	std::cout << " wuerde map nummero " << LevelId << " laden..\n";
+	
 	this->FileName = PATH"include/map/" + LevelId + ".txt";
 
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
@@ -144,21 +144,21 @@ void Map::init(std::string LevelId){
 
 	iface.setTexture(ifaceImage);
 	iface.setOrigin((float)ifaceImage.getSize().x/2.f,(float)ifaceImage.getSize().y);
-	iface.setPosition(ConfigFile::currentConfigFile->width/2,ConfigFile::currentConfigFile->height);
+	iface.setPosition((float)ConfigFile::currentConfigFile->width/2,(float)ConfigFile::currentConfigFile->height);
 
 	HPBar.setFillColor(sf::Color(0x99,0x33,0x33));  // farbe des hp balkens
-	HPBar.setPosition(ConfigFile::currentConfigFile->width/2-55,ConfigFile::currentConfigFile->height-61);
+	HPBar.setPosition((float)ConfigFile::currentConfigFile->width/2-55,(float)ConfigFile::currentConfigFile->height-61);
 	HPBar.setSize(sf::Vector2f(180.f,28.f));
 	
 	EXPBar.setFillColor(sf::Color(0x00,0xCC,0x33)); // farbe des exp balkens
-	EXPBar.setPosition(ConfigFile::currentConfigFile->width/2-55,ConfigFile::currentConfigFile->height-30);
+	EXPBar.setPosition((float)ConfigFile::currentConfigFile->width/2-55,(float)ConfigFile::currentConfigFile->height-30);
 	EXPBar.setSize(sf::Vector2f(180.f,28.f));
 
-	DisplayHPText.Init(ConfigFile::currentConfigFile->width/2-53,ConfigFile::currentConfigFile->height-58,"HP",18,0);
-	DisplayEXPText.Init(ConfigFile::currentConfigFile->width/2-53,ConfigFile::currentConfigFile->height-27,"EXP",18,0);
-	DisplayHP.Init(ConfigFile::currentConfigFile->width/2+122,ConfigFile::currentConfigFile->height-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
-	DisplayEXP.Init(ConfigFile::currentConfigFile->width/2+123,ConfigFile::currentConfigFile->height-27,"Error",18,0);
-	DisplayLevel.Init(ConfigFile::currentConfigFile->width/2-128,ConfigFile::currentConfigFile->height-76,"Err",18,0);
+	DisplayHPText.Init((float)ConfigFile::currentConfigFile->width/2-53,(float)ConfigFile::currentConfigFile->height-58,"HP",18,0);
+	DisplayEXPText.Init((float)ConfigFile::currentConfigFile->width/2-53,(float)ConfigFile::currentConfigFile->height-27,"EXP",18,0);
+	DisplayHP.Init((float)ConfigFile::currentConfigFile->width/2+122,(float)ConfigFile::currentConfigFile->height-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
+	DisplayEXP.Init((float)ConfigFile::currentConfigFile->width/2+123,(float)ConfigFile::currentConfigFile->height-27,"Error",18,0);
+	DisplayLevel.Init((float)ConfigFile::currentConfigFile->width/2-128,(float)ConfigFile::currentConfigFile->height-76,"Err",18,0);
 	DisplayFPS.Init(0,0,"FPS: Error",20);
 	DisplayKoord.Init(0,20,"X: Error Y: Error",20);
 	DisplaySpeed.Init(0,40,"Speed: Error",20);
@@ -228,7 +228,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		DisplayKoord.Update(PlayerKoordText.str());
 
 		// und nochmal ^^
-		if( TileMap[TileX][TileY].Teleport ){
+ 		if( TileMap[TileX][TileY].Teleport ){
 			#ifdef DEBUGINFO
 				std::cout << "Lade Map: '" << TileMap[TileX][TileY].Teleport->Map << "' X: " << TileMap[TileX][TileY].Teleport->xDest << " Y: " << TileMap[TileX][TileY].Teleport->yDest << std::endl;
 			#endif
@@ -345,7 +345,6 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			
 		}
 		
-		
 		renderWindow.setView(renderWindow.getDefaultView());	// Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
 		
 		renderWindow.draw(iface);
@@ -391,176 +390,3 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 	}
 	return MapEvent(MapEvent::nothing);
 }
-/*
-void Map::load(Player& P1)
-{
-	
-	//currentSaveGame.loadSavegame(currentSavegame);
-
-	P1.setHealth(Savegame::currentSaveGame->pHealth);
-	P1.setLvl(Savegame::currentSaveGame->pLvl);
-	P1.setExp(Savegame::currentSaveGame->pExp);
-
-	// hier fehlt noch EXP Max und Health Max
-
-	P1.setPosition(Savegame::currentSaveGame->mPosX, Savegame::currentSaveGame->mPosY);
-	/*
-	std::cout << "loading savegame..";
-	std::ifstream loadgame;
-	loadgame.open(SAVEGAME, std::ios::binary);
-	if(loadgame.is_open()){
-
-		int tmp;
-		loadgame >> tmp;
-		P1.setHealth(tmp);
-		loadgame >> tmp;
-		P1.setLvl(tmp);
-		loadgame >> tmp;
-		P1.setExp(tmp);
-		
-		char tmper;
-		loadgame >> tmper; // gender
-		std::string temperer;
-		loadgame >> temperer; // name
-		loadgame >> temperer; // mapid
-		
-		float X,Y;
-		loadgame >> X;
-		loadgame >> Y;
-		
-		P1.setPosition(X,Y);
-
-		loadgame.close();
-	}else{
-		std::cout << "An error occurred during loading the saved game.." << std::endl;
-		return false;
-	}
-	
-	return true;
-	
-}*/
-
-/*
-void Map::save(Player& P1, std::string LevelId)
-{
-	Savegame::currentSaveGame->pHealth = P1.getHealth();
-	Savegame::currentSaveGame->pLvl = P1.getLvl();
-	Savegame::currentSaveGame->pExp = P1.getExp();
-	Savegame::currentSaveGame->pGender = P1.getGender();
-	Savegame::currentSaveGame->pName = P1.getName();
-	Savegame::currentSaveGame->mLevelId = LevelId;
-	Savegame::currentSaveGame->mPosX = P1.getPosX();
-	Savegame::currentSaveGame->mPosY = P1.getPosY();
-
-	Savegame::currentSaveGame->saveSavegame(P1.getGender(),false);
-/*
-	std::cout << "saving..\n";
-	std::ofstream savegame;
-	savegame.open(SAVEGAME, std::ios::trunc | std::ios::binary);
-	if(savegame.is_open()){
-		// Health
-		savegame << P1.getHealth() << std::endl;
-		// Level
-		savegame << P1.getLvl() << std::endl;
-		// Exp
-		savegame << P1.getExp() << std::endl;
-		// Gender
-		savegame << P1.getGender() << std::endl;
-		// Name
-		savegame << P1.getName() << std::endl;
-
-		// Map
-		savegame << LevelId << std::endl;
-		// Pos X auf Map
-		savegame << P1.getPosX() << std::endl;
-		// Pos Y auf Map
-		savegame << P1.getPosY() << std::endl;
-
-		std::stringstream ss;
-		ss << (P1.getHealth() - P1.getLvl() + P1.getExp() + P1.getGender() + (int)P1.getPosX() + (int)P1.getPosY() + CHECKSUM);
-		std::string checksum = md5(ss.str());
-
-		savegame << checksum;
-		#ifdef DEBUGINFO
-			std::cout << "Savegame Checksum -> " << checksum << std::endl;
-		#endif
-
-		savegame.close();
-		std::cout << "saved..\n";
-	}else{
-		std::cout << "An error occurred during saving the game..\a\n";
-	}
-	
-	return true;
-	
-}
-/*
-bool Map::pause(sf::RenderWindow& renderWindow, sf::View viewCamera, sf::Event levelLoop, Player& P1, std::string LevelId, sf::Clock& clock){
-	
-	Map::save(P1, LevelId);
-
-	#ifdef DEBUGINFO
-		std::cout << "Paused.." << std::endl;	
-	#endif
-
-	int CenterX = (int)viewCamera.getCenter().x;    // pausemenŸ muss hier gegengerechnet werden,
-	int CenterY = (int)viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
-                                                    // nicht Ÿbereinstimmen!
-	// Hintergrund Box
-	sf::RectangleShape Background(sf::Vector2f(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height));
-    Background.setFillColor(sf::Color(0, 0, 0,100));
-	Background.setPosition((float)CenterX-(float)ConfigFile::currentConfigFile->width/2.f,(float)CenterY-(float)ConfigFile::currentConfigFile->height/2.f);
-
-	// Pause Schriftzug
-	Schrift Pause(CenterX,CenterY-100,"Paused",50);
-	Pause.printText.setOrigin(Pause.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
-
-	// Logo im Pausemenü
-	sf::Texture LogoImage;
-	if(!LogoImage.loadFromFile(PATH"include/interface/splashscreen.png")){  // selbes bild wie im intro
-		throw "Error: include/interface/splashscreen.png not found.";
-	}
-	sf::Sprite Logo(LogoImage);
-	Logo.setOrigin((float)LogoImage.getSize().x/2.f,0);
-	Logo.setPosition((float)CenterX,(float)CenterY-300.f);
-
-	// Hilfetext
-	Schrift HilfeTasten(CenterX-50,CenterY,"ESC:\nF6\nF9:\nSpace:",20);
-	Schrift HilfeText(CenterX+70,CenterY,"Continue\nSave\nLoad\nExit Game",20);
-	HilfeTasten.printText.setOrigin(HilfeTasten.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
-	HilfeText.printText.setOrigin(HilfeText.printText.getGlobalBounds().width/2.f+1.f,0);		// Textbox zentrieren
-
-	// LOS! ZEICHNE ES NIEDERER SKLAVE!
-	renderWindow.draw(Background);
-	renderWindow.draw(Logo);
-	Pause.Render(renderWindow);
-	HilfeTasten.Render(renderWindow);
-	HilfeText.Render(renderWindow);
-
-	renderWindow.display();
-	
-	while(renderWindow.waitEvent(levelLoop)){
-		clock.restart();	// damit läuft der spieler nicht weiter wenn in der pause eine taste gedrückt gehalten wurde
-		if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed ){
-			if (levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == 8 ){
-				#ifdef DEBUGINFO
-					std::cout << "Continue Playing.." << std::endl;
-				#endif
-					return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
-			}else if(levelLoop.key.code == sf::Keyboard::Space || levelLoop.joystickButton.button == 9 ){
-				#ifdef DEBUGINFO
-					std::cout << "Quit Game!" << std::endl;
-				#endif
-					return true; // gebe true zurueck damit das spiel anschließend beendet wird
-			}else if(levelLoop.key.code == sf::Keyboard::F6){
-				Map::save(P1, LevelId);
-			}else if(levelLoop.key.code == sf::Keyboard::F9){
-				Map::load(P1);
-			}else if(levelLoop.type == sf::Event::Closed){
-				return true;
-			}
-		}
-	}
-	return false; // gebe false zurueck damit das spiel nicht beendet wird, sondern weiter geht!
-}
-*/

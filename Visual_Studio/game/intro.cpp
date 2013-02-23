@@ -2,12 +2,14 @@
 #include "defines.h"
 #include "schrift.h"
 #include "savegame.h"
+#include <ctime>
 
 void Intro::Show(sf::RenderWindow& renderWindow){
 	sf::Texture image;
 	if(!image.loadFromFile(PATH"include/interface/splashscreen.png")){
         throw "Error: include/interface/splashscreen.png not found.";
 	}
+	
 
 	sf::Sprite sprite(image);
 
@@ -18,23 +20,24 @@ void Intro::Show(sf::RenderWindow& renderWindow){
 	renderWindow.draw(sprite);                  // journey logo
 	renderWindow.display();
 
-	unsigned timer = 0U;
-	
+	clock_t begin = clock();
 
 	sf::Event currentEvent;
 	for(;;){	// dann gibts keine warnung mehr im vs 2010 auf warning lv 4 :P
 		while(renderWindow.pollEvent(currentEvent)){
 			if(currentEvent.type == sf::Event::KeyPressed || currentEvent.type == sf::Event::MouseButtonPressed || currentEvent.type == sf::Event::JoystickButtonPressed ){
 				return;
+
 			}
 			else if(currentEvent.type == sf::Event::Closed){
 				return;
 			}
 		}
-		if( timer > 50000U ){
+		clock_t end = clock();
+		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+		//std::cout << elapsed_secs << std::endl;
+		if( elapsed_secs > 5.f ){
 			return;
 		}
-		//std::cout << timer << std::endl;
-		timer++;
 	}
 }
