@@ -43,7 +43,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
         button = new MenuItem[buttons];                 // achtung! die ersten 2 buttons sind speziell!
                                                         // also auf sone ganz spezielle art und weise...
         button[0].text.setString("Select your hero");   // naja... sie sind eben ganz besonders!
-        button[0].text.setPosition(ConfigFile::currentConfigFile->width/2,ConfigFile::currentConfigFile->height/2-120);   // na wenn meine ersten beiden buttons eh keinen text haben...
+        button[0].text.setPosition((float)ConfigFile::currentConfigFile->width/2,(float)ConfigFile::currentConfigFile->height/2-120);   // na wenn meine ersten beiden buttons eh keinen text haben...
         button[0].text.setFont(font);                       // dann kann ich ihre texte ja für was anderes nehmen ^^
         button[0].text.setCharacterSize(40U);
         button[0].text.setColor(sf::Color(0U,0U,0U));
@@ -51,7 +51,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
         
         if(!newgame){               // warnung nur anzeigen, wenns einen alten spielstand zum überschreiben gibt.
             button[1].text.setString("Warning: This will overwrite your old savegame!");
-            button[1].text.setPosition(ConfigFile::currentConfigFile->width/2,ConfigFile::currentConfigFile->height/2+130);
+            button[1].text.setPosition((float)ConfigFile::currentConfigFile->width/2,(float)ConfigFile::currentConfigFile->height/2+130);
             button[1].text.setFont(font);
             button[1].text.setCharacterSize(20U);
             button[1].text.setColor(sf::Color(200U,0U,0U));
@@ -93,7 +93,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
                     button[i].action = Menue;
                     break;
             }
-            button[i].image.setPosition(button[i].rect.left,button[i].rect.top);
+            button[i].image.setPosition((float)button[i].rect.left,(float)button[i].rect.top);
             _menuItems.push_back(button[i]);
         }
     }
@@ -112,14 +112,14 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
             button[i].rect.height = BUTTONHEIGHT;
             button[i].image.setTexture(imageButton);
             button[i].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
-            button[i].image.setPosition(button[i].rect.left,button[i].rect.top);
+            button[i].image.setPosition((float)button[i].rect.left,(float)button[i].rect.top);
             button[i].text.setPosition(button[i].rect.left+10.f,button[i].rect.top+7.f);
             button[i].text.setFont(font);
             button[i].text.setCharacterSize(40U);
             button[i].text.setColor(sf::Color(255U,255U,255U));
             if(i<2){
                 button[i].image2.setTexture(imageOtherButton);
-                button[i].image2.setPosition(button[i].rect.left+BUTTONWIDTH-OPTIONWIDTH-7,button[i].rect.top+7);
+                button[i].image2.setPosition((float)button[i].rect.left+BUTTONWIDTH-OPTIONWIDTH-7,(float)button[i].rect.top+7);
 
             }
             button[i].active = true;
@@ -170,8 +170,8 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
             button[i].rect.height = BUTTONHEIGHT;
             button[i].image.setTexture(imageButton);
             button[i].image.setTextureRect(sf::IntRect(0,BUTTONHEIGHT*2,BUTTONWIDTH,BUTTONHEIGHT));
-            button[i].image.setPosition(button[i].rect.left,button[i].rect.top);
-            button[i].text.setPosition(button[i].rect.left+10.f,button[i].rect.top+7.f);
+            button[i].image.setPosition((float)button[i].rect.left,(float)button[i].rect.top);
+            button[i].text.setPosition((float)button[i].rect.left+10.f,(float)button[i].rect.top+7.f);
             button[i].text.setFont(font);
             button[i].text.setCharacterSize(40U);
             button[i].text.setColor(sf::Color(100U,100U,100U));
@@ -216,7 +216,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
 	Version.setFont(font);
 	Version.setColor(sf::Color(0U,0U,0U));
 	Version.setOrigin(Version.getGlobalBounds().width,Version.getGlobalBounds().height);
-
+	
 	Update(window);
 
 	return GetMenuResponse(window,menuType);
@@ -224,7 +224,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
 
 void MainMenu::Update(sf::RenderWindow& window){    // methode zum neu zeichnen des menüs,
 
-    spriteBackground.setPosition(-animation,0);         // hintergrundbild läuft durch
+    spriteBackground.setPosition((float)-animation,0.f);         // hintergrundbild läuft durch
     spriteBackgroundRepeat.setPosition(-animation+spriteBackground.getGlobalBounds().width,0);
     if( animation > spriteBackground.getGlobalBounds().width ) animation = 0;   // zurücksetzen wenn bildbreite erreicht wurde.
     animation++;            // LAUF FORREST! LAUF!
