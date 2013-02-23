@@ -388,6 +388,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, char me
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
 				if(HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y) != Nothing) // wenn kein button gedrückt wurde, mache nichts
+                    delete [] active;
 					return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
 			}
 /*           _                            _										            _                            _
@@ -409,10 +410,12 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, char me
    `.__,-'                                    `-.__.`							  `.__,-'                                    `-.__*/
 			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed || !CheckAxis==NoButton ){
                 if(GetMenuButton(menuEvent) == Enter){
+                    delete [] active;
 					return button[active[selected]].action;
 				}														
 				else if(GetMenuButton(menuEvent) == Back){
                     if(menuType != 'M'){
+                        delete [] active;
                         return Menue;
                     }
                     else {
@@ -468,6 +471,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, char me
 				#endif
 			}
 			else if(menuEvent.type == sf::Event::Closed){
+                delete [] active;
 				return Exit;
 			}
 		}
