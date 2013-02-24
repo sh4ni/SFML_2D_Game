@@ -51,34 +51,14 @@ void Map::init(std::string LevelId){
 			TileMap[LoadCounterX][LoadCounterY].EnemyId = 0;
 			TileMap[LoadCounterX][LoadCounterY].Teleport = 0;
 			TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect);
-			switch( TileType ){
-			case 0:
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-			case 9:
-			case 10:
-			case 12:
-			case 13:
-			case 14:
-			case 15:        // alle blšcke OHNE kollision!
-			case 16:
-			case 17:
-			case 19:
-			case 22:
-			case 23:
-			case 24:
-			case 25:
-			case 26:
-			case 27:
-			case 28:
-			case 29:
-			case 30:
+			switch( TileType ){		// alle blöcke OHNE kollision!
+			case  0: case  1: case  2: case  3: case  4: case  5: case  6: case  7: case  8: case  9:
+			case 10: case 12: case 13: case 14: case 15: case 16: case 17: case 19:
+			case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
+			case 30: case 31: case 32: case 35: case 36:
+			case 41: case 42:
+			case 50: case 51: case 52: case 57:
+			case 60: case 61:
 				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  // keine kollision
 					break;
 			default:        // defaultwert: alle anderen blšcke kriegen eine kollision!

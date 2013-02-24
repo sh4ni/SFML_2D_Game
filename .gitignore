@@ -26,6 +26,7 @@ game-Info.plist
 *.aps
 *.suo
 *.tlog
+*.opensdf
 Visual_Studio/ipch/
 Visual_Studio/Debug/
 Visual_Studio/Release/

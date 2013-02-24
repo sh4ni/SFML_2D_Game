@@ -14,7 +14,7 @@ void Game::Init(void)
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
 
-	// bitte stehen lassen @daniel
+	// ........ was soll das?! -_-
 	sf::Music music;
 		if(!music.openFromFile(PATH"include/sound/green.wav")) 
 			std::cout << "error" << std::endl;
@@ -23,7 +23,6 @@ void Game::Init(void)
 		music.play();
 		music.setLoop(true);
 	}
-	// bitte stehen lassen @daniel
 
 
 	if(Savegame::currentSaveGame->loadSavegame(true)){
@@ -163,7 +162,6 @@ void Game::ShowMap(sf::View viewCamera, bool continueGame){
     }
 
 	MapEvent newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
-
 	
 	if(newGameState.theReason == MapEvent::pause)
 		_gameState = Paused;
@@ -178,6 +176,7 @@ void Game::ShowMap(sf::View viewCamera, bool continueGame){
 		Map::currentMap->getPlayer()->setPosition(newGameState.newMapPosX,newGameState.newMapPosY);
 		Savegame::currentSaveGame->saveSavegame();
 		
+		std::cout << "   newGameState - X:" << newGameState.newMapPosX << " Y:" << newGameState.newMapPosY << std::endl;
 		map.destory();	// delete alte map bevor die neue geladen wird
 	}
 }

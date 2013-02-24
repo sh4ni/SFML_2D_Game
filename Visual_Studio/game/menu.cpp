@@ -410,8 +410,9 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& renderWindow, c
    `.__,-'                                    `-.__.`							  `.__,-'                                    `-.__*/
 			else if(menuEvent.type == sf::Event::KeyPressed || menuEvent.type == sf::Event::JoystickButtonPressed || !CheckAxis==NoButton ){
                 if(GetMenuButton(menuEvent) == Enter){
+					int temp = active[selected];
                     delete [] active;
-					return button[active[selected]].action;
+					return button[temp].action;
 				}														
 				else if(GetMenuButton(menuEvent) == Back){
                     if(menuType != 'M'){
