@@ -1,5 +1,4 @@
 #include "game.h"
-#include <SFML\Audio.hpp>
 #include <exception>
 using namespace std;
 
