@@ -35,7 +35,7 @@ public:
 private:
     enum MenuButton{ NoButton, Up, Down, Enter, Back };
     MenuButton GetMenuButton(sf::Event menuEvent);
-	MenuResult GetMenuResponse(sf::RenderWindow& window, char menuType = 'M');
+	MenuResult GetMenuResponse(sf::RenderWindow& renderWindow, char menuType = 'M');
 	MenuResult HandleClick(int x, int y);
 	std::list<MenuItem> _menuItems;
 	void Update(sf::RenderWindow &Window);

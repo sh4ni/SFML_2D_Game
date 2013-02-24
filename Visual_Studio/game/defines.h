@@ -58,7 +58,7 @@
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
 #define DEFAULT_WINMODE "window"
-#define DEFAULT_SOUND "true"
+#define DEFAULT_SOUND 1 // true
 
 #define SAVEGAME "save.txt"
 #define CHECKSAVE 1

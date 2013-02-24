@@ -4,7 +4,7 @@
 
 int MainMenu::animation = 0;
 
-MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char menuType){
+MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, bool newgame, char menuType){
 	//Load menu image from file
 	sf::Texture imageMenu;
 	sf::Texture imageBackground;
@@ -137,7 +137,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
                 case 1:
                     button[i].text.setString("Sound");
                     button[i].action = Sound;
-                    if(ConfigFile::currentConfigFile->sound == "false"){
+                    if(ConfigFile::currentConfigFile->sound == false){
                         button[i].image2.setTextureRect(sf::IntRect(0,0,OPTIONWIDTH,OPTIONHEIGHT));
                     }
                     else {
@@ -217,31 +217,31 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window, bool newgame, char
 	Version.setColor(sf::Color(0U,0U,0U));
 	Version.setOrigin(Version.getGlobalBounds().width,Version.getGlobalBounds().height);
 	
-	Update(window);
+	Update(renderWindow);
 
-	return GetMenuResponse(window,menuType);
+	return GetMenuResponse(renderWindow,menuType);
 }
 
-void MainMenu::Update(sf::RenderWindow& window){    // methode zum neu zeichnen des menüs,
+void MainMenu::Update(sf::RenderWindow& renderWindow){    // methode zum neu zeichnen des menüs,
 
     spriteBackground.setPosition((float)-animation,0.f);         // hintergrundbild läuft durch
     spriteBackgroundRepeat.setPosition(-animation+spriteBackground.getGlobalBounds().width,0);
     if( animation > spriteBackground.getGlobalBounds().width ) animation = 0;   // zurücksetzen wenn bildbreite erreicht wurde.
     animation++;            // LAUF FORREST! LAUF!
 
-	window.draw(spriteBackgroundRepeat);            // da mittlerweile der hintergrund animiert ist
-    window.draw(spriteBackground);                  // und auch die buttons sich ändern
-	window.draw(spriteMenu);
+	renderWindow.draw(spriteBackgroundRepeat);            // da mittlerweile der hintergrund animiert ist
+    renderWindow.draw(spriteBackground);                  // und auch die buttons sich ändern
+	renderWindow.draw(spriteMenu);
 	for( int i=0; i<this->buttons; i++ ){
-		window.draw(button[i].image);
-		window.draw(button[i].text);
+		renderWindow.draw(button[i].image);
+		renderWindow.draw(button[i].text);
         if( button[i].image2.getPosition().x ){
-            window.draw(button[i].image2);
+            renderWindow.draw(button[i].image2);
         }
 	}
-	window.draw(Version);
+	renderWindow.draw(Version);
 
-	window.display();
+	renderWindow.display();
 }
 
 MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
@@ -294,7 +294,7 @@ MainMenu::MenuButton MainMenu::GetMenuButton(sf::Event menuEvent){
     return NoButton;
 }
 
-MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, char menuType){
+MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& renderWindow, char menuType){
 	sf::Event menuEvent;
     MenuButton CheckAxis = NoButton;
     bool blockAxis = false;
@@ -339,7 +339,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, char me
                 blockAxis = false;
             }
         }
-		while(window.pollEvent(menuEvent)){
+		while(renderWindow.pollEvent(menuEvent)){
             if( menuType == 'G' ){
                 switch(active[selected]){   // aktiver button wird anders dargestellt.
                     case 0:
@@ -475,6 +475,6 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window, char me
 				return Exit;
 			}
 		}
-		Update(window);
+		Update(renderWindow);
 	}
 }

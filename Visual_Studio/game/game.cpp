@@ -1,4 +1,5 @@
 #include "game.h"
+#include <SFML/Audio.hpp>
 
 void Game::Init(void)
 {
@@ -12,6 +13,18 @@ void Game::Init(void)
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
+
+	// bitte stehen lassen @daniel
+	sf::Music music;
+		if(!music.openFromFile(PATH"include/sound/green.wav")) 
+			std::cout << "error" << std::endl;
+	
+	if(ConfigFile::currentConfigFile->sound == true){
+		music.play();
+		music.setLoop(true);
+	}
+	// bitte stehen lassen @daniel
+
 
 	if(Savegame::currentSaveGame->loadSavegame(true)){
 		Game::Start();
@@ -36,8 +49,6 @@ void Game::Start(bool newgame)
 		_mainWindow.setMouseCursorVisible(false);
 	}
 	
-	
-
 	// Lade und setze das Fenstericon
 	sf::Image Icon;
 	if(!Icon.loadFromFile(PATH"include/interface/icon.bmp"))
@@ -241,11 +252,11 @@ void Game::ShowMenuOptions(){
             _gameState = ShowingMenu;
             break;
         case MainMenu::Sound:
-            if(ConfigFile::currentConfigFile->sound == "false"){
-                ConfigFile::currentConfigFile->sound = "true";
+            if(ConfigFile::currentConfigFile->sound == false){
+                ConfigFile::currentConfigFile->sound = 1;
             }
             else {
-                ConfigFile::currentConfigFile->sound = "false";
+                ConfigFile::currentConfigFile->sound = 0;
             }
             ConfigFile::currentConfigFile->saveConfigFile();
             break;
