@@ -10,15 +10,11 @@ class myexception: public exception{
 
 int main(void){
 	try{
-
-		sf::Music music;
-		if(!music.openFromFile(PATH"include/sound/green.wav")) 
-			std::cout << "error" << std::endl;
-		music.play();
-		music.setLoop(true);
-
 		Game::Init();
-		/*while(1){
+		
+		// Exeption handler bad_alloc test
+		/* 		
+		while(1){
 			int * myfail = new int[10000000];
 			std::cout << "alloziiere speicher!" << std::endl;
 		}*/

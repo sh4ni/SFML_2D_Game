@@ -5,7 +5,7 @@
 
 class Intro{
 public:
-	void Show(sf::RenderWindow& window);
+	void Show(sf::RenderWindow& renderWindow);
 };
 
 #endif

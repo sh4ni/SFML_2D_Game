@@ -17,7 +17,7 @@ public:
 	int width;
 	int height;
 	std::string winmode;
-	std::string sound;
+	bool sound;
 
 	// Controller Setting
 	unsigned controller_A;
