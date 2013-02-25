@@ -1,6 +1,5 @@
 #include "game.h"
 
-
 void Game::Init(void)
 {
 	// Do it!
@@ -13,11 +12,6 @@ void Game::Init(void)
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
-	
-	
-	if(!gameMusic::music.openFromFile(PATH"include/sound/menu.ogg")) 
-		throw "sound not loaded";
-	
 
 	if(Savegame::currentSaveGame->loadSavegame(true)){
 		Game::Start();
@@ -85,10 +79,7 @@ void Game::GameLoop(bool newgame){
 	sf::View viewCamera = _mainWindow.getView();
 	char gender;
 
-	if(gameMusic::music.getStatus() != sf::Music::Playing && ConfigFile::currentConfigFile->sound == true && _gameState != GameState::ShowingIntro){
-		gameMusic::music.play();
-		gameMusic::music.setLoop(true);
-	}
+	
 		
 	switch(_gameState){
 		case Game::ShowingIntro:
@@ -98,6 +89,12 @@ void Game::GameLoop(bool newgame){
 			ShowIntro();
 		break;
 		case Game::ShowingMenu:
+			if(gameMusic::music.getStatus() != sf::Music::Playing && ConfigFile::currentConfigFile->sound == true){
+				if(!gameMusic::music.openFromFile(PATH"include/sound/menu.ogg")) 
+					throw "sound not loaded";
+				gameMusic::music.play();
+				gameMusic::music.setLoop(true);
+			}
 			#ifdef DEBUGINFO
 				std::cout << "Show the Menu" << std::endl;
 			#endif
@@ -124,15 +121,12 @@ void Game::GameLoop(bool newgame){
 			#ifdef DEBUGINFO
 				std::cout << "Show the Map / Level" << std::endl;
 			#endif
-			
 			ShowMap(viewCamera);				
             break;
 		case Game::Continue:
-			
 			ShowMap(viewCamera,true);
             break;
 		case Game::NewGame:
-			
 			ShowMap(viewCamera);
 			break;
 		case Game::Paused:
@@ -152,7 +146,6 @@ void Game::GamePaused(sf::View viewCamera){
 		gameMusic::music.play();
 		_gameState = Continue;
 	}
-
 	// hier kann ich irgendwann zurück ins menü!
 }
 
@@ -174,7 +167,6 @@ void Game::ShowMap(sf::View viewCamera, bool continueGame){
 		_gameState = Exiting;
 	else if(newGameState.theReason == MapEvent::dead){
 		Savegame::currentSaveGame->loadSavegame();
-		
 		_gameState = ShowingMenu;
 	}else if(newGameState.theReason == MapEvent::mapchange){
 		Map::currentMap->getPlayer()->setLevelId(newGameState.newMapId);

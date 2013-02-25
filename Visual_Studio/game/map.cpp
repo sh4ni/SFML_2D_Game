@@ -1,6 +1,4 @@
 #include "map.h"
-#include <SFML/Audio.hpp>
-#include "game.h"
 
 sf::Texture Map::LevelTexture;
 Map * Map::currentMap;
@@ -179,6 +177,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 	while( 1+3+3==7 ){
 		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){
+			gameMusic::music.stop();	// damit im menü die musik wieder korrekt abgespielt wird
 			return MapEvent(MapEvent::dead);
 		}
 		ElapsedTime = (float)clock.restart().asMilliseconds();
