@@ -1,4 +1,6 @@
 #include "map.h"
+#include <SFML/Audio.hpp>
+#include "sounds.h"
 
 sf::Texture Map::LevelTexture;
 Map * Map::currentMap;
@@ -162,6 +164,18 @@ Map::~Map(){
 }
 
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
+	
+	std::string musicFileName = PATH"include/sound/" + LevelId + ".ogg";
+	sf::Music music;
+	if(!music.openFromFile(musicFileName.c_str())) 
+		std::cout << "error" << std::endl;
+	else
+		if(ConfigFile::currentConfigFile->sound == true){
+			music.play();
+			music.setLoop(true);
+		}
+	
+	
 	while( 1+3+3==7 ){
 		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){

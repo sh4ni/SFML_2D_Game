@@ -17,9 +17,6 @@ class Game{
 public:
 	static void Init();
 	static void Start(bool newgame = false);
-	/*static Savegame currentSaveGame;
-	static ConfigFile currentConfigFile;*/
-	
 private:
 	enum GameState { Uninitialized, Initialized, ShowingIntro, Paused, ShowingMenu, Playing, Continue, NewGame, Options, Exiting, ShowingGenderMenu };
 	static void ShowIntro();

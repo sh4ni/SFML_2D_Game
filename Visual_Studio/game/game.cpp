@@ -1,5 +1,4 @@
 #include "game.h"
-#include <SFML/Audio.hpp>
 
 void Game::Init(void)
 {
@@ -13,17 +12,6 @@ void Game::Init(void)
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
-
-	// ........ was soll das?! -_-
-	sf::Music music;
-		if(!music.openFromFile(PATH"include/sound/green.wav")) 
-			std::cout << "error" << std::endl;
-	
-	if(ConfigFile::currentConfigFile->sound == true){
-		music.play();
-		music.setLoop(true);
-	}
-
 
 	if(Savegame::currentSaveGame->loadSavegame(true)){
 		Game::Start();

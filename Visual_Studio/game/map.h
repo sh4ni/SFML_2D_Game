@@ -101,6 +101,8 @@ public:
 	
 	static Map * currentMap;
     
+	
+
     void initInterface(void){
         if( P1.getGender() == 'F' ){
             if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
