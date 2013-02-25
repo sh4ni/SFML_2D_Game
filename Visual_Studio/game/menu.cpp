@@ -1,6 +1,5 @@
 #include "menu.h"
 #include "defines.h"
-#include "sounds.h"
 #include <iostream>
 
 int MainMenu::animation = 0;
@@ -15,15 +14,6 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, bool newgame
 	if(!imageBackground.loadFromFile(PATH"include/interface/menu_back.png")){
         throw "Error: include/interface/menu_back.png not found.";
 	}
-
-	sf::Music music;
-	if(!music.openFromFile(PATH"include/sound/menu.ogg")) 
-		std::cout << "error" << std::endl;
-	else 
-		if(ConfigFile::currentConfigFile->sound == true){
-			music.play();
-			music.setLoop(true);
-		}
 
 	// Menü und Hintergrund
 	spriteMenu.setTexture(imageMenu);

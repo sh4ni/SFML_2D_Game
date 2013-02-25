@@ -7,19 +7,16 @@
     #define SYS_MACOS
 #endif
 
-//#define WIDTH 1024	wird nicht mehr gebraucht
-//#define HEIGHT 768
-
 #define FPS 60U
 
 #define DEBUGINFO				// Für Debug infos im code
 
-#define VERSION "0.4.2 Alpha"	// intro und menü
+#define VERSION "0.5.0 Alpha"	// intro und menü
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
 #else
-	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is disabled"
+	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__
 #endif
 
 // path du /include folder

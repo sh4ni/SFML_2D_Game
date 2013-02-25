@@ -11,12 +11,14 @@
 #include "map.h"
 #include "savegame.h"
 #include "pause.h"
+#include "sounds.h"
 
 
 class Game{
 public:
 	static void Init();
 	static void Start(bool newgame = false);
+	//static sf::Music music;
 private:
 	enum GameState { Uninitialized, Initialized, ShowingIntro, Paused, ShowingMenu, Playing, Continue, NewGame, Options, Exiting, ShowingGenderMenu };
 	static void ShowIntro();
@@ -29,6 +31,8 @@ private:
 	static bool IsExiting();
 	static GameState _gameState;
 	static sf::RenderWindow _mainWindow;
+	
+	
 };
 
 

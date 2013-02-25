@@ -11,6 +11,7 @@
 #include "schrift.h"
 #include <vector>
 #include "monster.h"
+#include "sounds.h"
 
 class tp{
 	public:

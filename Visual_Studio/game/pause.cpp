@@ -35,8 +35,13 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 	Logo.setPosition((float)CenterX,(float)CenterY-300.f);
 
 	// Hilfetext
-	Schrift HilfeTasten(CenterX-50,CenterY,"ESC:\nF6\nF9:\nSpace:",20);
-	Schrift HilfeText(CenterX+70,CenterY,"Continue\nSave\nLoad\nExit Game",20);
+	#ifdef DEBUGINFO
+		Schrift HilfeTasten(CenterX-50,CenterY,"ESC:\n1\n2\n9\n0\nF6\nF9:\nSpace:",20);
+		Schrift HilfeText(CenterX+70,CenterY,"Continue\nGrow EXP\nGet Damage\nEnable Player Input\nBlock Player Input\nSave\nLoad\nExit Game",20);
+	#else
+		Schrift HilfeTasten(CenterX-50,CenterY,"ESC:\nF6\nF9:\nSpace:",20);
+		Schrift HilfeText(CenterX+70,CenterY,"Continue\nSave\nLoad\nExit Game",20);
+	#endif
 	HilfeTasten.printText.setOrigin(HilfeTasten.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
 	HilfeText.printText.setOrigin(HilfeText.printText.getGlobalBounds().width/2.f+1.f,0);		// Textbox zentrieren
 

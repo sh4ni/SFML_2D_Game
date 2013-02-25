@@ -1,5 +1,6 @@
 #include "game.h"
 
+
 void Game::Init(void)
 {
 	// Do it!
@@ -12,6 +13,11 @@ void Game::Init(void)
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
 	if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";
+	
+	
+	if(!gameMusic::music.openFromFile(PATH"include/sound/menu.ogg")) 
+		throw "sound not loaded";
+	
 
 	if(Savegame::currentSaveGame->loadSavegame(true)){
 		Game::Start();
@@ -79,6 +85,11 @@ void Game::GameLoop(bool newgame){
 	sf::View viewCamera = _mainWindow.getView();
 	char gender;
 
+	if(gameMusic::music.getStatus() != sf::Music::Playing && ConfigFile::currentConfigFile->sound == true && _gameState != GameState::ShowingIntro){
+		gameMusic::music.play();
+		gameMusic::music.setLoop(true);
+	}
+		
 	switch(_gameState){
 		case Game::ShowingIntro:
 			#ifdef DEBUGINFO
@@ -113,12 +124,15 @@ void Game::GameLoop(bool newgame){
 			#ifdef DEBUGINFO
 				std::cout << "Show the Map / Level" << std::endl;
 			#endif
+			
 			ShowMap(viewCamera);				
             break;
 		case Game::Continue:
+			
 			ShowMap(viewCamera,true);
             break;
 		case Game::NewGame:
+			
 			ShowMap(viewCamera);
 			break;
 		case Game::Paused:
@@ -130,11 +144,14 @@ void Game::GameLoop(bool newgame){
 }
 void Game::GamePaused(sf::View viewCamera){
 	Pause PauseMenu;
+	gameMusic::music.pause();
 	bool quitGame = PauseMenu.Show(_mainWindow, viewCamera);
 	if(quitGame)
 		_gameState = Exiting;
-	else
+	else{
+		gameMusic::music.play();
 		_gameState = Continue;
+	}
 
 	// hier kann ich irgendwann zurück ins menü!
 }
@@ -241,9 +258,11 @@ void Game::ShowMenuOptions(){
         case MainMenu::Sound:
             if(ConfigFile::currentConfigFile->sound == false){
                 ConfigFile::currentConfigFile->sound = 1;
+				gameMusic::music.play();
             }
             else {
                 ConfigFile::currentConfigFile->sound = 0;
+				gameMusic::music.stop();
             }
             ConfigFile::currentConfigFile->saveConfigFile();
             break;
