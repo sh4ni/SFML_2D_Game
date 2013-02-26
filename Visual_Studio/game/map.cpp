@@ -115,12 +115,13 @@ void Map::init(std::string LevelId){
 		Hier wird der Sound geladen!		
 
 	*/
-
-	gameMusic::music.stop();
-	std::string musicFileName = PATH"include/sound/" + LevelId + ".ogg";
-	gameMusic::music.openFromFile(musicFileName.c_str());
-	gameMusic::music.play();
-	gameMusic::music.setLoop(true);
+	if(ConfigFile::currentConfigFile->sound == true){
+		gameMusic::music.stop();
+		std::string musicFileName = PATH"include/sound/" + LevelId + ".ogg";
+		gameMusic::music.openFromFile(musicFileName.c_str());
+		gameMusic::music.play();
+		gameMusic::music.setLoop(true);
+	}
 
 	initInterface();
 

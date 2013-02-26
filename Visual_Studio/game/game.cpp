@@ -78,7 +78,13 @@ bool Game::IsExiting()
 void Game::GameLoop(){
 	sf::View viewCamera = _mainWindow.getView();
 	char gender;
-		
+
+	if(gameMusic::music.getStatus() != sf::Music::Playing && ConfigFile::currentConfigFile->sound == true && _gameState != Game::ShowingIntro){
+		if(!gameMusic::music.openFromFile(PATH"include/sound/menu.ogg")) 
+			throw "sound not loaded";
+		gameMusic::music.play();
+		gameMusic::music.setLoop(true);
+	}
 	switch(_gameState){
 		case Game::ShowingIntro:
 			#ifdef DEBUGINFO
@@ -87,12 +93,6 @@ void Game::GameLoop(){
 			ShowIntro();
 		break;
 		case Game::ShowingMenu:
-			if(gameMusic::music.getStatus() != sf::Music::Playing && ConfigFile::currentConfigFile->sound == true){
-				if(!gameMusic::music.openFromFile(PATH"include/sound/menu.ogg")) 
-					throw "sound not loaded";
-				gameMusic::music.play();
-				gameMusic::music.setLoop(true);
-			}
 			#ifdef DEBUGINFO
 				std::cout << "Show the Menu" << std::endl;
 			#endif
