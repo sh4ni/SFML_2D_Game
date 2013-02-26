@@ -15,16 +15,16 @@ void Character::Render(sf::RenderWindow &Window){
 	Window.draw(sprite);
 }
 
-
-
 float Character::getPosX(void){
 	return this->PosX;
 }
 float Character::getPosY(void){
 	return this->PosY;
 }
-void Character::setPosition(float PosX, float PosY){
-	sprite.setPosition(PosX,PosY);
+void Character::setPosition(float x, float y){
+    this->PosX = x;
+    this->PosY = y;
+	sprite.setPosition(x,y);
 }
 
 float Character::getSpeed(void){

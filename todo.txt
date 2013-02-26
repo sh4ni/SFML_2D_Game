@@ -1,15 +1,16 @@
 ToDo vor Featurefreeze
 - passive Monster, aggresive Monster / Freundliche NPCs
-- gameover screen (f)
-- grafikeffekte: regen (k)
-- Map Editor - perl script
 
 ToDo nach Projektabgabe
+- Map Editor - perl script
+- gameover screen (f)
+- grafikeffekte: regen (k)
 - Dialoge/Story
 - Dialogboxen im Spiel bei Unterhaltungen
 - Map Editor - direkt Tiled files laden oder eigenen machen
 
 Improvements und Bugfixes
+- bei teleport auf nicht vorhandene map wird diese ins savegame eingetragen und eine exeption wird geworfen -> spielstand unbrauchbar bis map angelegt wird.
 . konsolen textausgaben wenn DEBUGINFO nicht definiert ist
 . bildschirmauflösungen im optionenmenü
 . hintergrundbild im menü für hohe auflösungen anpassen (k)
