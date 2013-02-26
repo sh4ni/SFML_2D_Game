@@ -4,7 +4,7 @@
 
 int MainMenu::animation = 0;
 
-MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, bool newgame, char menuType){
+MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuType){
 	//Load menu image from file
 	sf::Texture imageMenu;
 	sf::Texture imageBackground;
@@ -49,7 +49,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, bool newgame
         button[0].text.setColor(sf::Color(0U,0U,0U));
         button[0].text.setOrigin(button[0].text.getGlobalBounds().width/2+1,0);
         
-        if(!newgame){               // warnung nur anzeigen, wenns einen alten spielstand zum Ÿberschreiben gibt.
+        if(!Game::isNewGame){               // warnung nur anzeigen, wenns einen alten spielstand zum Ÿberschreiben gibt.
             button[1].text.setString("Warning: This will overwrite your old savegame!");
             button[1].text.setPosition((float)ConfigFile::currentConfigFile->width/2,(float)ConfigFile::currentConfigFile->height/2+130);
             button[1].text.setFont(font);
@@ -180,7 +180,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, bool newgame
             switch(i){
                 case 0:
                     button[i].text.setString("Continue");
-                    if(!newgame){
+                    if(!Game::isNewGame){
                         button[i].action = Continue;
                         button[i].active = true;
                     }

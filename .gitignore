@@ -35,6 +35,7 @@ Visual_Studio/game/Debug/
 Visual_Studio/game/Release/
 Visual_Studio/game/screenshots/
 Visual_Studio/game/save.txt
+Visual_Studio/game/savegame.bin
 Visual_Studio/game/settings*.cfg
 *.sdf
 *.sln

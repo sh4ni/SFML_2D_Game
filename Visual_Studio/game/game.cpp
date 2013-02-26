@@ -16,11 +16,12 @@ void Game::Init(void)
 	if(Savegame::currentSaveGame->loadSavegame(true)){
 		Game::Start();
 	}else{
-		Game::Start(true);
+		Game::isNewGame = true;
+		Game::Start();
 	}
 }
 
-void Game::Start(bool newgame)
+void Game::Start()
 {
 	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
@@ -51,7 +52,7 @@ void Game::Start(bool newgame)
 	
 	// Solange das Spiel nicht beendet wird, führe GameLoop aus
 	while(!IsExiting()){
-		GameLoop(newgame);
+		GameLoop();
 	}
 
 	// Wenn der GameLoop beendet wurde, schließe das Fenster
@@ -63,7 +64,8 @@ bool Game::IsExiting()
 {
 	// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zurück, ansonsten ein False
 	if(_gameState == Game::Exiting){
-		
+		// Möglichkeit das Spiel zu Speichern
+
 		delete Savegame::currentSaveGame;
 		delete ConfigFile::currentConfigFile;
 		
@@ -71,15 +73,11 @@ bool Game::IsExiting()
 	}else{ 
 		return false;
 	}
-	// Möglichkeit das Spiel zu Speichern
 }
 
-void Game::GameLoop(bool newgame){
-    
+void Game::GameLoop(){
 	sf::View viewCamera = _mainWindow.getView();
 	char gender;
-
-	
 		
 	switch(_gameState){
 		case Game::ShowingIntro:
@@ -98,7 +96,7 @@ void Game::GameLoop(bool newgame){
 			#ifdef DEBUGINFO
 				std::cout << "Show the Menu" << std::endl;
 			#endif
-			ShowMenu(newgame);
+			ShowMenu();
             break;
         case Game::ShowingGenderMenu:
 			#ifdef DEBUGINFO
@@ -184,9 +182,9 @@ void Game::ShowIntro(){
 	_gameState = Game::ShowingMenu;
 }
 
-void Game::ShowMenu(bool newgame){
+void Game::ShowMenu(){
 	MainMenu mainMenu;
-	MainMenu::MenuResult result = mainMenu.Show(_mainWindow, newgame);
+	MainMenu::MenuResult result = mainMenu.Show(_mainWindow);
 	
 	switch(result)
 	{
@@ -220,7 +218,7 @@ void Game::ShowMenu(bool newgame){
 
 const char Game::ShowMenuGender(){
     MainMenu genderMenu;
-    MainMenu::MenuResult result = genderMenu.Show(_mainWindow, false, 'G');
+    MainMenu::MenuResult result = genderMenu.Show(_mainWindow, 'G');
     switch (result) {
         case MainMenu::Female:
             _gameState = NewGame;
@@ -242,7 +240,7 @@ const char Game::ShowMenuGender(){
 
 void Game::ShowMenuOptions(){
     MainMenu optionsMenu;
-    MainMenu::MenuResult result = optionsMenu.Show(_mainWindow, false, 'O');
+    MainMenu::MenuResult result = optionsMenu.Show(_mainWindow, 'O');
     switch (result) {
         case MainMenu::Menue:
             _gameState = ShowingMenu;
@@ -287,3 +285,4 @@ void Game::ShowMenuOptions(){
 // static member variables need to be instantiated outside of the class
 Game::GameState Game::_gameState = Uninitialized;
 sf::RenderWindow Game::_mainWindow;
+bool Game::isNewGame;

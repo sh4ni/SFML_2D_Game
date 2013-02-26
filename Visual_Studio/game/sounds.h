@@ -5,9 +5,14 @@
 
 class gameMusic{
 public:
+	gameMusic(){
+		//Konstruktor	
+	};
+	~gameMusic(){
+		//Destruktor
+	};
+
 	static sf::Music music;
-private:
-	/// danner 
 };
 
 #endif

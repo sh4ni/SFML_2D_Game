@@ -11,7 +11,7 @@
 
 #define DEBUGINFO				// Für Debug infos im code
 
-#define VERSION "0.5.1 Alpha"	// intro und menü
+#define VERSION "0.5.2 Alpha"	// intro und menü
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
@@ -50,29 +50,14 @@
 #define BASEEXP 50.f
 #define EXPMULTIPLICATOR 1.15f
 
+// ConfigFile
 #define SETTINGS "settings.cfg"
-
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
 #define DEFAULT_WINMODE "window"
 #define DEFAULT_SOUND 1 // true
 
-#define SAVEGAME "save.txt"
-#define CHECKSAVE 1
-#define CHECKSUM 4815162342
-
-#define DEFAULT_HEALTH 100
-#define DEFAULT_LVL 1
-#define DEFAULT_EXP 0
-
-#define DEFAULT_F_NAME "Ashley"
-#define DEFAULT_M_NAME "Fabi"	// in memories
-
-#define DEFAULT_LEVEL "map1"
-#define DEFAULT_POSX 512
-#define DEFAULT_POSY 384
-
-// nicht löschen
+// ConfigFile - Controllersettings
 #ifdef SYS_WINDOWS
 	#define DEFAULT_A 0
 	#define DEFAULT_B 1
@@ -96,5 +81,18 @@
 	#define DEFAULT_LS 6
 	#define DEFAULT_RS 7
 #endif
+
+// SaveGame
+#define SAVEGAME "savegame.bin"
+#define DEFAULT_HEALTH 100
+#define DEFAULT_LVL 1
+#define DEFAULT_EXP 0
+#define DEFAULT_F_NAME "Ashley"
+#define DEFAULT_M_NAME "Fabi"	// in memories
+#define DEFAULT_LEVEL "map1"
+#define DEFAULT_POSX 512
+#define DEFAULT_POSY 384
+#define CHECKSUM 4815162342
+
 
 #endif

@@ -5,6 +5,7 @@
 #include "schrift.h"
 #include "savegame.h"
 #include <list>
+#include "game.h"
 
 class MainMenu{
 public:
@@ -18,7 +19,7 @@ public:
         bool active;
         sf::Sprite image2;
 	};
-	MenuResult Show(sf::RenderWindow& renderWindow, bool newgame = false, char menuType = 'M');
+	MenuResult Show(sf::RenderWindow& renderWindow, char menuType = 'M');
 	MainMenu(){
 		button = NULL;
 	}
