@@ -53,6 +53,7 @@ public:
 class Map{
 private:
 	std::string mapTheme;
+	std::string mapMusic;
 
 	static sf::Texture LevelTexture;
 

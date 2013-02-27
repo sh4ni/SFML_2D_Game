@@ -28,7 +28,7 @@ void Map::init(std::string LevelId){
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName.c_str());
 	if( openfile.is_open() ){
-		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme >> this->MapLevelMin >> this->MapLevelMax;
+		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme >> this->mapMusic >> this->MapLevelMin >> this->MapLevelMax;
 		
 		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.
 		for ( int i = 0 ; i < MapSizeX ; i++ ){		// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
