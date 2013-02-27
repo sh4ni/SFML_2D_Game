@@ -27,9 +27,10 @@ public:
     
     void Init (int controller=0);
 	void Update	(float ElapsedTime);
-	void Render	(sf::RenderWindow &Window){
-		Window.draw(sprite);
-	}
+	//void Render	(sf::RenderWindow &Window){
+		/*cout << "bla" << endl;
+		Character::Render();*/
+	//}
 	
 	std::string getLevelId(void){
 		return this->LevelId;
@@ -61,10 +62,7 @@ public:
 	int getExpMax(void){
 		return this->pExpMax;
 	}
-	void setMapSize( int xMax, int yMax){
-		this->MapSize.x = xMax;
-		this->MapSize.y = yMax;
-	}
+	
     void ResetCooldown(void){
         this->HealTickRate = -COOLDOWN + IDLEHEAL;
     }

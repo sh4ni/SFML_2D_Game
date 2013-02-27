@@ -1,16 +1,18 @@
 #include "character.h"
 
 Character::Character(){
-
+	Init();
 };
 Character::~Character(){
 
 };
 
+void Character::Init(){
+	
+}
 void Character::Update(float ElapsedTime){
 
 }
-
 void Character::Render(sf::RenderWindow &Window){
 	Window.draw(sprite);
 }

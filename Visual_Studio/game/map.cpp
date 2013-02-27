@@ -8,7 +8,7 @@ Map::Map(){
 }
 
 void Map::init(std::string LevelId){
-	
+
 	#ifdef DEBUGINFO
 		std::cout << "Load Map : " << LevelId << std::endl;
 	#endif
@@ -22,6 +22,7 @@ void Map::init(std::string LevelId){
 	this->CollisionMap = 0;
 	this->MapLevelMin = 1;
 	this->MapLevelMax = 1;
+	this->monsterCounter = 0;
 	
 	this->FileName = PATH"include/map/" + LevelId + ".txt";
 
@@ -78,6 +79,11 @@ void Map::init(std::string LevelId){
 			if( idTemp == 0 ){
 				openfile >> TileMap[xTemp][yTemp].EnemyId;
 				std::cout << "ENEMY: " << TileMap[xTemp][yTemp].EnemyId << std::endl;
+				Monster theEnemy;
+				theEnemy.setType(TileMap[xTemp][yTemp].EnemyId);
+				theEnemy.setPosition(xTemp*TILESIZE+TILESIZE/2,yTemp*TILESIZE);
+				monsterList.push_back(theEnemy);
+				monsterCounter++;
 			}
 			else if( idTemp == 1){
 				TileMap[xTemp][yTemp].Teleport = new tp;
@@ -105,6 +111,12 @@ void Map::init(std::string LevelId){
 	this->P1.setColMap(CollisionMap);
 	this->P1.setMapSize( MapSizeX, MapSizeY );
 
+	for(int i = 0; i<(int)monsterList.size(); i++){
+		monsterList[i].setColMap(CollisionMap);
+		monsterList[i].setMapSize( MapSizeX, MapSizeY);
+	}
+	
+	
 	//Player P2(CollisionMap,currentSavegame,1);        // 2 Spieler Koop Test
 	//P2.setMapSize( MapSizeX, MapSizeY );              // Funktioniert ohne probleme!
 
@@ -258,6 +270,17 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		// Rendern des Spielers
 		P1.Render(renderWindow);
 		P1.Update(ElapsedTime);
+
+		
+		for(int i = 0; i < (int)monsterList.size(); i++){
+			if(!monsterList[i].isActive){
+				monsterList.erase(monsterList.begin() + i);
+				monsterCounter--;
+			}
+			monsterList[i].Update(ElapsedTime);
+			monsterList[i].Render(renderWindow);
+		}
+
 		
 		//P2.Render(renderWindow);      // 2 Spieler test... siehe weiter oben
 		//P2.Update(ElapsedTime);

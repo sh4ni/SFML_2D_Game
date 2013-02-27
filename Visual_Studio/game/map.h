@@ -12,6 +12,7 @@
 #include <vector>
 #include "monster.h"
 #include "sounds.h"
+#include <vector>
 
 class tp{
 	public:
@@ -70,6 +71,9 @@ private:
 	sf::Clock clock;
 
 	Player P1;
+
+	std::vector<Monster> monsterList;
+	int monsterCounter;
 	
 	float LastTime;
 	float ElapsedTime;

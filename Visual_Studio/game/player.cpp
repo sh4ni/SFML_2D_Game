@@ -35,10 +35,6 @@ void Player::Init(int controller){
 		#endif
 	}
 
-	Speed = PLAYERSPEED;
-	HealTickRate = 0;
-	Animation = 0;
-
 	if(!texture.loadFromFile(tex)){
 		throw "Error: Playertexture not found.";
 	}
@@ -47,6 +43,10 @@ void Player::Init(int controller){
 		std::cout << "Successfully loaded the player texture!" << std::endl;
 	}
 	#endif
+	
+	Speed = PLAYERSPEED;
+	HealTickRate = 0;
+	Animation = 0;
 
 	sprite.setTexture(texture);
 	sprite.setOrigin(TILESIZE/2,TILESIZE);

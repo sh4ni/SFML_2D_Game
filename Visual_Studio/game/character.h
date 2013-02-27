@@ -20,16 +20,16 @@ protected:
 	int Health;
 	int Lvl;
 
-
-	// not in use
-	int strenght;
-	int agility;
-	int vitality;
+	// not in use yet
+	//int strenght;
+	//int agility;
+	//int vitality;
 
 public:
 	Character();
 	~Character();
 
+	void Init();
 	void Update(float ElapsedTime);
 	void Render(sf::RenderWindow &Window);
 
@@ -37,6 +37,10 @@ public:
 	float getPosX(void);
 	float getPosY(void);
 	void setPosition(float X, float Y);
+	void setMapSize( int xMax, int yMax){
+		this->MapSize.x = xMax;
+		this->MapSize.y = yMax;
+	}
 
 	float getSpeed(void);
 	void increaseSpeed(float speedValue);
