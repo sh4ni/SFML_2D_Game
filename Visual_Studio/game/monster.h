@@ -5,7 +5,7 @@
 #include <iostream>
 #include "defines.h"
 #include "character.h"
-
+#include <cmath>
 #include <ctime>
 
 class Monster : public Character{
@@ -14,7 +14,7 @@ private:
 
 
 public:
-	Monster(bool isAggresiv=true);
+	Monster();
 	~Monster();
 
 	void Init();
@@ -26,6 +26,7 @@ public:
 
 
 	bool targetingPlayer;
+	bool isAggressiv;
 
 	int moveDirection;
 	clock_t begin; 

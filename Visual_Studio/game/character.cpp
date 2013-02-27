@@ -65,7 +65,7 @@ int Character::getLvl(void){
 	return this->Lvl;
 }
 
-void Character::setColMap(sf::IntRect*** ColMap){
+void Character::setColMap(sf::IntRect***& ColMap){
 	this->ColMap = ColMap;
 };
 

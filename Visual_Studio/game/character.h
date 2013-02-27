@@ -31,7 +31,7 @@ public:
 
 	void Init();
 	void Update(float ElapsedTime);
-	void Render(sf::RenderWindow &Window);
+	void Render(sf::RenderWindow& Window);
 
 	// getter and settter
 	float getPosX(void);
@@ -55,7 +55,7 @@ public:
 	void setLvl(int Lvl);
 	int getLvl(void);
 
-	void setColMap(sf::IntRect*** ColMap);
+	void setColMap(sf::IntRect***& ColMap);
 };
 
 #endif

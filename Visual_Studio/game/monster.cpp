@@ -1,6 +1,6 @@
 #include "monster.h"
 #include "map.h"
-Monster::Monster(bool isAggresiv){
+Monster::Monster(){
 	Init();
 };
 Monster::~Monster(){
@@ -43,7 +43,8 @@ void Monster::Init(){
 	srand((unsigned)time(NULL));
 	this->begin = clock();
 	this->moveDirection = 0;
-	this->targetingPlayer = true;
+	this->targetingPlayer = false;
+	this->isAggressiv = true;
 }
 
 void Monster::Update(float ElapsedTime){
@@ -60,9 +61,24 @@ void Monster::Update(float ElapsedTime){
 		if( elapsed_secs > (HOLDTIME + MOVETIME) ){
 			this->begin = end;
 			this->moveDirection = (int)rand() % 4;	// 0 up - 1 down - 2 left - 3 right
-			
 		}
-				
+			
+		if(isAggressiv || targetingPlayer){
+			float x = PlayerPosX - PosX;
+			float y = PlayerPosY - PosY;
+
+			if(x < 0) x *= -1;
+			if(y < 0) y *= -1;
+
+			x = sqrt(pow(x,2)+pow(y,2));
+
+			if ( x < (float)(DETECTIONRADIUS*TILESIZE) ){
+				this->targetingPlayer = true;
+			}else if( x > LOSTRADIUS){
+				this->targetingPlayer = false;
+			}
+		}
+
 		if(!targetingPlayer){
 			if(elapsed_secs > HOLDTIME){
 				if(moveDirection == 0){
@@ -85,7 +101,6 @@ void Monster::Update(float ElapsedTime){
 			}else{
 				PosX -= (Speed*ElapsedTime);
 			}
-
 			if(y > 0){
 				PosY += (Speed*ElapsedTime);
 			}else{

@@ -7,7 +7,7 @@ Ein Projekt im Rahmen der Ausbildung zum staatlich geprüften Techniker an der Ru
 Programmierer:
 Daniel Maier und Filip Menke
 
-Projektaufsicht:
+Begleitende Lehrkraft:
 Dr. Markus Hofmann
 
 (c) 2013
