@@ -1,5 +1,5 @@
 #include "monster.h"
-
+#include "map.h"
 Monster::Monster(bool isAggresiv){
 	Init();
 };
@@ -39,19 +39,64 @@ void Monster::Init(){
 	sprite.setOrigin(TILESIZE/2,TILESIZE);
 	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
 	sprite.setPosition(PosX, PosY);
+
+	srand((unsigned)time(NULL));
+	this->begin = clock();
+	this->moveDirection = 0;
+	this->targetingPlayer = true;
 }
 
 void Monster::Update(float ElapsedTime){
 	if(isActive){
-		
 		this->PosX = sprite.getPosition().x;
 		this->PosY = sprite.getPosition().y;
 
-		srand((unsigned)time(NULL));
+		float PlayerPosX = Map::currentMap->getPlayer()->getPosX();
+		float PlayerPosY = Map::currentMap->getPlayer()->getPosY();
 
-		double myRand = (double)rand() / RAND_MAX;
-		PosX += Speed*ElapsedTime;
-		PosY += Speed*ElapsedTime;
+		clock_t end = clock();
+		float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
+		//std::cout << elapsed_secs << std::endl;
+		if( elapsed_secs > (HOLDTIME + MOVETIME) ){
+			this->begin = end;
+			this->moveDirection = (int)rand() % 4;	// 0 up - 1 down - 2 left - 3 right
+			
+		}
+				
+		if(!targetingPlayer){
+			if(elapsed_secs > HOLDTIME){
+				if(moveDirection == 0){
+					PosY -= (Speed*ElapsedTime);
+				}else if(moveDirection == 1){
+					PosY += (Speed*ElapsedTime);
+				}else if(moveDirection == 2){
+					PosX -= (Speed*ElapsedTime);
+				}else{
+					PosX += (Speed*ElapsedTime);
+				}
+			}
+		}else{
+			// wenn der Spieler entdeckt wurde
+			float x = PlayerPosX - PosX;
+			float y = PlayerPosY - PosY;
+			
+			if(x > 0){
+				PosX += (Speed*ElapsedTime);
+			}else{
+				PosX -= (Speed*ElapsedTime);
+			}
+
+			if(y > 0){
+				PosY += (Speed*ElapsedTime);
+			}else{
+				PosY -= (Speed*ElapsedTime);
+			}
+
+		}
+
+
+
+
 		/*
 		 *
 		 *

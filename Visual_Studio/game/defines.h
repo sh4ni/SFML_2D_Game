@@ -11,7 +11,7 @@
 
 #define DEBUGINFO				// Für Debug infos im code
 
-#define VERSION "0.6.1 Alpha"	// intro und menü
+#define VERSION "0.6.3 Alpha"	// intro und menü
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
@@ -49,6 +49,11 @@
 #define HEALTHMULTIPLICATOR 1.1f
 #define BASEEXP 50.f
 #define EXPMULTIPLICATOR 1.15f
+
+
+// used in monster.cpp
+#define HOLDTIME 3.f
+#define MOVETIME 0.5f
 
 // ConfigFile
 #define SETTINGS "settings.cfg"

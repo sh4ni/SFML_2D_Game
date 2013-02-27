@@ -6,11 +6,15 @@
 #include "defines.h"
 #include "character.h"
 
+#include <ctime>
+
 class Monster : public Character{
 private:
 	int monsterType;
+
+
 public:
-	Monster(bool isAggresiv=false);
+	Monster(bool isAggresiv=true);
 	~Monster();
 
 	void Init();
@@ -19,6 +23,13 @@ public:
 	void setType(int monsterType);
 
 	bool isActive;
+
+
+	bool targetingPlayer;
+
+	int moveDirection;
+	clock_t begin; 
+	clock_t end;
 };
 
 #endif
