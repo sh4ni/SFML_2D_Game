@@ -72,7 +72,8 @@ private:
 
 	Player P1;
 
-	std::vector<Monster> monsterList;
+	//std::vector<Monster> monsterList;
+	Monster * monsterList;
 	int monsterCounter;
 	
 	float LastTime;

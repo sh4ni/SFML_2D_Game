@@ -43,14 +43,18 @@ void Monster::Init(){
 }
 
 void Monster::Update(float ElapsedTime){
-	std::cout << "ich bin update!" << std::endl;
+	
 	if(isActive){
-		std::cout << " ich bin updatetetetererer" << std::endl;
+		
 		this->PosX = sprite.getPosition().x;
 		this->PosY = sprite.getPosition().y;
 
-		//srand((unsigned)time(NULL));
-		PosX -= 0.1;
+		
+		srand((unsigned)time(NULL));
+
+		double myRand = (double)rand() / RAND_MAX;
+		PosX -= myRand*10;
+		PosY -= myRand*10;
 
 		sprite.setPosition(PosX,PosY);
 	}
