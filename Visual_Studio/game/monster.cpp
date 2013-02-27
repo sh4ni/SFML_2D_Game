@@ -47,12 +47,28 @@ void Monster::Update(float ElapsedTime){
 		this->PosX = sprite.getPosition().x;
 		this->PosY = sprite.getPosition().y;
 
-		
 		srand((unsigned)time(NULL));
 
 		double myRand = (double)rand() / RAND_MAX;
 		PosX += Speed*ElapsedTime;
 		PosY += Speed*ElapsedTime;
+		/*
+		 *
+		 *
+		MONSTER LÄUFT RANDOM RUM
+		 *
+		 *
+		 */
+
+		;;;;;
+
+		/*
+		 *
+		 *
+		KOLLISIONSABFRAGE DES MONSTERS
+		 *
+		 *
+		 */
 
 		sprite.setPosition(PosX,PosY);
 	}
