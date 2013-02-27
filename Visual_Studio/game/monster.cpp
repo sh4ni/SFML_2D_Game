@@ -1,7 +1,6 @@
 #include "monster.h"
 
 Monster::Monster(bool isAggresiv){
-	std::cout << "1 ich bin hier!" << std::endl;
 	Init();
 };
 Monster::~Monster(){
@@ -14,13 +13,13 @@ void Monster::setType(int monsterType){
 }
 
 void Monster::Init(){
-	std::cout << "2 ich bin hier!" << std::endl;
+	std::cout << "INIT Monster" << std::endl;
 	this->Health = 200;
 	this->Lvl = 1;
 	this->Name = "Monster XY";
 	this->PosX = 500;
 	this->PosY = 600;
-	this->Speed = 0.2f;
+	this->Speed = 0.1f;
 	this->isActive = true;
 
 	sf::String tex;
@@ -43,7 +42,6 @@ void Monster::Init(){
 }
 
 void Monster::Update(float ElapsedTime){
-	
 	if(isActive){
 		
 		this->PosX = sprite.getPosition().x;
@@ -53,8 +51,8 @@ void Monster::Update(float ElapsedTime){
 		srand((unsigned)time(NULL));
 
 		double myRand = (double)rand() / RAND_MAX;
-		PosX -= myRand*10;
-		PosY -= myRand*10;
+		PosX += Speed*ElapsedTime;
+		PosY += Speed*ElapsedTime;
 
 		sprite.setPosition(PosX,PosY);
 	}

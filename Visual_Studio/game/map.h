@@ -39,7 +39,7 @@ public:
 	MapEvent(MapEvent::reason theReason, std::string newMapId = "", float newMapPosX = 0, float newMapPosY = 0 ){
 		this->theReason = theReason;
 		this->newMapId = newMapId;
-		this->newMapPosX = newMapPosX*TILESIZE+16;
+		this->newMapPosX = newMapPosX*TILESIZE+TILESIZE/2;
 		this->newMapPosY = newMapPosY*TILESIZE;
 	};
 	~MapEvent(){
@@ -73,7 +73,7 @@ private:
 	Player P1;
 
 	//std::vector<Monster> monsterList;
-	Monster * monsterList;
+	Monster* monsterList;
 	int monsterCounter;
 	
 	float LastTime;

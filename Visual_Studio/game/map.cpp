@@ -117,11 +117,18 @@ void Map::init(std::string LevelId){
 	/*for(int i = 0; i<(int)monsterList.size(); i++){
 		monsterList[i].setColMap(CollisionMap);
 		monsterList[i].setMapSize( MapSizeX, MapSizeY);
-	}
-	*/
+	}*/
+
 	monsterList = new Monster[monsterCounter];
-	
-	for(int x = 0; 
+	for( int y=0, i=0; y<MapSizeY; y++){
+		for( int x=0; x<MapSizeX; x++){
+			if( TileMap[x][y].EnemyId ){
+				monsterList[i].setType(TileMap[x][y].EnemyId);
+				monsterList[i].setPosition(x*TILESIZE+16,y*TILESIZE);
+				i++;
+			}
+		}
+	}
 	
 	//Player P2(CollisionMap,currentSavegame,1);        // 2 Spieler Koop Test
 	//P2.setMapSize( MapSizeX, MapSizeY );              // Funktioniert ohne probleme!
@@ -184,6 +191,7 @@ void Map::destory(){
 	
 	delete [] TileMap;                             // Lšschen der TileMap - Pointer
     delete [] CollisionMap;                        // Lšschen der CollisionMap - Pointer auf Pointer
+	delete [] monsterList;							// Löschen der Monster
 	std::cout << "deleted map..." << std::endl;
 }
 
@@ -276,7 +284,6 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		// Rendern des Spielers
 		P1.Render(renderWindow);
 		P1.Update(ElapsedTime);
-
 		
 		/*for(int i = 0; i < (int)monsterList.size(); i++){
 			if(!monsterList[i].isActive){
@@ -287,9 +294,10 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			monsterList[i].Render(renderWindow);
 		}*/
 
-		for(int i=0;i<2;i++){
+		for(int i=0;i<monsterCounter;i++){
 			monsterList[i].Update(ElapsedTime);
 			monsterList[i].Render(renderWindow);
+			//std::cout << "Monster " << i << ": " << monsterList[i].getPosX() << "/" << monsterList[i].getPosY() << std::endl;
 		}
 
 		
