@@ -54,6 +54,7 @@
 // used in monster.cpp
 #define HOLDTIME 3.f
 #define MOVETIME 0.5f
+#define MOVETOLLERANCE 4
 #define DETECTIONRADIUS 3
 #define LOSTRADIUS 8
 

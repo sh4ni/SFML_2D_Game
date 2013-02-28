@@ -21,6 +21,7 @@ void Monster::Init(){
 	this->PosY = 600;
 	this->Speed = 0.1f;
 	this->isActive = true;
+    this->Animation = 0;
 
 	sf::String tex;
 	
@@ -83,48 +84,60 @@ void Monster::Update(float ElapsedTime){
 			}
 		}
 
+        bool walking = false;
 		if(!targetingPlayer){
 			if(elapsed_secs > HOLDTIME){
+                walking = true;
 				if(moveDirection == 0){
 					PosY -= (Speed*ElapsedTime);
-				}else if(moveDirection == 1){
+                    sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+				}
+                else if(moveDirection == 1){
 					PosY += (Speed*ElapsedTime);
-				}else if(moveDirection == 2){
+                    sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
+				}
+                else if(moveDirection == 2){
 					PosX -= (Speed*ElapsedTime);
-				}else{
+                    sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+				}
+                else{
 					PosX += (Speed*ElapsedTime);
+                    sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 				}
 			}
-		}else{
+            else {
+                walking = false;
+                sprite.setTextureRect(sf::IntRect(0,sprite.getTextureRect().top,TILESIZE,TILESIZE*2));  // spieler "steht", wenn er sich nicht bewegt.
+            }
+		}
+        else{
 			// wenn der Spieler entdeckt wurde
 			float x = PlayerPosX - PosX;
 			float y = PlayerPosY - PosY;
-			
-			if(x > 0){
+			if(x > MOVETOLLERANCE){
+                walking = true;
 				PosX += (Speed*ElapsedTime);
-			}else{
+                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+			}else if (x < -MOVETOLLERANCE){
+                walking = true;
 				PosX -= (Speed*ElapsedTime);
+                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 			}
-			if(y > 0){
+			if(y > MOVETOLLERANCE){
+                walking = true;
 				PosY += (Speed*ElapsedTime);
-			}else{
+                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
+			}else if( y < -MOVETOLLERANCE){
+                walking = true;
 				PosY -= (Speed*ElapsedTime);
+                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 			}
 
 		}
-
-
-
-
-		/*
-		 *
-		 *
-		MONSTER LÄUFT RANDOM RUM
-		 *
-		 *
-		 */
-
-		;;;;;
+        if( walking ){      // nur animieren wenn spieler lŠuft
+            if( (Animation/(int)((1/Speed)*ElapsedTime*ANIMATIONSPEED)) >= 4) Animation = 0;
+            Animation++;
+        }
 
 		/*
 		 *
