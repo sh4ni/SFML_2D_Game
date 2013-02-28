@@ -18,23 +18,33 @@ void Monster::setType(int monsterType){
 void Monster::Init(){
 	std::cout << "INIT Monster" << std::endl;
     
-	this->Health = 200;
-	this->Lvl = 1;
-	this->Name = "Monster XY";
-
+    int minLevel = Map::currentMap->getMonsterLevel().x;
+    int maxLevel = Map::currentMap->getMonsterLevel().y;
+    
+    this->Lvl = (rand() % maxLevel)+minLevel;
+    
 	sf::String tex;
-		
-	std::cout << monsterType << std::endl;
-	if( monsterType == 1 ){
-		this->isAggressiv = true;
-		tex.insert(0,PATH"include/texture/monster/entity_slime_reddish.png");
-	}else if( monsterType == 2){
-		this->isAggressiv = true;
-		tex.insert(0,PATH"include/texture/monster/entity_slime_blue.png");
-	}else if( monsterType == 3){
-		this->isAggressiv = true;
-		tex.insert(0,PATH"include/texture/monster/entity_slime_green.png");
-	}
+	//std::cout << monsterType << std::endl;
+	this->Health = (int)(MONSTERBASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
+    this->isAggressiv = true;
+    switch ( monsterType ){
+        case 1:
+            this->Name = "Green Slime";
+            tex.insert(0,PATH"include/texture/monster/entity_slime_green.png");
+            this->isAggressiv = false;
+            break;
+        case 2:
+            this->Name = "Red Slime";
+            tex.insert(0,PATH"include/texture/monster/entity_slime_reddish.png");
+            break;
+        case 3:
+            this->Name = "Blue Slime";
+            tex.insert(0,PATH"include/texture/monster/entity_slime_blue.png");
+            this->isAggressiv = false;
+            break;
+        default:
+            break;
+    }
 
 	if(!texture.loadFromFile(tex)){
 		throw "Error: Monstertexture not found.";
@@ -50,9 +60,8 @@ void Monster::Init(){
 	sprite.setOrigin(TILESIZE/2,TILESIZE);
 	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
 	sprite.setPosition(PosX, PosY);
-	srand((unsigned)time(NULL));
 	this->begin = clock();
-	this->moveDirection = 0;
+    this->moveDirection = (int)rand() % 4;	// 0 up - 1 down - 2 left - 3 right
 }
 
 void Monster::Update(float ElapsedTime){

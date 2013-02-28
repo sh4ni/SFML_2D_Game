@@ -2,6 +2,8 @@
 
 void Game::Init(void)
 {
+    // Random funktion wird im spiel šfters verwendet
+	srand((unsigned)time(NULL));
 	// Do it!
 	Savegame::currentSaveGame = new Savegame;
 	ConfigFile::currentConfigFile = new ConfigFile;
@@ -134,6 +136,7 @@ void Game::GameLoop(){
             break;
 	}
 }
+
 void Game::GamePaused(sf::View viewCamera){
 	Pause PauseMenu;
 	gameMusic::music.pause();

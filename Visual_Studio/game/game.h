@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <time.h>
 #include "defines.h"
 #include "intro.h"
 #include "menu.h"
@@ -12,7 +13,6 @@
 #include "savegame.h"
 #include "pause.h"
 #include "sounds.h"
-
 
 class Game{
 private:

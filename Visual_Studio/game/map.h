@@ -110,7 +110,9 @@ public:
 	
 	static Map * currentMap;
     
-	
+    sf::Vector2i getMonsterLevel(void){
+        return sf::Vector2i(this->MapLevelMin,this->MapLevelMax);
+    }
 
     void initInterface(void){
         if( P1.getGender() == 'F' ){

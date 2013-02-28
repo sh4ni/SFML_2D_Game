@@ -16,8 +16,6 @@ void Map::init(std::string LevelId){
 	
 	this->MapSizeX = 0;
 	this->MapSizeY = 0;
-	int LoadCounterX = 0;
-	int LoadCounterY = 0;
 	this->TileMap = 0;
 	this->CollisionMap = 0;
 	this->MapLevelMin = 1;
@@ -31,6 +29,9 @@ void Map::init(std::string LevelId){
 	
 	this->FileName = PATH"include/map/" + LevelId + ".txt";
 
+	int LoadCounterX = 0;
+	int LoadCounterY = 0;
+    
 	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName.c_str());
 	if( openfile.is_open() ){
@@ -66,11 +67,10 @@ void Map::init(std::string LevelId){
 			case 50: case 51: case 52: case 57:
 			case 60: case 61:
 				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  // keine kollision
-					break;
+                    break;
 			default:        // defaultwert: alle anderen blšcke kriegen eine kollision!
                     CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
-				break;
-
+                    break;
 			}
 			LoadCounterX++;
 			if( LoadCounterX >= MapSizeX ){
@@ -120,7 +120,6 @@ void Map::init(std::string LevelId){
 	for( int y=0, i=0; y<MapSizeY; y++){
 		for( int x=0; x<MapSizeX; x++){
 			if( TileMap[x][y].EnemyId ){
-				std::cout << TileMap[x][y].EnemyId;
 				monsterList[i].setType(TileMap[x][y].EnemyId);
 				monsterList[i].setPosition(x*TILESIZE+16,y*TILESIZE);
 				i++;
@@ -224,9 +223,9 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		CamY = (int)P1.getPosY();
         
         // prŸfen ob spieler aus dem bildschirm lŠuft
-        if( CamX < 0 ) return MapEvent(MapEvent::mapchange,nextMap[2],-1,CamY/TILESIZE);                         // Links
+        if( CamX < 0 ) return MapEvent(MapEvent::mapchange,nextMap[2],-1,CamY/TILESIZE);                        // Links
         else if( CamX > (MapSizeX*TILESIZE)) return MapEvent(MapEvent::mapchange,nextMap[3],0,CamY/TILESIZE);   // Rechts
-        if( CamY < 0 ) return MapEvent(MapEvent::mapchange,nextMap[0],CamX/TILESIZE,-1);                         // Oben
+        if( CamY < 0 ) return MapEvent(MapEvent::mapchange,nextMap[0],CamX/TILESIZE,-1);                        // Oben
         else if( CamY > (MapSizeY*TILESIZE)) return MapEvent(MapEvent::mapchange,nextMap[1],CamX/TILESIZE,0);   // Unten
 
 		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell für die Koordinatenanzeige
@@ -287,10 +286,6 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				y++;
 			}
 		}
-
-		// Rendern des Spielers
-		P1.Render(renderWindow);
-		P1.Update(ElapsedTime);
 		
 		/*for(int i = 0; i < (int)monsterList.size(); i++){
 			if(!monsterList[i].isActive){
@@ -301,11 +296,16 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			monsterList[i].Render(renderWindow);
 		}*/
 
+        // Rendern der Monster
 		for(int i=0;i<monsterCounter;i++){
 			monsterList[i].Update(ElapsedTime);
 			monsterList[i].Render(renderWindow);
 			//std::cout << "Monster " << i << ": " << monsterList[i].getPosX() << "/" << monsterList[i].getPosY() << std::endl;
 		}
+        
+		// Rendern des Spielers
+		P1.Render(renderWindow);
+		P1.Update(ElapsedTime);
 
 		
 		//P2.Render(renderWindow);      // 2 Spieler test... siehe weiter oben

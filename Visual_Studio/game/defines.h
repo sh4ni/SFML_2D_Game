@@ -57,6 +57,7 @@
 #define MOVETOLLERANCE 4
 #define DETECTIONRADIUS 3
 #define LOSTRADIUS 8
+#define MONSTERBASEHEALTH 50
 
 // ConfigFile
 #define SETTINGS "settings.cfg"
