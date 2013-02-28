@@ -1,5 +1,4 @@
 ToDo vor Featurefreeze
-- monster: kollisionskontrolle (k)
 - monster: spieler nimmt schaden bei berührung
 - player: kann monster angreifen
 

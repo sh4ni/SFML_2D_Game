@@ -52,11 +52,11 @@
 
 
 // used in monster.cpp
-#define HOLDTIME 3.f
+#define HOLDTIME 0.1f
 #define MOVETIME 0.5f
 #define MOVETOLLERANCE 4
-#define DETECTIONRADIUS 3
-#define LOSTRADIUS 8
+#define DETECTIONRADIUS 5
+#define LOSTRADIUS 20
 #define MONSTERBASEHEALTH 50
 
 // ConfigFile

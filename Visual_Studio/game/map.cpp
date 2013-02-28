@@ -122,6 +122,8 @@ void Map::init(std::string LevelId){
 			if( TileMap[x][y].EnemyId ){
 				monsterList[i].setType(TileMap[x][y].EnemyId);
 				monsterList[i].setPosition(x*TILESIZE+16,y*TILESIZE);
+                monsterList[i].setColMap(CollisionMap);
+                monsterList[i].setMapSize( MapSizeX, MapSizeY );
 				i++;
 			}
 		}

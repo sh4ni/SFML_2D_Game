@@ -68,6 +68,90 @@ void Monster::Update(float ElapsedTime){
 	if(isActive){
 		this->PosX = sprite.getPosition().x;
 		this->PosY = sprite.getPosition().y;
+        
+        int tx = ((int)PosX/TILESIZE)-1;
+        int ty = ((int)PosY/TILESIZE)-1;
+
+        // Monsterkollision
+        
+        bool blockUp = false;
+        bool blockDown = false;
+        bool blockLeft = false;
+        bool blockRight = false;
+        
+        // 12 Kollisionspunkte
+        int CollisionPoint[12][2] = {
+            {(int)PosX-TILESIZE/2, (int)PosY},										//  0: Links Oben						+--- Player ----+
+            {(int)PosX+TILESIZE/2-1, (int)PosY},									//  1: Rechts Oben						|				|
+            {(int)PosX-TILESIZE/2, (int)PosY+TILESIZE-1},							//  2: Links Unten						|				|
+            {(int)PosX+TILESIZE/2-1, (int)PosY+TILESIZE-1},							//  3: Rechts Unten						|				| keine Kollisionsabfrage
+            {(int)PosX-TILESIZE/2+COLLISIONTOLERANCE, (int)PosY},					//  4: Links Oben Hilfspunkt Oben		|				| im oberen bereich.
+            {(int)PosX+TILESIZE/2-1-COLLISIONTOLERANCE, (int)PosY},					//  5: Rechts Oben Hilfspunkt Oben		|				|
+            {(int)PosX-TILESIZE/2+COLLISIONTOLERANCE, (int)PosY+TILESIZE-1},		//  6: Links Unten Hilfspunkt Unten		| 00 04   05 01 |
+            {(int)PosX+TILESIZE/2-1-COLLISIONTOLERANCE, (int)PosY+TILESIZE-1},		//  7: Rechts Unten Hilfspunkt Unten	| 08         09 |
+            {(int)PosX-TILESIZE/2, (int)PosY+COLLISIONTOLERANCE},					//  8: Links Oben Hilfspunkt Links		|				|
+            {(int)PosX+TILESIZE/2-1, (int)PosY+COLLISIONTOLERANCE},					//  9: Rechts Oben Hilfspunkt Rechts	| 10         11 |
+            {(int)PosX-TILESIZE/2, (int)PosY+TILESIZE-1-COLLISIONTOLERANCE},		// 10: Links Unten Hilfspunkt Links		| 02 06   07 03 |
+            {(int)PosX+TILESIZE/2-1, (int)PosY+TILESIZE-1-COLLISIONTOLERANCE},		// 11: Rechts Unten Hilfspunkt Rechts	+---------------+
+            
+        };
+        
+        bool cp[12] = {0,0,0,0,0,0,0,0,0,0,0,0};    // alle kollisionspunkte sind erstmal false
+        
+        for( int i=0; i<9; i++){
+            if(tx+(i%3) >= 0 && ty+i/3 >= 0 && tx+(i%3) < MapSize.x && ty+i/3 < MapSize.y && ColMap[tx+(i%3)][ty+i/3] != NULL){
+                for( int p=0; p<12; p++){
+                    if( ColMap[tx+(i%3)][ty+i/3]->contains(CollisionPoint[p][0],CollisionPoint[p][1]) ){
+                        cp[p] = 1;
+                    }
+                }       // setze alle kollisionspunkte auf 1, welche eine kollision mit der welt haben.
+            }
+        }
+        
+        for( int i=0; i<12; i++){	// Punktabfrage sollte jetzt passen. Fall zu untersuchen: 0 !4 !8 und dann gegen die ecke laufen...
+            if( ((cp[0] && cp[4]) || (cp[1] && cp[5])) && (!cp[8] || !cp[9]) ){ // Bei Normaler Auslastung
+                blockUp = true;
+            }
+            else if( ((cp[2] && cp[6]) || (cp[3] && cp[7])) && (!cp[10] || !cp[11]) ){
+                blockDown = true;
+            }
+            if( ((cp[0] && cp[8]) || (cp[2] && cp[10])) && (!cp[4] || !cp[6]) ){
+                blockLeft = true;
+            }
+            else if( ((cp[1] && cp[9]) || (cp[3] && cp[11])) && (!cp[5] || !cp[7]) ){
+                blockRight = true;
+            }
+            if( (cp[0] && cp[4] && cp[8] && !cp[1] && !cp[2])||(cp[0] && cp[1] && cp[2]) ){ // bei hoher Auslastung
+                blockUp = true;
+                blockLeft = true;
+            }
+            else if( (cp[1] && cp[5] && cp[9] && !cp[0] && !cp[3])||(cp[1] && cp[0] && cp[3]) ){
+                blockUp = true;
+                blockRight = true;
+            }
+            else if( (cp[2] && cp[6] && cp[10] && !cp[0] && !cp[3])||(cp[2] && cp[0] && cp[3]) ){
+                blockDown = true;
+                blockLeft = true;
+            }
+            else if( (cp[3] && cp[7] && cp[11] && !cp[1] && !cp[2])||(cp[3] && cp[1] && cp[2]) ){
+                blockDown = true;
+                blockRight = true;
+            }
+            else if( cp[0] && cp[1] && !cp[2] && !cp[3] ){
+                blockUp = true;
+            }
+            else if( cp[2] && cp[3] && !cp[0] && !cp[1] ){
+                blockDown = true;
+            }
+            else if( cp[0] && cp[2] && !cp[1] && !cp[3] ){
+                blockLeft = true;
+            }
+            else if( cp[1] && cp[3] && !cp[0] && !cp[2] ){
+                blockRight = true;
+            }
+        }
+        
+        // Monsterbewegung
 
 		float PlayerPosX = Map::currentMap->getPlayer()->getPosX();
 		float PlayerPosY = Map::currentMap->getPlayer()->getPosY();
@@ -103,20 +187,23 @@ void Monster::Update(float ElapsedTime){
         bool walking = false;
 		if(!targetingPlayer){
 			if(elapsed_secs > HOLDTIME){
-                walking = true;
-				if(moveDirection == 0){
+				if(moveDirection == 0 && !blockUp){
+                    walking = true;
 					PosY -= (Speed*ElapsedTime);
                     sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 				}
-                else if(moveDirection == 1){
+                else if(moveDirection == 1 && !blockDown){
+                    walking = true;
 					PosY += (Speed*ElapsedTime);
                     sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
 				}
-                else if(moveDirection == 2){
+                else if(moveDirection == 2 && !blockLeft){
+                    walking = true;
 					PosX -= (Speed*ElapsedTime);
                     sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 				}
-                else{
+                else if(moveDirection == 3 && !blockDown){
+                    walking = true;
 					PosX += (Speed*ElapsedTime);
                     sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 				}
@@ -130,20 +217,20 @@ void Monster::Update(float ElapsedTime){
 			// wenn der Spieler entdeckt wurde
 			float x = PlayerPosX - PosX;
 			float y = PlayerPosY - PosY;
-			if(x > MOVETOLLERANCE){
+			if( (x > MOVETOLLERANCE) && !blockRight ){
                 walking = true;
 				PosX += (Speed*ElapsedTime);
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
-			}else if (x < -MOVETOLLERANCE){
+			}else if ( (x < -MOVETOLLERANCE) && !blockLeft ){
                 walking = true;
 				PosX -= (Speed*ElapsedTime);
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 			}
-			if(y > MOVETOLLERANCE){
+			if( (y > MOVETOLLERANCE) && !blockDown ){
                 walking = true;
 				PosY += (Speed*ElapsedTime);
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
-			}else if( y < -MOVETOLLERANCE){
+			}else if( (y < -MOVETOLLERANCE) && !blockUp ){
                 walking = true;
 				PosY -= (Speed*ElapsedTime);
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
@@ -155,14 +242,28 @@ void Monster::Update(float ElapsedTime){
             Animation++;
         }
 
-		/*
-		 *
-		 *
-		KOLLISIONSABFRAGE DES MONSTERS
-		 *
-		 *
-		 */
-
+        // Kollision ggf. Korrigieren
+        if( blockUp ){
+            if( (TILESIZE-((int)PosY-(((int)PosY/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
+                PosY= (float)(((int)PosY/TILESIZE)*TILESIZE+TILESIZE-1);
+            }
+        }
+        if( blockDown ){
+            if( (((int)PosY+TILESIZE)-((((int)PosY+TILESIZE)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
+                PosY= (float)((((int)PosY+TILESIZE)/TILESIZE)*TILESIZE-TILESIZE+1);
+            }
+        }
+        if( blockLeft ){
+            if( (TILESIZE-(((int)PosX-TILESIZE/2)-((((int)PosX-TILESIZE/2)/TILESIZE)*TILESIZE))) > COLLISIONTOLERANCE ){
+                PosX= (float)((((int)PosX-TILESIZE/2)/TILESIZE)*TILESIZE+TILESIZE*3/2-1);
+            }
+        }
+        if( blockRight ){
+            if( (((int)PosX+TILESIZE/2)-((((int)PosX+TILESIZE/2)/TILESIZE)*TILESIZE)) > COLLISIONTOLERANCE ){
+                PosX= (float)((((int)PosX+TILESIZE/2)/TILESIZE)*TILESIZE-TILESIZE/2+1);
+            }
+        }
+        
 		sprite.setPosition(PosX,PosY);
 	}
 }
