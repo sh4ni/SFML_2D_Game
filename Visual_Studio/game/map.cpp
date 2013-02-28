@@ -173,6 +173,8 @@ void Map::init(std::string LevelId){
 	DisplayKoord.Init(0,20,"X: Error Y: Error",20);
 	DisplaySpeed.Init(0,40,"Speed: Error",20);
 
+	// Die Map wurde erfolgreich geladen, also kann gespeichert werden
+	Savegame::currentSaveGame->saveSavegame();
 }
 
 void Map::destory(){

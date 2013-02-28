@@ -11,7 +11,7 @@
 
 #define DEBUGINFO				// Für Debug infos im code
 
-#define VERSION "0.6.8 Alpha"	// intro und menü
+#define VERSION "0.6.9 Alpha"	// intro und menü
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
