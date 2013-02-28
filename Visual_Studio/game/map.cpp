@@ -84,14 +84,7 @@ void Map::init(std::string LevelId){
 			if( idTemp == 0 ){
 				openfile >> TileMap[xTemp][yTemp].EnemyId;
 				std::cout << "ENEMY: " << TileMap[xTemp][yTemp].EnemyId << std::endl;
-
 				monsterCounter++;
-
-				//Monster theEnemy;
-				//theEnemy.setType(TileMap[xTemp][yTemp].EnemyId);
-				//theEnemy.setPosition(xTemp*TILESIZE+TILESIZE/2,yTemp*TILESIZE);
-				//monsterList.push_back(theEnemy);
-				//monsterCounter++;
 			}
 			else if( idTemp == 1){
 				TileMap[xTemp][yTemp].Teleport = new tp;
@@ -122,15 +115,12 @@ void Map::init(std::string LevelId){
 	this->P1.setColMap(CollisionMap);
 	this->P1.setMapSize( MapSizeX, MapSizeY );
 
-	/*for(int i = 0; i<(int)monsterList.size(); i++){
-		monsterList[i].setColMap(CollisionMap);
-		monsterList[i].setMapSize( MapSizeX, MapSizeY);
-	}*/
 
 	monsterList = new Monster[monsterCounter];
 	for( int y=0, i=0; y<MapSizeY; y++){
 		for( int x=0; x<MapSizeX; x++){
 			if( TileMap[x][y].EnemyId ){
+				std::cout << TileMap[x][y].EnemyId;
 				monsterList[i].setType(TileMap[x][y].EnemyId);
 				monsterList[i].setPosition(x*TILESIZE+16,y*TILESIZE);
 				i++;

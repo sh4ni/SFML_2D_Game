@@ -24,6 +24,7 @@ public:
 
 	bool isActive;
 
+	sf::Texture texture;
 
 	bool targetingPlayer;
 	bool isAggressiv;
