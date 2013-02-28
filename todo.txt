@@ -13,8 +13,9 @@ ToDo nach Projektabgabe
 - Map Editor - direkt Tiled files laden oder eigenen machen
 
 Improvements und Bugfixes vor Featurefreeze
-- monster bewegen sich abgehackt bei kollision (k)
+- Haus Textur: kamin abändern
 . schwebt mauszeiger über einem button und nutzt die tastatur zum navigieren, wird der andere button wieder selected (k)
+	k: muss ich unter win prüfen, auf osx hab ich das nicht :x
 - bei teleport auf nicht vorhandene map wird diese ins savegame eingetragen und eine exeption wird geworfen -> spielstand unbrauchbar bis map angelegt wird (f)
 . konsolen textausgaben wenn DEBUGINFO nicht definiert ist
 . controller-axen im menü verbessern (k)

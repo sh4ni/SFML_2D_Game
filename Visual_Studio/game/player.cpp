@@ -205,7 +205,7 @@ void Player::Update(float ElapsedTime){
 			 sf::Joystick::isButtonPressed(controller,14))
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
    		   && !blockRight ){
-	        		PosX += Speed*ElapsedTime;
+            PosX += Speed*ElapsedTime;
 			blockLeft = false;
 			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 			walking = true;

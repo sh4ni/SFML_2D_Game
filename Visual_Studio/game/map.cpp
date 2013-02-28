@@ -141,7 +141,7 @@ void Map::init(std::string LevelId){
 	*/
 	if(ConfigFile::currentConfigFile->sound == true){
 		gameMusic::music.stop();
-		std::string musicFileName = PATH"include/sound/" + LevelId + ".ogg";
+		std::string musicFileName = PATH"include/sound/" + mapMusic + ".ogg";
 		gameMusic::music.openFromFile(musicFileName.c_str());
 		gameMusic::music.play();
 		gameMusic::music.setLoop(true);

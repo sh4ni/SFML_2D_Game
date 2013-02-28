@@ -191,21 +191,25 @@ void Monster::Update(float ElapsedTime){
                     walking = true;
 					PosY -= (Speed*ElapsedTime);
                     sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+                    blockDown = false;
 				}
                 else if(moveDirection == 1 && !blockDown){
                     walking = true;
 					PosY += (Speed*ElapsedTime);
                     sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
+                    blockUp = false;
 				}
                 else if(moveDirection == 2 && !blockLeft){
                     walking = true;
 					PosX -= (Speed*ElapsedTime);
                     sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+                    blockRight = false;
 				}
-                else if(moveDirection == 3 && !blockDown){
+                else if(moveDirection == 3 && !blockRight){
                     walking = true;
 					PosX += (Speed*ElapsedTime);
                     sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+                    blockLeft = false;
 				}
 			}
             else {
@@ -217,23 +221,29 @@ void Monster::Update(float ElapsedTime){
 			// wenn der Spieler entdeckt wurde
 			float x = PlayerPosX - PosX;
 			float y = PlayerPosY - PosY;
-			if( (x > MOVETOLLERANCE) && !blockRight ){
-                walking = true;
-				PosX += (Speed*ElapsedTime);
-                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
-			}else if ( (x < -MOVETOLLERANCE) && !blockLeft ){
-                walking = true;
-				PosX -= (Speed*ElapsedTime);
-                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
-			}
-			if( (y > MOVETOLLERANCE) && !blockDown ){
-                walking = true;
-				PosY += (Speed*ElapsedTime);
-                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
-			}else if( (y < -MOVETOLLERANCE) && !blockUp ){
+            if( (y < -MOVETOLLERANCE) && !blockUp ){
                 walking = true;
 				PosY -= (Speed*ElapsedTime);
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+                blockDown = false;
+			}
+			else if( (y > MOVETOLLERANCE) && !blockDown ){
+                walking = true;
+				PosY += (Speed*ElapsedTime);
+                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
+                blockUp = false;
+			}
+            if ( (x < -MOVETOLLERANCE) && !blockLeft ){
+                walking = true;
+				PosX -= (Speed*ElapsedTime);
+                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+                blockRight = false;
+			}
+			else if( (x > MOVETOLLERANCE) && !blockRight ){
+                walking = true;
+				PosX += (Speed*ElapsedTime);
+                sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+                blockLeft = false;
 			}
 
 		}
