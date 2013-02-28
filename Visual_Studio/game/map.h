@@ -56,6 +56,8 @@ private:
 	std::string mapTheme;
 	std::string mapMusic;
 
+    std::string nextMap[4]; // 0 = oben // 1 = unten // 2 = links // 3 = rechts
+    
 	static sf::Texture LevelTexture;
 
 	int MapSizeX;

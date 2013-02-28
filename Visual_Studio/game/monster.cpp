@@ -61,13 +61,17 @@ void Monster::Update(float ElapsedTime){
 		float PlayerPosY = Map::currentMap->getPlayer()->getPosY();
 
 		clock_t end = clock();
+#ifdef SYS_MACOS
+        float elapsed_secs = float(end - begin) *10/ CLOCKS_PER_SEC;
+#else
 		float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
+#endif
 		//std::cout << elapsed_secs << std::endl;
 		if( elapsed_secs > (HOLDTIME + MOVETIME) ){
 			this->begin = end;
 			this->moveDirection = (int)rand() % 4;	// 0 up - 1 down - 2 left - 3 right
 		}
-			
+        
 		if(isAggressiv || targetingPlayer){
 			float x = PlayerPosX - PosX;
 			float y = PlayerPosY - PosY;

@@ -23,6 +23,11 @@ void Map::init(std::string LevelId){
 	this->MapLevelMin = 1;
 	this->MapLevelMax = 1;
 	this->monsterCounter = 0;
+    
+    this->nextMap[0] = LevelId;
+    this->nextMap[1] = LevelId;
+    this->nextMap[2] = LevelId;
+    this->nextMap[3] = LevelId;
 	
 	this->FileName = PATH"include/map/" + LevelId + ".txt";
 
@@ -86,6 +91,9 @@ void Map::init(std::string LevelId){
 				openfile >> TileMap[xTemp][yTemp].Teleport->Map >> TileMap[xTemp][yTemp].Teleport->xDest >> TileMap[xTemp][yTemp].Teleport->yDest;
 				std::cout << "TELEPORTER: " << TileMap[xTemp][yTemp].Teleport->Map << " " << TileMap[xTemp][yTemp].Teleport->xDest << " " << TileMap[xTemp][yTemp].Teleport->yDest << std::endl;
 			}
+            else if( idTemp == 2){
+                openfile >> nextMap[xTemp]; // xTemp = Direction! // 0 = oben // 1 = unten // 2 = links // 3 = rechts
+            }
 		}
 
 
@@ -137,6 +145,9 @@ void Map::init(std::string LevelId){
 		gameMusic::music.play();
 		gameMusic::music.setLoop(true);
 	}
+    
+    if( P1.getPosX() < 0) P1.setPosition(MapSizeX*TILESIZE, P1.getPosY());
+    if( P1.getPosY() < 0) P1.setPosition(P1.getPosX(), MapSizeY*TILESIZE);
 
 	initInterface();
 
@@ -211,6 +222,12 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		// Kamera folgt dem Spieler...
 		CamX = (int)P1.getPosX();
 		CamY = (int)P1.getPosY();
+        
+        // prŸfen ob spieler aus dem bildschirm lŠuft
+        if( CamX < 0 ) return MapEvent(MapEvent::mapchange,nextMap[2],-1,CamY/TILESIZE);                         // Links
+        else if( CamX > (MapSizeX*TILESIZE)) return MapEvent(MapEvent::mapchange,nextMap[3],0,CamY/TILESIZE);   // Rechts
+        if( CamY < 0 ) return MapEvent(MapEvent::mapchange,nextMap[0],CamX/TILESIZE,-1);                         // Oben
+        else if( CamY > (MapSizeY*TILESIZE)) return MapEvent(MapEvent::mapchange,nextMap[1],CamX/TILESIZE,0);   // Unten
 
 		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell für die Koordinatenanzeige
 		// und ruf aus performancegründen die getPos methode nicht 2 mal auf.
