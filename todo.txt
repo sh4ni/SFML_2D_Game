@@ -1,6 +1,7 @@
 ToDo vor Featurefreeze
-- monster: spieler nimmt schaden bei berührung
-- player: kann monster angreifen
+. monster: holdtime und movetime mit einem zufallswert versehen
+! monster: spieler nimmt schaden bei berührung
+! player: kann monster angreifen
 
 ToDo nach Projektabgabe
 - Map Editor - perl script
@@ -11,12 +12,15 @@ ToDo nach Projektabgabe
 - Dialogboxen im Spiel bei Unterhaltungen
 - Map Editor - direkt Tiled files laden oder eigenen machen
 
-Improvements und Bugfixes
+Improvements und Bugfixes vor Featurefreeze
+- monster bewegen sich abgehackt bei kollision (k)
 . schwebt mauszeiger über einem button und nutzt die tastatur zum navigieren, wird der andere button wieder selected (k)
 - bei teleport auf nicht vorhandene map wird diese ins savegame eingetragen und eine exeption wird geworfen -> spielstand unbrauchbar bis map angelegt wird (f)
 . konsolen textausgaben wenn DEBUGINFO nicht definiert ist
-. bildschirmauflösungen im optionenmenü (k)
 . controller-axen im menü verbessern (k)
+
+Improvements und Bugfixes vor Featurefreeze
+. bildschirmauflösungen im optionenmenü (k)
 . im savegame wird die ausrichtung des players gespeichert (f)
 . laufanimation bei nicht ganz durchgedrückten gamepad (k)
 . schlechte fps: prüfen ob laufanimation passt
