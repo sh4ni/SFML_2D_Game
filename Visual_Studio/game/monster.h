@@ -24,6 +24,8 @@ public:
 
 	bool isActive;
 
+	sf::String tex;
+	sf::Texture texture;
 
 	bool targetingPlayer;
 	bool isAggressiv;

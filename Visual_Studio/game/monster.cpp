@@ -1,7 +1,7 @@
 #include "monster.h"
 #include "map.h"
 Monster::Monster(){
-	Init();
+	
 };
 Monster::~Monster(){
 
@@ -10,6 +10,7 @@ Monster::~Monster(){
 
 void Monster::setType(int monsterType){
 	this->monsterType = monsterType;
+	Init();
 }
 
 void Monster::Init(){
@@ -17,18 +18,25 @@ void Monster::Init(){
 	this->Health = 200;
 	this->Lvl = 1;
 	this->Name = "Monster XY";
-	this->PosX = 500;
-	this->PosY = 600;
 	this->Speed = 0.1f;
 	this->isActive = true;
+	
+	std::cout << monsterType << std::endl;
+	if( monsterType == 1 ){
+		this->isAggressiv = true;
+		this->tex.insert(0,PATH"include/texture/monster/entity_slime_reddish.png");
+	}else if( monsterType == 2){
+		this->isAggressiv = true;
+		this->tex.insert(0,PATH"include/texture/monster/entity_slime_blue.png");
+	}else if( monsterType == 3){
+		this->isAggressiv = true;
+		this->tex.insert(0,PATH"include/texture/monster/entity_slime_green.png");
+	}
 
-	sf::String tex;
-	
-	tex.insert(0,PATH"include/texture/monster/entity_slime_reddish.png");
-	
 	if(!texture.loadFromFile(tex)){
 		throw "Error: Monstertexture not found.";
 	}
+
 	#ifdef DEBUGINFO
 	else {
 		std::cout << "Successfully loaded the Monster texture!" << std::endl;
@@ -39,12 +47,9 @@ void Monster::Init(){
 	sprite.setOrigin(TILESIZE/2,TILESIZE);
 	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
 	sprite.setPosition(PosX, PosY);
-
 	srand((unsigned)time(NULL));
 	this->begin = clock();
 	this->moveDirection = 0;
-	this->targetingPlayer = false;
-	this->isAggressiv = true;
 }
 
 void Monster::Update(float ElapsedTime){
