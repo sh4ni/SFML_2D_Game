@@ -67,11 +67,16 @@ void Monster::Update(float ElapsedTime){
 		this->PosX = sprite.getPosition().x;
 		this->PosY = sprite.getPosition().y;
         
+		//Hitbox
+		this->hitBox.width = TILESIZE-TILESIZE/4;
+		this->hitBox.height = TILESIZE-TILESIZE/4;
+		this->hitBox.left = PosX-TILESIZE*3/8;
+		this->hitBox.top = PosY+TILESIZE/4;
+
         int tx = ((int)PosX/TILESIZE)-1;
         int ty = ((int)PosY/TILESIZE)-1;
 
         // Monsterkollision
-        
         bool blockUp = false;
         bool blockDown = false;
         bool blockLeft = false;

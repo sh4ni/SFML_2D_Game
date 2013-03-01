@@ -18,6 +18,7 @@ protected:
 	std::string Name; 
 
 	int Health;
+	int AttackPower;
 	int Lvl;
 
 	// not in use yet

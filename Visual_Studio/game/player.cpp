@@ -19,20 +19,15 @@ void Player::Init(int controller){
 
 	this->controller = controller;
 	this->blockControl = false;
+	this->isAttacking = false;
+	this->canAttack = true;
+	this->lookDirection = 'D';
 
 	sf::String tex;
 	if(pGender == 'F'){         // spielertextur abhängig vom gewählten helden.
-		#ifdef DEBUGINFO
-			tex.insert(0,PATH"include/texture/player/player_female.png");
-		#else
-			tex.insert(0,PATH"include/texture/player/player_female.png");
-		#endif
+		tex.insert(0,PATH"include/texture/player/player_female.png");
 	}else {
-		#ifdef DEBUGINFO
-			tex.insert(0,PATH"include/texture/player/player_male.png");
-		#else
-			tex.insert(0,PATH"include/texture/player/player_male.png");
-		#endif
+		tex.insert(0,PATH"include/texture/player/player_male.png");
 	}
 
 	if(!texture.loadFromFile(tex)){
@@ -44,6 +39,17 @@ void Player::Init(int controller){
 	}
 	#endif
 	
+	tex.clear();
+	tex.insert(0,PATH"include/texture/player/weapon_sword.png");
+	if(!weaponTexture.loadFromFile(tex)){
+		throw "Error: Weapontexture not found.";
+	}
+	#ifdef DEBUGINFO
+	else {
+		std::cout << "Successfully loaded the weapon texture!" << std::endl;
+	}
+	#endif
+
 	Speed = PLAYERSPEED;
 	HealTickRate = 0;
 	Animation = 0;
@@ -52,6 +58,11 @@ void Player::Init(int controller){
 	sprite.setOrigin(TILESIZE/2,TILESIZE);
 	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
 	sprite.setPosition(Savegame::currentSaveGame->mPosX, Savegame::currentSaveGame->mPosY);
+
+	weaponSprite.setTexture(weaponTexture);
+	weaponSprite.setOrigin(8,0);
+	weaponSprite.setTextureRect(sf::IntRect(0,0,16,32));
+	weaponSprite.setPosition(Savegame::currentSaveGame->mPosX, Savegame::currentSaveGame->mPosY+TILESIZE/2);
 }
 
 void Player::Update(float ElapsedTime){
@@ -147,26 +158,26 @@ void Player::Update(float ElapsedTime){
 		if( sf::Joystick::isConnected(controller) ){    // analoge axen des controllers nur nutzen, falls auch einer angeschlossen ist
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp ){
 				PosY += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
+				if(!isAttacking) lookDirection = 'U';
 				blockDown = false;
-				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE) && !blockDown ){
 				PosY += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
+				if(!isAttacking) lookDirection = 'D';
 				blockUp = false;
-				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE) && !blockLeft ){
 				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
+				if(!isAttacking) lookDirection = 'L';
 				blockRight = false;
-				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE) && !blockRight ){
 				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
+				if(!isAttacking) lookDirection = 'R';
 				blockLeft = false;
-				sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 				walking = true;
 			}
 		}                       // hier nochmal die tastenabfragen. siehe menu.cpp ganz unten für tastenbelegung
@@ -176,8 +187,8 @@ void Player::Update(float ElapsedTime){
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		   && !blockUp ){
 			PosY -= (Speed*ElapsedTime);
+			if(!isAttacking) lookDirection = 'U';
 			blockDown = false;
-			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
 			walking = true;
 		}    
 		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
@@ -186,8 +197,8 @@ void Player::Update(float ElapsedTime){
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		   && !blockDown ){
 			PosY += (Speed*ElapsedTime);
+			if(!isAttacking) lookDirection = 'D';
 			blockUp = false;
-			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
 			walking = true;
 		}
 		if ( (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
@@ -196,8 +207,8 @@ void Player::Update(float ElapsedTime){
 			&& !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			&& !blockLeft ){
 			PosX -= (Speed*ElapsedTime);
+			if(!isAttacking) lookDirection = 'L';
 			blockRight = false;
-			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 			walking = true;
 		}
 		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
@@ -206,10 +217,36 @@ void Player::Update(float ElapsedTime){
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
    		   && !blockRight ){
             PosX += Speed*ElapsedTime;
+			if(!isAttacking) lookDirection = 'R';
 			blockLeft = false;
-			sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 			walking = true;
 		}
+	}
+
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && canAttack ){
+		canAttack = false;
+		isAttacking = true;
+	}
+	if( !(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && !canAttack ){
+		canAttack = true;
+		isAttacking = false;
+	}
+
+	if(lookDirection == 'U'){
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+		weaponSprite.setRotation(180);
+	}
+	else if(lookDirection == 'D'){
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
+		weaponSprite.setRotation(0);
+	}
+	else if(lookDirection == 'L'){
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
+		weaponSprite.setRotation(90);
+	}
+	else {
+		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
+		weaponSprite.setRotation(270);
 	}
 
 	if( walking ){      // nur animieren wenn spieler läuft
@@ -260,5 +297,21 @@ void Player::Update(float ElapsedTime){
 			#endif
 		}
 	}
+	weaponSprite.setPosition(PosX,PosY+TILESIZE/2);
+
+	if(isAttacking){
+		weaponDmgBox = weaponSprite.getGlobalBounds();
+		for( int i=0; i < Map::currentMap->getMonsterCounter(); i++){
+			Monster* mon = Map::currentMap->getMonsterList();
+			if( mon[i].getHitBox().intersects(weaponDmgBox) ){
+				isAttacking = false;
+				std::cout << "HIT: " << i << std::endl;
+
+			}
+		}
+		//std::cout << "x: " << weaponDmgBox.left << " y: " << weaponDmgBox.top << " b: " << weaponDmgBox.width << " h: " << weaponDmgBox.height << std::endl;
+	}
+
+
 	sprite.setPosition(PosX,PosY);
 }

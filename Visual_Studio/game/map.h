@@ -153,6 +153,14 @@ public:
 		return &P1;
 	}
 
+	int getMonsterCounter(){
+		return this->monsterCounter;
+	}
+
+	Monster* getMonsterList(){
+		return this->monsterList;
+	}
+
 	sf::Clock* getClock(void){
 		return &clock;
 	}

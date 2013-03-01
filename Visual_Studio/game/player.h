@@ -13,6 +13,9 @@ class Player : public Character{
 private:
     int controller;
 	bool blockControl;
+	bool isAttacking;
+	bool canAttack;
+	char lookDirection;
 	
 	int HealTickRate;
 	int pHealthMax;
@@ -20,17 +23,23 @@ private:
 	int pExpMax;	// Exp needed Until Levelup
 	char pGender;	// M - Male | F - Female
 	std::string LevelId;
-	
+
+	sf::FloatRect weaponDmgBox;
+	sf::Texture weaponTexture;
+	sf::Sprite weaponSprite;
+
 public:
 	
 	Player(int controller=0);
     
     void Init (int controller=0);
 	void Update	(float ElapsedTime);
-	//void Render	(sf::RenderWindow &Window){
-		/*cout << "bla" << endl;
-		Character::Render();*/
-	//}
+	void Render(sf::RenderWindow &Window){
+		Window.draw(sprite);
+		if(isAttacking){
+			Window.draw(weaponSprite);
+		}
+	}
 	
 	std::string getLevelId(void){
 		return this->LevelId;
@@ -106,7 +115,6 @@ public:
 			std::cout << "block " << block << std::endl;
 		#endif
 	}
-
 };
 
 #endif

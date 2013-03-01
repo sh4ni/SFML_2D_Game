@@ -12,10 +12,24 @@ class Monster : public Character{
 private:
 	int monsterType;
 
+	sf::Texture texture;
+	sf::FloatRect hitBox;
+
+	bool targetingPlayer;
+	bool isAggressiv;
+
+	int moveDirection;
+	clock_t begin; 
+	clock_t end;
+
 
 public:
 	Monster();
 	~Monster();
+
+	sf::FloatRect getHitBox(void){
+		return this->hitBox;
+	}
 
 	void Init();
 	void Update(float ElapsedTime);
@@ -24,14 +38,6 @@ public:
 
 	bool isActive;
 
-	sf::Texture texture;
-
-	bool targetingPlayer;
-	bool isAggressiv;
-
-	int moveDirection;
-	clock_t begin; 
-	clock_t end;
 };
 
 #endif
