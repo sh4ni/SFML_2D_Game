@@ -63,7 +63,7 @@ void Map::init(std::string LevelId){
 			switch( TileType ){		// alle blˆcke OHNE kollision!
 			case  0: case  1: case  2: case  3: case  4: case  5: case  6: case  7: case  8: case  9:
 			case 10: case 12: case 13: case 14: case 15: case 16: case 17: case 19:
-			case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
+			case 20: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
 			case 30: case 31: case 32: case 35: case 36:
 			case 41: case 42:
 			case 50: case 51: case 52: case 57:
@@ -85,13 +85,13 @@ void Map::init(std::string LevelId){
 			openfile >> idTemp >> xTemp >> yTemp;
 			if( idTemp == 0 ){
 				openfile >> TileMap[xTemp][yTemp].EnemyId;
-				std::cout << "ENEMY: " << TileMap[xTemp][yTemp].EnemyId << std::endl;
+				//std::cout << "ENEMY: " << TileMap[xTemp][yTemp].EnemyId << std::endl;
 				monsterCounter++;
 			}
 			else if( idTemp == 1){
 				TileMap[xTemp][yTemp].Teleport = new tp;
 				openfile >> TileMap[xTemp][yTemp].Teleport->Map >> TileMap[xTemp][yTemp].Teleport->xDest >> TileMap[xTemp][yTemp].Teleport->yDest;
-				std::cout << "TELEPORTER: " << TileMap[xTemp][yTemp].Teleport->Map << " " << TileMap[xTemp][yTemp].Teleport->xDest << " " << TileMap[xTemp][yTemp].Teleport->yDest << std::endl;
+				//std::cout << "TELEPORTER: " << TileMap[xTemp][yTemp].Teleport->Map << " " << TileMap[xTemp][yTemp].Teleport->xDest << " " << TileMap[xTemp][yTemp].Teleport->yDest << std::endl;
 			}
             else if( idTemp == 2){
                 openfile >> nextMap[xTemp]; // xTemp = Direction! // 0 = oben // 1 = unten // 2 = links // 3 = rechts
@@ -229,16 +229,16 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		CamY = (int)P1.getPosY();
         
         // prüfen ob spieler aus dem bildschirm läuft
-        if( CamX < 0 ){							// Links
+        if( CamX < 0 ){										// Links
 			return MapEvent(MapEvent::mapchange,nextMap[2],getNextLevelSize(nextMap[2]).x-1,CamY/TILESIZE);
 		}
-        else if( CamX > (MapSizeX*TILESIZE)){	// Rechts
+        else if( CamX > (MapSizeX*TILESIZE)){				// Rechts
 			return MapEvent(MapEvent::mapchange,nextMap[3],0,CamY/TILESIZE);
 		}
-        if( CamY < 0 ){							// Oben
-			return MapEvent(MapEvent::mapchange,nextMap[0],CamX/TILESIZE,getNextLevelSize(nextMap[2]).y-1);
+        if( CamY < -TILESIZE/2 ){							// Oben
+			return MapEvent(MapEvent::mapchange,nextMap[0],CamX/TILESIZE,getNextLevelSize(nextMap[0]).y-1);
 		}
-        else if( CamY > (MapSizeY*TILESIZE)){	// Unten
+        else if( CamY > ((MapSizeY*TILESIZE)-TILESIZE/2)){	// Unten
 			return MapEvent(MapEvent::mapchange,nextMap[1],CamX/TILESIZE,0);
 		}
 
@@ -277,7 +277,10 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		}
 		else if ( CamX < ConfigFile::currentConfigFile->width/2 ) CamX = ConfigFile::currentConfigFile->width/2;
 		else if ( CamX > MapSizeX * TILESIZE - ConfigFile::currentConfigFile->width/2 ) CamX = MapSizeX * TILESIZE - ConfigFile::currentConfigFile->width/2;
-		if ( MapSizeY*TILESIZE < ConfigFile::currentConfigFile->height ) CamY = MapSizeY*TILESIZE/2;
+		if ( MapSizeY*TILESIZE < ConfigFile::currentConfigFile->height ){
+			CamY = MapSizeY*TILESIZE/2;
+			renderWindow.clear();
+		}
 		else if ( CamY < ConfigFile::currentConfigFile->height/2 ) CamY = ConfigFile::currentConfigFile->height/2;
 		else if ( CamY > MapSizeY * TILESIZE - ConfigFile::currentConfigFile->height/2 ) CamY = MapSizeY * TILESIZE - ConfigFile::currentConfigFile->height/2;
 		renderWindow.setView(viewCamera);

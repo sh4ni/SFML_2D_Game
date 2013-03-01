@@ -16,8 +16,6 @@ void Monster::setType(int monsterType){
 }
 
 void Monster::Init(){
-	std::cout << "INIT Monster" << std::endl;
-    
     int minLevel = Map::currentMap->getMonsterLevel().x;
     int maxLevel = Map::currentMap->getMonsterLevel().y;
     
@@ -52,7 +50,7 @@ void Monster::Init(){
 
 	#ifdef DEBUGINFO
 	else {
-		std::cout << "Successfully loaded the Monster texture!" << std::endl;
+		//std::cout << "Successfully loaded the Monster texture!" << std::endl;
 	}
 	#endif
 

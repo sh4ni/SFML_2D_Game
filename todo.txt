@@ -1,4 +1,4 @@
-ToDo vor Featurefreeze
+﻿ToDo vor Featurefreeze
 . monster: holdtime und movetime mit einem zufallswert versehen
 ! monster: spieler nimmt schaden bei berührung
 ! player: kann monster angreifen
@@ -21,6 +21,7 @@ Improvements und Bugfixes vor Featurefreeze
 . controller-axen im menü verbessern (k)
 
 Improvements und Bugfixes vor Featurefreeze
+! welche tiles haben eine kollision? aus datei laden! (k)
 . bildschirmauflösungen im optionenmenü (k)
 . im savegame wird die ausrichtung des players gespeichert (f)
 . laufanimation bei nicht ganz durchgedrückten gamepad (k)
