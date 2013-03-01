@@ -127,6 +127,21 @@ public:
         }
     }
 
+	sf::Vector2i getNextLevelSize(std::string NevtLevel){
+		std::string FileName = PATH"include/map/" + NevtLevel + ".txt";
+		int x = 0;
+		int y = 0;
+		std::ifstream openfile(FileName.c_str());
+		if( openfile.is_open() ){
+			openfile >> x >> y;
+			std::ifstream closefile(FileName.c_str());
+		}
+		else {
+			throw "Error: " + FileName + " not found.";
+		}
+		return sf::Vector2i(x,y);
+	}
+
 	void init(std::string LevelId);
 	void destory();
 

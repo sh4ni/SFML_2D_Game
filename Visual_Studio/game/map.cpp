@@ -14,6 +14,8 @@ void Map::init(std::string LevelId){
 	#endif
 	//renderWindow.setMouseCursorVisible(false);
 	
+	this->CamX = TILESIZE;
+	this->CamY = TILESIZE;
 	this->MapSizeX = 0;
 	this->MapSizeY = 0;
 	this->TileMap = 0;
@@ -227,10 +229,18 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		CamY = (int)P1.getPosY();
         
         // prŸfen ob spieler aus dem bildschirm lŠuft
-        if( CamX < 0 ) return MapEvent(MapEvent::mapchange,nextMap[2],-1,CamY/TILESIZE);                        // Links
-        else if( CamX > (MapSizeX*TILESIZE)) return MapEvent(MapEvent::mapchange,nextMap[3],0,CamY/TILESIZE);   // Rechts
-        if( CamY < 0 ) return MapEvent(MapEvent::mapchange,nextMap[0],CamX/TILESIZE,-1);                        // Oben
-        else if( CamY > (MapSizeY*TILESIZE)) return MapEvent(MapEvent::mapchange,nextMap[1],CamX/TILESIZE,0);   // Unten
+        if( CamX < 0 ){							// Links
+			return MapEvent(MapEvent::mapchange,nextMap[2],getNextLevelSize(nextMap[2]).x-1,CamY/TILESIZE);
+		}
+        else if( CamX > (MapSizeX*TILESIZE)){	// Rechts
+			return MapEvent(MapEvent::mapchange,nextMap[3],0,CamY/TILESIZE);
+		}
+        if( CamY < 0 ){							// Oben
+			return MapEvent(MapEvent::mapchange,nextMap[0],CamX/TILESIZE,getNextLevelSize(nextMap[2]).y-1);
+		}
+        else if( CamY > (MapSizeY*TILESIZE)){	// Unten
+			return MapEvent(MapEvent::mapchange,nextMap[1],CamX/TILESIZE,0);
+		}
 
 		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell für die Koordinatenanzeige
 		// und ruf aus performancegründen die getPos methode nicht 2 mal auf.
