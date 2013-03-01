@@ -99,8 +99,8 @@
 #define DEFAULT_F_NAME "Ashley"
 #define DEFAULT_M_NAME "Fabi"	// in memories
 #define DEFAULT_LEVEL "map1"
-#define DEFAULT_POSX 512
-#define DEFAULT_POSY 384
+#define DEFAULT_POSX 560
+#define DEFAULT_POSY 288
 #define CHECKSUM 4815162342
 
 

@@ -173,7 +173,6 @@ void Game::ShowMap(sf::View viewCamera, bool continueGame){
 		Map::currentMap->getPlayer()->setLevelId(newGameState.newMapId);
 		Map::currentMap->getPlayer()->setPosition(newGameState.newMapPosX,newGameState.newMapPosY);
 		
-		
 		std::cout << "   newGameState - X:" << newGameState.newMapPosX << " Y:" << newGameState.newMapPosY << std::endl;
 		map.destory();	// delete alte map bevor die neue geladen wird
 	}

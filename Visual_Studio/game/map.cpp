@@ -176,7 +176,7 @@ void Map::init(std::string LevelId){
 	DisplaySpeed.Init(0,40,"Speed: Error",20);
 
 	// Die Map wurde erfolgreich geladen, also kann gespeichert werden
-	Savegame::currentSaveGame->saveSavegame();
+	//Savegame::currentSaveGame->saveSavegame();
 }
 
 void Map::destory(){
@@ -301,15 +301,6 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			}
 		}
 		
-		/*for(int i = 0; i < (int)monsterList.size(); i++){
-			if(!monsterList[i].isActive){
-				monsterList.erase(monsterList.begin() + i);
-				monsterCounter--;
-			}
-			monsterList[i].Update(ElapsedTime);
-			monsterList[i].Render(renderWindow);
-		}*/
-
         // Rendern der Monster
 		for(int i=0;i<monsterCounter;i++){
 			monsterList[i].Update(ElapsedTime);
