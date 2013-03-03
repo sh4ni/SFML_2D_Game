@@ -82,10 +82,11 @@ public:
         if ( damage <= 0 ){
             damage = 1;
         }
+        damageText(damage,'p');
         this->Health -= damage;
         if( this->Health < 0 ){
             this->Health = 0;
-			std::cout << "Player will be die!" << std::endl;
+			//std::cout << "Player will be die!" << std::endl;
         }
     }
     void playerHeal( int heal ){
@@ -97,12 +98,16 @@ public:
     void playerExp( int exp, int level ){
         int levelDif = level-this->Lvl;
         exp += levelDif*(level/2);
+        if ( exp <= 0 ){
+            exp = 1;
+        }
         this->pExp += exp;
         if( this->pExp >= this->pExpMax ){       // Hier levelup!
             this->pExp -= this->pExpMax;
             this->Lvl++;
             this->pHealthMax = (int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
             this->pExpMax = (int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
+            this->AttackPower = (int)(BASEDMG*pow(DMGMULTIPLICATOR,(float)(this->Lvl-1)));
 			this->Health = this->pHealthMax;
             #ifdef DEBUGINFO
                 std::cout << "LEVEL UP: " << this->Lvl << std::endl;

@@ -47,9 +47,10 @@
 
 #define BASEHEALTH 100.f
 #define HEALTHMULTIPLICATOR 1.1f
+#define BASEDMG 15
+#define DMGMULTIPLICATOR 1.1f
 #define BASEEXP 50.f
 #define EXPMULTIPLICATOR 1.15f
-
 
 // used in monster.cpp
 #define HOLDTIME 5.f
@@ -57,7 +58,12 @@
 #define MOVETOLLERANCE 4
 #define DETECTIONRADIUS 5
 #define LOSTRADIUS 20
+
 #define MONSTERBASEHEALTH 50
+#define MONSTERBASEDMG 5
+#define MONSTERDMGMULTIPLICATOR 1.1f
+#define MONSTERBASEEXP 5.f
+#define MONSTEREXPMULTIPLICATOR 1.125f
 
 // ConfigFile
 #define SETTINGS "settings.cfg"

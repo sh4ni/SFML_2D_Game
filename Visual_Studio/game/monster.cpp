@@ -1,9 +1,12 @@
 #include "monster.h"
 #include "map.h"
+
 Monster::Monster(){
 	this->Speed = 0.1f;
 	this->isActive = true;
     this->Animation = 0;
+    this->isHit = false;
+    this->hitTimer = 0;
 };
 Monster::~Monster(){
 
@@ -20,7 +23,9 @@ void Monster::Init(){
     int maxLevel = Map::currentMap->getMonsterLevel().y;
     
     this->Lvl = (rand() % maxLevel)+minLevel;
-    
+    this->AttackPower = (int)(MONSTERBASEDMG*pow(MONSTERDMGMULTIPLICATOR,(float)(this->Lvl-1)));
+    this->exp = (int)(MONSTERBASEEXP*pow(MONSTEREXPMULTIPLICATOR,(float)(this->Lvl-1)));
+
 	sf::String tex;
 	//std::cout << monsterType << std::endl;
 	this->Health = (int)(MONSTERBASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
@@ -175,10 +180,10 @@ void Monster::Update(float ElapsedTime){
 			float x = PlayerPosX - PosX;
 			float y = PlayerPosY - PosY;
 
-			if(x < 0) x *= -1;
-			if(y < 0) y *= -1;
+			if(x < 0) x = -x;
+			if(y < 0) y = -y;
 
-			x = sqrt(pow(x,2)+pow(y,2));
+			x = sqrt(pow(x,2.f)+pow(y,2.f));
 
 			if ( x < (float)(DETECTIONRADIUS*TILESIZE) ){
 				this->targetingPlayer = true;
@@ -186,7 +191,7 @@ void Monster::Update(float ElapsedTime){
 				this->targetingPlayer = false;
 			}
 		}
-
+        
         bool walking = false;
 		if(!targetingPlayer){
 			if(elapsed_secs > HOLDTIME){
@@ -224,6 +229,14 @@ void Monster::Update(float ElapsedTime){
 			// wenn der Spieler entdeckt wurde
 			float x = PlayerPosX - PosX;
 			float y = PlayerPosY - PosY;
+            
+            if(isHit){
+                Speed = 0.3f;
+                x = -x;
+                y = -y;
+            }
+            else Speed = 0.1f;
+            
             if( (y < -MOVETOLLERANCE) && !blockUp ){
                 walking = true;
 				PosY -= (Speed*ElapsedTime);
@@ -248,11 +261,19 @@ void Monster::Update(float ElapsedTime){
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
                 blockLeft = false;
 			}
-
 		}
+        
         if( walking ){      // nur animieren wenn spieler lŠuft
             if( (Animation/(int)((1/Speed)*ElapsedTime*ANIMATIONSPEED)) >= 4) Animation = 0;
             Animation++;
+        }
+        
+        if(isHit){
+            hitTimer += ElapsedTime/10;
+            if( hitTimer > 8){
+                hitTimer = 0;
+                isHit = false;
+            }
         }
 
         // Kollision ggf. Korrigieren
@@ -279,4 +300,24 @@ void Monster::Update(float ElapsedTime){
         
 		sprite.setPosition(PosX,PosY);
 	}
+}
+
+void Monster::damageMe( int damage, int level ){
+    isHit = true;
+    int levelDif = level-this->Lvl;
+    damage += (levelDif*(level/10));
+    if ( damage <= 0 ){
+        damage = 1;
+    }
+    damageText(damage,'m');
+    this->Health -= damage;
+    if( this->Health < 0 ){
+        isActive = false;
+        Map::currentMap->getPlayer()->damageText(100,'e');
+        Map::currentMap->getPlayer()->setExp(this->exp);
+        hitBox.left = 0;
+        hitBox.top = 0;
+        hitBox.width = 0;
+        hitBox.height = 0;
+    }
 }

@@ -5,23 +5,27 @@
 #include <iostream>
 #include "defines.h"
 #include "character.h"
-#include <cmath>
+#include <math.h>
 #include <ctime>
 
 class Monster : public Character{
 private:
 	int monsterType;
+    int exp;
+	bool isActive;
 
 	sf::Texture texture;
 	sf::FloatRect hitBox;
 
 	bool targetingPlayer;
 	bool isAggressiv;
+    bool isHit;
 
 	int moveDirection;
 	clock_t begin; 
 	clock_t end;
 
+    float hitTimer;
 
 public:
 	Monster();
@@ -35,9 +39,16 @@ public:
 	void Update(float ElapsedTime);
 	
 	void setType(int monsterType);
-
-	bool isActive;
-
+    
+    void damageMe( int damage, int level );
+    
+    void targetPlayer(){
+        targetingPlayer = true;
+    }
+    
+    void Render(sf::RenderWindow &Window){
+        if(isActive) Character::Render(Window);
+    }
 };
 
 #endif
