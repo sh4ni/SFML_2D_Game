@@ -1,9 +1,9 @@
-﻿ToDo vor Featurefreeze
+ToDo vor Featurefreeze
+. player: bei levelup neues level anzeigen (k)
 . monster: holdtime und movetime mit einem zufallswert versehen
-! monster: spieler nimmt schaden bei berührung
-! player: kann monster angreifen
 
 ToDo nach Projektabgabe
+! Map Loader: tiles mit kollision aus datei auslesen (k)
 - Map Editor - perl script
 - gameover screen (f)
 - grafikeffekte: regen (k)
@@ -13,15 +13,13 @@ ToDo nach Projektabgabe
 - Map Editor - direkt Tiled files laden oder eigenen machen
 
 Improvements und Bugfixes vor Featurefreeze
-- Haus Textur: kamin abändern
-. schwebt mauszeiger über einem button und nutzt die tastatur zum navigieren, wird der andere button wieder selected (k)
-	k: muss ich unter win prüfen, auf osx hab ich das nicht :x
+- Haus Textur: kamin abändern (k)
+- Brücken Textur: perspektive hinzufügen (k)
 - bei teleport auf nicht vorhandene map wird diese ins savegame eingetragen und eine exeption wird geworfen -> spielstand unbrauchbar bis map angelegt wird (f)
 . konsolen textausgaben wenn DEBUGINFO nicht definiert ist
 . controller-axen im menü verbessern (k)
 
-Improvements und Bugfixes vor Featurefreeze
-! welche tiles haben eine kollision? aus datei laden! (k)
+Improvements und Bugfixes nach Featurefreeze
 . bildschirmauflösungen im optionenmenü (k)
 . im savegame wird die ausrichtung des players gespeichert (f)
 . laufanimation bei nicht ganz durchgedrückten gamepad (k)
