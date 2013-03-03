@@ -5,13 +5,12 @@
 	#define SYS_WINDOWS
 #elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh)
     #define SYS_MACOS
+	#define DEBUGINFO	// Für Debug infos im code
 #endif
 
 #define FPS 60U
 
-#define DEBUGINFO_NO				// Für Debug infos im code
-
-#define VERSION "0.8.0 Alpha"	// intro und menü
+#define VERSION "0.8.1 Alpha"	// intro und menü
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
