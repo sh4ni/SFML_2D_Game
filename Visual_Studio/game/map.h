@@ -1,18 +1,14 @@
 #ifndef MAP_H_
 #define MAP_H_
 
-
 #include <sstream>
-
-//#include "game.h"
-
 #include "player.h"
 #include "savegame.h"
 #include "schrift.h"
 #include <vector>
 #include "monster.h"
 #include "sounds.h"
-#include <vector>
+#include <ctime>
 
 class tp{
 	public:

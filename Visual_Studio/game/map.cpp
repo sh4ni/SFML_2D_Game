@@ -331,7 +331,18 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
-					if(Screen.saveToFile("screenshots/screenshot-"__DATE__"-.png")){
+
+					time_t rawtime;
+					struct tm * timeinfo;
+
+					time ( &rawtime );
+					timeinfo = localtime ( &rawtime );
+					
+					std::stringstream ss;
+					ss << "screenshots/screenshot_" << LevelId << "_" << timeinfo->tm_mday << "-" << (timeinfo->tm_mon+1) << "_" << timeinfo->tm_hour << "-" << timeinfo->tm_min << "-" <<timeinfo->tm_sec << ".png";
+					std::string screenshotFileName = ss.str();
+					
+					if(Screen.saveToFile(screenshotFileName)){
 						#ifdef DEBUGINFO
 							std::cout << " Screenshot gespeichert.. " << std::endl;	
 						#endif
