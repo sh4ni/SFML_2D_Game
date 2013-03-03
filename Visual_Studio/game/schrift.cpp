@@ -9,11 +9,11 @@ sf::Font Schrift::font;
 Schrift::Schrift(){
 	//Standard Konstruktor
 };
-Schrift::Schrift(int X, int Y, sf::String myText, int size, sf::Uint8 color){
+Schrift::Schrift(float X, float Y, sf::String myText, int size, sf::Uint8 color){
 	this->Init(X,Y,myText,size,color);
 }
 
-void Schrift::Init(int X, int Y, sf::String myText, int size, sf::Uint8 color){
+void Schrift::Init(float X, float Y, sf::String myText, int size, sf::Uint8 color){
 	if( !FontLoaded ){
 		if(!Schrift::font.loadFromFile(PATH"include/fonts/arial.ttf")){
 			throw "Error: Font not found.";
@@ -31,7 +31,7 @@ void Schrift::Init(int X, int Y, sf::String myText, int size, sf::Uint8 color){
 	printText.setCharacterSize(size);
 	
 	printText.setColor(sf::Color(color,color,color));
-	printText.setPosition((float)X,(float)Y);
+	printText.setPosition(X,Y);
 }
 
 void Schrift::Update(sf::String myText){

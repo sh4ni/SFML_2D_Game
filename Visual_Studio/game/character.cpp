@@ -10,9 +10,9 @@ Character::~Character(){
 void Character::Init(){
 	
 }
-void Character::Update(float ElapsedTime){
-
-}
+//void Character::Update(float ElapsedTime){
+//
+//}
 
 float Character::getPosX(void){
 	return this->PosX;

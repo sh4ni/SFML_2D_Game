@@ -35,7 +35,7 @@ public:
 	~Character();
 
 	void Init();
-	void Update(float ElapsedTime);
+	//void Update(float ElapsedTime);
 
 	// getter and settter
 	float getPosX(void);
@@ -77,7 +77,7 @@ public:
     
     void Render(sf::RenderWindow &Window, bool drawEnemy = true){
         if(drawEnemy) Window.draw(sprite);
-        for( int i=0; i<dmgText.size(); i++){
+        for( unsigned i=0; i<dmgText.size(); i++){
             dmgText[i].printText.setPosition(dmgText[i].printText.getPosition().x, dmgText[i].printText.getPosition().y-1 );
             dmgText[i].printText.setColor(sf::Color(dmgText[i].printText.getColor().r,dmgText[i].printText.getColor().g,dmgText[i].printText.getColor().b,dmgText[i].printText.getColor().a-4));
             dmgText[i].Render(Window);

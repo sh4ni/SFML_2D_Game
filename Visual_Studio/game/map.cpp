@@ -123,7 +123,7 @@ void Map::init(std::string LevelId){
 		for( int x=0; x<MapSizeX; x++){
 			if( TileMap[x][y].EnemyId ){
 				monsterList[i].setType(TileMap[x][y].EnemyId);
-				monsterList[i].setPosition(x*TILESIZE+16,y*TILESIZE);
+				monsterList[i].setPosition((float)(x*TILESIZE+16),(float)(y*TILESIZE));
                 monsterList[i].setColMap(CollisionMap);
                 monsterList[i].setMapSize( MapSizeX, MapSizeY );
 				i++;
@@ -149,8 +149,8 @@ void Map::init(std::string LevelId){
 		gameMusic::music.setLoop(true);
 	}
     
-    if( P1.getPosX() < 0) P1.setPosition(MapSizeX*TILESIZE, P1.getPosY());
-    if( P1.getPosY() < 0) P1.setPosition(P1.getPosX(), MapSizeY*TILESIZE);
+    if( P1.getPosX() < 0) P1.setPosition((float)(MapSizeX*TILESIZE), P1.getPosY());
+    if( P1.getPosY() < 0) P1.setPosition(P1.getPosX(), (float)(MapSizeY*TILESIZE));
 
 	initInterface();
 
@@ -166,11 +166,11 @@ void Map::init(std::string LevelId){
 	EXPBar.setPosition((float)(ConfigFile::currentConfigFile->width/2-55),(float)(ConfigFile::currentConfigFile->height-30));
 	EXPBar.setSize(sf::Vector2f(180.f,28.f));
 
-	DisplayHPText.Init(ConfigFile::currentConfigFile->width/2-53,ConfigFile::currentConfigFile->height-58,"HP",18,0);
-	DisplayEXPText.Init(ConfigFile::currentConfigFile->width/2-53,ConfigFile::currentConfigFile->height-27,"EXP",18,0);
-	DisplayHP.Init(ConfigFile::currentConfigFile->width/2+122,ConfigFile::currentConfigFile->height-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
-	DisplayEXP.Init(ConfigFile::currentConfigFile->width/2+123,ConfigFile::currentConfigFile->height-27,"Error",18,0);
-	DisplayLevel.Init(ConfigFile::currentConfigFile->width/2-128,ConfigFile::currentConfigFile->height-76,"Err",18,0);
+	DisplayHPText.Init((float)(ConfigFile::currentConfigFile->width/2-53),(float)(ConfigFile::currentConfigFile->height-58),"HP",18,0);
+	DisplayEXPText.Init((float)(ConfigFile::currentConfigFile->width/2-53),(float)(ConfigFile::currentConfigFile->height-27),"EXP",18,0);
+	DisplayHP.Init((float)(ConfigFile::currentConfigFile->width/2+122),(float)(ConfigFile::currentConfigFile->height-58),"Error",18,0);      // default strings, falls was im spiel nicht klappt
+	DisplayEXP.Init((float)(ConfigFile::currentConfigFile->width/2+123),(float)(ConfigFile::currentConfigFile->height-27),"Error",18,0);
+	DisplayLevel.Init((float)(ConfigFile::currentConfigFile->width/2-128),(float)(ConfigFile::currentConfigFile->height-76),"Err",18,0);
 #ifdef DEBUGINFO
 	DisplayFPS.Init(0,0,"FPS: Error",20);
 	DisplayKoord.Init(0,20,"X: Error Y: Error",20);
@@ -230,18 +230,18 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		CamX = (int)P1.getPosX();
 		CamY = (int)P1.getPosY();
         
-        // prŸfen ob spieler aus dem bildschirm lŠuft
+        // prüfen ob spieler aus dem bildschirm läuft
         if( CamX < 0 ){										// Links
-			return MapEvent(MapEvent::mapchange,nextMap[2],getNextLevelSize(nextMap[2]).x-1,CamY/TILESIZE);
+			return MapEvent(MapEvent::mapchange,nextMap[2],(float)(getNextLevelSize(nextMap[2]).x-1),(float)(CamY/TILESIZE));
 		}
         else if( CamX > (MapSizeX*TILESIZE)){				// Rechts
-			return MapEvent(MapEvent::mapchange,nextMap[3],0,CamY/TILESIZE);
+			return MapEvent(MapEvent::mapchange,nextMap[3],0.f,(float)(CamY/TILESIZE));
 		}
         if( CamY < -TILESIZE/2 ){							// Oben
-			return MapEvent(MapEvent::mapchange,nextMap[0],CamX/TILESIZE,getNextLevelSize(nextMap[0]).y-1);
+			return MapEvent(MapEvent::mapchange,nextMap[0],(float)(CamX/TILESIZE),(float)(getNextLevelSize(nextMap[0]).y-1));
 		}
         else if( CamY > ((MapSizeY*TILESIZE)-TILESIZE/2)){	// Unten
-			return MapEvent(MapEvent::mapchange,nextMap[1],CamX/TILESIZE,0);
+			return MapEvent(MapEvent::mapchange,nextMap[1],(float)(CamX/TILESIZE),0.f);
 		}
 
 		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell für die Koordinatenanzeige
@@ -264,7 +264,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			#ifdef DEBUGINFO
 				std::cout << "Lade Map: '" << TileMap[TileX][TileY].Teleport->Map << "' X: " << TileMap[TileX][TileY].Teleport->xDest << " Y: " << TileMap[TileX][TileY].Teleport->yDest << std::endl;
 			#endif
-			return MapEvent(MapEvent::mapchange,TileMap[TileX][TileY].Teleport->Map,TileMap[TileX][TileY].Teleport->xDest,TileMap[TileX][TileY].Teleport->yDest);
+			return MapEvent(MapEvent::mapchange,TileMap[TileX][TileY].Teleport->Map,(float)(TileMap[TileX][TileY].Teleport->xDest),(float)(TileMap[TileX][TileY].Teleport->yDest));
 		}
 
 		std::ostringstream PlayerSpeedText;
@@ -342,7 +342,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				else if(levelLoop.key.code == sf::Keyboard::F9){
 					Savegame::currentSaveGame->loadSavegame();
 				}
-                #ifdef DEBUGINFO
+#ifdef DEBUGINFO
 				else if(levelLoop.key.code == sf::Keyboard::E){         // ein paar debug keys
 					P1.increaseSpeed(0.1f);                             // E = schneller laufen
 				}                                                       // Q = langsamer laufen
@@ -374,7 +374,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 						ConfigFile::currentConfigFile->saveConfigFile();
 					}
 				}
-                #endif
+#endif
 			}
             else if(levelLoop.type == sf::Event::LostFocus){
 				#ifdef DEBUGINFO

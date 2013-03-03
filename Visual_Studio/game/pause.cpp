@@ -1,6 +1,6 @@
 #include "pause.h"
 
-/*
+/**
 Wenn die Pause gestartet wird,
 färbt sich der Bildschirm dunkel transparent.
 Der Spieler kann hier durch Eingaben das Spiel a) Speichern b) Laden c) Beenden
@@ -11,15 +11,13 @@ beendet wird oder fortgesetzt wird.
 
 bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 	//renderWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height, 32), WINDOWTITLE, sf::Style::Fullscreen);
-	int CenterX = (int)viewCamera.getCenter().x;    // pausemenŸ muss hier gegengerechnet werden,
-	int CenterY = (int)viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
+	float CenterX = viewCamera.getCenter().x;    // pausemenŸ muss hier gegengerechnet werden,
+	float CenterY = viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
                                                     // nicht Ÿbereinstimmen!
 	// Hintergrund Box
-	
-	
 	sf::RectangleShape Background(sf::Vector2f((float)ConfigFile::currentConfigFile->width, (float)ConfigFile::currentConfigFile->height));
     Background.setFillColor(sf::Color(0, 0, 0,100));
-	Background.setPosition((float)CenterX-(float)ConfigFile::currentConfigFile->width/2.f,(float)CenterY-(float)ConfigFile::currentConfigFile->height/2.f);
+	Background.setPosition(CenterX-(float)ConfigFile::currentConfigFile->width/2.f,CenterY-(float)ConfigFile::currentConfigFile->height/2.f);
 
 	// Pause Schriftzug
 	Schrift Pause(CenterX,CenterY-100,"Paused",50);
@@ -32,15 +30,15 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View viewCamera){
 	}
 	sf::Sprite Logo(LogoImage);
 	Logo.setOrigin((float)LogoImage.getSize().x/2.f,0);
-	Logo.setPosition((float)CenterX,(float)CenterY-300.f);
+	Logo.setPosition(CenterX,CenterY-300.f);
 
 	// Hilfetext
 	#ifdef DEBUGINFO
-		Schrift HilfeTasten(CenterX-50,CenterY,"ESC:\n1\n2\n9\n0\nF6\nF9:\nSpace:",20);
-		Schrift HilfeText(CenterX+70,CenterY,"Continue\nGrow EXP\nGet Damage\nEnable Player Input\nBlock Player Input\nSave\nLoad\nExit Game",20);
+		Schrift HilfeTasten(CenterX-50.f,CenterY,"ESC:\n1\n2\n9\n0\nF6\nF9:\nSpace:",20);
+		Schrift HilfeText(CenterX+70.f,CenterY,"Continue\nGrow EXP\nGet Damage\nEnable Player Input\nBlock Player Input\nSave\nLoad\nExit Game",20);
 	#else
-		Schrift HilfeTasten(CenterX-50,CenterY,"ESC:\nF6\nF9:\nSpace:",20);
-		Schrift HilfeText(CenterX+70,CenterY,"Continue\nSave\nLoad\nExit Game",20);
+		Schrift HilfeTasten(CenterX-50.f,CenterY,"ESC:\nF6\nF9:\nSpace:",20);
+		Schrift HilfeText(CenterX+70.f,CenterY,"Continue\nSave\nLoad\nExit Game",20);
 	#endif
 	HilfeTasten.printText.setOrigin(HilfeTasten.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
 	HilfeText.printText.setOrigin(HilfeText.printText.getGlobalBounds().width/2.f+1.f,0);		// Textbox zentrieren
