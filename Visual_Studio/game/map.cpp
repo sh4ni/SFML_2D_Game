@@ -29,7 +29,7 @@ void Map::init(std::string LevelId){
     this->nextMap[2] = LevelId;
     this->nextMap[3] = LevelId;
 	
-	this->FileName = PATH"include/map/" + LevelId + ".txt";
+	std::string FileName = PATH"include/map/" + LevelId + ".txt";
 
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
@@ -39,6 +39,23 @@ void Map::init(std::string LevelId){
 	if( openfile.is_open() ){
 		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme >> this->mapMusic >> this->MapLevelMin >> this->MapLevelMax;
 		
+        std::vector<int> CollisionInfo;
+        
+        std::string ThemeFileName = PATH"include/texture/world/" + mapTheme + ".txt";   // tiles mit kollision werden aus textdatei geladen.
+        std::ifstream openThemeFile(ThemeFileName.c_str());
+        if( openThemeFile.is_open()){
+            while(!openThemeFile.eof()){
+                int temp;
+                openThemeFile >> temp;
+                CollisionInfo.push_back(temp);
+            }
+            std::ifstream closefile(ThemeFileName.c_str());
+        }
+        else {
+            throw "Error: " + ThemeFileName + " not found.";
+        }
+        std::cout << mapTheme << " has " << CollisionInfo.size() << " collisionboxes" << std::endl;
+    
 		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.
 		for ( int i = 0 ; i < MapSizeX ; i++ ){		// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
 			TileMap[i] = new TilePart[MapSizeY];
@@ -48,7 +65,6 @@ void Map::init(std::string LevelId){
 		for ( int i = 0 ; i < MapSizeX ; i++ ){
 			CollisionMap[i] = new sf::IntRect*[MapSizeY];
 		}
-
 
 		while( LoadCounterY < MapSizeY ){
 			openfile >> TileType;
@@ -60,7 +76,21 @@ void Map::init(std::string LevelId){
 			TileMap[LoadCounterX][LoadCounterY].EnemyId = 0;
 			TileMap[LoadCounterX][LoadCounterY].Teleport = 0;
 			TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect);
-			switch( TileType ){		// alle blöcke OHNE kollision!
+            
+            bool foundCollision = false;
+            for( int i=0; i<CollisionInfo.size(); i++){
+                if(CollisionInfo[i] == TileType) {
+                    foundCollision = true;
+                }
+            }
+            if(foundCollision){
+				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  // keine kollision
+            }
+            else {
+                CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
+            }
+            
+			/*switch( TileType ){		// alte "hardcode" datei
 			case  0: case  1: case  2: case  3: case  4: case  5: case  6: case  7: case  8: case  9:
 			case 10: case 12: case 13: case 14: case 15: case 16: case 17: case 19:
 			case 20: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
@@ -73,7 +103,7 @@ void Map::init(std::string LevelId){
 			default:        // defaultwert: alle anderen blšcke kriegen eine kollision!
                     CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
                     break;
-			}
+			}*/
 			LoadCounterX++;
 			if( LoadCounterX >= MapSizeX ){
 				LoadCounterX = 0;
@@ -83,19 +113,19 @@ void Map::init(std::string LevelId){
 		while( !openfile.eof() ){
 			int idTemp, xTemp, yTemp;
 			openfile >> idTemp >> xTemp >> yTemp;
-			if( idTemp == 0 ){
+            if( idTemp == 1){
+                openfile >> nextMap[xTemp]; // xTemp = Direction! // 0 = oben // 1 = unten // 2 = links // 3 = rechts
+            }
+			else if( idTemp == 2 ){
 				openfile >> TileMap[xTemp][yTemp].EnemyId;
 				//std::cout << "ENEMY: " << TileMap[xTemp][yTemp].EnemyId << std::endl;
 				monsterCounter++;
 			}
-			else if( idTemp == 1){
+			else if( idTemp == 3){
 				TileMap[xTemp][yTemp].Teleport = new tp;
 				openfile >> TileMap[xTemp][yTemp].Teleport->Map >> TileMap[xTemp][yTemp].Teleport->xDest >> TileMap[xTemp][yTemp].Teleport->yDest;
 				//std::cout << "TELEPORTER: " << TileMap[xTemp][yTemp].Teleport->Map << " " << TileMap[xTemp][yTemp].Teleport->xDest << " " << TileMap[xTemp][yTemp].Teleport->yDest << std::endl;
 			}
-            else if( idTemp == 2){
-                openfile >> nextMap[xTemp]; // xTemp = Direction! // 0 = oben // 1 = unten // 2 = links // 3 = rechts
-            }
 		}
 
 

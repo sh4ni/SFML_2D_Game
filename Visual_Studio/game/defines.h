@@ -102,7 +102,13 @@
 #endif
 
 // SaveGame
-#define SAVEGAME "savegame.bin"
+#ifdef DEBUGINFO
+    #define SAVEGAME "savegame_debug.bin"
+    #define CHECKSUM 0
+#else
+    #define SAVEGAME "savegame.bin"
+    #define CHECKSUM 4815162342
+#endif
 #define DEFAULT_HEALTH 100
 #define DEFAULT_LVL 1
 #define DEFAULT_EXP 0
@@ -111,7 +117,7 @@
 #define DEFAULT_LEVEL "map1"
 #define DEFAULT_POSX 560
 #define DEFAULT_POSY 288
-#define CHECKSUM 4815162342
+
 
 
 #endif

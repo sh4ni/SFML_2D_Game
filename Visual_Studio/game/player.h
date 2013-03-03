@@ -115,6 +115,7 @@ public:
             this->pExpMax = (int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
             this->AttackPower = (int)(BASEDMG*pow(DMGMULTIPLICATOR,(float)(this->Lvl-1)));
 			this->Health = this->pHealthMax;
+            damageText(this->Lvl,'l');
             #ifdef DEBUGINFO
                 std::cout << "LEVEL UP: " << this->Lvl << std::endl;
             #endif

@@ -63,8 +63,6 @@ private:
 	int TileType;
 	TilePart** TileMap;
 	sf::IntRect*** CollisionMap;
-
-	std::string FileName;
 	
 	sf::Clock clock;
 

@@ -65,12 +65,17 @@ public:
         Schrift E1;
 		std::ostringstream dmgString;
         if( type == 'e') dmgString << "XP +";
+        else if( type == 'l') dmgString << "LEVEL ";
 		dmgString << damage;
         E1.Init(PosX,PosY,dmgString.str());
         E1.printText.setStyle(sf::Text::Bold);
-        if( type == 'm') E1.printText.setColor(sf::Color(255,255,0));
-        else if( type == 'p') E1.printText.setColor(sf::Color(255,0,0));
-        else if( type == 'e') E1.printText.setColor(sf::Color(255,0,255));
+        if( type == 'm') E1.printText.setColor(sf::Color(0xFF,0xFF,0x00));
+        else if( type == 'p') E1.printText.setColor(sf::Color(0xFF,0x00,0x00));
+        else if( type == 'e') E1.printText.setColor(sf::Color(0xFF,0x00,0xFF));
+        else if( type == 'l'){
+            E1.printText.setCharacterSize(100);
+            E1.printText.setColor(sf::Color(0xFF,0x88,0x00));
+        }
         E1.printText.setOrigin(E1.printText.getGlobalBounds().width/2, 0);
         dmgText.push_back(E1);
     }
