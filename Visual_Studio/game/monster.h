@@ -47,7 +47,7 @@ public:
     }
     
     void Render(sf::RenderWindow &Window){
-        if(isActive) Character::Render(Window);
+        Character::Render(Window, isActive);
     }
 };
 

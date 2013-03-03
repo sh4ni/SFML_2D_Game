@@ -64,19 +64,22 @@ public:
     void damageText(int damage, char type){
         Schrift E1;
 		std::ostringstream dmgString;
+        if( type == 'e') dmgString << "XP +";
 		dmgString << damage;
         E1.Init(PosX,PosY,dmgString.str());
-        if( type == 'p') E1.printText.setColor(sf::Color(255,0,0));
+        E1.printText.setStyle(sf::Text::Bold);
+        if( type == 'm') E1.printText.setColor(sf::Color(255,255,0));
+        else if( type == 'p') E1.printText.setColor(sf::Color(255,0,0));
         else if( type == 'e') E1.printText.setColor(sf::Color(255,0,255));
         E1.printText.setOrigin(E1.printText.getGlobalBounds().width/2, 0);
         dmgText.push_back(E1);
     }
     
-    void Render(sf::RenderWindow &Window){
-        Window.draw(sprite);
+    void Render(sf::RenderWindow &Window, bool drawEnemy = true){
+        if(drawEnemy) Window.draw(sprite);
         for( int i=0; i<dmgText.size(); i++){
             dmgText[i].printText.setPosition(dmgText[i].printText.getPosition().x, dmgText[i].printText.getPosition().y-1 );
-            dmgText[i].printText.setColor(sf::Color(255,255,255,dmgText[i].printText.getColor().a-4));
+            dmgText[i].printText.setColor(sf::Color(dmgText[i].printText.getColor().r,dmgText[i].printText.getColor().g,dmgText[i].printText.getColor().b,dmgText[i].printText.getColor().a-4));
             dmgText[i].Render(Window);
             if( dmgText[i].printText.getColor().a < 10 ){
                 dmgText.erase(dmgText.begin()+i);

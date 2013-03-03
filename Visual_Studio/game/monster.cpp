@@ -6,7 +6,7 @@ Monster::Monster(){
 	this->isActive = true;
     this->Animation = 0;
     this->isHit = false;
-    this->hitTimer = 0;
+    this->hitTimer = 0.f;
 };
 Monster::~Monster(){
 
@@ -237,6 +237,7 @@ void Monster::Update(float ElapsedTime){
             }
             else Speed = 0.1f;
             
+            bool isOnY = false;
             if( (y < -MOVETOLLERANCE) && !blockUp ){
                 walking = true;
 				PosY -= (Speed*ElapsedTime);
@@ -249,6 +250,7 @@ void Monster::Update(float ElapsedTime){
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
                 blockUp = false;
 			}
+            else isOnY = true;
             if ( (x < -MOVETOLLERANCE) && !blockLeft ){
                 walking = true;
 				PosX -= (Speed*ElapsedTime);
@@ -261,6 +263,9 @@ void Monster::Update(float ElapsedTime){
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
                 blockLeft = false;
 			}
+            else if(isOnY){
+                Map::currentMap->getPlayer()->playerDamage(this->AttackPower, this->Lvl);
+            }
 		}
         
         if( walking ){      // nur animieren wenn spieler lŠuft
@@ -269,9 +274,9 @@ void Monster::Update(float ElapsedTime){
         }
         
         if(isHit){
-            hitTimer += ElapsedTime/10;
-            if( hitTimer > 8){
-                hitTimer = 0;
+            hitTimer += ElapsedTime/10.f;
+            if( hitTimer > 8.f){
+                hitTimer = 0.f;
                 isHit = false;
             }
         }
@@ -313,8 +318,7 @@ void Monster::damageMe( int damage, int level ){
     this->Health -= damage;
     if( this->Health < 0 ){
         isActive = false;
-        Map::currentMap->getPlayer()->damageText(100,'e');
-        Map::currentMap->getPlayer()->setExp(this->exp);
+        Map::currentMap->getPlayer()->playerExp(this->exp,this->Lvl);
         hitBox.left = 0;
         hitBox.top = 0;
         hitBox.width = 0;

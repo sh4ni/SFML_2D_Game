@@ -16,6 +16,8 @@ private:
 	bool isAttacking;
 	bool canAttack;
 	char lookDirection;
+    bool isInvincible;
+    float invincibleTimer;
 	
 	int HealTickRate;
 	int pHealthMax;
@@ -35,7 +37,7 @@ public:
     void Init (int controller=0);
 	void Update	(float ElapsedTime);
 	void Render(sf::RenderWindow &Window){
-		Window.draw(sprite);
+        Character::Render(Window);
 		if(isAttacking){
 			Window.draw(weaponSprite);
 		}
@@ -77,16 +79,19 @@ public:
     }
     void playerDamage( int damage, int level ){
         ResetCooldown();
-		int levelDif = level-this->Lvl;
-        damage += (levelDif*(level/10));
-        if ( damage <= 0 ){
-            damage = 1;
-        }
-        damageText(damage,'p');
-        this->Health -= damage;
-        if( this->Health < 0 ){
-            this->Health = 0;
-			//std::cout << "Player will be die!" << std::endl;
+        if(!isInvincible){
+            isInvincible = true;
+            int levelDif = level-this->Lvl;
+            damage += (levelDif*(level/10));
+            if ( damage <= 0 ){
+                damage = 1;
+            }
+            damageText(damage,'p');
+            this->Health -= damage;
+            if( this->Health < 0 ){
+                this->Health = 0;
+                //std::cout << "Player will be die!" << std::endl;
+            }
         }
     }
     void playerHeal( int heal ){
@@ -101,6 +106,7 @@ public:
         if ( exp <= 0 ){
             exp = 1;
         }
+        damageText(exp,'e');
         this->pExp += exp;
         if( this->pExp >= this->pExpMax ){       // Hier levelup!
             this->pExp -= this->pExpMax;

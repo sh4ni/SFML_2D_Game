@@ -14,6 +14,9 @@ void Player::Init(int controller){
 	this->pGender = Savegame::currentSaveGame->pGender;
 	this->Name = Savegame::currentSaveGame->pName;
 	this->LevelId = Savegame::currentSaveGame->mLevelId;
+    this->isInvincible = false;
+    this->invincibleTimer = 0.f;
+    
 	this->pHealthMax = (int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
 	this->pExpMax = (int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
     this->AttackPower = (int)(BASEDMG*pow(DMGMULTIPLICATOR,(float)(this->Lvl-1)));
@@ -316,6 +319,13 @@ void Player::Update(float ElapsedTime){
 		//std::cout << "x: " << weaponDmgBox.left << " y: " << weaponDmgBox.top << " b: " << weaponDmgBox.width << " h: " << weaponDmgBox.height << std::endl;
 	}
 
+    if(isInvincible){
+        invincibleTimer += ElapsedTime/10.f;
+        if( invincibleTimer > 64.f){
+            invincibleTimer = 0.f;
+            isInvincible = false;
+        }
+    }
 
 	sprite.setPosition(PosX,PosY);
 }
