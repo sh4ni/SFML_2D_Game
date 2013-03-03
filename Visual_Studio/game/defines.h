@@ -11,7 +11,7 @@
 
 #define DEBUGINFO				// Für Debug infos im code
 
-#define VERSION "0.6.9 Alpha"	// intro und menü
+#define VERSION "0.8.0 Alpha"	// intro und menü
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
@@ -55,7 +55,7 @@
 // used in monster.cpp
 #define HOLDTIME 5.f
 #define MOVETIME 0.5f
-#define MOVETOLLERANCE 4
+#define MOVETOLLERANCE (TILESIZE/2)
 #define DETECTIONRADIUS 5
 #define LOSTRADIUS 20
 
