@@ -1,6 +1,10 @@
-ToDo vor Featurefreeze
+﻿ToDo vor Featurefreeze
 . player: bei levelup neues level anzeigen (k)
 . monster: holdtime und movetime mit einem zufallswert versehen
+
+ToDo vor Technikerbörse
+! Spezielle Maps mit vielen Gegnern
+  Schriftzug IAV1113 aus Gras
 
 ToDo nach Projektabgabe
 ! Map Loader: tiles mit kollision aus datei auslesen (k)

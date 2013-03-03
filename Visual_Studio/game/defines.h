@@ -3,8 +3,13 @@
 
 #if defined(_WIN32) || defined(__WIN32__)
 	#define SYS_WINDOWS
-#elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh)
+#elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh) 
     #define SYS_MACOS
+#elif defined(linux) || defined(__linux)
+	#define SYS_LINUX
+#endif
+
+#ifdef DEBUG
 	#define DEBUGINFO	// Für Debug infos im code
 #endif
 

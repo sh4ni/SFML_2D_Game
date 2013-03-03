@@ -326,7 +326,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
-				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
+				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.key.code == sf::Keyboard::P || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
 					return MapEvent(MapEvent::pause);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
