@@ -13,9 +13,6 @@ void Character::Init(){
 void Character::Update(float ElapsedTime){
 
 }
-void Character::Render(sf::RenderWindow &Window){
-	Window.draw(sprite);
-}
 
 float Character::getPosX(void){
 	return this->PosX;

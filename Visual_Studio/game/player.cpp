@@ -16,6 +16,7 @@ void Player::Init(int controller){
 	this->LevelId = Savegame::currentSaveGame->mLevelId;
 	this->pHealthMax = (int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
 	this->pExpMax = (int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
+    this->AttackPower = (int)(BASEDMG*pow(DMGMULTIPLICATOR,(float)(this->Lvl-1)));
 
 	this->controller = controller;
 	this->blockControl = false;
@@ -301,11 +302,14 @@ void Player::Update(float ElapsedTime){
 
 	if(isAttacking){
 		weaponDmgBox = weaponSprite.getGlobalBounds();
+        //weaponDmgBox.top += TILESIZE/2;
 		for( int i=0; i < Map::currentMap->getMonsterCounter(); i++){
 			Monster* mon = Map::currentMap->getMonsterList();
 			if( mon[i].getHitBox().intersects(weaponDmgBox) ){
 				isAttacking = false;
 				std::cout << "HIT: " << i << std::endl;
+                mon[i].damageMe(AttackPower,this->Lvl);
+                mon[i].targetPlayer();
 
 			}
 		}
