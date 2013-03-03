@@ -171,9 +171,11 @@ void Map::init(std::string LevelId){
 	DisplayHP.Init(ConfigFile::currentConfigFile->width/2+122,ConfigFile::currentConfigFile->height-58,"Error",18,0);      // default strings, falls was im spiel nicht klappt
 	DisplayEXP.Init(ConfigFile::currentConfigFile->width/2+123,ConfigFile::currentConfigFile->height-27,"Error",18,0);
 	DisplayLevel.Init(ConfigFile::currentConfigFile->width/2-128,ConfigFile::currentConfigFile->height-76,"Err",18,0);
+#ifdef DEBUGINFO
 	DisplayFPS.Init(0,0,"FPS: Error",20);
 	DisplayKoord.Init(0,20,"X: Error Y: Error",20);
 	DisplaySpeed.Init(0,40,"Speed: Error",20);
+#endif
 
 	// Die Map wurde erfolgreich geladen, also kann gespeichert werden
 	//Savegame::currentSaveGame->saveSavegame();
@@ -334,6 +336,12 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 						#endif
 					}
 				}
+				else if(levelLoop.key.code == sf::Keyboard::F6){
+					Savegame::currentSaveGame->saveSavegame();
+                }
+				else if(levelLoop.key.code == sf::Keyboard::F9){
+					Savegame::currentSaveGame->loadSavegame();
+				}
                 #ifdef DEBUGINFO
 				else if(levelLoop.key.code == sf::Keyboard::E){         // ein paar debug keys
 					P1.increaseSpeed(0.1f);                             // E = schneller laufen
@@ -353,12 +361,6 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				else if(levelLoop.key.code == sf::Keyboard::Num9){
                     P1.setBlockControl(false);
                 }
-				else if(levelLoop.key.code == sf::Keyboard::F6){
-					Savegame::currentSaveGame->saveSavegame();
-                }
-				else if(levelLoop.key.code == sf::Keyboard::F9){
-					Savegame::currentSaveGame->loadSavegame();
-				}
 				else if(levelLoop.key.code == sf::Keyboard::F){
 					if(ConfigFile::currentConfigFile->winmode == "window"){
 						renderWindow.create(sf::VideoMode(ConfigFile::currentConfigFile->width, ConfigFile::currentConfigFile->height), WINDOWTITLE, sf::Style::Fullscreen);
@@ -422,9 +424,11 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		DisplayEXP.Render(renderWindow);        // exp Anzeige
 		DisplayLevel.Render(renderWindow);      // level Anzeige
 
+#ifdef DEBUGINFO
 		DisplayFPS.Render(renderWindow);        // FPS Anzeige
 		DisplayKoord.Render(renderWindow);      // Spielerkoordinaten Anzeige
 		DisplaySpeed.Render(renderWindow);      // Geschwindigkeit des Players
+#endif
 
 		renderWindow.display();
 		
