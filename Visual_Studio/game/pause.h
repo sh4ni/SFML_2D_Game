@@ -8,7 +8,7 @@
 
 class Pause{
 public:
-	bool Show(sf::RenderWindow& renderWindow, sf::View viewCamera);
+	bool Show(sf::RenderWindow& renderWindow, sf::View& viewCamera);
 };
 
 #endif

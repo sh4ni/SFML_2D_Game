@@ -145,7 +145,7 @@ public:
 	void init(std::string LevelId);
 	void destory();
 
-	MapEvent Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera);
+	MapEvent Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View& viewCamera);
 	
 	sf::IntRect getRect(int x, int y);
 	

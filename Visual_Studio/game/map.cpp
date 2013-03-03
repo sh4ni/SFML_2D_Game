@@ -208,7 +208,8 @@ Map::~Map(){
     destory();
 }
 
-MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View viewCamera){
+MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View& viewCamera){
+	//viewCamera.setSize((float)(ConfigFile::currentConfigFile->width/2),(float)(ConfigFile::currentConfigFile->height/2));
 	while( 1+3+3==7 ){
 		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){

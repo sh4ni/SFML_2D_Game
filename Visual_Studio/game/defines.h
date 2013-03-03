@@ -9,7 +9,7 @@
 
 #define FPS 60U
 
-#define DEBUGINFO				// Für Debug infos im code
+#define DEBUGINFO_NO				// Für Debug infos im code
 
 #define VERSION "0.8.0 Alpha"	// intro und menü
 
