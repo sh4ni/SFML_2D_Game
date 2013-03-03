@@ -38,7 +38,7 @@ void Monster::Init(){
             break;
         case 2:
             this->Name = "Red Slime";
-            tex.insert(0,PATH"include/texture/monster/entity_slime_reddish.png");
+            tex.insert(0,PATH"include/texture/monster/entity_slime_red.png");
             break;
         case 3:
             this->Name = "Blue Slime";

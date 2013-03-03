@@ -12,8 +12,8 @@ void Game::Init(void)
 	ConfigFile::currentConfigFile->loadConfigFile();
 	
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
-	if(!system("mkdir screenshots"))
-		throw "Failed to create the screenshot folder!";
+	/*if(!system("mkdir screenshots"))
+		throw "Failed to create the screenshot folder!";*/
 
 	if(Savegame::currentSaveGame->loadSavegame(true)){
 		Game::Start();

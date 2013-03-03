@@ -21,7 +21,7 @@ int main(void){
 		
 	}
 	catch(const char * str){
-		std::cout << str << std::endl;
+		std::cout << "sorry, an error occurs " << str << std::endl;
 		system("pause");
 	}
 	catch(bad_alloc& err){
