@@ -7,6 +7,8 @@ Monster::Monster(){
     this->Animation = 0;
     this->isHit = false;
     this->hitTimer = 0.f;
+    this->dmgTimer = 0.f;
+    this->canAttack = true;
 };
 Monster::~Monster(){
 
@@ -23,12 +25,12 @@ void Monster::Init(){
     int maxLevel = Map::currentMap->getMonsterLevel().y;
     
     this->Lvl = (rand() % maxLevel)+minLevel;
-    this->AttackPower = (int)(MONSTERBASEDMG*pow(MONSTERDMGMULTIPLICATOR,(float)(this->Lvl-1)));
-    this->exp = (int)(MONSTERBASEEXP*pow(MONSTEREXPMULTIPLICATOR,(float)(this->Lvl-1)));
+    this->AttackPower = FMONDMG;//(int)(MONSTERBASEDMG*pow(MONSTERDMGMULTIPLICATOR,(float)(this->Lvl-1)));
+	this->Health = FMONHP;//(int)(MONSTERBASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
+    this->exp = FMONEXP;//(int)(MONSTERBASEEXP*pow(MONSTEREXPMULTIPLICATOR,(float)(this->Lvl-1)));
 
 	sf::String tex;
 	//std::cout << monsterType << std::endl;
-	this->Health = (int)(MONSTERBASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
     this->isAggressiv = true;
     switch ( monsterType ){
         case 1:
@@ -263,8 +265,9 @@ void Monster::Update(float ElapsedTime){
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
                 blockLeft = false;
 			}
-            else if(isOnY){
+            else if(isOnY && canAttack){
                 Map::currentMap->getPlayer()->playerDamage(this->AttackPower, this->Lvl);
+                canAttack = false;
             }
 		}
         
@@ -278,6 +281,14 @@ void Monster::Update(float ElapsedTime){
             if( hitTimer > 8.f){
                 hitTimer = 0.f;
                 isHit = false;
+            }
+        }
+        
+        if(!canAttack){
+            dmgTimer += ElapsedTime/10.f;
+            if( dmgTimer > 64.f){
+                dmgTimer = 0.f;
+                canAttack = true;
             }
         }
 
@@ -309,14 +320,10 @@ void Monster::Update(float ElapsedTime){
 
 void Monster::damageMe( int damage, int level ){
     isHit = true;
-    int levelDif = level-this->Lvl;
-    damage += (levelDif*(level/10));
-    if ( damage <= 0 ){
-        damage = 1;
-    }
+    damage = calcDamage(damage, level);
     damageText(damage,'m');
     this->Health -= damage;
-    if( this->Health < 0 ){
+    if( this->Health <= 0 ){
         isActive = false;
         Map::currentMap->getPlayer()->playerExp(this->exp,this->Lvl);
         hitBox.left = 0;

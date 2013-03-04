@@ -23,7 +23,7 @@ protected:
 
 	int Health;
 	int AttackPower;
-	int Lvl;
+	char Lvl;
 
 	// not in use yet
 	//int strenght;
@@ -60,6 +60,24 @@ public:
 	int getLvl(void);
 
 	void setColMap(sf::IntRect***& ColMap);
+    
+    int calcDamage(int damage,int level){
+        int levelDif = level-this->Lvl;
+        float multi = 1.f;
+        if(levelDif > 0){   // Gegner hat einen höhreren Level
+            if(levelDif >10) levelDif = 10;
+            multi += (float)levelDif*0.025f;
+        }
+        else if(levelDif < 0){ // Gegner hat einen niedrigeren Level
+            if(levelDif < -10) levelDif = -10;
+            multi += (float)levelDif*0.1f;
+        }
+        damage = (int)((float)damage * multi);
+        if ( damage <= 0 ){
+            damage = 1;
+        }
+        return damage;
+    }
     
     void damageText(int damage, char type){
         Schrift E1;

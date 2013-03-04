@@ -2,6 +2,7 @@ ToDo vor Featurefreeze
 . monster: holdtime und movetime mit einem zufallswert versehen
 
 ToDo vor Technikerbörse
+- 2x Zoom im Spiel
 . Texturen für "im Haus" (k)
 ! Spezielle Maps mit vielen Gegnern
 - Schriftzug IAV1113 aus Gras
@@ -12,6 +13,7 @@ Improvements und Bugfixes vor Technikerbörse
 - bei teleport auf nicht vorhandene map wird diese ins savegame eingetragen und eine exeption wird geworfen -> spielstand unbrauchbar bis map angelegt wird (f)
 . konsolen textausgaben wenn DEBUGINFO nicht definiert ist
 . controller-axen im menü verbessern (k)
+. bei fullscreen - höchste auflösung
 
 ToDo nach Projektabgabe
 - Map Editor - perl script

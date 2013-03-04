@@ -17,7 +17,7 @@ private:
 	bool canAttack;
 	char lookDirection;
     bool isInvincible;
-    float invincibleTimer;
+    //float invincibleTimer;
 	
 	int HealTickRate;
 	int pHealthMax;
@@ -80,17 +80,12 @@ public:
     void playerDamage( int damage, int level ){
         ResetCooldown();
         if(!isInvincible){
-            isInvincible = true;
-            int levelDif = level-this->Lvl;
-            damage += (levelDif*(level/10));
-            if ( damage <= 0 ){
-                damage = 1;
-            }
+            //isInvincible = true;
+            damage = calcDamage(damage, level);
             damageText(damage,'p');
             this->Health -= damage;
-            if( this->Health < 0 ){
+            if( this->Health <= 0 ){
                 this->Health = 0;
-                //std::cout << "Player will be die!" << std::endl;
             }
         }
     }
@@ -101,24 +96,35 @@ public:
         }
     }
     void playerExp( int exp, int level ){
-        int levelDif = level-this->Lvl;
-        exp += levelDif*(level/2);
-        if ( exp <= 0 ){
-            exp = 1;
-        }
-        damageText(exp,'e');
-        this->pExp += exp;
-        if( this->pExp >= this->pExpMax ){       // Hier levelup!
-            this->pExp -= this->pExpMax;
-            this->Lvl++;
-            this->pHealthMax = (int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
-            this->pExpMax = (int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
-            this->AttackPower = (int)(BASEDMG*pow(DMGMULTIPLICATOR,(float)(this->Lvl-1)));
-			this->Health = this->pHealthMax;
-            damageText(this->Lvl,'l');
-            #ifdef DEBUGINFO
-                std::cout << "LEVEL UP: " << this->Lvl << std::endl;
-            #endif
+        if( this->Lvl < MAXLEVEL ){
+            int levelDif = level-this->Lvl;
+            
+            float multi = 1.f;
+            if(levelDif > 0){   // Gegner hat einen höhreren Level
+                if(levelDif >10) levelDif = 10;
+                multi += (float)levelDif*0.005f;
+            }
+            else if(levelDif < 0){  // Gegner hat einen niedrigeren Level
+                if(levelDif < -10) levelDif = -10;
+                multi += (float)levelDif*0.1f;
+            }
+            exp = (int)((float)exp * multi);
+
+            /*exp += levelDif*(level/2);
+            if ( exp <= 0 ){
+                exp = 1;
+            }*/
+            damageText(exp,'e');
+            this->pExp += exp;
+            if( this->pExp >= this->pExpMax ){       // Hier levelup!
+                this->pExp -= this->pExpMax;
+                this->Lvl++;
+                this->pHealthMax = FHPMAX;//(int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
+                this->pExpMax = FEXPMAX;//(int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
+                this->AttackPower = FDMG;//(int)(BASEDMG*pow(DMGMULTIPLICATOR,(float)(this->Lvl-1)));
+                this->Health = this->pHealthMax;
+                damageText(this->Lvl,'l');
+            }
         }
     }
 	void setBlockControl(bool block=false){

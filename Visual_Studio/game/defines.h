@@ -41,7 +41,16 @@
 // used in map.cpp and player.cpp
 #define TILESIZE 32
 
+// Formeln fŸr Schaden, Hp, Exp von Monstern und Spielern
+#define FDMG (int)( 25.f*pow(1.10776f,(float)(this->Lvl-5)) )
+#define FHPMAX (int)( 50.f*pow(1.2023913f,(float)(this->Lvl-5)) )
+#define FEXPMAX (int)( 250.f*pow(1.1424142f,(float)(this->Lvl-5)) )
+#define FMONDMG (int)( 5.f*pow(1.12496f,(float)(this->Lvl-5)) )
+#define FMONHP (int)( 50.f*pow(1.124953f,(float)(this->Lvl-5)) )
+#define FMONEXP (int)( 10.f*pow(1.08543f,(float)(this->Lvl-5)) )
+
 // used in player.cpp
+#define MAXLEVEL 50
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
 #define ANIMATIONSPEED 2.8f         // Mehr = langsamere Animation
@@ -49,12 +58,12 @@
 #define IDLEHEAL 85					// 
 #define COOLDOWN 200
 
-#define BASEHEALTH 100.f
+/*#define BASEHEALTH 100.f
 #define HEALTHMULTIPLICATOR 1.1f
 #define BASEDMG 15
 #define DMGMULTIPLICATOR 1.1f
 #define BASEEXP 50.f
-#define EXPMULTIPLICATOR 1.15f
+#define EXPMULTIPLICATOR 1.15f*/
 
 // used in monster.cpp
 #define HOLDTIME 5.f
@@ -63,11 +72,11 @@
 #define DETECTIONRADIUS 5
 #define LOSTRADIUS 20
 
-#define MONSTERBASEHEALTH 50
+/*#define MONSTERBASEHEALTH 50
 #define MONSTERBASEDMG 5
 #define MONSTERDMGMULTIPLICATOR 1.1f
 #define MONSTERBASEEXP 5.f
-#define MONSTEREXPMULTIPLICATOR 1.125f
+#define MONSTEREXPMULTIPLICATOR 1.125f*/
 
 // ConfigFile
 #define SETTINGS "settings.cfg"
@@ -109,7 +118,7 @@
     #define SAVEGAME "savegame.bin"
     #define CHECKSUM 4815162342
 #endif
-#define DEFAULT_HEALTH 100
+#define DEFAULT_HEALTH 23
 #define DEFAULT_LVL 1
 #define DEFAULT_EXP 0
 #define DEFAULT_F_NAME "Ashley"

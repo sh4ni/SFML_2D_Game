@@ -26,6 +26,8 @@ private:
 	clock_t end;
 
     float hitTimer;
+    float dmgTimer;
+    bool canAttack;
 
 public:
 	Monster();
