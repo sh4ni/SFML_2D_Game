@@ -78,7 +78,7 @@ void Map::init(std::string LevelId){
 			TileMap[LoadCounterX][LoadCounterY].TexturePart = new sf::Sprite(LevelTexture,subRect);
             
             bool foundCollision = false;
-            for( int i=0; i<CollisionInfo.size(); i++){
+            for( unsigned i=0; i<CollisionInfo.size(); i++){
                 if(CollisionInfo[i] == TileType) {
                     foundCollision = true;
                 }
