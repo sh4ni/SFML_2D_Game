@@ -225,15 +225,18 @@ void Player::Update(float ElapsedTime){
 			blockLeft = false;
 			walking = true;
 		}
-	}
-
-	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && canAttack ){
-		canAttack = false;
-		isAttacking = true;
-	}
-	if( !(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && !canAttack ){
-		canAttack = true;
-		isAttacking = false;
+        if( (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) ||
+             sf::Joystick::isButtonPressed(controller,ConfigFile::currentConfigFile->controller_A))
+           && canAttack ){
+            canAttack = false;
+            isAttacking = true;
+        }
+        else if( (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) &&
+                  !(sf::Joystick::isButtonPressed(controller,ConfigFile::currentConfigFile->controller_A)))
+                && !canAttack ){
+            canAttack = true;
+            isAttacking = false;
+        }
 	}
 
 	if(lookDirection == 'U'){
@@ -329,3 +332,68 @@ void Player::Update(float ElapsedTime){
 
 	sprite.setPosition(PosX,PosY);
 }
+
+void Player::Render(sf::RenderWindow &Window){
+    Character::Render(Window);
+    if(isAttacking){
+        Window.draw(weaponSprite);
+    }
+}
+
+void Player::ResetCooldown(void){
+    this->HealTickRate = -COOLDOWN + IDLEHEAL;
+}
+
+void Player::playerDamage( int damage, int level ){
+    ResetCooldown();
+    if(!isInvincible){
+        //isInvincible = true;
+        damage = calcDamage(damage, level);
+        damageText(damage,'p');
+        this->Health -= damage;
+        if( this->Health <= 0 ){
+            this->Health = 0;
+        }
+    }
+}
+
+void Player::playerHeal( int heal ){
+    this->Health += heal;
+    if( this->Health > this->pHealthMax ){
+        this->Health = this->pHealthMax;
+    }
+}
+
+void Player::playerExp( int exp, int level ){
+    if( this->Lvl < MAXLEVEL ){
+        int levelDif = level-this->Lvl;
+        
+        float multi = 1.f;
+        if(levelDif > 0){   // Gegner hat einen höhreren Level
+            if(levelDif >10) levelDif = 10;
+            multi += (float)levelDif*0.005f;
+        }
+        else if(levelDif < 0){  // Gegner hat einen niedrigeren Level
+            if(levelDif < -10) levelDif = -10;
+            multi += (float)levelDif*0.1f;
+        }
+        exp = (int)((float)exp * multi);
+        
+        /*exp += levelDif*(level/2);
+         if ( exp <= 0 ){
+         exp = 1;
+         }*/
+        damageText(exp,'e');
+        this->pExp += exp;
+        if( this->pExp >= this->pExpMax ){       // Hier levelup!
+            this->pExp -= this->pExpMax;
+            this->Lvl++;
+            this->pHealthMax = FHPMAX;//(int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
+            this->pExpMax = FEXPMAX;//(int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
+            this->AttackPower = FDMG;//(int)(BASEDMG*pow(DMGMULTIPLICATOR,(float)(this->Lvl-1)));
+            this->Health = this->pHealthMax;
+            damageText(this->Lvl,'l');
+        }
+    }
+}
+
