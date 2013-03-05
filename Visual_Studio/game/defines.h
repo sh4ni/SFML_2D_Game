@@ -48,6 +48,7 @@
 #define FMONDMG (int)( 5.f*pow(1.12496f,(float)(this->Lvl-5)) )
 #define FMONHP (int)( 50.f*pow(1.124953f,(float)(this->Lvl-5)) )
 #define FMONEXP (int)( 10.f*pow(1.08543f,(float)(this->Lvl-5)) )
+#define FHPREG (int)( 2.5f*pow(1.14242f,(float)(this->Lvl-5)) )
 
 // used in player.cpp
 #define MAXLEVEL 50
