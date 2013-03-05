@@ -59,7 +59,7 @@
 #define COOLDOWN 200
 
 // used in monster.cpp
-#define HOLDTIME 5.f
+#define HOLDTIME 5
 #define MOVETIME 0.5f
 #define MOVETOLLERANCE (TILESIZE/2)
 #define DMGRANGE 1
