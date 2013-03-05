@@ -70,7 +70,7 @@ void Map::init(std::string LevelId){
 
 		while( LoadCounterY < MapSizeY ){
 			openfile >> TileType;
-			//TileType--;
+			TileType--;
 			sf::IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
 			subRect.top=TileType/10*TILESIZE;   // zeile

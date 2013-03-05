@@ -35,12 +35,13 @@ private:
 	static void GameLoop();
 	static void GamePaused(sf::View viewCamera);
 
-	static void ShowMap(sf::View viewCamera, bool continueGame = false);
+	static void ShowMap(sf::View viewCamera);
 
 	static bool IsExiting();
 public:
 	static void Init();
 	static void Start();
 	static bool isNewGame;
+	static bool continueGame;
 };
 #endif

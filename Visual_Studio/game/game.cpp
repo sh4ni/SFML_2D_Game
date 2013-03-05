@@ -10,6 +10,8 @@ void Game::Init(void)
 
 	// Lade die Einstellungen des Spiels.. 
 	ConfigFile::currentConfigFile->loadConfigFile();
+
+	Game::continueGame = false;
 	
 	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
 	/*if(!system("mkdir screenshots"))
@@ -124,12 +126,13 @@ void Game::GameLoop(){
 			ShowMap(viewCamera);
             break;
 		case Game::Continue:
-			ShowMap(viewCamera,true);
+			ShowMap(viewCamera);
             break;
 		case Game::NewGame:
 			ShowMap(viewCamera);
 			break;
 		case Game::Paused:
+			Game::continueGame = true;
 			GamePaused(viewCamera);
 			break;
         default:
@@ -150,15 +153,19 @@ void Game::GamePaused(sf::View viewCamera){
 	// hier kann ich irgendwann zurück ins menü!
 }
 
-void Game::ShowMap(sf::View viewCamera, bool continueGame){
+void Game::ShowMap(sf::View viewCamera){
 	static Map map;
 	Map::currentMap = &map;
 
-	if(!continueGame){	// wenn das spiel nach dem sterben fortgesetzt wird (mit altem spielstand) muss die map nicht erneut initalisiert werden, da sie es schon ist
+	std::cout << "continue " << Game::continueGame << std::endl;
+
+	if(!Game::continueGame){	// wenn das spiel nach dem sterben fortgesetzt wird (mit altem spielstand) muss die map nicht erneut initalisiert werden, da sie es schon ist
 		map.init(Savegame::currentSaveGame->mLevelId);
         map.getPlayer()->Init();    // der player aber schon :D
         map.initInterface();
-    }
+    }else{
+		Game::continueGame = false;
+	}
 
 	MapEvent newGameState = map.Show(_mainWindow, Savegame::currentSaveGame->mLevelId, viewCamera);
 	
@@ -289,3 +296,4 @@ void Game::ShowMenuOptions(){
 Game::GameState Game::_gameState = Uninitialized;
 sf::RenderWindow Game::_mainWindow;
 bool Game::isNewGame;
+bool Game::continueGame;
