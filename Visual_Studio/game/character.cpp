@@ -102,7 +102,7 @@ void Character::damageText(int damage, char type){
 	dmgText.push_back(E1);
 }
 
-void Character::Render(sf::RenderWindow &renderWindow, bool drawEnemy = true){
+void Character::Render(sf::RenderWindow &renderWindow, bool drawEnemy){
 	if(drawEnemy) renderWindow.draw(sprite);
 
 	for( unsigned i=0; i<dmgText.size(); i++){
