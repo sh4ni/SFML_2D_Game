@@ -24,7 +24,7 @@ void Map::init(std::string LevelId){
 	this->MapLevelMax = 1;
 	this->monsterCounter = 0;
 
-	this->isZoom = false;
+	this->isZoom = true;
     
     this->nextMap[0] = LevelId;
     this->nextMap[1] = LevelId;
@@ -238,8 +238,12 @@ Map::~Map(){
 }
 
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View& viewCamera){
-	if(isZoom) viewCamera.setSize((float)(ConfigFile::currentConfigFile->width/2),(float)(ConfigFile::currentConfigFile->height/2));
 	while( 1+3+3==7 ){
+		
+		int width = ConfigFile::currentConfigFile->width/(isZoom?2:1);
+		int height = ConfigFile::currentConfigFile->height/(isZoom?2:1);
+		viewCamera.setSize((float)width,(float)height);
+		
 		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){
 			gameMusic::music.stop();	// damit im menü die musik wieder korrekt abgespielt wird
@@ -302,18 +306,18 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		DisplaySpeed.Update(PlayerSpeedText.str());
 
 		// ...geht aber nicht übers Kartenende hinaus
-		if ( MapSizeX*TILESIZE < ConfigFile::currentConfigFile->width ){
+		if ( MapSizeX*TILESIZE < width ){
 			CamX = MapSizeX*TILESIZE/2;
 			renderWindow.clear();
 		}
-		else if ( CamX < ConfigFile::currentConfigFile->width/2 ) CamX = ConfigFile::currentConfigFile->width/2;
-		else if ( CamX > MapSizeX * TILESIZE - ConfigFile::currentConfigFile->width/2 ) CamX = MapSizeX * TILESIZE - ConfigFile::currentConfigFile->width/2;
-		if ( MapSizeY*TILESIZE < ConfigFile::currentConfigFile->height ){
+		else if ( CamX < width/2 ) CamX = width/2;
+		else if ( CamX > MapSizeX * TILESIZE - width/2 ) CamX = MapSizeX * TILESIZE - width/2;
+		if ( MapSizeY*TILESIZE < height ){
 			CamY = MapSizeY*TILESIZE/2;
 			renderWindow.clear();
 		}
-		else if ( CamY < ConfigFile::currentConfigFile->height/2 ) CamY = ConfigFile::currentConfigFile->height/2;
-		else if ( CamY > MapSizeY * TILESIZE - ConfigFile::currentConfigFile->height/2 ) CamY = MapSizeY * TILESIZE - ConfigFile::currentConfigFile->height/2;
+		else if ( CamY < height/2 ) CamY = height/2;
+		else if ( CamY > MapSizeY * TILESIZE - height/2 ) CamY = MapSizeY * TILESIZE - height/2;
 		renderWindow.setView(viewCamera);
 		viewCamera.setCenter((float)CamX,(float)CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
 
@@ -321,12 +325,12 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		// Orientierung an der Kamera, damit nur sichtbare Sprites neu gezeichnet werden.
 
 		{// Klammer, wegen sichtbarkeit der variablen.
-			int y = ((int)CamY-(ConfigFile::currentConfigFile->height/2))/TILESIZE;
+			int y = ((int)CamY-(height/2))/TILESIZE;
 			if( y<0 ) y=0;
-			while( (y < ((int)CamY+(ConfigFile::currentConfigFile->height/2)+TILESIZE-1)/TILESIZE)&&(y<MapSizeY) ){
-				int x = ((int)CamX-(ConfigFile::currentConfigFile->width/2))/TILESIZE;
+			while( (y < ((int)CamY+(height/2)+TILESIZE-1)/TILESIZE)&&(y<MapSizeY) ){
+				int x = ((int)CamX-(width/2))/TILESIZE;
 				if( x<0 ) x=0;
-				while( (x < ((int)CamX+(ConfigFile::currentConfigFile->width/2)+TILESIZE-1)/TILESIZE)&&(x<MapSizeX) ){
+				while( (x < ((int)CamX+(width/2)+TILESIZE-1)/TILESIZE)&&(x<MapSizeX) ){
 					TileMap[x][y].TexturePart->setPosition( (float)(x * TILESIZE), (float)(y * TILESIZE) );
 					renderWindow.draw(*TileMap[x][y].TexturePart);
 					x++;
@@ -394,6 +398,10 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				else if(levelLoop.key.code == sf::Keyboard::Q){         // 1 = 10 erfahrung kriegen
 					P1.decreaseSpeed(0.1f);                             // 2 = 20 level 10 schaden kriegen
 				}                                                       // ...
+                else if(levelLoop.key.code == sf::Keyboard::Z){
+                    if(isZoom) isZoom = false;
+					else isZoom = true;
+                }
                 else if(levelLoop.key.code == sf::Keyboard::Num1){
                     P1.playerExp(P1.getExpMax()/4, P1.getLvl());
                 }
