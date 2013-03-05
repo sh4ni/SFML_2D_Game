@@ -121,7 +121,7 @@ void Game::GameLoop(){
 			#ifdef DEBUGINFO
 				std::cout << "Show the Map / Level" << std::endl;
 			#endif
-			ShowMap(viewCamera);				
+			ShowMap(viewCamera);
             break;
 		case Game::Continue:
 			ShowMap(viewCamera,true);

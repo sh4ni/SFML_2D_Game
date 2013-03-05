@@ -23,6 +23,8 @@ void Map::init(std::string LevelId){
 	this->MapLevelMin = 1;
 	this->MapLevelMax = 1;
 	this->monsterCounter = 0;
+
+	this->isZoom = true;
     
     this->nextMap[0] = LevelId;
     this->nextMap[1] = LevelId;
@@ -166,11 +168,7 @@ void Map::init(std::string LevelId){
 
 	this->LastTime = 1.f;
 	
-	/**
-
-		Hier wird der Sound geladen!		
-
-	*/
+	///Hier wird der Sound geladen!
 	if(ConfigFile::currentConfigFile->sound == true){
 		gameMusic::music.stop();
 		std::string musicFileName = PATH"include/sound/" + mapMusic + ".ogg";
@@ -239,7 +237,7 @@ Map::~Map(){
 }
 
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View& viewCamera){
-	//viewCamera.setSize((float)(ConfigFile::currentConfigFile->width/2),(float)(ConfigFile::currentConfigFile->height/2));
+	if(isZoom) viewCamera.setSize((float)(ConfigFile::currentConfigFile->width/2),(float)(ConfigFile::currentConfigFile->height/2));
 	while( 1+3+3==7 ){
 		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){
@@ -357,6 +355,9 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.key.code == sf::Keyboard::P || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
+					viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
+					renderWindow.setView(viewCamera);
+					renderWindow.display();
 					return MapEvent(MapEvent::pause);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
@@ -422,6 +423,9 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				#ifdef DEBUGINFO
 					std::cout << " Outside the window!.. Game will be paused" << std::endl;	
 				#endif
+					viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
+					renderWindow.setView(viewCamera);
+					renderWindow.display();
 					return MapEvent(MapEvent::pause);
 			}
             else if(levelLoop.type == sf::Event::Closed){

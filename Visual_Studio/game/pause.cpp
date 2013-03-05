@@ -10,7 +10,7 @@ beendet wird oder fortgesetzt wird.
 */
 
 bool Pause::Show(sf::RenderWindow& renderWindow, sf::View& viewCamera){
-	
+
 	float CenterX = viewCamera.getCenter().x;    // pausemenü muss hier gegengerechnet werden,
 	float CenterY = viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
                                                     // nicht übereinstimmen!
@@ -43,7 +43,7 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View& viewCamera){
 	HilfeTasten.printText.setOrigin(HilfeTasten.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
 	HilfeText.printText.setOrigin(HilfeText.printText.getGlobalBounds().width/2.f+1.f,0);		// Textbox zentrieren
 
-	// LOS! ZEICHNE ES NIEDERER SKLAVE!
+	// LOS! ZEICHNE ES, NIEDERER SKLAVE!
 	renderWindow.draw(Background);
 	renderWindow.draw(Logo);
 	Pause.Render(renderWindow);

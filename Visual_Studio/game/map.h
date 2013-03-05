@@ -76,6 +76,8 @@ private:
 	float ElapsedTime;
 	float Frames;
 
+	bool isZoom;
+
 	int CamX;
 	int CamY;
 
@@ -158,6 +160,7 @@ public:
 	sf::Clock* getClock(void){
 		return &clock;
 	}
+
 };
 
 #endif

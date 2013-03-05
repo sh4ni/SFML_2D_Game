@@ -162,13 +162,11 @@ void Player::Update(float ElapsedTime){
 		if( sf::Joystick::isConnected(controller) ){    // analoge axen des controllers nur nutzen, falls auch einer angeschlossen ist
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp ){
 				PosY += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
-				if(!isAttacking) lookDirection = 'U';
 				blockDown = false;
 				walking = true;
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE) && !blockDown ){
 				PosY += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
-				if(!isAttacking) lookDirection = 'D';
 				blockUp = false;
 				walking = true;
 			}
@@ -180,10 +178,31 @@ void Player::Update(float ElapsedTime){
 			}
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE) && !blockRight ){
 				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
-				if(!isAttacking) lookDirection = 'R';
 				blockLeft = false;
 				walking = true;
 			}
+			//std::cout << sf::Joystick::getAxisPosition(controller,sf::Joystick::X) << " " << sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) << std::endl;
+			int xTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::X);
+			int yTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::Y);
+			if (xTemp <0) xTemp = -xTemp;
+			if (yTemp <0) yTemp = -yTemp;
+			if( xTemp > yTemp ){
+				if( sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE){
+					if(!isAttacking) lookDirection = 'L';
+				}
+				else if (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE){
+					if(!isAttacking) lookDirection = 'R';
+				}
+			}
+			else {
+				if( sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE){
+					if(!isAttacking) lookDirection = 'U';
+				}
+				else if (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE){
+					if(!isAttacking) lookDirection = 'D';
+				}
+			}
+
 		}                       // hier nochmal die tastenabfragen. siehe menu.cpp ganz unten für tastenbelegung
 		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
 			 sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
