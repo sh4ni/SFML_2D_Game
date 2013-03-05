@@ -173,7 +173,7 @@ void Monster::Update(float ElapsedTime){
 		float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
 #endif
 		//std::cout << elapsed_secs << std::endl;
-		if( elapsed_secs > (HOLDTIME + MOVETIME) ){
+		if( elapsed_secs > ( (float)HOLDTIME + MOVETIME + ((float)(rand()%(HOLDTIME*500))/1000) ) ){
 			this->begin = end;
 			this->moveDirection = (int)rand() % 4;	// 0 up - 1 down - 2 left - 3 right
 		}
