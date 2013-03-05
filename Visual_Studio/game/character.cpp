@@ -92,6 +92,7 @@ void Character::damageText(int damage, char type){
 	
 	if( type == 'm') E1.printText.setColor(sf::Color(0xFF,0xFF,0x00));
 	else if( type == 'p') E1.printText.setColor(sf::Color(0xFF,0x00,0x00));
+	else if( type == 'h') E1.printText.setColor(sf::Color(0x00,0xFF,0x00));
 	else if( type == 'e') E1.printText.setColor(sf::Color(0xFF,0x00,0xFF));
 	else if( type == 'l'){
 		E1.printText.setCharacterSize(100);

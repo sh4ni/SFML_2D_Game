@@ -48,13 +48,14 @@
 #define FMONDMG (int)( 5.f*pow(1.12496f,(float)(this->Lvl-5)) )
 #define FMONHP (int)( 50.f*pow(1.124953f,(float)(this->Lvl-5)) )
 #define FMONEXP (int)( 10.f*pow(1.08543f,(float)(this->Lvl-5)) )
+#define FHPREG (int)( 2.5f*pow(1.14242f,(float)(this->Lvl-5)) )
 
 // used in player.cpp
 #define MAXLEVEL 50
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
 #define ANIMATIONSPEED 2.8f         // Mehr = langsamere Animation
-#define CONTROLLERTOLERANCE 22.f    // Analogstick nie komplett in der 0 possition
+#define CONTROLLERTOLERANCE 25.f    // Analogstick nie komplett in der 0 possition
 #define IDLEHEAL 85					// 
 #define COOLDOWN 200
 

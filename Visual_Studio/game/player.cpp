@@ -288,7 +288,7 @@ void Player::Update(float ElapsedTime){
 		sprite.setTextureRect(sf::IntRect(0,sprite.getTextureRect().top,TILESIZE,TILESIZE*2));  // spieler "steht", wenn er sich nicht bewegt.
         if( HealTickRate >= IDLEHEAL ){
 			HealTickRate = 0;
-			this->playerHeal((int)(  (this->pHealthMax/100) ));     // Heilt den Player wenn er sich nicht bewegt.
+			this->playerHeal( FHPREG );     // Heilt den Player wenn er sich nicht bewegt.
 		}
 		//std::cout << HealTickRate << std::endl;
 		HealTickRate++;
@@ -330,6 +330,7 @@ void Player::Update(float ElapsedTime){
 	weaponSprite.setPosition(PosX,PosY);
 
 	if(isAttacking){
+        ResetCooldown();
 		weaponDmgBox = weaponSprite.getGlobalBounds();
         weaponDmgBox.top += TILESIZE/2;
 		for( int i=0; i < Map::currentMap->getMonsterCounter(); i++){
@@ -381,6 +382,7 @@ void Player::playerDamage( int damage, int level ){
 }
 
 void Player::playerHeal( int heal ){
+    if( this->Health < this->pHealthMax ) damageText(heal,'h');
     this->Health += heal;
     if( this->Health > this->pHealthMax ){
         this->Health = this->pHealthMax;
@@ -406,7 +408,7 @@ void Player::playerExp( int exp, int level ){
          if ( exp <= 0 ){
          exp = 1;
          }*/
-        damageText(exp,'e');
+        if(exp>0)damageText(exp,'e');
         this->pExp += exp;
         if( this->pExp >= this->pExpMax ){       // Hier levelup!
             this->pExp -= this->pExpMax;
