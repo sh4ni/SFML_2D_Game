@@ -24,7 +24,8 @@ void Map::init(std::string LevelId){
 	this->MapLevelMax = 1;
 	this->monsterCounter = 0;
 
-	this->isZoom = false;
+	this->isZoom = true;
+    this->willPause = false;
     
     this->nextMap[0] = LevelId;
     this->nextMap[1] = LevelId;
@@ -239,12 +240,13 @@ Map::~Map(){
 
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View& viewCamera){
 
-	int width = ConfigFile::currentConfigFile->width/(isZoom?2:1);
-	int height = ConfigFile::currentConfigFile->height/(isZoom?2:1);
-	viewCamera.setSize((float)width,(float)height);
-
 	while( 1+3+3==7 ){
-				
+
+        int width = ConfigFile::currentConfigFile->width/(isZoom?2:1);
+        int height = ConfigFile::currentConfigFile->height/(isZoom?2:1);
+        viewCamera.setSize((float)width,(float)height);
+		if(willPause) renderWindow.clear();
+
 		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){
 			gameMusic::music.stop();	// damit im menü die musik wieder korrekt abgespielt wird
@@ -339,7 +341,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				y++;
 			}
 		}
-		
+
         // Rendern der Monster
 		for(int i=0;i<monsterCounter;i++){
 			monsterList[i].Update(ElapsedTime);
@@ -355,16 +357,17 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		//P2.Render(renderWindow);      // 2 Spieler test... siehe weiter oben
 		//P2.Update(ElapsedTime);
 
+        if(willPause){
+            isZoom = true;
+            willPause = false;
+            return MapEvent(MapEvent::pause);
+        }
 		sf::Event levelLoop;
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.key.code == sf::Keyboard::P || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
-					if(isZoom){
-						viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
-						renderWindow.setView(viewCamera);
-						renderWindow.display();
-					}
-					return MapEvent(MapEvent::pause);
+                    isZoom = false;
+                    willPause = true;
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
 					sf::Image Screen = renderWindow.capture();
@@ -431,14 +434,10 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			}
             else if(levelLoop.type == sf::Event::LostFocus){
 				#ifdef DEBUGINFO
-					std::cout << " Outside the window!.. Game will be paused" << std::endl;	
+					std::cout << " Outside the window!.. Game will be paused" << std::endl;
 				#endif
-					if(isZoom){
-						viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
-						renderWindow.setView(viewCamera);
-						renderWindow.display();
-					}
-					return MapEvent(MapEvent::pause);
+                isZoom = false;
+                willPause = true;
 			}
             else if(levelLoop.type == sf::Event::Closed){
 				return MapEvent(MapEvent::exiting);

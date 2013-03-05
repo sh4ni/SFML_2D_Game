@@ -187,9 +187,14 @@ void Monster::Update(float ElapsedTime){
 
 			x = sqrt(pow(x,2.f)+pow(y,2.f));
 
+            if ( (x < (float)(DMGRANGE*TILESIZE)) && canAttack ){
+                Map::currentMap->getPlayer()->playerDamage(this->AttackPower, this->Lvl);
+                canAttack = false;
+            }
 			if ( x < (float)(DETECTIONRADIUS*TILESIZE) ){
 				this->targetingPlayer = true;
-			}else if( x > LOSTRADIUS){
+			}
+            else if( x > LOSTRADIUS){
 				this->targetingPlayer = false;
 			}
 		}
@@ -239,7 +244,6 @@ void Monster::Update(float ElapsedTime){
             }
             else Speed = 0.1f;
             
-            bool isOnY = false;
             if( (y < -MOVETOLLERANCE) && !blockUp ){
                 walking = true;
 				PosY -= (Speed*ElapsedTime);
@@ -252,7 +256,6 @@ void Monster::Update(float ElapsedTime){
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
                 blockUp = false;
 			}
-            else isOnY = true;
             if ( (x < -MOVETOLLERANCE) && !blockLeft ){
                 walking = true;
 				PosX -= (Speed*ElapsedTime);
@@ -265,10 +268,6 @@ void Monster::Update(float ElapsedTime){
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
                 blockLeft = false;
 			}
-            else if(isOnY && canAttack){
-                Map::currentMap->getPlayer()->playerDamage(this->AttackPower, this->Lvl);
-                canAttack = false;
-            }
 		}
         
         if( walking ){      // nur animieren wenn spieler läuft
