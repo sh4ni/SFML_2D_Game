@@ -23,7 +23,7 @@ protected:
 
 	int Health;
 	int AttackPower;
-	char Lvl;
+	int Lvl;
 
 	// not in use yet
 	//int strenght;

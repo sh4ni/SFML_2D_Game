@@ -64,8 +64,8 @@ void Player::Init(int controller){
 	sprite.setPosition(Savegame::currentSaveGame->mPosX, Savegame::currentSaveGame->mPosY);
 
 	weaponSprite.setTexture(weaponTexture);
-	weaponSprite.setOrigin(8,0);
-	weaponSprite.setTextureRect(sf::IntRect(0,0,16,32));
+	weaponSprite.setOrigin(TILESIZE/4,0);
+	weaponSprite.setTextureRect(sf::IntRect(0,0,TILESIZE/4+1,TILESIZE));
 	weaponSprite.setPosition(Savegame::currentSaveGame->mPosX, Savegame::currentSaveGame->mPosY+TILESIZE/2);
 }
 
@@ -241,19 +241,23 @@ void Player::Update(float ElapsedTime){
 
 	if(lookDirection == 'U'){
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
+		//weaponSprite.setTextureRect(sf::IntRect(0,0,TILESIZE/4+1,TILESIZE));
 		weaponSprite.setRotation(180);
 	}
 	else if(lookDirection == 'D'){
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
+		//weaponSprite.setTextureRect(sf::IntRect(0,0,TILESIZE/4+1,TILESIZE));
 		weaponSprite.setRotation(0);
 	}
 	else if(lookDirection == 'L'){
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
-		weaponSprite.setRotation(90);
+		//weaponSprite.setTextureRect(sf::IntRect(TILESIZE/4+1,0,TILESIZE/4+1,TILESIZE));
+		weaponSprite.setRotation(90-35);
 	}
 	else {
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
-		weaponSprite.setRotation(270);
+		//weaponSprite.setTextureRect(sf::IntRect(TILESIZE/4+1,0,TILESIZE/4+1,TILESIZE));
+		weaponSprite.setRotation(270+35);
 	}
 
 	if( walking ){      // nur animieren wenn spieler läuft
@@ -304,16 +308,15 @@ void Player::Update(float ElapsedTime){
 			#endif
 		}
 	}
-	weaponSprite.setPosition(PosX,PosY+TILESIZE/2);
+	weaponSprite.setPosition(PosX,PosY);
 
 	if(isAttacking){
 		weaponDmgBox = weaponSprite.getGlobalBounds();
-        //weaponDmgBox.top += TILESIZE/2;
+        weaponDmgBox.top += TILESIZE/2;
 		for( int i=0; i < Map::currentMap->getMonsterCounter(); i++){
 			Monster* mon = Map::currentMap->getMonsterList();
 			if( mon[i].getHitBox().intersects(weaponDmgBox) ){
 				isAttacking = false;
-				std::cout << "HIT: " << i << std::endl;
                 mon[i].damageMe(AttackPower,this->Lvl);
                 mon[i].targetPlayer();
 
@@ -334,10 +337,11 @@ void Player::Update(float ElapsedTime){
 }
 
 void Player::Render(sf::RenderWindow &Window){
-    Character::Render(Window);
+	if(lookDirection == 'D' || lookDirection == 'R') Character::Render(Window);
     if(isAttacking){
         Window.draw(weaponSprite);
     }
+	if(lookDirection == 'U' || lookDirection == 'L') Character::Render(Window);
 }
 
 void Player::ResetCooldown(void){
