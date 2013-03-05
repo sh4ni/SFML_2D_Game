@@ -76,6 +76,7 @@ private:
 	float Frames;
 
 	bool isZoom;
+    bool willPause;
 
 	int CamX;
 	int CamY;
