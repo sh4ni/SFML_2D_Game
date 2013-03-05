@@ -366,12 +366,6 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.key.code == sf::Keyboard::P || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
-					/*if(isZoom){
-						viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
-						renderWindow.setView(viewCamera);
-						renderWindow.display();
-					}
-					return MapEvent(MapEvent::pause);*/
                     isZoom = false;
                     willPause = true;
 				}
@@ -440,14 +434,10 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			}
             else if(levelLoop.type == sf::Event::LostFocus){
 				#ifdef DEBUGINFO
-					std::cout << " Outside the window!.. Game will be paused" << std::endl;	
+					std::cout << " Outside the window!.. Game will be paused" << std::endl;
 				#endif
-					if(isZoom){
-						viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
-						renderWindow.setView(viewCamera);
-						renderWindow.display();
-					}
-					return MapEvent(MapEvent::pause);
+                isZoom = false;
+                willPause = true;
 			}
             else if(levelLoop.type == sf::Event::Closed){
 				return MapEvent(MapEvent::exiting);
