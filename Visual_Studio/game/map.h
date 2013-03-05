@@ -64,7 +64,6 @@ private:
 	TilePart** TileMap;
 	sf::IntRect*** CollisionMap;
 	sf::Clock clock;
-	bool willPause;
 
 	Player P1;
 

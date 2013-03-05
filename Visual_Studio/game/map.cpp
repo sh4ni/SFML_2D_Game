@@ -24,7 +24,7 @@ void Map::init(std::string LevelId){
 	this->MapLevelMax = 1;
 	this->monsterCounter = 0;
 
-	this->isZoom = true;
+	this->isZoom = false;
     
     this->nextMap[0] = LevelId;
     this->nextMap[1] = LevelId;
@@ -70,7 +70,7 @@ void Map::init(std::string LevelId){
 
 		while( LoadCounterY < MapSizeY ){
 			openfile >> TileType;
-			TileType--;
+			//TileType--;
 			sf::IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
 			subRect.top=TileType/10*TILESIZE;   // zeile
@@ -238,12 +238,13 @@ Map::~Map(){
 }
 
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View& viewCamera){
+
+	int width = ConfigFile::currentConfigFile->width/(isZoom?2:1);
+	int height = ConfigFile::currentConfigFile->height/(isZoom?2:1);
+	viewCamera.setSize((float)width,(float)height);
+
 	while( 1+3+3==7 ){
-		
-		int width = ConfigFile::currentConfigFile->width/(isZoom?2:1);
-		int height = ConfigFile::currentConfigFile->height/(isZoom?2:1);
-		viewCamera.setSize((float)width,(float)height);
-		
+				
 		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){
 			gameMusic::music.stop();	// damit im menü die musik wieder korrekt abgespielt wird
@@ -355,7 +356,6 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		//P2.Update(ElapsedTime);
 
 		sf::Event levelLoop;
-
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.key.code == sf::Keyboard::P || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){

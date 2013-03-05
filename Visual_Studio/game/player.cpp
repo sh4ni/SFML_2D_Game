@@ -182,10 +182,10 @@ void Player::Update(float ElapsedTime){
 				walking = true;
 			}
 			//std::cout << sf::Joystick::getAxisPosition(controller,sf::Joystick::X) << " " << sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) << std::endl;
-			int xTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::X);
-			int yTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::Y);
-			if (xTemp <0) xTemp = -xTemp;
-			if (yTemp <0) yTemp = -yTemp;
+			float xTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::X);
+			float yTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::Y);
+			if (xTemp <0.f) xTemp = -xTemp;
+			if (yTemp <0.f) yTemp = -yTemp;
 			if( xTemp > yTemp ){
 				if( sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE){
 					if(!isAttacking) lookDirection = 'L';
