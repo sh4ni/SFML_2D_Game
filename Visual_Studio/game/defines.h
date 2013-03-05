@@ -58,17 +58,11 @@
 #define IDLEHEAL 85					// 
 #define COOLDOWN 200
 
-/*#define BASEHEALTH 100.f
-#define HEALTHMULTIPLICATOR 1.1f
-#define BASEDMG 15
-#define DMGMULTIPLICATOR 1.1f
-#define BASEEXP 50.f
-#define EXPMULTIPLICATOR 1.15f*/
-
 // used in monster.cpp
 #define HOLDTIME 5.f
 #define MOVETIME 0.5f
 #define MOVETOLLERANCE (TILESIZE/2)
+#define DMGRANGE 1
 #define DETECTIONRADIUS 5
 #define LOSTRADIUS 20
 
