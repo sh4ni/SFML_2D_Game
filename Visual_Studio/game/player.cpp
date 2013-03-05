@@ -330,6 +330,7 @@ void Player::Update(float ElapsedTime){
 	weaponSprite.setPosition(PosX,PosY);
 
 	if(isAttacking){
+        ResetCooldown();
 		weaponDmgBox = weaponSprite.getGlobalBounds();
         weaponDmgBox.top += TILESIZE/2;
 		for( int i=0; i < Map::currentMap->getMonsterCounter(); i++){
@@ -381,12 +382,10 @@ void Player::playerDamage( int damage, int level ){
 }
 
 void Player::playerHeal( int heal ){
+    if( this->Health < this->pHealthMax ) damageText(heal,'h');
     this->Health += heal;
     if( this->Health > this->pHealthMax ){
         this->Health = this->pHealthMax;
-    }
-    else {
-        damageText(heal,'h');
     }
 }
 
