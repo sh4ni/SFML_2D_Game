@@ -269,10 +269,10 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
         
         // prüfen ob spieler aus dem bildschirm läuft
         if( CamX < 0 ){										// Links
-			return MapEvent(MapEvent::mapchange,nextMap[2],(float)(getNextLevelSize(nextMap[2]).x-1),(float)(CamY/TILESIZE));
+			return MapEvent(MapEvent::mapchange,nextMap[2],(float)(getNextLevelSize(nextMap[2]).x-1),(float)((CamY+TILESIZE/2)/TILESIZE));
 		}
         else if( CamX > (MapSizeX*TILESIZE)){				// Rechts
-			return MapEvent(MapEvent::mapchange,nextMap[3],0.f,(float)(CamY/TILESIZE));
+			return MapEvent(MapEvent::mapchange,nextMap[3],0.f,(float)((CamY+TILESIZE/2)/TILESIZE));
 		}
         if( CamY < -TILESIZE/2 ){							// Oben
 			return MapEvent(MapEvent::mapchange,nextMap[0],(float)(CamX/TILESIZE),(float)(getNextLevelSize(nextMap[0]).y-1));

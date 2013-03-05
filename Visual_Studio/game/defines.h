@@ -55,7 +55,7 @@
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
 #define ANIMATIONSPEED 2.8f         // Mehr = langsamere Animation
-#define CONTROLLERTOLERANCE 22.f    // Analogstick nie komplett in der 0 possition
+#define CONTROLLERTOLERANCE 25.f    // Analogstick nie komplett in der 0 possition
 #define IDLEHEAL 85					// 
 #define COOLDOWN 200
 
