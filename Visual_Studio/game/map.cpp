@@ -24,7 +24,7 @@ void Map::init(std::string LevelId){
 	this->MapLevelMax = 1;
 	this->monsterCounter = 0;
 
-	this->isZoom = true;
+	this->isZoom = false;
     
     this->nextMap[0] = LevelId;
     this->nextMap[1] = LevelId;
@@ -42,8 +42,8 @@ void Map::init(std::string LevelId){
 		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme >> this->mapMusic >> this->MapLevelMin >> this->MapLevelMax;
 		
         std::vector<int> CollisionInfo;
-        
-        std::string ThemeFileName = PATH"include/texture/world/" + mapTheme + ".txt";   // tiles mit kollision werden aus textdatei geladen.
+
+		std::string ThemeFileName = PATH"include/texture/world/" + mapTheme + ".txt";   // tiles mit kollision werden aus textdatei geladen.
         std::ifstream openThemeFile(ThemeFileName.c_str());
         if( openThemeFile.is_open()){
             while(!openThemeFile.eof()){
@@ -70,6 +70,7 @@ void Map::init(std::string LevelId){
 
 		while( LoadCounterY < MapSizeY ){
 			openfile >> TileType;
+			TileType--;
 			sf::IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
 			subRect.top=TileType/10*TILESIZE;   // zeile
@@ -273,8 +274,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			return MapEvent(MapEvent::mapchange,nextMap[1],(float)(CamX/TILESIZE),0.f);
 		}
 
-		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell für die Koordinatenanzeige
-		// und ruf aus performancegründen die getPos methode nicht 2 mal auf.
+		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell ^^
 		TileX = CamX/TILESIZE;
 		TileY = (CamY+TILESIZE/2)/TILESIZE;
 
@@ -355,9 +355,11 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
 				if(levelLoop.key.code == sf::Keyboard::Escape || levelLoop.key.code == sf::Keyboard::P || levelLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
-					viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
-					renderWindow.setView(viewCamera);
-					renderWindow.display();
+					if(isZoom){
+						viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
+						renderWindow.setView(viewCamera);
+						renderWindow.display();
+					}
 					return MapEvent(MapEvent::pause);
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F10) {
@@ -423,9 +425,11 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				#ifdef DEBUGINFO
 					std::cout << " Outside the window!.. Game will be paused" << std::endl;	
 				#endif
-					viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
-					renderWindow.setView(viewCamera);
-					renderWindow.display();
+					if(isZoom){
+						viewCamera.setSize((float)(ConfigFile::currentConfigFile->width),(float)(ConfigFile::currentConfigFile->height));
+						renderWindow.setView(viewCamera);
+						renderWindow.display();
+					}
 					return MapEvent(MapEvent::pause);
 			}
             else if(levelLoop.type == sf::Event::Closed){
