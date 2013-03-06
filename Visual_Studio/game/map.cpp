@@ -50,7 +50,7 @@ void Map::init(std::string LevelId){
             while(!openThemeFile.eof()){
                 int temp;
                 openThemeFile >> temp;
-                CollisionInfo.push_back(temp);
+                CollisionInfo.push_back(--temp);
             }
             std::ifstream closefile(ThemeFileName.c_str());
         }

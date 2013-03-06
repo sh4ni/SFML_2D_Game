@@ -117,7 +117,7 @@
     #define SAVEGAME "savegame.bin"
     #define CHECKSUM 4815162342
 #endif
-#define DEFAULT_HEALTH 432	// 23
+#define DEFAULT_HEALTH 737	// 23
 #define DEFAULT_LVL 20		// 1
 #define DEFAULT_EXP 1337	// 0
 #define DEFAULT_F_NAME "Ashley"
