@@ -82,8 +82,8 @@ bool Game::IsExiting()
 void Game::GameLoop(){
 	sf::View viewCamera = _mainWindow.getView();
 	char gender;
-
-	if(gameMusic::music.getStatus() != sf::Music::Playing && ConfigFile::currentConfigFile->sound == true && _gameState != Game::ShowingIntro){
+	std::cout << "SOUND: " << ConfigFile::currentConfigFile->sound << std::endl;
+	if( gameMusic::music.getStatus() != sf::Music::Playing && ConfigFile::currentConfigFile->sound == true && _gameState != Game::ShowingIntro){
 		if(!gameMusic::music.openFromFile(PATH"include/sound/menu.ogg")) 
 			throw "sound not loaded";
 		gameMusic::music.play();
@@ -147,7 +147,9 @@ void Game::GamePaused(sf::View viewCamera){
 	if(quitGame)
 		_gameState = Exiting;
 	else{
-		gameMusic::music.play();
+		if(ConfigFile::currentConfigFile->sound == true)
+			gameMusic::music.play();
+
 		_gameState = Continue;
 	}
 	// hier kann ich irgendwann zurück ins menü!
