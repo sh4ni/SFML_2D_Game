@@ -1,14 +1,12 @@
 ToDo vor Technikerbörse
 . Texturen für "im Haus" (k)
 
-Improvements und Bugfixes vor Technikerbörse
-. controller-axen im menü verbessern (k)
+ToDo nach Technikerbörse
+. konsolen textausgaben wenn DEBUGINFO nicht definiert ist
+- bei fullscreen - höchste auflösung
 
 ToDo nach Projektabgabe
-. konsolen textausgaben wenn DEBUGINFO nicht definiert ist
-. bei fullscreen - höchste auflösung
-- bei teleport auf nicht vorhandene map wird diese ins savegame eingetragen und eine - Map exeption wird geworfen -> spielstand unbrauchbar bis map angelegt wird (f)
-Editor - perl script
+- Map-Editor - perl script
 - gameover screen (f)
 - grafikeffekte: regen (k)
 - freundliche npcs
@@ -17,6 +15,7 @@ Editor - perl script
 - Map Editor - direkt Tiled files laden oder eigenen machen
 
 Improvements und Bugfixes nach Projektabgabe
+. bei teleport auf nicht vorhandene map wird diese ins savegame eingetragen und eine exeption wird geworfen -> spielstand unbrauchbar bis map angelegt wird (f)
 . bildschirmauflösungen im optionenmenü (k)
 . im savegame wird die ausrichtung des players gespeichert (f)
 . laufanimation bei nicht ganz durchgedrückten gamepad (k)
