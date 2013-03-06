@@ -117,14 +117,14 @@
     #define SAVEGAME "savegame.bin"
     #define CHECKSUM 4815162342
 #endif
-#define DEFAULT_HEALTH 23
-#define DEFAULT_LVL 1
-#define DEFAULT_EXP 0
+#define DEFAULT_HEALTH 432	// 23
+#define DEFAULT_LVL 20		// 1
+#define DEFAULT_EXP 1337	// 0
 #define DEFAULT_F_NAME "Ashley"
 #define DEFAULT_M_NAME "Fabi"	// in memories
 #define DEFAULT_LEVEL "map1"
-#define DEFAULT_POSX 560
-#define DEFAULT_POSY 288
+#define DEFAULT_POSX 1008   
+#define DEFAULT_POSY 640	
 
 
 

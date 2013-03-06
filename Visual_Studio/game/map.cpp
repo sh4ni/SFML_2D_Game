@@ -239,7 +239,6 @@ Map::~Map(){
 }
 
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View& viewCamera){
-
 	while( 1+3+3==7 ){
 
         int width = ConfigFile::currentConfigFile->width/(isZoom?2:1);

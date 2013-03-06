@@ -12,7 +12,9 @@ Begleitende Lehrkraft:
 Dr. Markus Hofmann
 
 
+Eine aktuelle Version des Spiels kann über http://catnet.de/journey bezogen werden.
+
 -----------------------------------------------
 Copyright (c) 2013
-Filip Menke
 Daniel Maier
+Filip Menke
