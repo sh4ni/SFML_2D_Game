@@ -26,7 +26,7 @@ void Monster::Init(){
     int minLevel = Map::currentMap->getMonsterLevel().x;
     int maxLevel = Map::currentMap->getMonsterLevel().y;
     
-    this->Lvl = (rand() % maxLevel)+minLevel;
+    this->Lvl = (rand()%(maxLevel-minLevel+1))+minLevel;
     this->AttackPower = FMONDMG;//(int)(MONSTERBASEDMG*pow(MONSTERDMGMULTIPLICATOR,(float)(this->Lvl-1)));
 	this->Health = FMONHP;//(int)(MONSTERBASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
     this->exp = FMONEXP;//(int)(MONSTERBASEEXP*pow(MONSTEREXPMULTIPLICATOR,(float)(this->Lvl-1)));
