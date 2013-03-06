@@ -234,7 +234,7 @@ void Monster::Update(float ElapsedTime){
 
 			x = sqrt(pow(x,2.f)+pow(y,2.f));
 
-            if ( (x < (float)(DMGRANGE*TILESIZE)) && canAttack ){
+            if ( (x < (float)(DMGRANGE*TILESIZE+(isBig?(TILESIZE/2):0))) && canAttack ){
                 Map::currentMap->getPlayer()->playerDamage(this->AttackPower, this->Lvl);
                 canAttack = false;
             }
@@ -291,25 +291,25 @@ void Monster::Update(float ElapsedTime){
             }
             else Speed = 0.1f;
             
-            if( (y < -MOVETOLLERANCE) && !blockUp ){
+            if( (y < -(MOVETOLLERANCE+(isBig?(TILESIZE/2):0))) && !blockUp ){
                 walking = true;
 				PosY -= (Speed*ElapsedTime);
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*1,TILESIZE,TILESIZE*2));
                 blockDown = false;
 			}
-			else if( (y > MOVETOLLERANCE) && !blockDown ){
+			else if( (y > MOVETOLLERANCE+(isBig?(TILESIZE/2):0)) && !blockDown ){
                 walking = true;
 				PosY += (Speed*ElapsedTime);
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),0,TILESIZE,TILESIZE*2));
                 blockUp = false;
 			}
-            if ( (x < -MOVETOLLERANCE) && !blockLeft ){
+            if ( (x < -(MOVETOLLERANCE+(isBig?(TILESIZE/2):0))) && !blockLeft ){
                 walking = true;
 				PosX -= (Speed*ElapsedTime);
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
                 blockRight = false;
 			}
-			else if( (x > MOVETOLLERANCE) && !blockRight ){
+			else if( (x > MOVETOLLERANCE+(isBig?(TILESIZE/2):0)) && !blockRight ){
                 walking = true;
 				PosX += (Speed*ElapsedTime);
                 sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
