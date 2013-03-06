@@ -315,15 +315,15 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& renderWindow, c
             if(!blockAxis){
                 if( (sf::Joystick::getAxisPosition(0,sf::Joystick::Y) < -CONTROLLERAXISMENUE) ||
                    (sf::Joystick::getAxisPosition(0,sf::Joystick::X) < -CONTROLLERAXISMENUE) ||
-                   (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) < -CONTROLLERAXISMENUE) ||
-                   (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) < -CONTROLLERAXISMENUE) ){
+                   (sf::Joystick::getAxisPosition(0,sf::Joystick::PovY) < -CONTROLLERAXISMENUE) ||
+                   (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) > CONTROLLERAXISMENUE) ){
                     CheckAxis = Up;
                     blockAxis = true;
                 }
                 else if( (sf::Joystick::getAxisPosition(0,sf::Joystick::Y) > CONTROLLERAXISMENUE) ||
                         (sf::Joystick::getAxisPosition(0,sf::Joystick::X) > CONTROLLERAXISMENUE) ||
                         (sf::Joystick::getAxisPosition(0,sf::Joystick::PovY) > CONTROLLERAXISMENUE) ||
-                        (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) > CONTROLLERAXISMENUE) ){
+                        (sf::Joystick::getAxisPosition(0,sf::Joystick::PovX) < -CONTROLLERAXISMENUE) ){
                     CheckAxis = Down;
                     blockAxis = true;
                 }
