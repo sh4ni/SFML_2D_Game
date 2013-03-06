@@ -17,9 +17,8 @@ bool is_empty(std::ifstream& myFile)
 // Bereche die Checksume des Spielstandes anhand eines MD5 Alogrihtmus
 std::string calc_checksum(){
 	std::stringstream ss;
-	ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp + Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX + (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
+	ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp - Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX - (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
 	std::string checksum = md5(ss.str());
-	//@filip noch anpassen in final
 
 #ifdef DEBUGINFO
 	std::cout << "Savegame Checksum " << checksum << std::endl;
