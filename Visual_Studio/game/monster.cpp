@@ -9,6 +9,8 @@ Monster::Monster(){
     this->hitTimer = 0.f;
     this->dmgTimer = 0.f;
     this->canAttack = true;
+    this->isBig = false;
+    this->isSpecial = 'n';
 };
 Monster::~Monster(){
 
@@ -32,7 +34,7 @@ void Monster::Init(){
 	sf::String tex;
 	//std::cout << monsterType << std::endl;
     this->isAggressiv = true;
-    switch ( monsterType ){
+    switch(monsterType){
         case 1:
             this->Name = "Green Slime";
             tex.insert(0,PATH"include/texture/monster/entity_slime_green.png");
@@ -45,12 +47,28 @@ void Monster::Init(){
         case 3:
             this->Name = "Blue Slime";
             tex.insert(0,PATH"include/texture/monster/entity_slime_blue.png");
-            this->isAggressiv = false;
+            this->isSpecial = 'b';
+            this->isBig = true;
             break;
         default:
             break;
     }
-
+    
+    switch(isSpecial){  // b = Boss // e = Elite
+        case 'b':
+            this->AttackPower = (int)((float)this->AttackPower * 1.2f);
+            this->Health *= 20;
+            this->exp *= 25;
+            this->Speed = 0.15f;
+            break;
+        case 'e':
+            this->AttackPower = (int)((float)this->AttackPower * 1.5f);
+            this->Health *= 2;
+            this->exp *= 2;
+            this->Speed = 0.2f;
+            break;
+    }
+    
 	if(!texture.loadFromFile(tex)){
 		throw "Error: Monstertexture not found.";
 	}
@@ -62,11 +80,30 @@ void Monster::Init(){
 	#endif
 
 	sprite.setTexture(texture);
-	sprite.setOrigin(TILESIZE/2,TILESIZE);
 	sprite.setTextureRect(sf::IntRect(0,0,TILESIZE,TILESIZE*2));
+    if(isBig){
+        sprite.setScale(2,2);
+        sprite.setOrigin(TILESIZE/2,TILESIZE+TILESIZE/2);
+    }
+    else {
+        sprite.setOrigin(TILESIZE/2,TILESIZE);
+        
+    }
 	sprite.setPosition(PosX, PosY);
 	this->begin = clock();
     this->moveDirection = (int)rand() % 4;	// 0 up - 1 down - 2 left - 3 right
+
+    this->hitBox.width = TILESIZE-TILESIZE/4;
+    this->hitBox.height = TILESIZE-TILESIZE/4;
+
+    if(isBig){
+        this->hitBox.width = TILESIZE*2-8;
+        this->hitBox.height = TILESIZE*2-8;
+    }
+    else {
+        this->hitBox.width = TILESIZE-8;
+        this->hitBox.height = TILESIZE-8;
+    }
 }
 
 void Monster::Update(float ElapsedTime){
@@ -75,11 +112,21 @@ void Monster::Update(float ElapsedTime){
 		this->PosY = sprite.getPosition().y;
         
 		//Hitbox
-		this->hitBox.width = TILESIZE-TILESIZE/4;
-		this->hitBox.height = TILESIZE-TILESIZE/4;
-		this->hitBox.left = PosX-TILESIZE*3/8;
-		this->hitBox.top = PosY+TILESIZE/4;
-
+        if(isBig){
+            this->hitBox.left = PosX+4-TILESIZE;
+            this->hitBox.top = PosY+8-TILESIZE;
+        }
+        else {
+            this->hitBox.left = PosX+4-TILESIZE/2;
+            this->hitBox.top = PosY+8;            
+        }
+        
+#ifdef DEBUGINFO
+        drawHitBox.setFillColor(sf::Color(255,255,255,75));
+        drawHitBox.setPosition(hitBox.left, hitBox.top);
+        drawHitBox.setSize(sf::Vector2f(hitBox.width,hitBox.height));
+#endif
+        
         int tx = ((int)PosX/TILESIZE)-1;
         int ty = ((int)PosY/TILESIZE)-1;
 

@@ -15,7 +15,8 @@ void Player::Init(int controller){
 	this->Name = Savegame::currentSaveGame->pName;
 	this->LevelId = Savegame::currentSaveGame->mLevelId;
     this->isInvincible = false;
-    //this->invincibleTimer = 0.f;
+    this->showSword = false;
+    this->swordTimer = 0.f;
     
 	this->pHealthMax = FHPMAX;//(int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
 	this->pExpMax = FEXPMAX;//(int)(BASEEXP*pow(EXPMULTIPLICATOR,(float)(this->Lvl-1)));
@@ -271,12 +272,12 @@ void Player::Update(float ElapsedTime){
 	else if(lookDirection == 'L'){
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*2,TILESIZE,TILESIZE*2));
 		//weaponSprite.setTextureRect(sf::IntRect(TILESIZE/4+1,0,TILESIZE/4+1,TILESIZE));
-		weaponSprite.setRotation(90-35);
+		if(!showSword)weaponSprite.setRotation(90);
 	}
 	else {
 		sprite.setTextureRect(sf::IntRect(TILESIZE*((Animation/(int)((1/Speed)*ANIMATIONSPEED))%4+1),TILESIZE*2*3,TILESIZE,TILESIZE*2));
 		//weaponSprite.setTextureRect(sf::IntRect(TILESIZE/4+1,0,TILESIZE/4+1,TILESIZE));
-		weaponSprite.setRotation(270+35);
+		if(!showSword)weaponSprite.setRotation(270);
 	}
 
 	if( walking ){      // nur animieren wenn spieler läuft
@@ -336,32 +337,51 @@ void Player::Update(float ElapsedTime){
 		for( int i=0; i < Map::currentMap->getMonsterCounter(); i++){
 			Monster* mon = Map::currentMap->getMonsterList();
 			if( mon[i].getHitBox().intersects(weaponDmgBox) ){
+                showSword = true;
 				isAttacking = false;
+                switch(mon[i].getType()){
+                    case 1:
+                    case 2:
+                        if(lookDirection=='L')weaponSprite.setRotation(90-35);
+                        else if(lookDirection=='R')weaponSprite.setRotation(270+35);
+
+                        break;
+                    default:
+                        break;
+                }
                 mon[i].damageMe(AttackPower,this->Lvl);
                 mon[i].targetPlayer();
 
 			}
 		}
+#ifdef DEBUGINFO
+        drawSwordBox.setSize(sf::Vector2f(weaponDmgBox.width,weaponDmgBox.height));
+        drawSwordBox.setPosition(weaponDmgBox.left, weaponDmgBox.top);
+        drawSwordBox.setFillColor(sf::Color(255,255,255,75));
+#endif
 		//std::cout << "x: " << weaponDmgBox.left << " y: " << weaponDmgBox.top << " b: " << weaponDmgBox.width << " h: " << weaponDmgBox.height << std::endl;
 	}
 
-    /*if(isInvincible){
-        invincibleTimer += ElapsedTime/10.f;
-        if( invincibleTimer > 64.f){
-            invincibleTimer = 0.f;
-            isInvincible = false;
+    if(showSword){
+        swordTimer += ElapsedTime/10.f;
+        if( swordTimer > 16.f){
+            swordTimer = 0.f;
+            showSword = false;
         }
-    }*/
+    }
 
 	sprite.setPosition(PosX,PosY);
 }
 
 void Player::Render(sf::RenderWindow &Window){
 	if(lookDirection == 'D' || lookDirection == 'R') Character::Render(Window);
-    if(isAttacking){
+    if(isAttacking || showSword){
         Window.draw(weaponSprite);
     }
 	if(lookDirection == 'U' || lookDirection == 'L') Character::Render(Window);
+#ifdef DEBUGINFO
+    if(isAttacking) Window.draw(drawSwordBox);
+#endif
 }
 
 void Player::ResetCooldown(void){

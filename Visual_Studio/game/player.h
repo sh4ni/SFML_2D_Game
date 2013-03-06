@@ -17,7 +17,8 @@ private:
 	bool canAttack;
 	char lookDirection;
     bool isInvincible;
-    //float invincibleTimer;
+    bool showSword;
+    float swordTimer;
 	
 	int HealTickRate;
 	int pHealthMax;
@@ -29,6 +30,10 @@ private:
 	sf::FloatRect weaponDmgBox;
 	sf::Texture weaponTexture;
 	sf::Sprite weaponSprite;
+    
+#ifdef DEBUGINFO
+    sf::RectangleShape drawSwordBox;
+#endif
 
 public:
 	

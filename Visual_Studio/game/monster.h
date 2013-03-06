@@ -17,9 +17,16 @@ private:
 	sf::Texture texture;
 	sf::FloatRect hitBox;
 
+#ifdef DEBUGINFO
+    sf::RectangleShape drawHitBox;
+#endif
+    
 	bool targetingPlayer;
 	bool isAggressiv;
     bool isHit;
+    
+    char isSpecial;
+    bool isBig;
 
 	int moveDirection;
 	clock_t begin; 
@@ -42,14 +49,21 @@ public:
 	
 	void setType(int monsterType);
     
+    int getType(void){
+        return this->monsterType;
+    }
+    
     void damageMe( int damage, int level );
     
     void targetPlayer(){
         targetingPlayer = true;
     }
     
-    void Render(sf::RenderWindow &Window){
-        Character::Render(Window, isActive);
+    void Render(sf::RenderWindow &renderWindow){
+        Character::Render(renderWindow, isActive);
+#ifdef DEBUGINFO
+        if(this->isActive)renderWindow.draw(drawHitBox);
+#endif
     }
 };
 
