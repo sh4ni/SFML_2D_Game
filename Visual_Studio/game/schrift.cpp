@@ -1,6 +1,10 @@
 #include "schrift.h"
 #include "defines.h"
 
+#ifdef SYS_MACOS
+#include "ResourcePath.hpp"
+#endif
+
 bool Schrift::FontLoaded = false;
 sf::Font Schrift::font;
 

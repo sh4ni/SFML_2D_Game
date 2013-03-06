@@ -1,5 +1,9 @@
 #include "savegame.h"
 
+#ifdef SYS_MACOS
+#include "ResourcePath.hpp"
+#endif
+
 Savegame * Savegame::currentSaveGame;
 ConfigFile * ConfigFile::currentConfigFile;
 
@@ -45,7 +49,8 @@ void Savegame::saveSavegame(bool defaultSavegame){
 		std::cout << "Savegame will be saved!" << std::endl;
 	
 	std::ofstream defaultsavegame;
-	defaultsavegame.open(PATH SAVEGAME, std::ios::trunc & std::ios::binary);
+    std::string defaultSavegamePath = PATH SAVEGAME;
+	defaultsavegame.open(defaultSavegamePath.c_str(), std::ios::trunc & std::ios::binary);
 	if(defaultsavegame.is_open()){
 		if(defaultSavegame){
 			// Health
@@ -125,7 +130,8 @@ void Savegame::saveSavegame(bool defaultSavegame){
 
 bool Savegame::loadSavegame(bool init){
 	std::ifstream loadgame;
-	loadgame.open(PATH SAVEGAME, std::ios::binary);
+    std::string defaultSavegamePath = PATH SAVEGAME;
+	loadgame.open(defaultSavegamePath.c_str(), std::ios::binary);
 	
 	if(!is_empty(loadgame) && loadgame.is_open()){
 
@@ -183,7 +189,8 @@ ConfigFile::~ConfigFile(){
 
 void ConfigFile::saveConfigFile(bool defaultConfig){
 	std::ofstream configFile;
-	configFile.open(PATH SETTINGS, std::ios::trunc);
+    std::string defaultSettingsPath = PATH SETTINGS;
+	configFile.open(defaultSettingsPath.c_str(), std::ios::trunc);
 	if(configFile.is_open()){
 		if(defaultConfig){
 			#ifdef DEBUGINFO
@@ -266,7 +273,7 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 void ConfigFile::loadConfigFile(){
 	std::ifstream configFile;
 	std::string line;
-	configFile.open(PATH SETTINGS);
+	//configFile.open(PATH SETTINGS);
 	if(!is_empty(configFile) && configFile.is_open()){
 		while(configFile >> line){
 			if(line == "WIDTH"){

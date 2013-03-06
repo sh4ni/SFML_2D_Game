@@ -10,6 +10,10 @@
 #include "sounds.h"
 #include <ctime>
 
+#ifdef SYS_MACOS
+#include "ResourcePath.hpp"
+#endif
+
 class tp{
 	public:
 		std::string Map;
