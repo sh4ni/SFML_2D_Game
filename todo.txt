@@ -1,16 +1,18 @@
-﻿ToDo nach Technikerbörse
+ToDo nach Technikerbörse
 . Texturen für "im Haus" (k)
 . konsolen textausgaben wenn DEBUGINFO nicht definiert ist
-- bei fullscreen - höchste auflösung
+. bei fullscreen - höchste auflösung
 
 ToDo nach Projektabgabe
-- Map-Editor - perl script
+- kein rückstoß bei elite und boss gegnern (k)
+. aggro range der monster soll sich an den levelunterschied richten (k)
+- level, leben und name soll bei gegnern sichtbar sein, mit denen man kämpft (k)
 - gameover screen (f)
+! Map Editor - direkt Tiled files laden oder perl script
 - grafikeffekte: regen (k)
 - freundliche npcs
 - Dialoge/Story
 - Dialogboxen im Spiel bei Unterhaltungen
-- Map Editor - direkt Tiled files laden oder eigenen machen
 
 Improvements und Bugfixes nach Projektabgabe
 . bei teleport auf nicht vorhandene map wird diese ins savegame eingetragen und eine exeption wird geworfen -> spielstand unbrauchbar bis map angelegt wird (f)
