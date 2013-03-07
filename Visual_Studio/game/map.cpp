@@ -397,9 +397,9 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				else if(levelLoop.key.code == sf::Keyboard::E){         // ein paar debug keys
 					P1.increaseSpeed(0.1f);                             // E = schneller laufen
 				}                                                       // Q = langsamer laufen
-				else if(levelLoop.key.code == sf::Keyboard::Q){         // 1 = 10 erfahrung kriegen
-					P1.decreaseSpeed(0.1f);                             // 2 = 20 level 10 schaden kriegen
-				}                                                       // ...
+				else if(levelLoop.key.code == sf::Keyboard::Q){         // Z = zoom an/ausschalten
+					P1.decreaseSpeed(0.1f);                             // 1 = levelup
+				}                                                       // 2 = 20 level 10 schaden kriegen
                 else if(levelLoop.key.code == sf::Keyboard::Z){
                     if(isZoom) isZoom = false;
 					else isZoom = true;

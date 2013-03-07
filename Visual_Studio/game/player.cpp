@@ -157,59 +157,115 @@ void Player::Update(float ElapsedTime){
 			std::cout << "KOLLISION ÜBERALL" << std::endl;	// teleport an sicheren ort
 		}
 	}
-            
+
+	char moveInput = 'n';		// moveInput: // n = nothing // s = stick // d = dpad // k = keyboard
 	bool walking = false;
 	if(!blockControl){
 		if( sf::Joystick::isConnected(controller) ){    // analoge axen des controllers nur nutzen, falls auch einer angeschlossen ist
-			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp ){
+			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp && (moveInput == 'n' || moveInput == 's') ){
+				moveInput = 's';
 				PosY += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
 				blockDown = false;
 				walking = true;
 			}
-			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE) && !blockDown ){
+			else if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE) && !blockDown && (moveInput == 'n' || moveInput == 's') ){
+				moveInput = 's';
 				PosY += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::Y)/100);
 				blockUp = false;
 				walking = true;
 			}
-			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE) && !blockLeft ){
+			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE) && !blockLeft && (moveInput == 'n' || moveInput == 's') ){
+				moveInput = 's';
 				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
-				if(!isAttacking) lookDirection = 'L';
 				blockRight = false;
 				walking = true;
 			}
-			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE) && !blockRight ){
+			else if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE) && !blockRight && (moveInput == 'n' || moveInput == 's') ){
+				moveInput = 's';
 				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::X)/100);
 				blockLeft = false;
 				walking = true;
 			}
-			//std::cout << sf::Joystick::getAxisPosition(controller,sf::Joystick::X) << " " << sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) << std::endl;
-			float xTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::X);
-			float yTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::Y);
-			if (xTemp <0.f) xTemp = -xTemp;
-			if (yTemp <0.f) yTemp = -yTemp;
-			if( xTemp > yTemp ){
-				if( sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE){
-					if(!isAttacking) lookDirection = 'L';
+			if(moveInput == 's'){
+				//std::cout << sf::Joystick::getAxisPosition(controller,sf::Joystick::X) << " " << sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) << std::endl;
+				float xTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::X);
+				float yTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::Y);
+				if (xTemp <0.f) xTemp = -xTemp;
+				if (yTemp <0.f) yTemp = -yTemp;
+				if( xTemp > yTemp ){
+					if( sf::Joystick::getAxisPosition(controller,sf::Joystick::X) < -CONTROLLERTOLERANCE){
+						if(!isAttacking) lookDirection = 'L';
+					}
+					else if (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE){
+						if(!isAttacking) lookDirection = 'R';
+					}
 				}
-				else if (sf::Joystick::getAxisPosition(controller,sf::Joystick::X) > CONTROLLERTOLERANCE){
-					if(!isAttacking) lookDirection = 'R';
+				else {
+					if( sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE){
+						if(!isAttacking) lookDirection = 'U';
+					}
+					else if (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE){
+						if(!isAttacking) lookDirection = 'D';
+					}
 				}
 			}
-			else {
-				if( sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE){
-					if(!isAttacking) lookDirection = 'U';
+
+#ifdef SYS_WINDOWS
+			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::PovX) > CONTROLLERTOLERANCE) && !blockUp && (moveInput == 'n' || moveInput == 'd') ){
+				moveInput = 'd';
+				PosY -= (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::PovX)/100);
+				blockDown = false;
+				walking = true;
+			}
+			else if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::PovX) < -CONTROLLERTOLERANCE) && !blockDown && (moveInput == 'n' || moveInput == 'd') ){
+				moveInput = 'd';
+				PosY -= (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::PovX)/100);
+				blockUp = false;
+				walking = true;
+			}
+			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::PovY) < -CONTROLLERTOLERANCE) && !blockLeft && (moveInput == 'n' || moveInput == 'd') ){
+				moveInput = 'd';
+				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::PovY)/100);
+				blockRight = false;
+				walking = true;
+			}
+			else if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::PovY) > CONTROLLERTOLERANCE) && !blockRight && (moveInput == 'n' || moveInput == 'd') ){
+				moveInput = 'd';
+				PosX += (Speed*ElapsedTime*sf::Joystick::getAxisPosition(controller,sf::Joystick::PovY)/100);
+				blockLeft = false;
+				walking = true;
+			}
+			if(moveInput == 'd'){
+				float xTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::PovY);
+				float yTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::PovX);
+				if (xTemp <0.f) xTemp = -xTemp;
+				if (yTemp <0.f) yTemp = -yTemp;
+				if( xTemp > yTemp ){
+					if( sf::Joystick::getAxisPosition(controller,sf::Joystick::PovY) < -CONTROLLERTOLERANCE){
+						if(!isAttacking) lookDirection = 'L';
+					}
+					else if (sf::Joystick::getAxisPosition(controller,sf::Joystick::PovY) > CONTROLLERTOLERANCE){
+						if(!isAttacking) lookDirection = 'R';
+					}
 				}
-				else if (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) > CONTROLLERTOLERANCE){
-					if(!isAttacking) lookDirection = 'D';
+				else {
+					if( sf::Joystick::getAxisPosition(controller,sf::Joystick::PovX) > CONTROLLERTOLERANCE){
+						if(!isAttacking) lookDirection = 'U';
+					}
+					else if (sf::Joystick::getAxisPosition(controller,sf::Joystick::PovX) < -CONTROLLERTOLERANCE){
+						if(!isAttacking) lookDirection = 'D';
+					}
 				}
 			}
+#endif
 
 		}                       // hier nochmal die tastenabfragen. siehe menu.cpp ganz unten für tastenbelegung
 		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
 			 sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
 			 sf::Joystick::isButtonPressed(controller,11) )
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		   && !blockUp ){
+		   && !blockUp && (moveInput == 'n' || moveInput == 'k') ){
+			moveInput = 'k';
 			PosY -= (Speed*ElapsedTime);
 			if(!isAttacking) lookDirection = 'U';
 			blockDown = false;
@@ -219,7 +275,8 @@ void Player::Update(float ElapsedTime){
 			 sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
 			 sf::Joystick::isButtonPressed(controller,12))
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		   && !blockDown ){
+		   && !blockDown && (moveInput == 'n' || moveInput == 'k') ){
+			moveInput = 'k';
 			PosY += (Speed*ElapsedTime);
 			if(!isAttacking) lookDirection = 'D';
 			blockUp = false;
@@ -229,7 +286,8 @@ void Player::Update(float ElapsedTime){
 			  sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
 			  sf::Joystick::isButtonPressed(controller,13))
 			&& !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-			&& !blockLeft ){
+			&& !blockLeft && (moveInput == 'n' || moveInput == 'k') ){
+			moveInput = 'k';
 			PosX -= (Speed*ElapsedTime);
 			if(!isAttacking) lookDirection = 'L';
 			blockRight = false;
@@ -239,7 +297,8 @@ void Player::Update(float ElapsedTime){
 			 sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
 			 sf::Joystick::isButtonPressed(controller,14))
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-   		   && !blockRight ){
+   		   && !blockRight && (moveInput == 'n' || moveInput == 'k') ){
+			moveInput = 'k';
             PosX += Speed*ElapsedTime;
 			if(!isAttacking) lookDirection = 'R';
 			blockLeft = false;
