@@ -160,6 +160,7 @@ void Player::Update(float ElapsedTime){
 
 	char moveInput = 'n';		// moveInput: // n = nothing // s = stick // d = dpad // k = keyboard
 	bool walking = false;
+	//std::cout << sf::Joystick::getAxisPosition(controller,sf::Joystick::PovX) << " " << sf::Joystick::getAxisPosition(controller,sf::Joystick::PovY) << std::endl;
 	if(!blockControl){
 		if( sf::Joystick::isConnected(controller) ){    // analoge axen des controllers nur nutzen, falls auch einer angeschlossen ist
 			if( (sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) < -CONTROLLERTOLERANCE) && !blockUp && (moveInput == 'n' || moveInput == 's') ){
@@ -187,7 +188,6 @@ void Player::Update(float ElapsedTime){
 				walking = true;
 			}
 			if(moveInput == 's'){
-				//std::cout << sf::Joystick::getAxisPosition(controller,sf::Joystick::X) << " " << sf::Joystick::getAxisPosition(controller,sf::Joystick::Y) << std::endl;
 				float xTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::X);
 				float yTemp = sf::Joystick::getAxisPosition(controller,sf::Joystick::Y);
 				if (xTemp <0.f) xTemp = -xTemp;
@@ -260,13 +260,15 @@ void Player::Update(float ElapsedTime){
 #endif
 
 		}                       // hier nochmal die tastenabfragen. siehe menu.cpp ganz unten für tastenbelegung
+		bool directionKey[4] = {false,false,false,false};
 		if( (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
 			 sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
 			 sf::Joystick::isButtonPressed(controller,11) )
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		   && !blockUp && (moveInput == 'n' || moveInput == 'k') ){
 			moveInput = 'k';
-			PosY -= (Speed*ElapsedTime);
+			directionKey[0] = true;
+			PosY -= Speed*ElapsedTime*((directionKey[2]||directionKey[3])?0.707107f:1.f);
 			if(!isAttacking) lookDirection = 'U';
 			blockDown = false;
 			walking = true;
@@ -277,7 +279,8 @@ void Player::Update(float ElapsedTime){
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		   && !blockDown && (moveInput == 'n' || moveInput == 'k') ){
 			moveInput = 'k';
-			PosY += (Speed*ElapsedTime);
+			directionKey[1] = true;
+			PosY += Speed*ElapsedTime*((directionKey[2]||directionKey[3])?0.707107f:1.f);
 			if(!isAttacking) lookDirection = 'D';
 			blockUp = false;
 			walking = true;
@@ -288,7 +291,8 @@ void Player::Update(float ElapsedTime){
 			&& !(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			&& !blockLeft && (moveInput == 'n' || moveInput == 'k') ){
 			moveInput = 'k';
-			PosX -= (Speed*ElapsedTime);
+			directionKey[2] = true;
+			PosX -= Speed*ElapsedTime*((directionKey[0]||directionKey[1])?0.707107f:1.f);
 			if(!isAttacking) lookDirection = 'L';
 			blockRight = false;
 			walking = true;
@@ -299,7 +303,8 @@ void Player::Update(float ElapsedTime){
 		   && !(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
    		   && !blockRight && (moveInput == 'n' || moveInput == 'k') ){
 			moveInput = 'k';
-            PosX += Speed*ElapsedTime;
+			directionKey[3] = true;
+            PosX += Speed*ElapsedTime*((directionKey[0]||directionKey[1])?0.707107f:1.f);
 			if(!isAttacking) lookDirection = 'R';
 			blockLeft = false;
 			walking = true;

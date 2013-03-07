@@ -1,7 +1,5 @@
-ToDo vor Technikerbörse
+﻿ToDo nach Technikerbörse
 . Texturen für "im Haus" (k)
-
-ToDo nach Technikerbörse
 . konsolen textausgaben wenn DEBUGINFO nicht definiert ist
 - bei fullscreen - höchste auflösung
 
