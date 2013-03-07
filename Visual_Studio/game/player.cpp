@@ -430,7 +430,7 @@ void Player::playerExp( int exp, int level ){
          }*/
         if(exp>0)damageText(exp,'e');
         this->pExp += exp;
-        if( this->pExp >= this->pExpMax ){       // Hier levelup!
+        while( (this->pExp >= this->pExpMax) && (this->Lvl < MAXLEVEL) ){       // Hier levelup!
             this->pExp -= this->pExpMax;
             this->Lvl++;
             this->pHealthMax = FHPMAX;//(int)(BASEHEALTH*pow(HEALTHMULTIPLICATOR,(float)(this->Lvl-1)));
@@ -439,6 +439,7 @@ void Player::playerExp( int exp, int level ){
             this->Health = this->pHealthMax;
             damageText(this->Lvl,'l');
         }
+		if(this->pExp >= this->pExpMax) this->pExp = this->pExpMax-1;
     }
 }
 

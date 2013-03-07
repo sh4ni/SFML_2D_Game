@@ -405,7 +405,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 					else isZoom = true;
                 }
                 else if(levelLoop.key.code == sf::Keyboard::Num1){
-                    P1.playerExp(P1.getExpMax()/4, P1.getLvl());
+                    P1.playerExp(P1.getExpMax(), P1.getLvl());
                 }
                 else if(levelLoop.key.code == sf::Keyboard::Num2){
                     P1.playerDamage(20, 10);
