@@ -15,7 +15,7 @@
 
 #define FPS 60U
 
-#define VERSION "0.9.5 Beta"	// intro und menü
+#define VERSION "Beta 0.9.6"	// intro und menü
 
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"

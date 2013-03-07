@@ -272,7 +272,8 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 void ConfigFile::loadConfigFile(){
 	std::ifstream configFile;
 	std::string line;
-	//configFile.open(PATH SETTINGS);
+    std::string defaultSettingsPath = PATH SETTINGS;
+	configFile.open(defaultSettingsPath.c_str());
 	if(!is_empty(configFile) && configFile.is_open()){
 		while(configFile >> line){
 			if(line == "WIDTH"){
