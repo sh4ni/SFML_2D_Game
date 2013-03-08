@@ -285,9 +285,14 @@ void Monster::Update(float ElapsedTime){
 			float y = PlayerPosY - PosY;
             
             if(isHit){
-                Speed = 0.3f;
-                x = -x;
-                y = -y;
+                if( isSpecial == 'b' || isSpecial == 'e' ){
+                    Speed = 0.01f;
+                }
+                else {
+                    Speed = 0.3f;
+                    x = -x;
+                    y = -y;                    
+                }
             }
             else Speed = 0.1f;
             
@@ -324,7 +329,7 @@ void Monster::Update(float ElapsedTime){
         
         if(isHit){
             hitTimer += ElapsedTime/10.f;
-            if( hitTimer > 8.f){
+            if( hitTimer > ( (isSpecial=='e'||isSpecial=='b')?96.f:8.f) ){
                 hitTimer = 0.f;
                 isHit = false;
             }

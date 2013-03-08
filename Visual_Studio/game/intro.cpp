@@ -11,13 +11,7 @@ void Intro::Show(sf::RenderWindow& renderWindow){
 	}
     
     std::vector<sf::VideoMode> modes = sf::VideoMode::getFullscreenModes();
-    for (std::size_t i = 0; i < modes.size(); ++i){
-        if(modes[i].bitsPerPixel == sf::VideoMode::getDesktopMode().bitsPerPixel && modes[i].height >= 768){
-			#ifdef DEBUGINFO
-				std::cout << "Res #" << i << ": " << modes[i].width << "x" << modes[i].height << std::endl;
-			#endif
-        }
-    }
+    std::cout << "MaxRes: " << modes[0].width << "x" << modes[0].height << std::endl;
 
 	sf::Sprite sprite(image);
 
