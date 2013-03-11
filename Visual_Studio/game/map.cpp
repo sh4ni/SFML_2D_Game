@@ -1,5 +1,6 @@
 #include "map.h"
 
+/// Static Variablen
 sf::Texture Map::LevelTexture;
 Map * Map::currentMap;
 
@@ -7,6 +8,10 @@ Map::Map(){
 	std::cout << "konstruktor MAP!" << std::endl;
 }
 
+/**
+ Map wird Initislisiert:
+ z.B. beim Laden einer neuen Map.
+ */
 void Map::init(std::string LevelId){
 
 	#ifdef DEBUGINFO
@@ -14,6 +19,7 @@ void Map::init(std::string LevelId){
 	#endif
 	//renderWindow.setMouseCursorVisible(false);
 	
+    /// Default-Werte
 	this->CamX = TILESIZE;
 	this->CamY = TILESIZE;
 	this->MapSizeX = 0;
@@ -23,28 +29,28 @@ void Map::init(std::string LevelId){
 	this->MapLevelMin = 1;
 	this->MapLevelMax = 1;
 	this->monsterCounter = 0;
-
 	this->isZoom = true;
     this->willPause = false;
-    
     this->nextMap[0] = LevelId;
     this->nextMap[1] = LevelId;
     this->nextMap[2] = LevelId;
     this->nextMap[3] = LevelId;
 	
+    /// Dateipfad
 	std::string FileName = PATH"include/map/" + LevelId + ".txt";
 
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
     
-	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
+	/// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName.c_str());
 	if( openfile.is_open() ){
 		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme >> this->mapMusic >> this->MapLevelMin >> this->MapLevelMax;
 		
         std::vector<int> CollisionInfo;
 
-		std::string ThemeFileName = PATH"include/texture/world/" + mapTheme + ".txt";   // tiles mit kollision werden aus textdatei geladen.
+        /// Tiles mit Kollision werden aus einer Textdatei geladen.
+		std::string ThemeFileName = PATH"include/texture/world/" + mapTheme + ".txt";
         std::ifstream openThemeFile(ThemeFileName.c_str());
         if( openThemeFile.is_open()){
             while(!openThemeFile.eof()){
@@ -57,25 +63,27 @@ void Map::init(std::string LevelId){
         else {
             throw "Error: " + ThemeFileName + " not found.";
         }
+#ifdef DEBUGINFO
         std::cout << mapTheme << " has " << CollisionInfo.size() << " collisionboxes" << std::endl;
+#endif
     
-		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.
-		for ( int i = 0 ; i < MapSizeX ; i++ ){		// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
+		TileMap = new TilePart*[MapSizeX];			/// Map Speicher Dynamisch reservieren.
+		for ( int i = 0 ; i < MapSizeX ; i++ ){		/// Es ist nicht gewŠhrleistet ob der Speicher an einem StŸck hintereinander ist.
 			TileMap[i] = new TilePart[MapSizeY];
 		}
-
 		CollisionMap = new sf::IntRect**[MapSizeX];
 		for ( int i = 0 ; i < MapSizeX ; i++ ){
 			CollisionMap[i] = new sf::IntRect*[MapSizeY];
 		}
 
+        /// Hier wird die eigentliche Map geladen.
 		while( LoadCounterY < MapSizeY ){
 			openfile >> TileType;
 			TileType--;
 			sf::IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
-			subRect.top=TileType/10*TILESIZE;   // zeile
-			subRect.left=TileType%10*TILESIZE;  // spalte
+			subRect.top=TileType/10*TILESIZE;   /// Zeile
+			subRect.left=TileType%10*TILESIZE;  /// Spalte
 			
 			TileMap[LoadCounterX][LoadCounterY].EnemyId = 0;
 			TileMap[LoadCounterX][LoadCounterY].Teleport = 0;
@@ -88,13 +96,13 @@ void Map::init(std::string LevelId){
                 }
             }
             if(foundCollision){
-				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  // keine kollision
+				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  /// keine Kollision
             }
             else {
-                CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
+                CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);    /// Kollision
             }
             
-			/*switch( TileType ){		// alte "hardcode" datei
+			/*switch( TileType ){		// alte "hardcode" version ohne Datei
 			case  0: case  1: case  2: case  3: case  4: case  5: case  6: case  7: case  8: case  9:
 			case 10: case 12: case 13: case 14: case 15: case 16: case 17: case 19:
 			case 20: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
@@ -108,17 +116,41 @@ void Map::init(std::string LevelId){
                     CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
                     break;
 			}*/
+            
 			LoadCounterX++;
 			if( LoadCounterX >= MapSizeX ){
 				LoadCounterX = 0;
 				LoadCounterY++;
 			}
 		}
+        
+        /**
+         Hier werden zusatzinfos wie Monster, Teleporter oder MapŸbergŠnge eingelesen.
+         ID X-Koordinate Y-Koordinate (ZusŠtzliche Infos)
+         ID 1: MapŸbergŠnge, wenn der Spieler den Bildschirm verlŠsst.
+            Da diese keine Position haben, wird die X-Koordinate fŸr den Bildschirmrand benutzt.
+            0 = Oberer Rand
+            1 = Unterer Rand
+            2 = Linker Rand
+            3 = Rechter Rand
+            Y-Koordinate ungenutzt.
+            Ein zusŠtzliches Attribut fŸr den Namen der neuen Map, welche geladen werden soll.
+         
+         ID 2: Gegner auf der Karte.
+            X- und Y-Koordinate bestimmen den Ort, an dem der Gegner auf der Karte startet.
+            Ein zusŠtzliches Attribut fŸr die Gegner ID.
+         
+         ID 3: Teleporter auf der Karte. z.B. wenn man ein Haus betreten will.
+            X- und Y-Koordinate bestimmen den Ort, an dem sich der Teleporter selbst befindet.
+            Drei zusŠtzliche Attribute:
+            1: Name der neuen Map
+            2 und 3: X- und Y-Koordinate auf der Ziel-Map
+         */
 		while( !openfile.eof() ){
 			int idTemp, xTemp, yTemp;
 			openfile >> idTemp >> xTemp >> yTemp;
             if( idTemp == 1){
-                openfile >> nextMap[xTemp]; // xTemp = Direction! // 0 = oben // 1 = unten // 2 = links // 3 = rechts
+                openfile >> nextMap[xTemp]; /// xTemp = Direction! // 0 = oben // 1 = unten // 2 = links // 3 = rechts
             }
 			else if( idTemp == 2 ){
 				openfile >> TileMap[xTemp][yTemp].EnemyId;
@@ -132,7 +164,6 @@ void Map::init(std::string LevelId){
 			}
 		}
 
-
 		#ifdef DEBUGINFO
 			std::cout << "Map successfully loaded." << std::endl;
 		#endif
@@ -142,16 +173,16 @@ void Map::init(std::string LevelId){
 		throw "Error: " + FileName + " not found.";
 	}
 
+    /// Lade Texturedatei
 	FileName = PATH"include/texture/world/" + mapTheme + ".png";
-
-	if( !LevelTexture.loadFromFile(FileName.c_str())){		// Lade Texturedatei
+	if( !LevelTexture.loadFromFile(FileName.c_str())){
 		throw "Error: " + FileName + " not found.";
 	}
 	
 	this->P1.setColMap(CollisionMap);
 	this->P1.setMapSize( MapSizeX, MapSizeY );
 
-
+    /// Monster werden erzeugt.
 	monsterList = new Monster[monsterCounter];
 	for( int y=0, i=0; y<MapSizeY; y++){
 		for( int x=0; x<MapSizeX; x++){
@@ -170,7 +201,7 @@ void Map::init(std::string LevelId){
 
 	this->LastTime = 1.f;
 	
-	///Hier wird der Sound geladen!
+	/// Hier wird der Sound geladen!
 	if(ConfigFile::currentConfigFile->sound == true){
 		gameMusic::music.stop();
 		std::string musicFileName = PATH"include/sound/" + mapMusic + ".ogg";

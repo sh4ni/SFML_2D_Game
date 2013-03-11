@@ -1,6 +1,7 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
+/// Erkennung des Betriebssystems
 #if defined(_WIN32) || defined(__WIN32__)
 	#define SYS_WINDOWS
 #elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh) 
@@ -9,21 +10,25 @@
 	#define SYS_LINUX
 #endif
 
+/// DEBUG wird vom Compiler gesetzt. DEBUGINFO kann hier bei Bedarf auskommentiert werden.
 #ifdef DEBUG
-	#define DEBUGINFO	// F¸r Debug infos im code
+	#define DEBUGINFO
 #endif
 
+/// Bilder pro Sekunde (Frames per Second) werden auf 60 Limitiert
 #define FPS 60U
 
-#define VERSION "Beta 0.9.6"	// intro und men¸
+/// Version des Spiels.
+#define VERSION "Beta 0.9.6"
 
+/// Fenster Titel
 #ifdef DEBUGINFO
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__ " - DEBUG Mode is enabled"
 #else
 	#define WINDOWTITLE "The Journey - " VERSION " Build - " __DATE__ " " __TIME__
 #endif
 
-// path du /include folder
+/// Pfad zum /include Ordner
 #ifdef SYS_MACOS
     #ifdef DEBUGINFO
         #define PATH "/Users/Kimiko/Documents/Git/SFML_2D_Game/Visual_Studio/game/"
@@ -34,7 +39,7 @@
     #define PATH ""
 #endif
 
-// used in menues
+/// für menu.cpp
 #define BUTTONWIDTH 704
 #define BUTTONHEIGHT 64
 #define GENDERBUTTON 128
@@ -42,10 +47,10 @@
 #define OPTIONHEIGHT 50
 #define CONTROLLERAXISMENUE 75.f
 
-// used in map.cpp and player.cpp
+/// für map.cpp und player.cpp
 #define TILESIZE 32
 
-// Formeln für Schaden, Hp, Exp von Monstern und Spielern
+/// Formeln für Schaden, Hp, Exp von Monstern und Spielern
 #define FDMG (int)( 25.f*pow(1.10776f,(float)(this->Lvl-5)) )
 #define FHPMAX (int)( 50.f*pow(1.2023913f,(float)(this->Lvl-5)) )
 #define FEXPMAX (int)( 250.f*pow(1.1424142f,(float)(this->Lvl-5)) )
@@ -54,7 +59,7 @@
 #define FMONEXP (int)( 10.f*pow(1.08543f,(float)(this->Lvl-5)) )
 #define FHPREG (int)( 2.5f*pow(1.14242f,(float)(this->Lvl-5)) )
 
-// used in player.cpp
+/// für player.cpp
 #define MAXLEVEL 50
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
@@ -63,7 +68,7 @@
 #define IDLEHEAL 85					// 
 #define COOLDOWN 200
 
-// used in monster.cpp
+/// für monster.cpp
 #define HOLDTIME 5
 #define MOVETIME 0.5f
 #define MOVETOLLERANCE (TILESIZE/2)
@@ -71,20 +76,14 @@
 #define DETECTIONRADIUS 5
 #define LOSTRADIUS 20
 
-/*#define MONSTERBASEHEALTH 50
-#define MONSTERBASEDMG 5
-#define MONSTERDMGMULTIPLICATOR 1.1f
-#define MONSTERBASEEXP 5.f
-#define MONSTEREXPMULTIPLICATOR 1.125f*/
-
-// ConfigFile
+/// für savegame.cpp - Config - Standardeinstellungen
 #define SETTINGS "settings.cfg"
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
 #define DEFAULT_WINMODE "window"
 #define DEFAULT_SOUND 1 // true
 
-// ConfigFile - Controllersettings
+/// für savegame.cpp - Config - Gamepad Tastenbelegung
 #ifdef SYS_WINDOWS
 	#define DEFAULT_A 0
 	#define DEFAULT_B 1
@@ -109,7 +108,7 @@
 	#define DEFAULT_RS 7
 #endif
 
-// SaveGame
+/// für savegame.cpp - Savegame
 #ifdef DEBUGINFO
     #define SAVEGAME "savegame_debug.bin"
     #define CHECKSUM 0
@@ -123,9 +122,7 @@
 #define DEFAULT_F_NAME "Ashley"
 #define DEFAULT_M_NAME "Fabi"	// in memories
 #define DEFAULT_LEVEL "map1"
-#define DEFAULT_POSX 1008   
-#define DEFAULT_POSY 640	
-
-
+#define DEFAULT_POSX 1008
+#define DEFAULT_POSY 640
 
 #endif
