@@ -68,7 +68,7 @@ void Map::init(std::string LevelId){
 #endif
     
 		TileMap = new TilePart*[MapSizeX];			/// Map Speicher Dynamisch reservieren.
-		for ( int i = 0 ; i < MapSizeX ; i++ ){		/// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
+		for ( int i = 0 ; i < MapSizeX ; i++ ){		/// Es ist nicht gew√§hrleistet ob der Speicher an einem St√ºck hintereinander ist.
 			TileMap[i] = new TilePart[MapSizeY];
 		}
 		CollisionMap = new sf::IntRect**[MapSizeX];
@@ -112,7 +112,7 @@ void Map::init(std::string LevelId){
 			case 60: case 61:
 				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  // keine kollision
                     break;
-			default:        // defaultwert: alle anderen blöcke kriegen eine kollision!
+			default:        // defaultwert: alle anderen bl√∂cke kriegen eine kollision!
                     CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);
                     break;
 			}*/
@@ -125,24 +125,24 @@ void Map::init(std::string LevelId){
 		}
         
         /**
-         Hier werden zusatzinfos wie Monster, Teleporter oder Mapübergänge eingelesen.
-         ID X-Koordinate Y-Koordinate (Zusätzliche Infos)
-         ID 1: Mapübergänge, wenn der Spieler den Bildschirm verlässt.
-            Da diese keine Position haben, wird die X-Koordinate für den Bildschirmrand benutzt.
+         Hier werden zusatzinfos wie Monster, Teleporter oder Map√ºberg√§nge eingelesen.
+         ID X-Koordinate Y-Koordinate (Zus√§tzliche Infos)
+         ID 1: Map√ºberg√§nge, wenn der Spieler den Bildschirm verl√§sst.
+            Da diese keine Position haben, wird die X-Koordinate f√ºr den Bildschirmrand benutzt.
             0 = Oberer Rand
             1 = Unterer Rand
             2 = Linker Rand
             3 = Rechter Rand
             Y-Koordinate ungenutzt.
-            Ein zusätzliches Attribut für den Namen der neuen Map, welche geladen werden soll.
+            Ein zus√§tzliches Attribut f√ºr den Namen der neuen Map, welche geladen werden soll.
          
          ID 2: Gegner auf der Karte.
             X- und Y-Koordinate bestimmen den Ort, an dem der Gegner auf der Karte startet.
-            Ein zusätzliches Attribut für die Gegner ID.
+            Ein zus√§tzliches Attribut f√ºr die Gegner ID.
          
          ID 3: Teleporter auf der Karte. z.B. wenn man ein Haus betreten will.
             X- und Y-Koordinate bestimmen den Ort, an dem sich der Teleporter selbst befindet.
-            Drei zusätzliche Attribute:
+            Drei zus√§tzliche Attribute:
             1: Name der neuen Map
             2 und 3: X- und Y-Koordinate auf der Ziel-Map
          */
@@ -173,12 +173,13 @@ void Map::init(std::string LevelId){
 		throw "Error: " + FileName + " not found.";
 	}
 
-    /// Lade Texturedatei
+    /// Lade Texturedatei.
 	FileName = PATH"include/texture/world/" + mapTheme + ".png";
 	if( !LevelTexture.loadFromFile(FileName.c_str())){
 		throw "Error: " + FileName + " not found.";
 	}
 	
+    /// Spieler die Kollisionsmap und die Mapgr√∂√üe mitteilen.
 	this->P1.setColMap(CollisionMap);
 	this->P1.setMapSize( MapSizeX, MapSizeY );
 
@@ -210,11 +211,13 @@ void Map::init(std::string LevelId){
 		gameMusic::music.setLoop(true);
 	}
     
-    if( P1.getPosX() < 0) P1.setPosition((float)(MapSizeX*TILESIZE), P1.getPosY());
-    if( P1.getPosY() < 0) P1.setPosition(P1.getPosX(), (float)(MapSizeY*TILESIZE));
+    //if( P1.getPosX() < 0) P1.setPosition((float)(MapSizeX*TILESIZE), P1.getPosY());
+    //if( P1.getPosY() < 0) P1.setPosition(P1.getPosX(), (float)(MapSizeY*TILESIZE));
 
+    /// Interface an gew√§hlten Helden anpassen.
 	initInterface();
 
+    /// Interface wird positioniert.
 	iface.setTexture(ifaceImage);
 	iface.setOrigin((float)ifaceImage.getSize().x/2.f,(float)ifaceImage.getSize().y);
 	iface.setPosition((float)(ConfigFile::currentConfigFile->width/2),(float)(ConfigFile::currentConfigFile->height));
@@ -232,6 +235,7 @@ void Map::init(std::string LevelId){
 	DisplayHP.Init((float)(ConfigFile::currentConfigFile->width/2+122),(float)(ConfigFile::currentConfigFile->height-58),"Error",18,0);      // default strings, falls was im spiel nicht klappt
 	DisplayEXP.Init((float)(ConfigFile::currentConfigFile->width/2+123),(float)(ConfigFile::currentConfigFile->height-27),"Error",18,0);
 	DisplayLevel.Init((float)(ConfigFile::currentConfigFile->width/2-128),(float)(ConfigFile::currentConfigFile->height-76),"Err",18,0);
+
 #ifdef DEBUGINFO
 	DisplayFPS.Init(0,0,"FPS: Error",20);
 	DisplayKoord.Init(0,20,"X: Error Y: Error",20);
@@ -242,44 +246,50 @@ void Map::init(std::string LevelId){
 	//Savegame::currentSaveGame->saveSavegame();
 }
 
+/// Hier wird die Map wieder gel√∂scht.
 void Map::destory(){
-    // Lösche TileMap wieder...
+    // L√∂sche TileMap wieder...
     for( int x=0; x<MapSizeX; x++){
         for( int y=0; y<MapSizeY; y++){
-            delete TileMap[x][y].TexturePart;   // Löschen der TileMap - Textureausschnitte
+            delete TileMap[x][y].TexturePart;   // L√∂schen der TileMap - Textureausschnitte
 			if( TileMap[x][y].Teleport ){
-				delete TileMap[x][y].Teleport;	// Löschen der TileMap - Teleporter
+				delete TileMap[x][y].Teleport;	// L√∂schen der TileMap - Teleporter
             }
             if( CollisionMap[x][y] ){
-                delete CollisionMap[x][y];      // Löschen der CollisionMap - Rechtecke
+                delete CollisionMap[x][y];      // L√∂schen der CollisionMap - Rechtecke
             }
         }
-		delete [] TileMap[x];                      // Löschen der TileMap - Objekte
-		delete [] CollisionMap[x];                 // Löschen der CollisionMap - Pointer
+		delete [] TileMap[x];                      // L√∂schen der TileMap - Objekte
+		delete [] CollisionMap[x];                 // L√∂schen der CollisionMap - Pointer
     }
 	
-	delete [] TileMap;                             // Löschen der TileMap - Pointer
-    delete [] CollisionMap;                        // Löschen der CollisionMap - Pointer auf Pointer
-	delete [] monsterList;							// Lˆschen der Monster
+	delete [] TileMap;                             // L√∂schen der TileMap - Pointer
+    delete [] CollisionMap;                        // L√∂schen der CollisionMap - Pointer auf Pointer
+	delete [] monsterList;							// LÀÜschen der Monster
+#ifdef DEBUGINFO
 	std::cout << "deleted map..." << std::endl;
+#endif
 }
 
+/// Destruktor ruft den Destroyer auf.
 Map::~Map(){
-	std::cout << "destruktor MAP!" << std::endl;
+	//std::cout << "destruktor MAP!" << std::endl;
     destory();
 }
 
+/// Der eigentliche Hauptgameloop
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View& viewCamera){
 	while( 1+3+3==7 ){
 
+        /// Bildschirm H√∂he und Breite
         int width = ConfigFile::currentConfigFile->width/(isZoom?2:1);
         int height = ConfigFile::currentConfigFile->height/(isZoom?2:1);
         viewCamera.setSize((float)width,(float)height);
 		if(willPause) renderWindow.clear();
 
-		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
+		sf::sleep(sf::milliseconds(10));	/// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){
-			gameMusic::music.stop();	// damit im men¸ die musik wieder korrekt abgespielt wird
+			gameMusic::music.stop();	// damit im men¬∏ die musik wieder korrekt abgespielt wird
 			return MapEvent(MapEvent::dead);
 		}
 		ElapsedTime = (float)clock.restart().asMilliseconds();
@@ -287,17 +297,17 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		Frames = 1.f /( ElapsedTime / 1000 );
 		LastTime = ElapsedTime;
 
-		// FPS
+		/// FPS anzeige
 		std::ostringstream FPSText;
 		FPSText.precision(0);
 		FPSText << std::fixed << "FPS: " << Frames;
 		DisplayFPS.Update(FPSText.str());
 
-		// Kamera folgt dem Spieler...
+		/// Kamera folgt dem Spieler.
 		CamX = (int)P1.getPosX();
 		CamY = (int)P1.getPosY();
         
-        // pr¸fen ob spieler aus dem bildschirm l‰uft
+        /// Pr√ºfen ob Spieler aus dem Bildschirm l√§uft.
         if( CamX < 0 ){										// Links
 			return MapEvent(MapEvent::mapchange,nextMap[2],(float)(getNextLevelSize(nextMap[2]).x-1),(float)((CamY+TILESIZE/2)/TILESIZE));
 		}
@@ -311,10 +321,11 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			return MapEvent(MapEvent::mapchange,nextMap[1],(float)(CamX/TILESIZE),0.f);
 		}
 
-		// Wenn ich schonmal die Spieler koordinaten schonmal hab, dann nutz ich sie hier noch schnell ^^
+		/// Tile auf dem der Spieler steht.
 		TileX = CamX/TILESIZE;
 		TileY = (CamY+TILESIZE/2)/TILESIZE;
 
+        /// Tiles nur im bereich der Mapgr√∂√üe.
 		if( TileX < 0 ) TileX = 0;
 		else if( TileX >= MapSizeX ) TileX = MapSizeX-1;
 		if( TileY < 0 ) TileY = 0;
@@ -325,7 +336,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		PlayerKoordText << std::fixed << "X: " << CamX << " Y: " << CamY << " TX: " << TileX << " TY: " << TileY;
 		DisplayKoord.Update(PlayerKoordText.str());
 
-		// und nochmal ^^
+		/// Wenn Spieler auf einen Teleporter l√§uft
  		if( TileMap[TileX][TileY].Teleport ){
 			#ifdef DEBUGINFO
 				std::cout << "Lade Map: '" << TileMap[TileX][TileY].Teleport->Map << "' X: " << TileMap[TileX][TileY].Teleport->xDest << " Y: " << TileMap[TileX][TileY].Teleport->yDest << std::endl;
@@ -338,7 +349,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		PlayerSpeedText << std::fixed << "Speed: " << P1.getSpeed();
 		DisplaySpeed.Update(PlayerSpeedText.str());
 
-		// ...geht aber nicht ¸bers Kartenende hinaus
+		/// Kamera geht nicht √ºber den Bildschirmrand hinaus
 		if ( MapSizeX*TILESIZE < width ){
 			CamX = MapSizeX*TILESIZE/2;
 			renderWindow.clear();
@@ -354,9 +365,10 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		renderWindow.setView(viewCamera);
 		viewCamera.setCenter((float)CamX,(float)CamY);	// Alles was ab hier gerendert wird, bewegt sich mit der Kamera mit
 
-		// Hier wird die Map gerendert.
-		// Orientierung an der Kamera, damit nur sichtbare Sprites neu gezeichnet werden.
-
+		/**
+         Hier wird die Map gerendert.
+         Orientierung an der Kamera, damit nur sichtbare Sprites neu gezeichnet werden.
+		*/
 		{// Klammer, wegen sichtbarkeit der variablen.
 			int y = ((int)CamY-(height/2))/TILESIZE;
 			if( y<0 ) y=0;
@@ -372,14 +384,14 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			}
 		}
 
-        // Rendern der Monster
+        /// Rendern der Monster
 		for(int i=0;i<monsterCounter;i++){
 			monsterList[i].Update(ElapsedTime);
 			monsterList[i].Render(renderWindow);
 			//std::cout << "Monster " << i << ": " << monsterList[i].getPosX() << "/" << monsterList[i].getPosY() << std::endl;
 		}
         
-		// Rendern des Spielers
+		/// Rendern des Spielers
 		P1.Render(renderWindow);
 		P1.Update(ElapsedTime);
 
@@ -387,11 +399,34 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		//P2.Render(renderWindow);      // 2 Spieler test... siehe weiter oben
 		//P2.Update(ElapsedTime);
 
+        /**
+         willPause wird gesetzt, wenn der Pause knopf gedr√ºckt wird, oder das Fenster nicht mehr den Fokus hat.
+         Es wird aber noch ein kompletter Frame gezeichnet.
+         Hier wird in die Pause gesprungen.
+         */
         if(willPause){
             isZoom = true;
             willPause = false;
             return MapEvent(MapEvent::pause);
         }
+        
+        /**
+         Hier werden verschiedene Tasten abgefragt, welche nichts mit der Spielersteuerung zu tun haben.
+         Esc    Pause
+         F10    Screenshot
+         F6     Speichern
+         F9     Laden
+         
+         Tasten nur im Debug Modus:
+         E      Schneller Laufen
+         Q      Langsamer Laufen
+         Z      Zoom ein-/ausschalten
+         1      Level Up
+         2      Spieler nimmt 20 "Level 10 Schaden"
+         0      Spieler bewegungen werden geblockt
+         9      Spieler bewegungen werden entblockt
+         F      Toggle Fullscreen/Windowmode
+         */
 		sf::Event levelLoop;
 		while(renderWindow.pollEvent(levelLoop)){
 			if(levelLoop.type == sf::Event::KeyPressed || levelLoop.type == sf::Event::JoystickButtonPressed){
@@ -474,19 +509,20 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			}
 			
 		}
-		
-		renderWindow.setView(renderWindow.getDefaultView());	// Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
-		
+
+        /// Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
+        renderWindow.setView(renderWindow.getDefaultView());
+        
 		renderWindow.draw(iface);
 
-        // balken für hp und exp werden hier angepasst.
+        /// Balken f√ºr HP und EXP werden hier angepasst.
 		HPBar.setSize(sf::Vector2f((float)P1.getHealth()/(float)P1.getHealthMax()*180.f,28.f));
 		EXPBar.setSize(sf::Vector2f((float)P1.getExp()/(float)P1.getExpMax()*180.f,28.f));
 
 		renderWindow.draw(HPBar);
 		renderWindow.draw(EXPBar);
 
-		DisplayHP.printText.setOrigin(DisplayHP.printText.getGlobalBounds().width,0);			// Text Rechtsb¸ndig
+		DisplayHP.printText.setOrigin(DisplayHP.printText.getGlobalBounds().width,0);			// Text Rechtsb√ºndig
 		DisplayEXP.printText.setOrigin(DisplayEXP.printText.getGlobalBounds().width,0);
 		DisplayLevel.printText.setOrigin(DisplayLevel.printText.getGlobalBounds().width/2,0);	// Text Zentrieren
 

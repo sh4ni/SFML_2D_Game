@@ -7,10 +7,10 @@
 Savegame * Savegame::currentSaveGame;
 ConfigFile * ConfigFile::currentConfigFile;
 
-// Prüfe ob eine Datei leer ist
+// PrÂ¸fe ob eine Datei leer ist
 bool is_empty(std::ifstream& myFile)
 {
-	// wenn die datei leer ist gebe ein true zurück
+	// wenn die datei leer ist gebe ein true zurÂ¸ck
     return myFile.peek() == std::ifstream::traits_type::eof();
 }
 
@@ -135,7 +135,7 @@ bool Savegame::loadSavegame(bool init){
 	if(!is_empty(loadgame) && loadgame.is_open()){
 
 		// gehe in die letzte position der datei
-		// wenn tellg keinen wert zurück gibt ist die datei leer und ein default save wird erstellt
+		// wenn tellg keinen wert zurÂ¸ck gibt ist die datei leer und ein default save wird erstellt
 		// ansonsten springe zum beginn der datei und lese diese ein
 		
 

@@ -14,6 +14,7 @@
 #include "ResourcePath.hpp"
 #endif
 
+/// Klasse f체r Teleporter auf der Map
 class tp{
 	public:
 		std::string Map;
@@ -21,6 +22,7 @@ class tp{
 		int yDest;
 };
 
+/// Klasse f체r Map Tiles
 class TilePart{
 private:
 	int TileType;
@@ -30,9 +32,8 @@ public:
 	tp* Teleport;
 };
 
+/// Klasse f체r Mapevents, welche zur체ck gegeben werden, wenn die Map verlassen wird.
 class MapEvent{
-private:
-	//
 public:
 	enum reason{ nothing, dead, mapchange, exiting, pause };
 
@@ -51,6 +52,7 @@ public:
 	float newMapPosY;
 };
 
+/// Klasse f체r die Map, bzw. den Hauptgameloop
 class Map{
 private:
 	std::string mapTheme;
@@ -88,7 +90,7 @@ private:
 	int TileX;
 	int TileY;
 
-	sf::Texture ifaceImage;         // lade interface entsprechend des gew둯lten heldens.
+	sf::Texture ifaceImage;         // lade interface entsprechend des gew채hlten heldens.
 	sf::Sprite iface;
 
 	sf::RectangleShape HPBar;

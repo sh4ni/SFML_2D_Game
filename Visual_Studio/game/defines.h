@@ -39,7 +39,7 @@
     #define PATH ""
 #endif
 
-/// f웦 menu.cpp
+/// f체r menu.cpp
 #define BUTTONWIDTH 704
 #define BUTTONHEIGHT 64
 #define GENDERBUTTON 128
@@ -47,10 +47,10 @@
 #define OPTIONHEIGHT 50
 #define CONTROLLERAXISMENUE 75.f
 
-/// f웦 map.cpp und player.cpp
+/// f체r map.cpp und player.cpp
 #define TILESIZE 32
 
-/// Formeln f웦 Schaden, Hp, Exp von Monstern und Spielern
+/// Formeln f체r Schaden, Hp, Exp von Monstern und Spielern
 #define FDMG (int)( 25.f*pow(1.10776f,(float)(this->Lvl-5)) )
 #define FHPMAX (int)( 50.f*pow(1.2023913f,(float)(this->Lvl-5)) )
 #define FEXPMAX (int)( 250.f*pow(1.1424142f,(float)(this->Lvl-5)) )
@@ -59,7 +59,7 @@
 #define FMONEXP (int)( 10.f*pow(1.08543f,(float)(this->Lvl-5)) )
 #define FHPREG (int)( 2.5f*pow(1.14242f,(float)(this->Lvl-5)) )
 
-/// f웦 player.cpp
+/// f체r player.cpp
 #define MAXLEVEL 50
 #define PLAYERSPEED 0.2f
 #define COLLISIONTOLERANCE 4
@@ -68,7 +68,7 @@
 #define IDLEHEAL 85					// 
 #define COOLDOWN 200
 
-/// f웦 monster.cpp
+/// f체r monster.cpp
 #define HOLDTIME 5
 #define MOVETIME 0.5f
 #define MOVETOLLERANCE (TILESIZE/2)
@@ -76,14 +76,14 @@
 #define DETECTIONRADIUS 5
 #define LOSTRADIUS 20
 
-/// f웦 savegame.cpp - Config - Standardeinstellungen
+/// f체r savegame.cpp - Config - Standardeinstellungen
 #define SETTINGS "settings.cfg"
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
 #define DEFAULT_WINMODE "window"
 #define DEFAULT_SOUND 1 // true
 
-/// f웦 savegame.cpp - Config - Gamepad Tastenbelegung
+/// f체r savegame.cpp - Config - Gamepad Tastenbelegung
 #ifdef SYS_WINDOWS
 	#define DEFAULT_A 0
 	#define DEFAULT_B 1
@@ -108,7 +108,7 @@
 	#define DEFAULT_RS 7
 #endif
 
-/// f웦 savegame.cpp - Savegame
+/// f체r savegame.cpp - Savegame
 #ifdef DEBUGINFO
     #define SAVEGAME "savegame_debug.bin"
     #define CHECKSUM 0

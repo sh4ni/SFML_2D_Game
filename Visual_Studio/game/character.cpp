@@ -71,18 +71,18 @@ void Character::setColMap(sf::IntRect***& ColMap){
 
 /**
  Berechnet den Schaden, welchen dein Charakter bekommen kann.
- Der Schaden wird je nach Levelunterschied abgeschwächt oder verstärkt.
+ Der Schaden wird je nach Levelunterschied abgeschw√§cht oder verst√§rkt.
  Unterschied Maximal +- 10 Level und zwischen.
  Der "Gegner" ist immer der Angreifer.
  -10 Level: Schaden 0%
  0 Level: Schaden 100%
  +10 Level: Schaden 125%
- Wenn der Berechnete Schaden 0 ist, wird pauschal immer 1 Schaden zurückgegeben.
+ Wenn der Berechnete Schaden 0 ist, wird pauschal immer 1 Schaden zur√ºckgegeben.
  */
 int Character::calcDamage(int damage,int level){
 	int levelDif = level-this->Lvl;
     float multi = 1.f;
-    if(levelDif > 0){   // Gegner hat einen höhreren Level
+    if(levelDif > 0){   // Gegner hat einen h√∂hreren Level
 		if(levelDif >10) levelDif = 10;
 			multi += (float)levelDif*0.025f;
 		}
@@ -98,9 +98,9 @@ int Character::calcDamage(int damage,int level){
 }
 
 /**
- Diese Methode ist für die Zahlen, die über die Charaktere hinweg schweben.
+ Diese Methode ist f√ºr die Zahlen, die √ºber die Charaktere hinweg schweben.
  z.B. Schaden, Erfahrungsgewinn, Levelaufstieg, usw.
- Für char type:
+ F√ºr char type:
  m = Schaden am Monster
  p = Schaden am Player
  h = Heilung
@@ -110,7 +110,7 @@ int Character::calcDamage(int damage,int level){
 void Character::damageText(int damage, char type){
 	Schrift E1;
 	std::ostringstream dmgString;
-	if( type == 'e') dmgString << "XP +";           // zusatztext für exp und levelup
+	if( type == 'e') dmgString << "XP +";           // zusatztext f√ºr exp und levelup
 	else if( type == 'l') dmgString << "LEVEL ";
 		
 	dmgString << damage;
@@ -131,9 +131,9 @@ void Character::damageText(int damage, char type){
 }
 
 /**
- Für das Darstellen eines Charakters.
- Inaktive ("getötete") Charaktere sollen nicht neu gezeichnet werden.
- der dmgText wird in einem Vector gespeichert und soll auch angezeigt werden können,
+ F√ºr das Darstellen eines Charakters.
+ Inaktive ("get√∂tete") Charaktere sollen nicht neu gezeichnet werden.
+ der dmgText wird in einem Vector gespeichert und soll auch angezeigt werden k√∂nnen,
  wenn ein Charakter inaktiv ist.
  */
 void Character::Render(sf::RenderWindow &renderWindow, bool drawEnemy){

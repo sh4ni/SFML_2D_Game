@@ -322,7 +322,7 @@ void Monster::Update(float ElapsedTime){
 			}
 		}
         
-        if( walking ){      // nur animieren wenn spieler lŠuft
+        if( walking ){      // nur animieren wenn spieler lÃ¤uft
             if( (Animation/(int)((1/Speed)*ElapsedTime*ANIMATIONSPEED)) >= 4) Animation = 0;
             Animation++;
         }

@@ -2,18 +2,18 @@
 
 /**
 Wenn die Pause gestartet wird,
-färbt sich der Bildschirm dunkel transparent.
+fâ€°rbt sich der Bildschirm dunkel transparent.
 Der Spieler kann hier durch Eingaben das Spiel a) Speichern b) Laden c) Beenden
-Die Pause gibt einen Wert zurück. Dieser Rückgabewert entscheidet ob das Spiel schlussendlich
+Die Pause gibt einen Wert zurÂ¸ck. Dieser RÂ¸ckgabewert entscheidet ob das Spiel schlussendlich
 beendet wird oder fortgesetzt wird.
 
 */
 
 bool Pause::Show(sf::RenderWindow& renderWindow, sf::View& viewCamera){
 
-	float CenterX = viewCamera.getCenter().x;    // pausemenŸ muss hier gegengerechnet werden,
+	float CenterX = viewCamera.getCenter().x;    // pausemenÃ¼ muss hier gegengerechnet werden,
 	float CenterY = viewCamera.getCenter().y;    // da sonst mapkoordinaten mit bildschirm koordinaten
-                                                    // nicht Ÿbereinstimmen!
+                                                    // nicht Ã¼bereinstimmen!
 	// Hintergrund Box
 	sf::RectangleShape Background(sf::Vector2f((float)ConfigFile::currentConfigFile->width, (float)ConfigFile::currentConfigFile->height));
     Background.setFillColor(sf::Color(0, 0, 0,100));
@@ -23,7 +23,7 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View& viewCamera){
 	Schrift Pause(CenterX,CenterY-100,"Paused",50);
 	Pause.printText.setOrigin(Pause.printText.getGlobalBounds().width/2.f+1.f,0);	// Textbox zentrieren
 
-	// Logo im Pausemenü
+	// Logo im PausemenÂ¸
 	sf::Texture LogoImage;
 	if(!LogoImage.loadFromFile(PATH"include/interface/splashscreen.png")){  // selbes bild wie im intro
 		throw "Error: include/interface/splashscreen.png not found.";
@@ -55,7 +55,7 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View& viewCamera){
 	sf::Event pauseLoop;
 	while(renderWindow.waitEvent(pauseLoop)){
 	
-		Map::currentMap->currentMap->getClock()->restart();	// damit der Player nicht während der Pause weiter laufen kann
+		Map::currentMap->currentMap->getClock()->restart();	// damit der Player nicht wâ€°hrend der Pause weiter laufen kann
 
 		if(pauseLoop.type == sf::Event::KeyPressed || pauseLoop.type == sf::Event::JoystickButtonPressed ){
 			if (pauseLoop.key.code == sf::Keyboard::Escape || pauseLoop.joystickButton.button == ConfigFile::currentConfigFile->controller_START ){
@@ -67,7 +67,7 @@ bool Pause::Show(sf::RenderWindow& renderWindow, sf::View& viewCamera){
 				#ifdef DEBUGINFO
 					std::cout << "Quit Game!" << std::endl;
 				#endif
-					return true; // gebe true zurueck damit das spiel anschließend beendet wird
+					return true; // gebe true zurueck damit das spiel anschlieï¬‚end beendet wird
 			}else if(pauseLoop.key.code == sf::Keyboard::F6){
 				Savegame::currentSaveGame->saveSavegame();
 			}else if(pauseLoop.key.code == sf::Keyboard::F9){

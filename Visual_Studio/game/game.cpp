@@ -2,7 +2,7 @@
 
 void Game::Init(void)
 {
-    // Random funktion wird im spiel šfters verwendet
+    // Random funktion wird im spiel Ã¶fters verwendet
 	srand((unsigned)time(NULL));
 	// Do it!
 	Savegame::currentSaveGame = new Savegame;
@@ -13,7 +13,7 @@ void Game::Init(void)
 
 	Game::continueGame = false;
 	
-	// Prüfung fehtl noch ob der ORdner schon vorhanden ist @fil
+	// PrÂ¸fung fehtl noch ob der ORdner schon vorhanden ist @fil
 	/*if(!system("mkdir screenshots"))
 		throw "Failed to create the screenshot folder!";*/
 
@@ -54,21 +54,21 @@ void Game::Start()
 	// Setze den Spielstatus auf Intro -> Intro wird angezeigt
 	_gameState = Game::ShowingIntro;
 	
-	// Solange das Spiel nicht beendet wird, führe GameLoop aus
+	// Solange das Spiel nicht beendet wird, fÂ¸hre GameLoop aus
 	while(!IsExiting()){
 		GameLoop();
 	}
 
-	// Wenn der GameLoop beendet wurde, schließe das Fenster
+	// Wenn der GameLoop beendet wurde, schlieï¬‚e das Fenster
 	_mainWindow.close();
 	//system("pause");
 }
 
 bool Game::IsExiting()
 {
-	// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zurück, ansonsten ein False
+	// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zurÂ¸ck, ansonsten ein False
 	if(_gameState == Game::Exiting){
-		// Möglichkeit das Spiel zu Speichern
+		// MË†glichkeit das Spiel zu Speichern
 
 		delete Savegame::currentSaveGame;
 		delete ConfigFile::currentConfigFile;
@@ -107,7 +107,7 @@ void Game::GameLoop(){
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
             gender = ShowMenuGender();
-			if(gender == 'M' || gender == 'F'){	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
+			if(gender == 'M' || gender == 'F'){	// somit wird kein neuer spielstand erzeugt, wenn man den zurÂ¸ck button im gender menÂ¸ drÂ¸ckt!
 				Savegame::currentSaveGame->pGender = gender;	// speichere explizit hier das geschlecht, da die restlichen werte aus der defines geladen werden
 				Savegame::currentSaveGame->saveSavegame(true); // true -> erzeuge einen neuen spielstand
 			}
@@ -152,7 +152,7 @@ void Game::GamePaused(sf::View viewCamera){
 
 		_gameState = Continue;
 	}
-	// hier kann ich irgendwann zurück ins menü!
+	// hier kann ich irgendwann zurÂ¸ck ins menÂ¸!
 }
 
 void Game::ShowMap(sf::View viewCamera){
@@ -242,7 +242,7 @@ const char Game::ShowMenuGender(){
 			break;
         case MainMenu::Menue:
             _gameState = ShowingMenu;
-			return 'X';			// Gebe X Zurück damit nicht gespeichert wird, wenn man nicht direkt möchte (new game)
+			return 'X';			// Gebe X ZurÂ¸ck damit nicht gespeichert wird, wenn man nicht direkt mË†chte (new game)
             break;
 		default:
             break; 

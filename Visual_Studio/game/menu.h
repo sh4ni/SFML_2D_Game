@@ -45,7 +45,7 @@ private:
 	sf::Sprite spriteMenu;
 	sf::Sprite spriteBackground;
 	sf::Sprite spriteBackgroundRepeat;
-	static int animation;      // laufvariable für das durchlaufende hintergrundbild
+	static int animation;      // laufvariable f√ºr das durchlaufende hintergrundbild
 	sf::Text Version;
 };
 

@@ -15,7 +15,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
         throw "Error: include/interface/menu_back.png not found.";
 	}
 
-	// Men¸ und Hintergrund
+	// Men¬∏ und Hintergrund
 	spriteMenu.setTexture(imageMenu);
 	spriteBackground.setTexture(imageBackground);       // ich brauch das bild 2 mal, da es sich beim durchscrollen
 	spriteBackgroundRepeat.setTexture(imageBackground); // wiederholen muss!
@@ -30,12 +30,12 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
 
     sf::Texture imageOtherButton;   // im neuen spiel, die spieler buttons. bei den optionen, der optionen button
     sf::Texture imageButton;
-    if(!imageButton.loadFromFile(PATH"include/interface/button.png")){  // standard button brauch ich in jedem menü
+    if(!imageButton.loadFromFile(PATH"include/interface/button.png")){  // standard button brauch ich in jedem men√º
         throw "Error: include/interface/button.png not found.";
     }
     
     // ========================= NEUES SPIEL =========================
-    if( menuType == 'G' ){           // ab hier das heldenauswahlmenü
+    if( menuType == 'G' ){           // ab hier das heldenauswahlmen√º
         if(!imageOtherButton.loadFromFile(PATH"include/interface/genderbutton.png")){  // genderbutton nur im gendermenp
             throw "Error: include/interface/genderbutton.png not found.";
         }
@@ -44,12 +44,12 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
                                                         // also auf sone ganz spezielle art und weise...
         button[0].text.setString("Select your hero");   // naja... sie sind eben ganz besonders!
         button[0].text.setPosition((float)ConfigFile::currentConfigFile->width/2,(float)ConfigFile::currentConfigFile->height/2-120);   // na wenn meine ersten beiden buttons eh keinen text haben...
-        button[0].text.setFont(font);                       // dann kann ich ihre texte ja für was anderes nehmen ^^
+        button[0].text.setFont(font);                       // dann kann ich ihre texte ja f√ºr was anderes nehmen ^^
         button[0].text.setCharacterSize(40U);
         button[0].text.setColor(sf::Color(0U,0U,0U));
         button[0].text.setOrigin(button[0].text.getGlobalBounds().width/2+1,0);
         
-        if(!Game::isNewGame){               // warnung nur anzeigen, wenns einen alten spielstand zum überschreiben gibt.
+        if(!Game::isNewGame){               // warnung nur anzeigen, wenns einen alten spielstand zum √ºberschreiben gibt.
             button[1].text.setString("Warning: This will overwrite your old savegame!");
             button[1].text.setPosition((float)ConfigFile::currentConfigFile->width/2,(float)ConfigFile::currentConfigFile->height/2+130);
             button[1].text.setFont(font);
@@ -87,7 +87,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
                     button[i].image.setTextureRect(sf::IntRect(0,GENDERBUTTON,GENDERBUTTON,GENDERBUTTON));
                     button[i].action = Male;
                     break;
-                case 2:         // ab hier können mehr standard buttons eingefügt werden!
+                case 2:         // ab hier k√∂nnen mehr standard buttons eingef√ºgt werden!
                     button[i].text.setString("Back");
                     button[i].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
                     button[i].action = Menue;
@@ -158,8 +158,8 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
 
     }
     
-    // ========================= HAUPTMENÜ =========================
-    else {              // ab hier das hauptmenü!
+    // ========================= HAUPTMEN√ú =========================
+    else {              // ab hier das hauptmen√º!
         buttons = 4;	// Wieviele Buttons brauchen wir? Ja richtig! 4 verdammt noch mal!
         button = new MenuItem[buttons];
         
@@ -196,12 +196,12 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
                     button[i].active = true;
                     break;
                 case 3:
-                    button[i].text.setString("Exit");       // neue buttons können ohne probleme eingefügt werden!
+                    button[i].text.setString("Exit");       // neue buttons k√∂nnen ohne probleme eingef√ºgt werden!
                     button[i].action = Exit;
                     button[i].active = true;
                     break;
             }
-            if( button[i].active ){	// Andere Textur und Textfarbe f¸r klickbare Buttons
+            if( button[i].active ){	// Andere Textur und Textfarbe f¬∏r klickbare Buttons
                 button[i].image.setTextureRect(sf::IntRect(0,0,BUTTONWIDTH,BUTTONHEIGHT));
                 button[i].text.setColor(sf::Color(255U,255U,255U));
             }
@@ -209,7 +209,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
         }        
     }
 
-    // version des spiels im menü
+    // version des spiels im men√º
 	Version.setPosition((float)ConfigFile::currentConfigFile->width-5.f,(float)ConfigFile::currentConfigFile->height-5.f);
 	Version.setString(VERSION);
 	Version.setCharacterSize(16U);
@@ -222,15 +222,15 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
 	return GetMenuResponse(renderWindow,menuType);
 }
 
-void MainMenu::Update(sf::RenderWindow& renderWindow){    // methode zum neu zeichnen des menüs,
+void MainMenu::Update(sf::RenderWindow& renderWindow){    // methode zum neu zeichnen des men√ºs,
 
-    spriteBackground.setPosition((float)-animation,0.f);         // hintergrundbild läuft durch
+    spriteBackground.setPosition((float)-animation,0.f);         // hintergrundbild l√§uft durch
     spriteBackgroundRepeat.setPosition(-animation+spriteBackground.getGlobalBounds().width,0);
-    if( animation > spriteBackground.getGlobalBounds().width ) animation = 0;   // zurücksetzen wenn bildbreite erreicht wurde.
+    if( animation > spriteBackground.getGlobalBounds().width ) animation = 0;   // zur√ºcksetzen wenn bildbreite erreicht wurde.
     animation++;            // LAUF FORREST! LAUF!
 
 	renderWindow.draw(spriteBackgroundRepeat);            // da mittlerweile der hintergrund animiert ist
-    renderWindow.draw(spriteBackground);                  // und auch die buttons sich ändern
+    renderWindow.draw(spriteBackground);                  // und auch die buttons sich √§ndern
 	renderWindow.draw(spriteMenu);
 	for( int i=0; i<this->buttons; i++ ){
 		renderWindow.draw(button[i].image);
@@ -249,10 +249,10 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 	for ( it = _menuItems.begin(); it != _menuItems.end(); it++){
 		sf::IntRect menuItemRect = (*it).rect;
 		if( menuItemRect.contains(x,y) ){   // wenn man einen button klickt...
-			return (*it).action;            // ...geb seine hinterlegte funktion zurück!
+			return (*it).action;            // ...geb seine hinterlegte funktion zur√ºck!
 		}
 	}
-	return Nothing;     // f¸r die, die keine buttons treffen und daneben klicken :>
+	return Nothing;     // f¬∏r die, die keine buttons treffen und daneben klicken :>
 }
 
 MainMenu::MenuButton MainMenu::GetMenuButton(sf::Event menuEvent){
@@ -307,7 +307,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& renderWindow, c
 	int activeButtons = 0;
 	for( int i=0; i<buttons; i++){          // array, das alle aktiven buttons beinhaltet,
 		if( button[i].active ){             // damit bei der tastatureingabe die inaktiven
-			active[activeButtons++] = i;    // buttons ¸bersprungen werden.
+			active[activeButtons++] = i;    // buttons ¬∏bersprungen werden.
 		}
 	}
 	while(4+8+15+16+23+42==108){	// LOST
@@ -365,7 +365,7 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& renderWindow, c
 						selected = i;
 						if( selectedOld != selected ){
 							if(menuType == 'G'){
-								switch(active[selectedOld]){		// evtl kˆnnte man das hier besser lˆsen ... so oft wie ich die alten buttons neu render... evtl bei jedem "‰ndern" alles neu machen.
+								switch(active[selectedOld]){		// evtl kÀÜnnte man das hier besser lÀÜsen ... so oft wie ich die alten buttons neu render... evtl bei jedem "‚Ä∞ndern" alles neu machen.
 									case 0:
 										button[active[selectedOld]].image.setTextureRect(sf::IntRect(0,0,GENDERBUTTON,GENDERBUTTON));
 										break;
@@ -384,11 +384,11 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& renderWindow, c
 					}
 				}
 			}
-			else if(menuEvent.type == sf::Event::MouseButtonPressed){    // men¸ mit maus steuern
+			else if(menuEvent.type == sf::Event::MouseButtonPressed){    // men¬∏ mit maus steuern
 				#ifdef DEBUGINFO
 					std::cout << "x " << menuEvent.mouseButton.x << " -  y " << menuEvent.mouseButton.y << std::endl;
 				#endif
-				if(HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y) != Nothing) // wenn kein button gedr¸ckt wurde, mache nichts
+				if(HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y) != Nothing) // wenn kein button gedr¬∏ckt wurde, mache nichts
                     delete [] active;
 					return HandleClick(menuEvent.mouseButton.x,menuEvent.mouseButton.y);
 			}
