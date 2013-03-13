@@ -1,6 +1,21 @@
 /**
 	Verantwortlich: Daniel Maier, Filip Menke
-	Infotext: 
+	Infotext: Hier findet der Hauptgameloop statt.
+    Bei der Initialisierung wird die Map aus einer Datei geladen.
+    
+    Dateiaufbau für einen Mapfile:
+    [int Größe X] [int Größe Y] [char* Texturenset] [char* Musikdatei] [int Monster Minlevel] [int Monster Maxlevel]
+    [int ...
+    Größe X und Größe Y großes 2D int Array um Texture aus dem Texturenset zu bestimmen
+    ...]
+    [Optional: zusätzliche Mapinfos meht dazu im Code]
+ 
+    Sobald das Texturenset ausgelesen wurde, wird eine zusätzliche Datei eingeladen, welche in einen Vector
+    alle Texturen OHNE kollision bestimmt.
+    Alle Texturen, welche nicht in dieser Datei angegeben werden, haben eine Kollision!
+ 
+    Nachdem die Map erfolgreich eingeladen wurde, werden alle weiteren erforderlichen Dateien wie das Texturenset
+    selbst, Monster, Spieler, usw. eingelesen/erzeugt.
 */
 #include "map.h"
 
@@ -129,7 +144,8 @@ void Map::init(std::string LevelId){
 		}
         
         /**
-         Hier werden zusatzinfos wie Monster, Teleporter oder Mapübergänge eingelesen.
+         Zusätzliche Mapinfos:
+         Hier werden Monster, Teleporter oder Mapübergänge eingelesen.
          ID X-Koordinate Y-Koordinate (Zusätzliche Infos)
          ID 1: Mapübergänge, wenn der Spieler den Bildschirm verlässt.
             Da diese keine Position haben, wird die X-Koordinate für den Bildschirmrand benutzt.
