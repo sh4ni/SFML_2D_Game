@@ -1,6 +1,15 @@
 ﻿/**
 	Verantwortlich: Daniel Maier
-	Infotext: 
+	Infotext: Dies ist die Klasse für die steuerbare Spielfigur.
+    Die Spielfigur wird einmalig Initialisiert und dann während des Gameloops immer
+    aktualisiert.
+    Der Spieler hat verschiedene Interaktionsmöglichkeiten.
+    Er kann sich durch Tastatur oder Gamepad eingabe auf der Map bewegen oder Monster
+    schlagen.
+    Ihm werden von der Map mehrere Infos mitgeteilt, welche er benötigt.
+    z.B. die Kollisionsmap oder die Mapgröße.
+    Die Kollisionsabfrage wird über 12 Kollisionspunkte realisiert, je nachdem wie der
+    Zustand der Punkte ist.
 */
 #include <math.h>
 #include "savegame.h"

@@ -1,6 +1,20 @@
 /**
 	Verantwortlich: Daniel Maier
-	Infotext: 
+	Infotext: Dies ist die Klasse für die Monster im Spiel.
+    Die Monster werden einmalig Initialisiert und dann während des Gameloops immer
+    aktualisiert.
+    Die Monster bewegen sich eigenständig auf der Karte, können dem Spieler schaden
+    zufügen und haben die selbe Kollisionsabfrage wie der Spieler auch.
+    Genauere Infos über die Kollisionsabfrage gibt es in der player.cpp, diese wurde
+    1zu1 ins Monster übertragen.
+    Es gibt verschiedene Monstertypen und ein Monster kann besonders stark, ein Boss
+    oder doppelt so groß sein.
+    Es bewegt sich in einem zufälligen Zeitintervall in eine zufällige Richtung.
+    Es kann Aggresiv oder Passiv sein.
+    Aggresive Monster greifen den Spieler bei sichtkontakt an, andere nur wenn sie
+    angegriffen werden.
+    Flüchtet der Spieler von einem Monster, stellt dieses ab einem gewissen Abstand
+    zum Spieler die verfolgung ein.
 */
 #include "monster.h"
 #include "map.h"
