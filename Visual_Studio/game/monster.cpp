@@ -1,3 +1,7 @@
+/**
+	Verantwortlich: Daniel Maier
+	Infotext: 
+*/
 #include "monster.h"
 #include "map.h"
 

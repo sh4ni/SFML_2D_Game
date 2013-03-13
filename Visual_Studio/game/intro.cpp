@@ -1,3 +1,7 @@
+/**
+	Vorantwortlich: Filip Menke
+	Infotext: Hier wird das Intro dargestellt
+*/
 #include "intro.h"
 #include "defines.h"
 #include "schrift.h"

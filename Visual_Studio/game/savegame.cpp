@@ -1,3 +1,16 @@
+/**
+	Verantwortlich: Filip Menke
+	Infotext: Diese Datei lädt und speichert die Konfigurationsdatei des Spieles
+	sowie den Spielstand.
+	Dabei wird am ersten Spielstart überprüft ob die Datei settings.cfg vorhanden ist. Wenn die Datei fehlt wird diese mit
+	Default werten aus der defines.h erstellt. Wird in den Optionen der Bildschirmmodus oder der Sound deaktiviert oder aktiviert,
+	erfolgt eine Sicherung in der settings.cfg.
+	Wird ein neues Spiel gestartet, so wird ein neues Defaultsavegame erstellt. Hierbei werden auch die Standardwerte aus der defines.h 
+	übernommen. Sobald der Spieler eine ein Level / Map wechselt erfolgt eine Sicherung des Spielstandes. Weiterhin ist es möglich das 
+	Spie jederzeit mit F9 zu laden.
+	Der Spielstand ist gegen Manipulationen gesichert. So wird bei jedem Speichern des Spielstandes ein MD5 Hash gebildet und bei jedem
+	Laden überprüft. Ist dieser korrupt, wird ein Defaultsavegame geladen.
+*/
 #include "savegame.h"
 
 #ifdef SYS_MACOS

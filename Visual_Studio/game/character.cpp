@@ -1,3 +1,7 @@
+/**
+	Verantwortlich: Filip Menke
+	Infotext: 
+*/
 #include "character.h"
 
 Character::Character(){

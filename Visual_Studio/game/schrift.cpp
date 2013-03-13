@@ -1,3 +1,9 @@
+/**
+	Verantwortlich: Filip Menke
+	Infotext: Diese Klasse stellt die Schrift am Bildschirm dar. 
+	Der Font Arial wird dabei nur einmal geladen. Es ist möglich die Farbe, die größe und den Textstring individuell
+	anzupassen.
+*/
 #include "schrift.h"
 #include "defines.h"
 

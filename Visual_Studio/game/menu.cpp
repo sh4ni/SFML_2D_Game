@@ -1,3 +1,11 @@
+/**
+	Verantwortlich: Daniel Maier
+	Infotext: Darstellung des Menüs. Es ist möglich durch Interaktion mit der Tastatur und Maus, sowie des XBOX 360 Controllers 
+	durch das Menü zu navigieren.
+	Es gibt eine Unterscheidung zwischen: Hauptmenü, Optionen, NewGame Menü -> Charakter Auswahl und Exit.
+	
+	Das Menü wird einmalig initalisiert.
+*/
 #include "menu.h"
 #include "defines.h"
 #include <iostream>

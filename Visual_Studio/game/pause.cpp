@@ -1,13 +1,11 @@
-#include "pause.h"
-
 /**
-Wenn die Pause gestartet wird,
-f‰rbt sich der Bildschirm dunkel transparent.
-Der Spieler kann hier durch Eingaben das Spiel a) Speichern b) Laden c) Beenden
-Die Pause gibt einen Wert zur¸ck. Dieser R¸ckgabewert entscheidet ob das Spiel schlussendlich
-beendet wird oder fortgesetzt wird.
-
+	Verantwortlich: Filip Menke
+	Infotext: Wenn die Pause gestartet wird, färbt sich der Bildschirm dunkel transparent.
+	Der Spieler kann hier durch Eingaben das Spiel a) F6 - Speichern b) F9 - Laden c) Leertaste - Beenden
+	Die Pause gibt einen Wert zurück. Dieser Rückgabewert entscheidet ob das Spiel schlussendlich
+	beendet wird oder fortgesetzt wird.
 */
+#include "pause.h"
 
 bool Pause::Show(sf::RenderWindow& renderWindow, sf::View& viewCamera){
 

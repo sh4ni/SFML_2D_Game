@@ -1,3 +1,7 @@
+/**
+	Verantwortlich: Daniel Maier
+	Infotext: 
+*/
 #include "game.h"
 #include <exception>
 

@@ -1,4 +1,8 @@
-﻿#include <math.h>
+﻿/**
+	Verantwortlich: Daniel Maier
+	Infotext: 
+*/
+#include <math.h>
 #include "savegame.h"
 #include "player.h"
 

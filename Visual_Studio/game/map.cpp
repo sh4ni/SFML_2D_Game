@@ -1,3 +1,7 @@
+/**
+	Verantwortlich: Daniel Maier, Filip Menke
+	Infotext: 
+*/
 #include "map.h"
 
 /// Static Variablen

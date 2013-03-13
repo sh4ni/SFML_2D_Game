@@ -1,8 +1,26 @@
+/**
+	Verantwortlich: Filip Menke
+	Infotext: Dies ist das Hauptspiel. Ab hier wird alles in die einzelnen Spielbereiche aufgeteilt.
+
+	Die Game::Init wird aus der main.cpp aufgerufen.
+	
+	Eine Detalierte Beschreibung erfolgt in den jeweiligen Methoden.
+	
+	Die Variable _gameState speichert immer den jeweiligen Zustand des Spiels.
+	
+*/
 #include "game.h"
 
 void Game::Init(void)
-{
-    // Random funktion wird im spiel öfters verwendet
+{	
+	/**
+	Es erfolgt eine Unterscheidung ob ein Spielstand vorhanden ist oder nicht.
+	Wenn kein Spielstand vorhanden ist oder der alte Spielstand manipuliert ist wird die Variable entsprechend gesetzt. Dies ist wichtig um 
+	im Menü den Punkt "NewGame" anwählbar zu machen oder nicht.
+
+	Jetzt wird Game::Start aufgerufen.
+	*/
+    // Random funktion wird im Spiel öfters verwendet
 	srand((unsigned)time(NULL));
 	// Do it!
 	Savegame::currentSaveGame = new Savegame;
@@ -13,10 +31,6 @@ void Game::Init(void)
 
 	Game::continueGame = false;
 	
-	// Pr¸fung fehtl noch ob der ORdner schon vorhanden ist @fil
-	/*if(!system("mkdir screenshots"))
-		throw "Failed to create the screenshot folder!";*/
-
 	if(Savegame::currentSaveGame->loadSavegame(true)){
 		Game::Start();
 	}else{
@@ -27,10 +41,15 @@ void Game::Init(void)
 
 void Game::Start()
 {
-	// Wenn der Spielstatus uninitalisiert, verlasse die Methode
+	/**
+		Hier wird das eigentliche Fenster erzeugt und dargestellt. Dabei wird die Bildschirmauflösung aus der Konfigurationsdatei geladen.
+		Der _gameState wird auf ShowingIntro gesetzt. Damit wird das Intro angezeigt. Nachdem das Intro beendet wurde startet
+		der GameLoop(). Der GameLoop läuft solange bis das Spiel beendet wird.
+	*/
+	/// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	
-	// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
+	/// Erzeuge ein neues Fenster mit den in der defines.h hinterlegten Werten
 	sf::VideoMode bpp = sf::VideoMode::getDesktopMode();
 	
 	if(ConfigFile::currentConfigFile->winmode == "window")
@@ -41,7 +60,7 @@ void Game::Start()
 		_mainWindow.setMouseCursorVisible(false);
 	}
 	
-	// Lade und setze das Fenstericon
+	/// Lade und setze das Fenstericon
 	sf::Image Icon;
 	if(!Icon.loadFromFile(PATH"include/interface/icon.bmp"))
 		std::cout << "Failed to load the Windowicon" << std::endl;
@@ -51,24 +70,24 @@ void Game::Start()
 	_mainWindow.setFramerateLimit(FPS);
 	_mainWindow.setVerticalSyncEnabled(true);
 
-	// Setze den Spielstatus auf Intro -> Intro wird angezeigt
+	/// Setze den Spielstatus auf Intro -> Intro wird angezeigt
 	_gameState = Game::ShowingIntro;
 	
-	// Solange das Spiel nicht beendet wird, f¸hre GameLoop aus
+	/// Solange das Spiel nicht beendet wird, führe GameLoop aus
 	while(!IsExiting()){
 		GameLoop();
 	}
 
-	// Wenn der GameLoop beendet wurde, schlieﬂe das Fenster
+	// Wenn der GameLoop beendet wurde, schließe das Fenster
 	_mainWindow.close();
 	//system("pause");
 }
 
 bool Game::IsExiting()
 {
-	// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zur¸ck, ansonsten ein False
+	// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zurück, ansonsten ein False
 	if(_gameState == Game::Exiting){
-		// Mˆglichkeit das Spiel zu Speichern
+		// Möglichkeit das Spiel zu Speichern
 
 		delete Savegame::currentSaveGame;
 		delete ConfigFile::currentConfigFile;
@@ -107,7 +126,7 @@ void Game::GameLoop(){
 				std::cout << "Show the Gender Menu" << std::endl;
 			#endif			
             gender = ShowMenuGender();
-			if(gender == 'M' || gender == 'F'){	// somit wird kein neuer spielstand erzeugt, wenn man den zur¸ck button im gender men¸ dr¸ckt!
+			if(gender == 'M' || gender == 'F'){	// somit wird kein neuer spielstand erzeugt, wenn man den zurück button im gender menü drückt!
 				Savegame::currentSaveGame->pGender = gender;	// speichere explizit hier das geschlecht, da die restlichen werte aus der defines geladen werden
 				Savegame::currentSaveGame->saveSavegame(true); // true -> erzeuge einen neuen spielstand
 			}
@@ -152,7 +171,7 @@ void Game::GamePaused(sf::View viewCamera){
 
 		_gameState = Continue;
 	}
-	// hier kann ich irgendwann zur¸ck ins men¸!
+	// hier kann ich irgendwann zurück ins men¸!
 }
 
 void Game::ShowMap(sf::View viewCamera){
@@ -242,7 +261,7 @@ const char Game::ShowMenuGender(){
 			break;
         case MainMenu::Menue:
             _gameState = ShowingMenu;
-			return 'X';			// Gebe X Zur¸ck damit nicht gespeichert wird, wenn man nicht direkt mˆchte (new game)
+			return 'X';			// Gebe X Zurück damit nicht gespeichert wird, wenn man nicht direkt möchte (new game)
             break;
 		default:
             break; 
