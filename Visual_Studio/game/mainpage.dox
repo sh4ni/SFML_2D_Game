@@ -1,20 +1,86 @@
-/*! \mainpage The Journey Documentation
- \section p1 Punkt 1
- bla bla bla
- \section p2 Punkt 2
- \subsection p2u1 Unterpunkt 1
- muh miau
- */
-
+/*!
+ \mainpage The Journey Documentation
+ \section p1 Verantwortlichkeit
+ <table>
+    <tr>
+        <th></th>
+        <th>Filip Menke</th>
+        <th>Daniel Maier</th>
+    </tr>
+    <tr>
+        <th>%Character</th>
+        <td>X</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th>Defines / Main</th>
+        <td>X</td>
+        <td>X</td>
+    </tr>
+    <tr>
+        <th>%Game</th>
+        <td>X</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th>%Intro</th>
+        <td>X</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th>%Map</th>
+        <td>X</td>
+        <td>X</td>
+    </tr>
+    <tr>
+        <th>%Menu</th>
+        <td></td>
+        <td>X</td>
+    </tr>
+    <tr>
+        <th>%Monster</th>
+        <td></td>
+        <td>X</td>
+    </tr>
+    <tr>
+        <th>%Pause</th>
+        <td>X</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th>%Player</th>
+        <td></td>
+        <td>X</td>
+    </tr>
+    <tr>
+        <th>%Savegame</th>
+        <td>X</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th>%Schrift</th>
+        <td>X</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th>%Sounds</th>
+        <td>X</td>
+        <td>X</td>
+    </tr>
+ </table>
  
-allg probleme vll
-team absprache, gel�st durch todos, teamviewer, teambesprechungen..
-
-/* Probleme filip
-- variablen namen >:
-- spieler lief in der pause weiter wenn man die taste gedr�ckt hielt
-
-- savegame wurde nach dem laden nicht direkt �bernommen
-
-
-*/
+ \section p2 Probleme während des Projekts
+ \subsection p2u1 Filip Menke
+ Es gab ein Problem mit dem Pausemenü in Verbindung mit der Bewegung des Spielers.<br>
+ So war es möglich, wenn sich der Spieler bewegte und man danach das Spiel pausierte, durch Wände zu laufen, wenn man die Richtungstaste weiter gedrückt hielt und die Pause danach beendete.<br>
+ Es hat viel überlegungsarbeit gekostet, wie man dieses Problem schließlich lösen konnte.<br>
+ - savegame wurde nach dem laden nicht direkt übernommen
+ 
+ \subsection p2u2 Daniel Maier
+ Die Kollisionsabfrage des Spielers erwies sich als komplizierter als gedacht. So ist die Abfrage ob eine Kollision besteht ansich nicht schwierig, allerdings ist es auch wichtig zu erkennen aus welcher richtung die Kollision ausgelöst wird.<br>
+ Auch ist die Kollisionsabfrage bei einem flüssigen Spieleablauf kein Problem. Wenn das Spiel allerdings aus irgend einem grund niedrige FPS hat, wird die Kollisionsabfrage nicht so oft durchlaufen und man ist quasi in der lage "schneller" in Wände "hinein" zu laufen.
+ 
+ \subsection p2u3 Lösung von Problemen
+ Es konnten allerdings alle Probleme gelöst werden. Hilfsmittel hierbei waren Telefonkonferenzen, Teamviewer Meetings, das führen einer To-Do-Liste oder einfach ein vereinbartes Treffen um ein Problem gemeinsam zu lösen.<br>
+ Es erwies sich allerdings als weitaus schwieriger geeignete Variablennamen zu finden als gedacht...
+ */

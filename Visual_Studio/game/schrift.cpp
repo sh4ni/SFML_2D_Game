@@ -1,5 +1,5 @@
 /**
-	Verantwortlich: Filip Menke
+	Verantwortlich: Filip Menke <br>
 	Infotext: Diese Klasse stellt die Schrift am Bildschirm dar. 
 	Der Font Arial wird dabei nur einmal geladen (statische Variablen).
 	Es ist möglich die Farbe, die größe und den Textstring individuell anzupassen.

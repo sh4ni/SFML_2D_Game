@@ -1,5 +1,5 @@
 /**
-	Verantwortlich: Filip Menke, Daniel Maier
+	Verantwortlich: Filip Menke, Daniel Maier <br>
 	Infotext: Alle Defines zu den einzelnen Methoden / Funktionen des Spieles.
 */
 #ifndef DEFINES_H_
@@ -54,6 +54,7 @@
 /// für map.cpp und player.cpp
 #define TILESIZE 32
 
+/// für monster.cpp / player.cpp
 /// Formeln für Schaden, Hp, Exp von Monstern und Spielern
 #define FDMG (int)( 25.f*pow(1.10776f,(float)(this->Lvl-5)) )
 #define FHPMAX (int)( 50.f*pow(1.2023913f,(float)(this->Lvl-5)) )

@@ -1,5 +1,5 @@
 /**
-	Verantwortlich: Filip Menke
+	Verantwortlich: Filip Menke, Daniel Maier <br>
 	Infotext: Einstiegsdatei ins Spiel durch aufruf von Game::Init()
 	Die Exception Handler fangen Fehler ab und verhindern einen möglichen Spielabsturz.
 */

@@ -1,5 +1,5 @@
 ﻿/**
-	Verantwortlich: Daniel Maier
+	Verantwortlich: Daniel Maier <br>
 	Infotext: Dies ist die Klasse für die steuerbare Spielfigur.
     Die Spielfigur wird einmalig Initialisiert und dann während des Gameloops immer
     aktualisiert.

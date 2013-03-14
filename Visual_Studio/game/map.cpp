@@ -1,5 +1,5 @@
 /**
-	Verantwortlich: Daniel Maier, Filip Menke
+	Verantwortlich: Daniel Maier, Filip Menke <br>
 	Infotext: Hier findet der Hauptgameloop statt.
     Bei der Initialisierung wird die Map aus einer Datei geladen.
     
