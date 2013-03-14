@@ -112,10 +112,12 @@ public:
 	
 	static Map * currentMap;
     
+    // Gibt das Min/Maxlevel der Map für die monster.cpp zurück.
     sf::Vector2i getMonsterLevel(void){
         return sf::Vector2i(this->MapLevelMin,this->MapLevelMax);
     }
 
+    // Interface Init-Funktion, falls ein neuer Held ausgewählt wird.
     void initInterface(void){
         if( P1.getGender() == 'F' ){
             if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
@@ -129,6 +131,7 @@ public:
         }
     }
 
+    // Gibt die Größe einer beliebigen Map zurück.
 	sf::Vector2i getNextLevelSize(std::string NevtLevel){
 		std::string FileName = PATH"include/map/" + NevtLevel + ".txt";
 		int x = 0;
@@ -155,10 +158,12 @@ public:
 		return &P1;
 	}
 
+    // Gibt die Anuahl der Monster auf der Map zurück.
 	int getMonsterCounter(){
 		return this->monsterCounter;
 	}
 
+    // Gibt die Monster selbst zurück.
 	Monster* getMonsterList(){
 		return this->monsterList;
 	}

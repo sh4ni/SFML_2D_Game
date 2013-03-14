@@ -19,6 +19,7 @@
 #include "monster.h"
 #include "map.h"
 
+/// Der Konstruktor des Monsters setzt Default-Werte für Variablen.
 Monster::Monster(){
 	this->Speed = 0.1f;
 	this->isActive = true;
@@ -30,16 +31,21 @@ Monster::Monster(){
     this->isBig = false;
     this->isSpecial = 'n';
 };
+
 Monster::~Monster(){
 
 };
 
-
+/// Der Typ (bzw. die Art) des Monsters wird gesetzt.
 void Monster::setType(int monsterType){
 	this->monsterType = monsterType;
 	Init();
 }
 
+/**
+ Monster werden Initialisiert.
+ Hier wird das Level, die Texture, Statuswerte und das Verhalten des Monsters bestimmt.
+ */
 void Monster::Init(){
     int minLevel = Map::currentMap->getMonsterLevel().x;
     int maxLevel = Map::currentMap->getMonsterLevel().y;
@@ -124,6 +130,11 @@ void Monster::Init(){
     }
 }
 
+/**
+ Die Update-Methode wird im Gameloop immer wieder neu aufgerufen.
+ Sie bewegt die Monster korrekt, hat die selbe Kollisionsabfrage wie der Spieler und lässt Monster den Spieler angreifen.
+ Sie berechnet das Verhalten des Monsters.
+ */
 void Monster::Update(float ElapsedTime){
 	if(isActive){
 		this->PosX = sprite.getPosition().x;
@@ -387,6 +398,7 @@ void Monster::Update(float ElapsedTime){
 	}
 }
 
+/// Diese Methode fügt dem Monster Schaden zu, wenn der Spieler es Angreift.
 void Monster::damageMe( int damage, int level ){
     isHit = true;
     damage = calcDamage(damage, level);

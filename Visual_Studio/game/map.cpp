@@ -19,7 +19,7 @@
 */
 #include "map.h"
 
-/// Static Variablen
+// Static Variablen
 sf::Texture Map::LevelTexture;
 Map * Map::currentMap;
 
@@ -38,7 +38,7 @@ void Map::init(std::string LevelId){
 	#endif
 	//renderWindow.setMouseCursorVisible(false);
 	
-    /// Default-Werte
+    // Default-Werte
 	this->CamX = TILESIZE;
 	this->CamY = TILESIZE;
 	this->MapSizeX = 0;
@@ -55,13 +55,13 @@ void Map::init(std::string LevelId){
     this->nextMap[2] = LevelId;
     this->nextMap[3] = LevelId;
 	
-    /// Dateipfad
+    // Dateipfad
 	std::string FileName = PATH"include/map/" + LevelId + ".txt";
 
 	int LoadCounterX = 0;
 	int LoadCounterY = 0;
     
-	/// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
+	// Map Loader. Datei wird eingelesen und es werden dynamisch neue objekte erzeugt.
 	std::ifstream openfile(FileName.c_str());
 	if( openfile.is_open() ){
 		openfile >> this->MapSizeX >> this->MapSizeY >> this->mapTheme >> this->mapMusic >> this->MapLevelMin >> this->MapLevelMax;
@@ -86,8 +86,8 @@ void Map::init(std::string LevelId){
         std::cout << mapTheme << " has " << CollisionInfo.size() << " collisionboxes" << std::endl;
 #endif
     
-		TileMap = new TilePart*[MapSizeX];			/// Map Speicher Dynamisch reservieren.
-		for ( int i = 0 ; i < MapSizeX ; i++ ){		/// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
+		TileMap = new TilePart*[MapSizeX];			// Map Speicher Dynamisch reservieren.
+		for ( int i = 0 ; i < MapSizeX ; i++ ){		// Es ist nicht gewährleistet ob der Speicher an einem Stück hintereinander ist.
 			TileMap[i] = new TilePart[MapSizeY];
 		}
 		CollisionMap = new sf::IntRect**[MapSizeX];
@@ -95,7 +95,7 @@ void Map::init(std::string LevelId){
 			CollisionMap[i] = new sf::IntRect*[MapSizeY];
 		}
 
-        /// Hier wird die eigentliche Map geladen.
+        // Hier wird die eigentliche Map geladen.
 		while( LoadCounterY < MapSizeY ){
 			openfile >> TileType;
 			TileType--;
@@ -193,17 +193,17 @@ void Map::init(std::string LevelId){
 		throw "Error: " + FileName + " not found.";
 	}
 
-    /// Lade Texturedatei.
+    // Lade Texturedatei.
 	FileName = PATH"include/texture/world/" + mapTheme + ".png";
 	if( !LevelTexture.loadFromFile(FileName.c_str())){
 		throw "Error: " + FileName + " not found.";
 	}
 	
-    /// Spieler die Kollisionsmap und die Mapgröße mitteilen.
+    // Spieler die Kollisionsmap und die Mapgröße mitteilen.
 	this->P1.setColMap(CollisionMap);
 	this->P1.setMapSize( MapSizeX, MapSizeY );
 
-    /// Monster werden erzeugt.
+    // Monster werden erzeugt.
 	monsterList = new Monster[monsterCounter];
 	for( int y=0, i=0; y<MapSizeY; y++){
 		for( int x=0; x<MapSizeX; x++){
@@ -222,7 +222,7 @@ void Map::init(std::string LevelId){
 
 	this->LastTime = 1.f;
 	
-	/// Hier wird der Sound geladen!
+	// Hier wird der Sound geladen!
 	if(ConfigFile::currentConfigFile->sound == true){
 		gameMusic::music.stop();
 		std::string musicFileName = PATH"include/sound/" + mapMusic + ".ogg";
@@ -234,10 +234,10 @@ void Map::init(std::string LevelId){
     //if( P1.getPosX() < 0) P1.setPosition((float)(MapSizeX*TILESIZE), P1.getPosY());
     //if( P1.getPosY() < 0) P1.setPosition(P1.getPosX(), (float)(MapSizeY*TILESIZE));
 
-    /// Interface an gewählten Helden anpassen.
+    // Interface an gewählten Helden anpassen.
 	initInterface();
 
-    /// Interface wird positioniert.
+    // Interface wird positioniert.
 	iface.setTexture(ifaceImage);
 	iface.setOrigin((float)ifaceImage.getSize().x/2.f,(float)ifaceImage.getSize().y);
 	iface.setPosition((float)(ConfigFile::currentConfigFile->width/2),(float)(ConfigFile::currentConfigFile->height));
@@ -301,13 +301,13 @@ Map::~Map(){
 MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View& viewCamera){
 	while( 1+3+3==7 ){
 
-        /// Bildschirm Höhe und Breite
+        // Bildschirm Höhe und Breite
         int width = ConfigFile::currentConfigFile->width/(isZoom?2:1);
         int height = ConfigFile::currentConfigFile->height/(isZoom?2:1);
         viewCamera.setSize((float)width,(float)height);
 		if(willPause) renderWindow.clear();
 
-		sf::sleep(sf::milliseconds(10));	/// CPU Auslastung nimmt imens ab
+		sf::sleep(sf::milliseconds(10));	// CPU Auslastung nimmt imens ab
 		if(P1.getHealth() <= 0){
 			gameMusic::music.stop();	// damit im men¸ die musik wieder korrekt abgespielt wird
 			return MapEvent(MapEvent::dead);
@@ -317,17 +317,17 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		Frames = 1.f /( ElapsedTime / 1000 );
 		LastTime = ElapsedTime;
 
-		/// FPS anzeige
+		// FPS anzeige
 		std::ostringstream FPSText;
 		FPSText.precision(0);
 		FPSText << std::fixed << "FPS: " << Frames;
 		DisplayFPS.Update(FPSText.str());
 
-		/// Kamera folgt dem Spieler.
+		// Kamera folgt dem Spieler.
 		CamX = (int)P1.getPosX();
 		CamY = (int)P1.getPosY();
         
-        /// Prüfen ob Spieler aus dem Bildschirm läuft.
+        // Prüfen ob Spieler aus dem Bildschirm läuft.
         if( CamX < 0 ){										// Links
 			return MapEvent(MapEvent::mapchange,nextMap[2],(float)(getNextLevelSize(nextMap[2]).x-1),(float)((CamY+TILESIZE/2)/TILESIZE));
 		}
@@ -341,11 +341,11 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			return MapEvent(MapEvent::mapchange,nextMap[1],(float)(CamX/TILESIZE),0.f);
 		}
 
-		/// Tile auf dem der Spieler steht.
+		// Tile auf dem der Spieler steht.
 		TileX = CamX/TILESIZE;
 		TileY = (CamY+TILESIZE/2)/TILESIZE;
 
-        /// Tiles nur im bereich der Mapgröße.
+        // Tiles nur im bereich der Mapgröße.
 		if( TileX < 0 ) TileX = 0;
 		else if( TileX >= MapSizeX ) TileX = MapSizeX-1;
 		if( TileY < 0 ) TileY = 0;
@@ -356,7 +356,7 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 		PlayerKoordText << std::fixed << "X: " << CamX << " Y: " << CamY << " TX: " << TileX << " TY: " << TileY;
 		DisplayKoord.Update(PlayerKoordText.str());
 
-		/// Wenn Spieler auf einen Teleporter läuft
+		// Wenn Spieler auf einen Teleporter läuft
  		if( TileMap[TileX][TileY].Teleport ){
 			#ifdef DEBUGINFO
 				std::cout << "Lade Map: '" << TileMap[TileX][TileY].Teleport->Map << "' X: " << TileMap[TileX][TileY].Teleport->xDest << " Y: " << TileMap[TileX][TileY].Teleport->yDest << std::endl;
@@ -404,14 +404,14 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			}
 		}
 
-        /// Rendern der Monster
+        // Rendern der Monster
 		for(int i=0;i<monsterCounter;i++){
 			monsterList[i].Update(ElapsedTime);
 			monsterList[i].Render(renderWindow);
 			//std::cout << "Monster " << i << ": " << monsterList[i].getPosX() << "/" << monsterList[i].getPosY() << std::endl;
 		}
         
-		/// Rendern des Spielers
+		// Rendern des Spielers
 		P1.Render(renderWindow);
 		P1.Update(ElapsedTime);
 
@@ -530,12 +530,12 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 			
 		}
 
-        /// Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
+        // Alles was ab hier gerendert wird, wird nicht mit der Kamera mit bewegt! z.b. das Interface
         renderWindow.setView(renderWindow.getDefaultView());
         
 		renderWindow.draw(iface);
 
-        /// Balken für HP und EXP werden hier angepasst.
+        // Balken für HP und EXP werden hier angepasst.
 		HPBar.setSize(sf::Vector2f((float)P1.getHealth()/(float)P1.getHealthMax()*180.f,28.f));
 		EXPBar.setSize(sf::Vector2f((float)P1.getExp()/(float)P1.getExpMax()*180.f,28.f));
 

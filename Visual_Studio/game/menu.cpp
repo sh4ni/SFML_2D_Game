@@ -15,8 +15,12 @@
 
 int MainMenu::animation = 0;
 
+/**
+ Klasse für das Menü.
+ Es hat 3 Typen für das Hauptmenü, das Helden-Auswahl-Menü und das Optionenmenü.
+ */
 MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuType){
-	//Load menu image from file
+	// Lade Menühintergrundbild
 	sf::Texture imageMenu;
 	sf::Texture imageBackground;
 	if(!imageMenu.loadFromFile(PATH"include/interface/menu.png")){
@@ -26,7 +30,7 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
         throw "Error: include/interface/menu_back.png not found.";
 	}
 
-	// Men¸ und Hintergrund
+	// Menü und Hintergrund
 	spriteMenu.setTexture(imageMenu);
 	spriteBackground.setTexture(imageBackground);       // ich brauch das bild 2 mal, da es sich beim durchscrollen
 	spriteBackgroundRepeat.setTexture(imageBackground); // wiederholen muss!
@@ -233,6 +237,9 @@ MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& renderWindow, char menuTyp
 	return GetMenuResponse(renderWindow,menuType);
 }
 
+/**
+ Updatemethode für das neu Rendern der Buttons und des bewegten Hintergrundbildes.
+ */
 void MainMenu::Update(sf::RenderWindow& renderWindow){    // methode zum neu zeichnen des menüs,
 
     spriteBackground.setPosition((float)-animation,0.f);         // hintergrundbild läuft durch
@@ -255,6 +262,9 @@ void MainMenu::Update(sf::RenderWindow& renderWindow){    // methode zum neu zei
 	renderWindow.display();
 }
 
+/**
+ Methode gibt den Button zurück, den man mit der Maus anklickt.
+ */
 MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 	std::list<MenuItem>::iterator it;
 	for ( it = _menuItems.begin(); it != _menuItems.end(); it++){
@@ -266,6 +276,9 @@ MainMenu::MenuResult MainMenu::HandleClick(int x, int y){
 	return Nothing;     // f¸r die, die keine buttons treffen und daneben klicken :>
 }
 
+/**
+ Gibt bei Tastatur- und Gamepadeingaben zurück, welche Menüfunktion benutzt werden soll.
+ */
 MainMenu::MenuButton MainMenu::GetMenuButton(sf::Event menuEvent){
     
     // Tastatur
@@ -305,6 +318,9 @@ MainMenu::MenuButton MainMenu::GetMenuButton(sf::Event menuEvent){
     return NoButton;
 }
 
+/**
+ Gibt dem Gameloop die Menüaktion zurück.
+ */
 MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& renderWindow, char menuType){
 
 	sf::Event menuEvent;
