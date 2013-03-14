@@ -3,7 +3,6 @@
 	Infotext: Dies ist das Hauptspiel. Ab hier wird alles in die einzelnen Spielbereiche aufgeteilt.
 
 	Die Game::Init wird aus der main.cpp aufgerufen.
-	
 	Eine Detalierte Beschreibung erfolgt in den jeweiligen Methoden.
 	
 	Die Variable _gameState speichert immer den jeweiligen Zustand des Spiels.
@@ -38,14 +37,14 @@ void Game::Init(void)
 		Game::Start();
 	}
 }
-
+/**
+	Hier wird das eigentliche Fenster erzeugt und dargestellt. Dabei wird die Bildschirmauflösung aus der Konfigurationsdatei geladen.
+	Der _gameState wird auf ShowingIntro gesetzt. Damit wird das Intro angezeigt. Nachdem das Intro beendet wurde startet
+	der GameLoop(). Der GameLoop läuft solange bis das Spiel beendet wird.
+*/
 void Game::Start()
 {
-	/**
-		Hier wird das eigentliche Fenster erzeugt und dargestellt. Dabei wird die Bildschirmauflösung aus der Konfigurationsdatei geladen.
-		Der _gameState wird auf ShowingIntro gesetzt. Damit wird das Intro angezeigt. Nachdem das Intro beendet wurde startet
-		der GameLoop(). Der GameLoop läuft solange bis das Spiel beendet wird.
-	*/
+	
 	/// Wenn der Spielstatus uninitalisiert, verlasse die Methode
 	if(_gameState != Uninitialized) return;
 	
@@ -158,6 +157,13 @@ void Game::GameLoop(){
 	}
 }
 
+/**
+	Die Pause wird aufgerufen.
+	Nach dem die Pause beendet wird, entscheidet sich hier
+	ob das Spiel fortgesetzt oder beendet wird.
+	Wird das Spiel fortgesetzt und der Sound ist in der Konfigurationsdatei aktiviert,
+	wird dieser abgespielt.
+*/
 void Game::GamePaused(sf::View viewCamera){
 	Pause PauseMenu;
 	gameMusic::music.pause();
@@ -170,7 +176,7 @@ void Game::GamePaused(sf::View viewCamera){
 
 		_gameState = Continue;
 	}
-	// hier kann ich irgendwann zurück ins men¸!
+	// hier kann ich irgendwann zurück ins menü!
 }
 
 void Game::ShowMap(sf::View viewCamera){
@@ -206,12 +212,22 @@ void Game::ShowMap(sf::View viewCamera){
 	}
 }
 
+/**
+	Zeige das Intro an. Wird dieses beendet wird als 
+	nächstes das Menü angezeigt.
+*/
 void Game::ShowIntro(){
 	Intro intro;
 	intro.Show(_mainWindow);
 	_gameState = Game::ShowingMenu;
 }
 
+/**
+	Zeige das Hauptmenü an. 
+	Nachdem das Menü "beendet" wurde wird der Rückgabewert untersucht.
+	Je nach Rückgabewert wird das Spiel Beendet, Fortgesetzt, das Geschlechtsmenü angezeigt
+	oder das Optionsmenü angezeigt.
+*/
 void Game::ShowMenu(){
 	MainMenu mainMenu;
 	MainMenu::MenuResult result = mainMenu.Show(_mainWindow);
@@ -246,6 +262,11 @@ void Game::ShowMenu(){
 	}
 }
 
+/**
+	Hier wird das Geschlechtsauswahlmenü angezeigt, 
+	je nach Benutzerwahl wird das Geschlecht zwischengespeichert und ein neues Spiel gegonnen
+	oder es wird in das Hauptmenü gewechselt.
+*/
 const char Game::ShowMenuGender(){
     MainMenu genderMenu;
     MainMenu::MenuResult result = genderMenu.Show(_mainWindow, 'G');
@@ -267,7 +288,11 @@ const char Game::ShowMenuGender(){
     }
     return 'M';
 }
-
+/**
+	Hier wird das Optionenmenü angezeigt,
+	je nach Benutzerwahl wird die Konfigurationsdatei geändert (Sound AN/AUS, Vollbildschirm AN/AUS, Default Werte laden)
+	oder es wird in das Hauptmenü gewechselt.
+*/
 void Game::ShowMenuOptions(){
     MainMenu optionsMenu;
     MainMenu::MenuResult result = optionsMenu.Show(_mainWindow, 'O');

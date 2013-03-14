@@ -171,7 +171,8 @@ bool Savegame::loadSavegame(bool init){
 		loadgame >> Savegame::currentSaveGame->checksum;
 		loadgame.close();
 
-		/// wenn das spiel NICHT aus dem Init Bereich der game.cpp geladen wurde
+		// Wenn das Spiel NICHT aus dem Init Bereich der game.cpp geladen wurde
+		// -> Das Spiel wurde durch F9 geladen
 		if(!init){ 
 			Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->pHealth);
 			Map::currentMap->getPlayer()->setLvl(Savegame::currentSaveGame->pLvl);

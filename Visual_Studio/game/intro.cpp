@@ -1,5 +1,5 @@
 /**
-	Vorantwortlich: Filip Menke
+	Vorantwortlich: Filip Menke <br>
 	Infotext: Hier wird das Intro dargestellt. Das Intro wird maximal 5 Sekunden angezeigt. Danach wird das
 	Hautpmenü angezeigt. Sofern der Benutzer eine Interaktion mit der Peripherie tätigt wird das Intro sofort beendet und das
 	Menü angezeigt.
@@ -10,7 +10,7 @@
 #include "savegame.h"
 #include <ctime>
 
-/// Anzeige des Intros solange keine Benutzereingabe getätigt wurde oder die Zeit nicht 5 Sekunden überschritten hat.
+// Anzeige des Intros solange keine Benutzereingabe getätigt wurde oder die Zeit nicht 5 Sekunden überschritten hat.
 void Intro::Show(sf::RenderWindow& renderWindow){
 	sf::Texture image;
 	if(!image.loadFromFile(PATH"include/interface/splashscreen.png")){
@@ -23,8 +23,8 @@ void Intro::Show(sf::RenderWindow& renderWindow){
 
 	sf::Sprite sprite(image);
 
-	sprite.setOrigin((float)image.getSize().x/2,(float)image.getSize().y/2);    /// "Mittelpunkt" des Logos in die Mitte
-	sprite.setPosition((float)ConfigFile::currentConfigFile->width/2.f,(float)ConfigFile::currentConfigFile->height/2.f);   /// Logo in der Mitte des Bildschirms
+	sprite.setOrigin((float)image.getSize().x/2,(float)image.getSize().y/2);    // "Mittelpunkt" des Logos in die Mitte
+	sprite.setPosition((float)ConfigFile::currentConfigFile->width/2.f,(float)ConfigFile::currentConfigFile->height/2.f);   // Logo in der Mitte des Bildschirms
 
 	// Hintergrundfarbe im Intro
 	renderWindow.clear(sf::Color(50,50,50));  
