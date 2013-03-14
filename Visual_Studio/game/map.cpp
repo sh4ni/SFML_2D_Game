@@ -101,8 +101,8 @@ void Map::init(std::string LevelId){
 			TileType--;
 			sf::IntRect subRect;
 			subRect.height=subRect.width=TILESIZE;
-			subRect.top=TileType/10*TILESIZE;   /// Zeile
-			subRect.left=TileType%10*TILESIZE;  /// Spalte
+			subRect.top=TileType/10*TILESIZE;   // Zeile
+			subRect.left=TileType%10*TILESIZE;  // Spalte
 			
 			TileMap[LoadCounterX][LoadCounterY].EnemyId = 0;
 			TileMap[LoadCounterX][LoadCounterY].Teleport = 0;
@@ -144,26 +144,27 @@ void Map::init(std::string LevelId){
 		}
         
         /**
-         Zusätzliche Mapinfos:
-         Hier werden Monster, Teleporter oder Mapübergänge eingelesen.
-         ID X-Koordinate Y-Koordinate (Zusätzliche Infos)
-         ID 1: Mapübergänge, wenn der Spieler den Bildschirm verlässt.
-            Da diese keine Position haben, wird die X-Koordinate für den Bildschirmrand benutzt.
-            0 = Oberer Rand
-            1 = Unterer Rand
-            2 = Linker Rand
-            3 = Rechter Rand
-            Y-Koordinate ungenutzt.
-            Ein zusätzliches Attribut für den Namen der neuen Map, welche geladen werden soll.
-         
-         ID 2: Gegner auf der Karte.
-            X- und Y-Koordinate bestimmen den Ort, an dem der Gegner auf der Karte startet.
-            Ein zusätzliches Attribut für die Gegner ID.
-         
-         ID 3: Teleporter auf der Karte. z.B. wenn man ein Haus betreten will.
-            X- und Y-Koordinate bestimmen den Ort, an dem sich der Teleporter selbst befindet.
-            Drei zusätzliche Attribute:
-            1: Name der neuen Map
+         <br><br>
+         Zusätzliche Mapinfos:<br>
+         Hier werden Monster, Teleporter oder Mapübergänge eingelesen.<br>
+         ID X-Koordinate Y-Koordinate (Zusätzliche Infos)<br>
+         ID 1: Mapübergänge, wenn der Spieler den Bildschirm verlässt.<br>
+            Da diese keine Position haben, wird die X-Koordinate für den Bildschirmrand benutzt.<br>
+            0 = Oberer Rand<br>
+            1 = Unterer Rand<br>
+            2 = Linker Rand<br>
+            3 = Rechter Rand<br>
+            Y-Koordinate ungenutzt.<br>
+            Ein zusätzliches Attribut für den Namen der neuen Map, welche geladen werden soll.<br>
+         <br>
+         ID 2: Gegner auf der Karte.<br>
+            X- und Y-Koordinate bestimmen den Ort, an dem der Gegner auf der Karte startet.<br>
+            Ein zusätzliches Attribut für die Gegner ID.<br>
+         <br>
+         ID 3: Teleporter auf der Karte. z.B. wenn man ein Haus betreten will.<br>
+            X- und Y-Koordinate bestimmen den Ort, an dem sich der Teleporter selbst befindet.<br>
+            Drei zusätzliche Attribute:<br>
+            1: Name der neuen Map<br>
             2 und 3: X- und Y-Koordinate auf der Ziel-Map
          */
 		while( !openfile.eof() ){
@@ -266,7 +267,7 @@ void Map::init(std::string LevelId){
 	//Savegame::currentSaveGame->saveSavegame();
 }
 
-/// Hier wird die Map wieder gelöscht.
+/// Hier wird die Map wieder gelöscht. Speicherplatz wird freigegeben.
 void Map::destory(){
     // Lösche TileMap wieder...
     for( int x=0; x<MapSizeX; x++){
