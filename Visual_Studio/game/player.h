@@ -8,7 +8,7 @@
 #include "defines.h"
 #include "character.h"
 
-
+/// Die Klasse für den Spieler. Sie wird ebenfalls vom Charakter abgeleitet.
 class Player : public Character{
 private:
     int controller;

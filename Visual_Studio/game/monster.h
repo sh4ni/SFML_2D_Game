@@ -8,6 +8,7 @@
 #include <math.h>
 #include <ctime>
 
+/// Die Klasse für die Monster, sie ist abgeleitet vom Charakter.
 class Monster : public Character{
 private:
 	int monsterType;

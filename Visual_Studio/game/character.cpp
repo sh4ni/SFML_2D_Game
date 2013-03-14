@@ -107,7 +107,7 @@ int Character::calcDamage(int damage,int level){
 }
 
 /**
- Diese Methode ist für die Zahlen, die über die Charaktere hinweg schweben.
+ Diese Methode ist für die Zahlen, die über die Charaktere hinweg schweben zuständig.
  z.B. Schaden, Erfahrungsgewinn, Levelaufstieg, usw.
  Für char type:
  m = Schaden am Monster

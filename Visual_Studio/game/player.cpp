@@ -15,10 +15,16 @@
 #include "savegame.h"
 #include "player.h"
 
+/// Der Konstruktor des Players. Er ruft die Init-Methode auf.
 Player::Player(int controller){
     Init(controller);
 }
 
+/**
+ Hier wird der Spieler initialisiert.
+ Alle Variablen werden mit Standardwerten versehen.
+ Sie bestimmt unter anderem das Aussehen des Spielers
+ */
 void Player::Init(int controller){
 	
 	this->Health = Savegame::currentSaveGame->pHealth;
@@ -83,6 +89,12 @@ void Player::Init(int controller){
 	weaponSprite.setPosition(Savegame::currentSaveGame->mPosX, Savegame::currentSaveGame->mPosY+TILESIZE/2);
 }
 
+/**
+ Auch der Spieler wird im Gameloop immer wieder aktualisiert.
+ Sie macht den Spieler über die Tastatur und ein Gamepad steuerbar.
+ Außerdem beinhaltet sie die Kollisionskontrolle und die verschiedenen Animationen des Spielers.
+ Alle Interaktionsmöglichkeiten des Spielers wie z.B. das Angreifen von Monstern, werden hier implementiert.
+ */
 void Player::Update(float ElapsedTime){
 
 	this->PosX = sprite.getPosition().x;
@@ -450,6 +462,7 @@ void Player::Update(float ElapsedTime){
 	sprite.setPosition(PosX,PosY);
 }
 
+/// Der Spieler wird hier gezeichnet. Wichtig ist hier die Reihenfolge, wann das Schwert hinter oder vor dem Player angezeigt wird.
 void Player::Render(sf::RenderWindow &Window){
 	if(lookDirection == 'D' || lookDirection == 'R') Character::Render(Window);
     if(isAttacking || showSword){
@@ -461,10 +474,15 @@ void Player::Render(sf::RenderWindow &Window){
 #endif
 }
 
+/**
+ Methode für das zurücksetzen des Heal-Cooldowns.
+ Wenn der Spieler mit dem Schwert Schlägt, von einem Monster angegriffen wird, oder sich bewegt, wird dieser zurückgesetzt, damit er nur im Stillstand geheilt wird.
+ */
 void Player::ResetCooldown(void){
     this->HealTickRate = -COOLDOWN + IDLEHEAL;
 }
 
+/// Wird der Spieler angegriffen, fügt diese Methode dem Spieler den Schaden zu.
 void Player::playerDamage( int damage, int level ){
     ResetCooldown();
     if(!isInvincible){
@@ -478,6 +496,7 @@ void Player::playerDamage( int damage, int level ){
     }
 }
 
+/// Diese Methode wird aufgerufen, wenn der Spieler geheilt wird.
 void Player::playerHeal( int heal ){
     if( this->Health < this->pHealthMax ) damageText(heal,'h');
     this->Health += heal;
@@ -486,6 +505,7 @@ void Player::playerHeal( int heal ){
     }
 }
 
+/// Diese Methode wird aufgerufen, wenn der Spieler Erfahrung bekommt (z.B. von Monstern).
 void Player::playerExp( int exp, int level ){
     if( this->Lvl < MAXLEVEL ){
         int levelDif = level-this->Lvl;
