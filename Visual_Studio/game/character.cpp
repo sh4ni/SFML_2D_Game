@@ -1,6 +1,7 @@
 /**
 	Verantwortlich: Filip Menke
-	Infotext: 
+	Infotext: Die Klasse Character ist die Basisklasse für den Player und die Monster.
+	Hier sind die jeweiligen Getter und Setter Methoden.
 */
 #include "character.h"
 
@@ -11,64 +12,66 @@ Character::~Character(){
 
 };
 
+/// Gibt die aktuelle Position X zurück
 float Character::getPosX(void){
 	return this->PosX;
 }
-
+/// Gibt die aktuelle Position Y zurück
 float Character::getPosY(void){
 	return this->PosY;
 }
-
+/// Setzt die Position X und Y
 void Character::setPosition( float x, float y){
     this->PosX = x;
     this->PosY = y;
 	sprite.setPosition(x,y);
 }
-
+/// Setzt die Mapgröße fest
 void Character::setMapSize( int xMax, int yMax){
 	this->MapSize.x = xMax;
 	this->MapSize.y = yMax;
 }
-
+/// Gibt die aktuelle Bewegungsgeschwindigkeit zurück
 float Character::getSpeed(void){
 	return this->Speed;
 }
-
+/// Erhöht die aktuelle Geschwindigkeit des Charakters
 void Character::increaseSpeed(float speedValue){
 	if(this->Speed < 0.35f)
 		this->Speed += speedValue;
 }
-
+/// Verringert die aktuelle Geschwindigkeit des Charakters
 void Character::decreaseSpeed(float speedValue){
 	if(this->Speed <= 0.2f)
 		this->Speed = 0.1f;
 	else
 		this->Speed -= speedValue;
 }
-
+/// Setzt den Namen des Charakters -> Später wichtig in Dialogen
 void Character::setName(std::string Name){
 	this->Name = Name;
 }
+/// Gibt den Namen des Charakters zurück
 std::string Character::getName(void){
 	return this->Name;
 }
-
+/// Gibt die aktuelle Lebensenergie zurück
 int Character::getHealth(void){
 	return this->Health;
 }
-
+/// Setzt die neue Lebensenergie
 void Character::setHealth(int Health){
 	this->Health = Health;
 }
-
+/// Setzt das neue Spieler Level
 void Character::setLvl(int Lvl){
 	this->Lvl = Lvl;
 }
-
+/// Gibt das aktuelle Spieler Level zurück
 int Character::getLvl(void){
 	return this->Lvl;
 }
-
+/// Erzeugt die Kollisionsmap
 void Character::setColMap(sf::IntRect***& ColMap){
 	this->ColMap = ColMap;
 };

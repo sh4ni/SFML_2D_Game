@@ -20,10 +20,10 @@
 Savegame * Savegame::currentSaveGame;
 ConfigFile * ConfigFile::currentConfigFile;
 
-// Pr¸fe ob eine Datei leer ist
+// Prüfe ob eine Datei leer ist
 bool is_empty(std::ifstream& myFile)
 {
-	// wenn die datei leer ist gebe ein true zur¸ck
+	// wenn die datei leer ist gebe ein true zurück
     return myFile.peek() == std::ifstream::traits_type::eof();
 }
 

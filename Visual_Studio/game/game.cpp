@@ -85,9 +85,8 @@ void Game::Start()
 
 bool Game::IsExiting()
 {
-	// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zurück, ansonsten ein False
+	/// Wenn der Spielstatus auf Beenden gesetzt wird dann gebe ein True zurück, ansonsten ein False
 	if(_gameState == Game::Exiting){
-		// Möglichkeit das Spiel zu Speichern
 
 		delete Savegame::currentSaveGame;
 		delete ConfigFile::currentConfigFile;

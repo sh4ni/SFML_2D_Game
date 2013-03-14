@@ -1,6 +1,7 @@
 /**
-	Verantwortlich: Daniel Maier
-	Infotext: 
+	Verantwortlich: Filip Menke
+	Infotext: Einstiegsdatei ins Spiel durch aufruf von Game::Init()
+	Die Exception Handler fangen Fehler ab und verhindern einen möglichen Spielabsturz.
 */
 #include "game.h"
 #include <exception>

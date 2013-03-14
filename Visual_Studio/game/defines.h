@@ -1,3 +1,7 @@
+/**
+	Verantwortlich: Filip Menke, Daniel Maier
+	Infotext: Alle Defines zu den einzelnen Methoden / Funktionen des Spieles.
+*/
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
