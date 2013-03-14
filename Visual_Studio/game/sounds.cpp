@@ -2,9 +2,9 @@
 	Verantwortlich: Daniel Maier, Filip Menke <br>
 	Infotext: Die Klasse Sound spielt die Ingame Musik ab.
 	Sofern in der Konfigurationsdatei settings.cfg der Sound aktiviert (Sound = True) 
-	ist wird ein Sound im MenŸ und den einzelnen Maps abgespielt. In der Pause wird die
+	ist wird ein Sound im MenÃ¼ und den einzelnen Maps abgespielt. In der Pause wird die
 	Soundausgabe pausiert. Weiterhin erfolgt kein Sound im Intro.
-	Wird der Sound deaktiviert erfolgt keine Soundausgabe im gesamten Spiel / MenŸs.
+	Wird der Sound deaktiviert erfolgt keine Soundausgabe im gesamten Spiel / MenÃ¼s.
 
 */
 #include "sounds.h"
