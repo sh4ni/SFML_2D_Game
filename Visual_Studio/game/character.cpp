@@ -5,9 +5,11 @@
 */
 #include "character.h"
 
+/// Standard Konstruktor Character
 Character::Character(){
 	
 };
+/// Standard Destruktor Character
 Character::~Character(){
 
 };

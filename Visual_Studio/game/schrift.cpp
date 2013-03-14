@@ -1,8 +1,8 @@
 /**
 	Verantwortlich: Filip Menke
 	Infotext: Diese Klasse stellt die Schrift am Bildschirm dar. 
-	Der Font Arial wird dabei nur einmal geladen. Es ist möglich die Farbe, die größe und den Textstring individuell
-	anzupassen.
+	Der Font Arial wird dabei nur einmal geladen (statische Variablen).
+	Es ist möglich die Farbe, die größe und den Textstring individuell anzupassen.
 */
 #include "schrift.h"
 #include "defines.h"
@@ -14,15 +14,14 @@
 bool Schrift::FontLoaded = false;
 sf::Font Schrift::font;
 
-// statische variablen, somit wird der font nur einmal geladen, egal wie oft die Schrift klasse
-// benutzt wird.
 Schrift::Schrift(){
 	//Standard Konstruktor
 };
+/// Überladener Standardkonstruktor
 Schrift::Schrift(float X, float Y, sf::String myText, int size, sf::Uint8 color){
 	this->Init(X,Y,myText,size,color);
 }
-
+/// Initalisierung der Schrift mit dem Standardfont Arial
 void Schrift::Init(float X, float Y, sf::String myText, int size, sf::Uint8 color){
 	if( !FontLoaded ){
 		if(!Schrift::font.loadFromFile(PATH"include/fonts/arial.ttf")){
@@ -43,11 +42,11 @@ void Schrift::Init(float X, float Y, sf::String myText, int size, sf::Uint8 colo
 	printText.setColor(sf::Color(color,color,color));
 	printText.setPosition(X,Y);
 }
-
+/// Aktualisieren des Textes
 void Schrift::Update(sf::String myText){
 	printText.setString(myText);
 }
-
+/// Darstellung des Textes auf dem Bildschirm
 void Schrift::Render(sf::RenderWindow &Window){
 	Window.draw(printText);
 }

@@ -5,12 +5,8 @@
 
 class gameMusic{
 public:
-	gameMusic(){
-		//Konstruktor	
-	};
-	~gameMusic(){
-		//Destruktor
-	};
+	gameMusic();
+	~gameMusic();
 
 	static sf::Music music;
 };

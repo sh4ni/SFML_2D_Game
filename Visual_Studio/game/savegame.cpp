@@ -20,14 +20,14 @@
 Savegame * Savegame::currentSaveGame;
 ConfigFile * ConfigFile::currentConfigFile;
 
-// Prüfe ob eine Datei leer ist
+/// Prüfe ob eine Datei leer ist
 bool is_empty(std::ifstream& myFile)
 {
 	// wenn die datei leer ist gebe ein true zurück
     return myFile.peek() == std::ifstream::traits_type::eof();
 }
 
-// Bereche die Checksume des Spielstandes anhand eines MD5 Alogrihtmus
+/// Bereche die Checksume des Spielstandes anhand eines MD5 Alogrihtmus
 std::string calc_checksum(){
 	std::stringstream ss;
 	ss << (Savegame::currentSaveGame->pHealth - Savegame::currentSaveGame->pLvl + Savegame::currentSaveGame->pExp - Savegame::currentSaveGame->pGender + (int)Savegame::currentSaveGame->mPosX - (int)Savegame::currentSaveGame->mPosY + CHECKSUM);
@@ -40,21 +40,25 @@ std::string calc_checksum(){
 	return checksum;
 }
 
+/// Standard Konstruktor Savegame
 Savegame::Savegame(){
 #ifdef DEBUGINFO
 	std::cout << "konstruktor Savegame." << std::endl;
 #endif
 }
+/// Standard Destruktor Savegame
 Savegame::~Savegame(){
 #ifdef DEBUGINFO
 	std::cout << "destruktor Savegame." << std::endl;
 #endif
 }
 
+/**
+	Wenn der Spielstand korrput ist oder keiner vorhanden ist,
+	wird eine neuer Spielstand mit vordefinierten Defaultwerten aus "defines.h" erstellt.
+*/
 void Savegame::saveSavegame(bool defaultSavegame){
-	// wenn der Spielstand korrput ist oder keiner vorhanden wird,
-	// wird eine neuer erstellt mit vordefinierten defaultwerte
-	
+		
 	if(defaultSavegame)
 		std::cout << "Default savegame will be loaded..\a\n";
 	else
@@ -139,7 +143,9 @@ void Savegame::saveSavegame(bool defaultSavegame){
 	}
 }
 
-
+/**
+	Hier wird der Spielstand geladen.
+*/
 bool Savegame::loadSavegame(bool init){
 	std::ifstream loadgame;
     std::string defaultSavegamePath = PATH SAVEGAME;
@@ -147,10 +153,11 @@ bool Savegame::loadSavegame(bool init){
 	
 	if(!is_empty(loadgame) && loadgame.is_open()){
 
-		// gehe in die letzte position der datei
-		// wenn tellg keinen wert zur¸ck gibt ist die datei leer und ein default save wird erstellt
-		// ansonsten springe zum beginn der datei und lese diese ein
-		
+		/**
+			Gehe in die letzte position der Datei, wenn tellg (is_emptpy(loadgame) keinen wert zurück gibt ist die Datei leer
+			und ein Default save wird erstellt.
+			Ansonsten springe zum Beginn der Datei und lese diese ein.
+		*/		
 
 		std::cout << "Savegame detected! Loading..\n";
 		loadgame >> Savegame::currentSaveGame->pHealth;
@@ -164,7 +171,8 @@ bool Savegame::loadSavegame(bool init){
 		loadgame >> Savegame::currentSaveGame->checksum;
 		loadgame.close();
 
-		if(!init){ // wenn das spiel NICHT aus dem Init Bereich der game.cpp geladen wurde
+		/// wenn das spiel NICHT aus dem Init Bereich der game.cpp geladen wurde
+		if(!init){ 
 			Map::currentMap->getPlayer()->setHealth(Savegame::currentSaveGame->pHealth);
 			Map::currentMap->getPlayer()->setLvl(Savegame::currentSaveGame->pLvl);
 			Map::currentMap->getPlayer()->setExp(Savegame::currentSaveGame->pExp);
@@ -187,18 +195,23 @@ bool Savegame::loadSavegame(bool init){
 	return false;
 }
 
-
+/// Standard Konstruktor Konfigurationsdatei
 ConfigFile::ConfigFile(){
 #ifdef DEBUGINFO
 	std::cout << "konstruktor ConfigFile." << std::endl;
 #endif
 };
+/// Standard Destruktor Konfigurationsdatei
 ConfigFile::~ConfigFile(){
 #ifdef DEBUGINFO
 	std::cout << "destruktor ConfigFile." << std::endl;
 #endif
 };
 
+/**
+	Wenn keine Konfigurationsdatei vorhanden ist,
+	wird eine neue mit Defaultwerten aus der "defines.h" erstellt.
+*/
 void ConfigFile::saveConfigFile(bool defaultConfig){
 	std::ofstream configFile;
     std::string defaultSettingsPath = PATH SETTINGS;
@@ -282,6 +295,11 @@ void ConfigFile::saveConfigFile(bool defaultConfig){
 	configFile.close();
 }
 
+/**
+	Die Konfigurationsdatei wird versucht zu laden. Sofern sie vorhanden ist
+	werden die Einstellungen ins Spiel übernommen, ansonsten wird eine 
+	Defaultkonfigurationsdatei erstellt.
+*/
 void ConfigFile::loadConfigFile(){
 	std::ifstream configFile;
 	std::string line;
