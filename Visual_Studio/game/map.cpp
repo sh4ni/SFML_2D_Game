@@ -115,10 +115,10 @@ void Map::init(std::string LevelId){
                 }
             }
             if(foundCollision){
-				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  /// keine Kollision
+				CollisionMap[LoadCounterX][LoadCounterY]=NULL;  // keine Kollision
             }
             else {
-                CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);    /// Kollision
+                CollisionMap[LoadCounterX][LoadCounterY]=new sf::IntRect(LoadCounterX*TILESIZE,LoadCounterY*TILESIZE,TILESIZE,TILESIZE);    // Kollision
             }
             
 			/*switch( TileType ){		// alte "hardcode" version ohne Datei
@@ -171,7 +171,7 @@ void Map::init(std::string LevelId){
 			int idTemp, xTemp, yTemp;
 			openfile >> idTemp >> xTemp >> yTemp;
             if( idTemp == 1){
-                openfile >> nextMap[xTemp]; /// xTemp = Direction! // 0 = oben // 1 = unten // 2 = links // 3 = rechts
+                openfile >> nextMap[xTemp]; // xTemp = Direction! // 0 = oben // 1 = unten // 2 = links // 3 = rechts
             }
 			else if( idTemp == 2 ){
 				openfile >> TileMap[xTemp][yTemp].EnemyId;
@@ -432,21 +432,21 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
         }
         
         /**
-         Hier werden verschiedene Tasten abgefragt, welche nichts mit der Spielersteuerung zu tun haben.
-         Esc    Pause
-         F10    Screenshot
-         F6     Speichern
-         F9     Laden
-         
-         Tasten nur im Debug Modus:
-         E      Schneller Laufen
-         Q      Langsamer Laufen
-         Z      Zoom ein-/ausschalten
-         1      Level Up
-         2      Spieler nimmt 20 "Level 10 Schaden"
-         0      Spieler bewegungen werden geblockt
-         9      Spieler bewegungen werden entblockt
-         F      Toggle Fullscreen/Windowmode
+         Hier werden verschiedene Tasten abgefragt, welche nichts mit der Spielersteuerung zu tun haben.<br>
+         Esc    Pause<br>
+         F10    Screenshot<br>
+         F6     Speichern<br>
+         F9     Laden<br>
+         <br>
+         Tasten nur im Debug Modus:<br>
+         E      Schneller Laufen<br>
+         Q      Langsamer Laufen<br>
+         Z      Zoom ein-/ausschalten<br>
+         1      Level Up<br>
+         2      Spieler nimmt 20 "Level 10 Schaden"<br>
+         0      Spieler bewegungen werden geblockt<br>
+         9      Spieler bewegungen werden entblockt<br>
+         F      Toggle Fullscreen/Windowmode<br>
          */
 		sf::Event levelLoop;
 		while(renderWindow.pollEvent(levelLoop)){
