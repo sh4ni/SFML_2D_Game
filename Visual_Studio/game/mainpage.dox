@@ -67,6 +67,16 @@
         <td>X</td>
         <td>X</td>
     </tr>
+    <tr>
+        <th>Anwender Dokumentation</th>
+        <td>X</td>
+        <td></td>
+    </tr>
+    <tr>
+        <th>Entwickler Dokumentation</th>
+        <td></td>
+        <td>X</td>
+    </tr>
  </table>
  
  \section p2 Probleme während des Projekts

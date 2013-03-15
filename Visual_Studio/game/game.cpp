@@ -1,5 +1,5 @@
 /**
-	Verantwortlich: Filip Menke
+	Verantwortlich: Filip Menke <br>
 	Infotext: Dies ist das Hauptspiel. Ab hier wird alles in die einzelnen Spielbereiche aufgeteilt.
 
 	Die Game::Init wird aus der main.cpp aufgerufen.
