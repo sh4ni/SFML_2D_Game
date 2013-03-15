@@ -22,7 +22,7 @@ class tp{
 		int yDest;
 };
 
-/// Klasse für Map Tiles
+/// Klasse für Map Tiles. Jedes Tile ist TILESIZE*TILESIZE groß, hat einen Texturausschnitt, einen Texturentyp und kann Teleporter und Monster beinhalten.
 class TilePart{
 private:
 	int TileType;
@@ -112,12 +112,12 @@ public:
 	
 	static Map * currentMap;
     
-    // Gibt das Min/Maxlevel der Map für die monster.cpp zurück.
+    /// Gibt das Min/Maxlevel der Map für die monster.cpp zurück.
     sf::Vector2i getMonsterLevel(void){
         return sf::Vector2i(this->MapLevelMin,this->MapLevelMax);
     }
 
-    // Interface Init-Funktion, falls ein neuer Held ausgewählt wird.
+    /// Interface Init-Funktion, falls ein neuer Held ausgewählt wird.
     void initInterface(void){
         if( P1.getGender() == 'F' ){
             if(!ifaceImage.loadFromFile(PATH"include/interface/interface-female.png")){
@@ -131,7 +131,7 @@ public:
         }
     }
 
-    // Gibt die Größe einer beliebigen Map zurück.
+    /// Gibt die Größe einer beliebigen Map zurück.
 	sf::Vector2i getNextLevelSize(std::string NevtLevel){
 		std::string FileName = PATH"include/map/" + NevtLevel + ".txt";
 		int x = 0;
@@ -154,20 +154,22 @@ public:
 	
 	sf::IntRect getRect(int x, int y);
 	
+    /// Gibt das Spieler-Objekt zurück.
 	Player* getPlayer(void){
 		return &P1;
 	}
 
-    // Gibt die Anuahl der Monster auf der Map zurück.
+    /// Gibt die Anzahl der Monster auf der Map zurück.
 	int getMonsterCounter(){
 		return this->monsterCounter;
 	}
 
-    // Gibt die Monster selbst zurück.
+    /// Gibt die Monster selbst zurück.
 	Monster* getMonsterList(){
 		return this->monsterList;
 	}
 
+    /// Gibt die verstrichene Zeit zurück.
 	sf::Clock* getClock(void){
 		return &clock;
 	}

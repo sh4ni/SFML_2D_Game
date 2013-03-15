@@ -41,6 +41,7 @@ public:
 	Monster();
 	~Monster();
 
+    /// Gibt die Hitbox des Monsters zurück. Sie bestimmt, wo das Monster angegriffen werden kann.
 	sf::FloatRect getHitBox(void){
 		return this->hitBox;
 	}
@@ -50,16 +51,19 @@ public:
 	
 	void setType(int monsterType);
     
+    /// Gibt die Art des Monsters zurück.
     int getType(void){
         return this->monsterType;
     }
     
     void damageMe( int damage, int level );
     
+    /// Lässt das Monster den Spieler angreifen.
     void targetPlayer(){
         targetingPlayer = true;
     }
     
+    /// Zeichnet das Monster
     void Render(sf::RenderWindow &renderWindow){
         Character::Render(renderWindow, isActive);
 #ifdef DEBUGINFO
