@@ -83,15 +83,16 @@
  \subsection p2u1 Filip Menke
  Es gab ein Problem mit dem Pausemenü in Verbindung mit der Bewegung des Spielers.<br>
  So war es möglich, wenn sich der Spieler bewegte und man danach das Spiel pausierte, durch Wände zu laufen, wenn man die Richtungstaste weiter gedrückt hielt und die Pause danach beendete.<br>
- Es hat viel überlegungsarbeit gekostet, wie man dieses Problem schließlich lösen konnte.<br>
- - savegame wurde nach dem laden nicht direkt übernommen
+ Es hat viel Zeit gekostet, wie man dieses Problem schließlich lösen konnte.<br>
+ Weiterhin gab war es schwierig das der Spielstand nach dem Laden direkt im Spiel übernommen wurde. Am Anfang musste das Spiel neu gestartet werden bevor der Player die geladenen Werte (Health, Exp) übernahm. Schlussendlich wurde das Problem gelöst.
+ 
  
  \subsection p2u2 Daniel Maier
- Die Kollisionsabfrage des Spielers erwies sich als komplizierter als gedacht. So ist die Abfrage ob eine Kollision besteht ansich nicht schwierig, allerdings ist es auch wichtig zu erkennen aus welcher richtung die Kollision ausgelöst wird.<br>
- Auch ist die Kollisionsabfrage bei einem flüssigen Spieleablauf kein Problem. Wenn das Spiel allerdings aus irgend einem grund niedrige FPS hat, wird die Kollisionsabfrage nicht so oft durchlaufen und man ist quasi in der lage "schneller" in Wände "hinein" zu laufen.
+ Die Kollisionsabfrage des Spielers erwies sich als komplizierter als gedacht. So ist die Abfrage ob eine Kollision besteht an sich nicht schwierig, allerdings ist es auch wichtig zu erkennen aus welcher Richtung die Kollision ausgelöst wird.<br>
+ Auch ist die Kollisionsabfrage bei einem flüssigen Spieleablauf kein Problem. Wenn das Spiel allerdings aus irgend einem grund niedrige FPS hat, wird die Kollisionsabfrage nicht so oft durchlaufen und man ist quasi in der Lage "schneller" in Wände "hinein" zu laufen.
  
  \subsection p2u3 Lösung von Problemen
  Es konnten allerdings alle Probleme gelöst werden. Hilfsmittel hierbei waren Telefonkonferenzen, Teamviewer Meetings, das führen einer To-Do-Liste oder einfach ein vereinbartes Treffen um ein Problem gemeinsam zu lösen.<br>
- Es erwies sich allerdings als weitaus schwieriger geeignete Variablennamen zu finden als gedacht...
+ Es erwies sich allerdings als weitaus schwieriger geeignete Variablennamen zu finden als gedacht.
 
  */
