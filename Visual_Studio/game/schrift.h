@@ -12,6 +12,7 @@ public:
 
 	void Render	(sf::RenderWindow &Window);
 	void Update	(sf::String myText);
+    void Position (float X, float Y);
 
 	sf::Text printText;
 private:

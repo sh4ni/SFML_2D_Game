@@ -50,3 +50,7 @@ void Schrift::Update(sf::String myText){
 void Schrift::Render(sf::RenderWindow &Window){
 	Window.draw(printText);
 }
+
+void Schrift::Position (float X, float Y){
+    printText.setPosition(X,Y);
+}

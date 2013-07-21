@@ -14,6 +14,8 @@ private:
 	int monsterType;
     int exp;
 	bool isActive;
+    
+    int maxHealth;
 
 	sf::Texture texture;
 	sf::FloatRect hitBox;
@@ -21,6 +23,10 @@ private:
 #ifdef DEBUGINFO
     sf::RectangleShape drawHitBox;
 #endif
+    
+    sf::RectangleShape hpBox;
+    Schrift nameBox;
+    Schrift levelBox;
     
 	bool targetingPlayer;
 	bool isAggressiv;
@@ -66,9 +72,16 @@ public:
     /// Zeichnet das Monster
     void Render(sf::RenderWindow &renderWindow){
         Character::Render(renderWindow, isActive);
+        if(this->isActive){
+            if(this->targetingPlayer){
+                renderWindow.draw(hpBox);
+                nameBox.Render(renderWindow);
+                levelBox.Render(renderWindow);
+            }
 #ifdef DEBUGINFO
-        if(this->isActive)renderWindow.draw(drawHitBox);
+            renderWindow.draw(drawHitBox);
 #endif
+        }
     }
 };
 

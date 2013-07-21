@@ -30,6 +30,10 @@ Monster::Monster(){
     this->canAttack = true;
     this->isBig = false;
     this->isSpecial = 'n';
+    
+    this->hpBox.setFillColor(sf::Color(0x99,0x33,0x33));
+    this->nameBox.Init(PosX,PosY,"Missing Name",12);
+    this->levelBox.Init(PosX,PosY,"-1",12);
 };
 
 Monster::~Monster(){
@@ -77,6 +81,12 @@ void Monster::Init(){
         default:
             break;
     }
+    nameBox.Update(Name);
+
+    std::ostringstream monsterLevelText;
+    //monsterLevelText.precision(0);
+    monsterLevelText << std::fixed << Lvl;
+    levelBox.Update(monsterLevelText.str());
     
     switch(isSpecial){  // b = Boss // e = Elite
         case 'b':
@@ -92,6 +102,8 @@ void Monster::Init(){
             this->Speed = 0.2f;
             break;
     }
+    
+    maxHealth = Health;
     
 	if(!texture.loadFromFile(tex)){
 		throw "Error: Monstertexture not found.";
@@ -155,6 +167,12 @@ void Monster::Update(float ElapsedTime){
         drawHitBox.setPosition(hitBox.left, hitBox.top);
         drawHitBox.setSize(sf::Vector2f(hitBox.width,hitBox.height));
 #endif
+        
+        hpBox.setPosition(PosX-50.f, PosY-10.f);
+        hpBox.setSize(sf::Vector2f((float)Health/(float)maxHealth*100.f,14.f));
+        
+        nameBox.Position(PosX-48.f, PosY-10.f);
+        levelBox.Position(PosX+40, PosY-10.f);
         
         int tx = ((int)PosX/TILESIZE)-1;
         int ty = ((int)PosY/TILESIZE)-1;
