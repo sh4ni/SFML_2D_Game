@@ -71,13 +71,13 @@ public:
     
     /// Zeichnet das Monster
     void Render(sf::RenderWindow &renderWindow){
-        Character::Render(renderWindow, isActive);
         if(this->isActive){
             if(this->targetingPlayer){
                 renderWindow.draw(hpBox);
                 nameBox.Render(renderWindow);
                 levelBox.Render(renderWindow);
             }
+            Character::Render(renderWindow, isActive);
 #ifdef DEBUGINFO
             renderWindow.draw(drawHitBox);
 #endif

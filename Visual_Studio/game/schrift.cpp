@@ -18,11 +18,11 @@ Schrift::Schrift(){
 	//Standard Konstruktor
 };
 /// Überladener Standardkonstruktor
-Schrift::Schrift(float X, float Y, sf::String myText, int size, sf::Uint8 color){
+Schrift::Schrift(float X, float Y, sf::String myText, int size, sf::Color color){
 	this->Init(X,Y,myText,size,color);
 }
 /// Initalisierung der Schrift mit dem Standardfont Arial
-void Schrift::Init(float X, float Y, sf::String myText, int size, sf::Uint8 color){
+void Schrift::Init(float X, float Y, sf::String myText, int size, sf::Color color){
 	if( !FontLoaded ){
 		if(!Schrift::font.loadFromFile(PATH"include/fonts/arial.ttf")){
 			throw "Error: Font not found.";
@@ -39,7 +39,7 @@ void Schrift::Init(float X, float Y, sf::String myText, int size, sf::Uint8 colo
 	printText.setFont(this->font);
 	printText.setCharacterSize(size);
 	
-	printText.setColor(sf::Color(color,color,color));
+	printText.setColor(color);
 	printText.setPosition(X,Y);
 }
 /// Aktualisieren des Textes

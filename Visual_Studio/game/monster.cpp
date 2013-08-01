@@ -31,9 +31,9 @@ Monster::Monster(){
     this->isBig = false;
     this->isSpecial = 'n';
     
+    // Lebensbalken an den Monstern
     this->hpBox.setFillColor(sf::Color(0x99,0x33,0x33));
     this->nameBox.Init(PosX,PosY,"Missing Name",12);
-    this->levelBox.Init(PosX,PosY,"-1",12);
 };
 
 Monster::~Monster(){
@@ -82,11 +82,6 @@ void Monster::Init(){
             break;
     }
     nameBox.Update(Name);
-
-    std::ostringstream monsterLevelText;
-    //monsterLevelText.precision(0);
-    monsterLevelText << std::fixed << Lvl;
-    levelBox.Update(monsterLevelText.str());
     
     switch(isSpecial){  // b = Boss // e = Elite
         case 'b':
@@ -103,8 +98,29 @@ void Monster::Init(){
             break;
     }
     
-    maxHealth = Health;
+    if( Lvl - Map::currentMap->getPlayer()->getLvl() <= -5 ){
+        this->levelBox.Init(PosX,PosY,"Err",12,sf::Color(180,180,180));
+    }
+    else if( Lvl - Map::currentMap->getPlayer()->getLvl() <= -2 ){
+        this->levelBox.Init(PosX,PosY,"Err",12,sf::Color(0,255,0));
+    }
+    else if( Lvl - Map::currentMap->getPlayer()->getLvl() <= 2 ){
+        this->levelBox.Init(PosX,PosY,"Err",12,sf::Color(255,255,0));
+    }
+    else if( Lvl - Map::currentMap->getPlayer()->getLvl() <= 4 ){
+        this->levelBox.Init(PosX,PosY,"Err",12,sf::Color(255,127,0));
+    }
+    else {
+        this->levelBox.Init(PosX,PosY,"Err",12,sf::Color(255,0,0));
+    }
     
+    maxHealth = Health;
+
+    std::ostringstream monsterLevelText;
+    //monsterLevelText.precision(0);
+    monsterLevelText << std::fixed << Lvl;
+    levelBox.Update(monsterLevelText.str());
+
 	if(!texture.loadFromFile(tex)){
 		throw "Error: Monstertexture not found.";
 	}
@@ -168,6 +184,7 @@ void Monster::Update(float ElapsedTime){
         drawHitBox.setSize(sf::Vector2f(hitBox.width,hitBox.height));
 #endif
         
+        // Lebensbalken an den Monstern
         hpBox.setPosition(PosX-50.f, PosY-10.f);
         hpBox.setSize(sf::Vector2f((float)Health/(float)maxHealth*100.f,14.f));
         

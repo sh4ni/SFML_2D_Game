@@ -251,11 +251,11 @@ void Map::init(std::string LevelId){
 	EXPBar.setPosition((float)(ConfigFile::currentConfigFile->width/2-55),(float)(ConfigFile::currentConfigFile->height-30));
 	EXPBar.setSize(sf::Vector2f(180.f,28.f));
 
-	DisplayHPText.Init((float)(ConfigFile::currentConfigFile->width/2-53),(float)(ConfigFile::currentConfigFile->height-58),"HP",18,0);
-	DisplayEXPText.Init((float)(ConfigFile::currentConfigFile->width/2-53),(float)(ConfigFile::currentConfigFile->height-27),"EXP",18,0);
-	DisplayHP.Init((float)(ConfigFile::currentConfigFile->width/2+122),(float)(ConfigFile::currentConfigFile->height-58),"Error",18,0);      // default strings, falls was im spiel nicht klappt
-	DisplayEXP.Init((float)(ConfigFile::currentConfigFile->width/2+123),(float)(ConfigFile::currentConfigFile->height-27),"Error",18,0);
-	DisplayLevel.Init((float)(ConfigFile::currentConfigFile->width/2-128),(float)(ConfigFile::currentConfigFile->height-76),"Err",18,0);
+	DisplayHPText.Init((float)(ConfigFile::currentConfigFile->width/2-53),(float)(ConfigFile::currentConfigFile->height-58),"HP",18,sf::Color(0,0,0));
+	DisplayEXPText.Init((float)(ConfigFile::currentConfigFile->width/2-53),(float)(ConfigFile::currentConfigFile->height-27),"EXP",18,sf::Color(0,0,0));
+	DisplayHP.Init((float)(ConfigFile::currentConfigFile->width/2+122),(float)(ConfigFile::currentConfigFile->height-58),"Error",18,sf::Color(0,0,0));      // default strings, falls was im spiel nicht klappt
+	DisplayEXP.Init((float)(ConfigFile::currentConfigFile->width/2+123),(float)(ConfigFile::currentConfigFile->height-27),"Error",18,sf::Color(0,0,0));
+	DisplayLevel.Init((float)(ConfigFile::currentConfigFile->width/2-128),(float)(ConfigFile::currentConfigFile->height-76),"Err",18,sf::Color(0,0,0));
 
 #ifdef DEBUGINFO
 	DisplayFPS.Init(0,0,"FPS: Error",20);
