@@ -121,8 +121,11 @@ void Character::damageText(int damage, char type){
 	std::ostringstream dmgString;
 	if( type == 'e') dmgString << "XP +";           // zusatztext für exp und levelup
 	else if( type == 'l') dmgString << "LEVEL ";
-		
-	dmgString << damage;
+    else if( type == 's') {
+        if ( damage == 0 ) dmgString << "Game Saved";
+        else if ( damage == 1 ) dmgString << "Game Loaded";
+    }
+	if ( type != 's' ) dmgString << damage;
 	E1.Init(PosX,PosY,dmgString.str());
 	E1.printText.setStyle(sf::Text::Bold);
 	
@@ -134,6 +137,7 @@ void Character::damageText(int damage, char type){
 		E1.printText.setCharacterSize(100);
 		E1.printText.setColor(sf::Color(0xFF,0x88,0x00));
 	}
+    else if( type == 's') E1.printText.setCharacterSize(60);
 	
 	E1.printText.setOrigin(E1.printText.getGlobalBounds().width/2, 0);
 	dmgText.push_back(E1);

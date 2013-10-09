@@ -476,9 +476,11 @@ MapEvent Map::Show(sf::RenderWindow& renderWindow, std::string LevelId, sf::View
 				}
 				else if(levelLoop.key.code == sf::Keyboard::F6){
 					Savegame::currentSaveGame->saveSavegame();
+                    Map::getPlayer()->damageText(0, 's');
                 }
 				else if(levelLoop.key.code == sf::Keyboard::F9){
 					Savegame::currentSaveGame->loadSavegame();
+                    Map::getPlayer()->damageText(1, 's');
 				}
 #ifdef DEBUGINFO
 				else if(levelLoop.key.code == sf::Keyboard::E){         // ein paar debug keys
