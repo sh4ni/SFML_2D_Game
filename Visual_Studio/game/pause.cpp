@@ -1,5 +1,4 @@
 /**
-	Verantwortlich: Filip Menke <br>
 	Infotext: Wenn die Pause gestartet wird, färbt sich der Bildschirm dunkel transparent.
 	Der Spieler kann hier durch Eingaben das Spiel a) F6 - Speichern b) F9 - Laden c) Leertaste - Beenden.
 	Die Pause gibt einen Wert zurück. Dieser Rückgabewert entscheidet ob das Spiel schlussendlich

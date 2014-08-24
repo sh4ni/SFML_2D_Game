@@ -1,5 +1,4 @@
 /**
-	Vorantwortlich: Filip Menke <br>
 	Infotext: Hier wird das Intro dargestellt. Das Intro wird maximal 5 Sekunden angezeigt. Danach wird das
 	Hautpmenü angezeigt. Sofern der Benutzer eine Interaktion mit der Peripherie tätigt wird das Intro sofort beendet und das
 	Menü angezeigt.

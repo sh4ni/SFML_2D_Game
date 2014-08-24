@@ -1,5 +1,4 @@
 /**
-	Verantwortlich: Filip Menke <br>
 	Infotext: Die Klasse Character ist die Basisklasse für den Player und die Monster.
 	Hier sind die jeweiligen Getter und Setter Methoden.
 */

@@ -1,5 +1,4 @@
 /**
-	Verantwortlich: Filip Menke <br>
 	Infotext: Diese Datei lädt und speichert die Konfigurationsdatei des Spieles
 	sowie den Spielstand.
 	Dabei wird am ersten Spielstart überprüft ob die Datei settings.cfg vorhanden ist. Wenn die Datei fehlt wird diese mit
